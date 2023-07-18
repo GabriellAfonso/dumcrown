@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" href="{% static 'dumcrown/images/favicon.ico' %}" type="image/x-icon">
+
+  <style>
+    .wallpaper {
+      width: 100%;
+      background-image: url("{% static 'dumcrown/images/wallpaper.jpg' %}");
+      background-size: cover;
+      background-position: center;
+      flex: 1;
+    }
+  </style>
+  
+
+  <link rel="stylesheet" href="{% static 'dumcrown/css/style.css' %}">
+
+  <script src="{% static 'dumcrown/js/script.js' %}" defer></script>
+
+  <title>DUM Crown</title>
+</head>
+
+<body>
+  <main>
+    <section class="login">
+
+      <div class="cima">
+        <img src="{% static 'dumcrown/images/logo_dum.png' %}" class="login_logo">
+        <h1 class="login_title"></h1>
+
+        <label class="login_label">
+          <span>nome de usuário</span>
+          <input type="text" name="username" class="input">
+        </label>
+
+        <label class="login_label">
+          <span>senha</span>
+          <input type="password" name="password" class="input">
+        </label>
+
+        <div class="login_icons">
+          <button type="button" class="icon_button">
+            <img src="{% static 'dumcrown/images/google-icon.png' %}" alt="google">
+          </button>
+          <button type="button" class="icon_button">
+            <img src="{% static 'dumcrown/images/apple-icon.png' %}" alt="apple">
+          </button>
+        </div>
+      </div>
+
+      <div class="baixo">
+
+        <button type="button" class="login_button" disabled>Login</button>
+
+        <a href="#" class="login_link">criar conta</a>
+      </div>
+    </section>
+
+    <section class="wallpaper">
+    </section>
+  </main>
+</body>
+
+</html>
