@@ -52,9 +52,6 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* margin-bottom: 20px; */
-
-
 }
 
 /* Div pro mobile */
@@ -182,4 +179,82 @@ main {
     text-transform: uppercase;
     margin-bottom: 5px;
     font-weight: 700;
+}
+
+/* Pagina de registro */
+.register {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 90%;
+    margin: 0 auto;
+    background-color: rgb(95, 95, 95, 0.9);
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgb(0, 0, 0)
+}
+
+.register h1 {
+    padding-top: 20px;
+    color: rgb(219, 219, 219);
+    text-shadow: 1px 1px #000000;
+}
+
+.register-div {
+    position: absolute;
+    top: 49%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.register-div span {
+    color: rgb(219, 219, 219);
+    font-weight: 400;
+    text-shadow: 1px 1px #000000;
+}
+
+.register_label {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.input-register {
+    width: 100%;
+    background-color: var(--medium-grey);
+    border: 2px solid rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    outline: none;
+    font-size: 0.9em;
+    padding: 10px 10px 10px;
+    font-weight: 600;
+    color: var(--deep-grey);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4)
+}
+
+.register-button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20vh;
+    height: 8vh;
+    background-color: rgb(182, 182, 182);
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4)
+}
+
+.register-button:hover {
+    background-color: rgb(207, 44, 44);
 }

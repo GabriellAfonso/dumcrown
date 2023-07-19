@@ -23,7 +23,7 @@
 
   <script src="{% static 'dumcrown/js/script.js' %}" defer></script>
 
-  <title>DUM Crown</title>
+  <title>Dum Crown - login</title>
 </head>
 
 <body>
@@ -32,8 +32,6 @@
 
       <div class="cima">
         <img src="{% static 'dumcrown/images/logo_dum.png' %}" class="login_logo">
-        <h1 class="login_title"></h1>
-
         <label class="login_label">
           <span>nome de usuário</span>
           <input type="text" name="username" class="input">
@@ -58,7 +56,7 @@
 
         <button type="button" class="login_button" disabled>Login</button>
 
-        <a href="#" class="login_link">criar conta</a>
+        <a href="{% url 'dumcrown:register' %}" class="login_link">criar conta</a>
       </div>
     </section>
 

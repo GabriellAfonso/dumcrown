@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'dumcrown/css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'dumcrown/images/favicon.ico' %}" type="image/x-icon">
+  <title>Dum Crown - Register</title>
+
+  <style>
+    body {
+      background-image: url({% static 'dumcrown/images/wallpaper2.jpg' %});
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <section class="register">
+      <h1>Crie sua conta</h1>
+      <div class="register-div">
+        <span>Nome de usuário</span>
+        <label class="register_label">
+          <input type="text" name="username" class="input-register">
+        </label>
+        <span>Senha</span>
+        <label class="register_label">
+          <input type="password" name="username" class="input-register">
+        </label>
+        <span>Confirmar senha</span>
+        <label class="register_label">
+          <input type="password" name="username" class="input-register">
+        </label>
+        <span>E-mail</span>
+        <label class="register_label">
+          <input type="text" name="email" class="input-register">
+        </label>
+        <button type="button" class="register-button">Criar conta</button>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
