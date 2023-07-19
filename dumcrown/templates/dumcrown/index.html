@@ -17,7 +17,6 @@
       flex: 1;
     }
   </style>
-  
 
   <link rel="stylesheet" href="{% static 'dumcrown/css/style.css' %}">
 
@@ -29,35 +28,45 @@
 <body>
   <main>
     <section class="login">
+      <form method="POST" action="{% url 'dumcrown:index' %}">
+        {% csrf_token %}
+        <div class="cima">
+          <img src="{% static 'dumcrown/images/logo_dum.png' %}" class="login_logo">
+          <label class="login_label">
+            <span>nome de usuário</span>
+            <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="input">
+          </label>
 
-      <div class="cima">
-        <img src="{% static 'dumcrown/images/logo_dum.png' %}" class="login_logo">
-        <label class="login_label">
-          <span>nome de usuário</span>
-          <input type="text" name="username" class="input">
-        </label>
+          <label for="{{ form.username.id_for_label }}" class="login_label">
+            <span>senha</span>
+            <input type="password" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}"
+              class="input">
+          </label>
 
-        <label class="login_label">
-          <span>senha</span>
-          <input type="password" name="password" class="input">
-        </label>
-
-        <div class="login_icons">
-          <button type="button" class="icon_button">
-            <img src="{% static 'dumcrown/images/google-icon.png' %}" alt="google">
-          </button>
-          <button type="button" class="icon_button">
-            <img src="{% static 'dumcrown/images/apple-icon.png' %}" alt="apple">
-          </button>
+          {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          <div class="login_icons">
+            <button type="button" class="icon_button">
+              <img src="{% static 'dumcrown/images/google-icon.png' %}" alt="google">
+            </button>
+            <button type="button" class="icon_button">
+              <img src="{% static 'dumcrown/images/apple-icon.png' %}" alt="apple">
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div class="baixo">
+        <div class="baixo">
+          <button type="submit" class="login_button" disabled>Login</button>
 
-        <button type="button" class="login_button" disabled>Login</button>
 
-        <a href="{% url 'dumcrown:register' %}" class="login_link">criar conta</a>
-      </div>
+          <a href="{% url 'dumcrown:register' %}" class="login_link">criar conta</a>
+        </div>
+      </form>
     </section>
 
     <section class="wallpaper">

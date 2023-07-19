@@ -7,6 +7,11 @@
     font-family: 'Lexend Deca', sans-serif;
 }
 
+form {
+    width: 100%;
+}
+
+
 :root {
     --white: #fff;
     --whitesmoke: #F9F9F9;
@@ -79,7 +84,7 @@ main {
 
 .login_label {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     width: 100%;
 }
 
@@ -179,6 +184,16 @@ main {
     text-transform: uppercase;
     margin-bottom: 5px;
     font-weight: 700;
+}
+
+
+.messages li {
+    margin-bottom: 5px;
+    margin-right: 20vh;
+    list-style: none;
+    color: rgb(235, 40, 40);
+
+
 }
 
 /* Pagina de registro */
