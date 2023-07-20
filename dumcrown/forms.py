@@ -19,6 +19,7 @@ class RegisterForm(UserCreationForm):
             'required': 'este campo é obrigatório.',
             'min_length': 'nome de usuário muito curto.',
             'max_length': 'nome de usuário muito grande.',
+            'invalid': 'nome de usuário invalido, nao utilize espaços',
         }
 )
     
@@ -26,8 +27,8 @@ class RegisterForm(UserCreationForm):
         required=True, 
         max_length=100,
         error_messages={
-        'required': 'este campo é obrigatório.',
-        'invalid': 'utilize um e-mail valido',
+            'required': 'este campo é obrigatório.',
+            'invalid': 'utilize um e-mail valido',
     }
 )   
     

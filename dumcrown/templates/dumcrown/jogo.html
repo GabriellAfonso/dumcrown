@@ -6,6 +6,12 @@
     <title>Jogo</title>
 </head>
 <body>
-    Entrou
+    <h1>Bem vindo {{ nickname }} </h1>
+    
+    <p> id:{{ id }} </p>
+    <p> level:{{ level }} </p>
+    <p> experiencia:{{ experience }} </p>
+    <a href="{% url 'dumcrown:logout' %}">Sair</a>
+
 </body>
 </html>
