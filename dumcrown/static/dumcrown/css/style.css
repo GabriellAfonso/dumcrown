@@ -30,7 +30,8 @@ main {
 }
 
 .login {
-    background-color: var(--deep-grey);
+    /* background-color: var(--deep-grey); */
+    background-image: linear-gradient(0deg, #000000, #353535);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -189,10 +190,9 @@ main {
 
 .messages li {
     margin-bottom: 5px;
-    margin-right: 20vh;
+    padding-right: 18vh;
     list-style: none;
     color: rgb(235, 40, 40);
-
 
 }
 
@@ -207,8 +207,7 @@ main {
     width: 70%;
     height: 90%;
     margin: 0 auto;
-    background-color: rgb(95, 95, 95, 0.9);
-    align-items: center;
+    background-image: linear-gradient(45deg, #000000, #404140);
     justify-content: flex-start;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgb(0, 0, 0)
@@ -218,6 +217,29 @@ main {
     padding-top: 20px;
     color: rgb(219, 219, 219);
     text-shadow: 1px 1px #000000;
+    text-align: center;
+}
+
+.register h2 {
+    margin-bottom: 10px;
+    color: rgb(1, 197, 1);
+    text-align: center;
+}
+
+.register p {
+    text-align: center;
+    list-style: none;
+}
+
+.register a {
+    color: #3d8bf1;
+}
+
+.error {
+    margin-top: -20px;
+    margin-bottom: 2px;
+    color: rgb(168, 31, 31);
+    text-align: left !important;
 }
 
 .register-div {
@@ -225,7 +247,7 @@ main {
     top: 49%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
+    width: 110%;
     max-width: 400px;
     max-height: 400px;
 }
@@ -239,7 +261,7 @@ main {
 .register_label {
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     width: 100%;
 }
 
@@ -257,6 +279,7 @@ main {
 }
 
 .register-button {
+    margin-top: 20px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);

@@ -5,27 +5,12 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from dumcrown.forms import LoginForm
+from dumcrown.forms import RegisterForm
 
 
 
 
 def index(request):
-    # if request.method == 'POST':
-    #     form = LoginForm(request, data=request.POST)
-    #     if form.is_valid():
-    #         username = form.cleaned_data['username']
-    #         password = form.cleaned_data['password']
-    #         user = authenticate(request, username=username, password=password)
-    #         if user is not None:
-    #             login(request, user)
-    #             return redirect('pagina_principal')  # Redirecionar para a página principal após o login bem-sucedido
-    #         else:
-    #             form.add_error(None, 'Usuário ou senha inválidos.')
-    # else:
-    #     form = LoginForm()
-
-
     form = AuthenticationForm(request)
     
     if request.method == 'POST':
@@ -36,7 +21,6 @@ def index(request):
             print('entrou')
             user = form.get_user()
             auth.login(request,user)
-            messages.success(request, 'Logado com sucesso!')
             return redirect('dumcrown:jogo')
 
         else:
@@ -58,9 +42,31 @@ def index(request):
     )
 
 def register(request):
+    form = RegisterForm()
+    conta_criada = False
+    if request.method == 'POST':
+        print(RegisterForm())
+        form = RegisterForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            conta_criada = True
+            context = {'conta_criada': conta_criada,}
+            return render(
+                request,
+                'dumcrown/register.html',
+                context,
+            )
+
+        else:
+            print(form.errors)
+            print('invalido')
+
+
 
     context = {
-       
+        'form': form,
+        'conta_criada': conta_criada,
     }
 
     return render(

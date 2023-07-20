@@ -20,25 +20,66 @@
   <main>
     <section class="register">
       <h1>Crie sua conta</h1>
+
+      <form method="POST" action="{% url 'dumcrown:register' %}">
+        {% csrf_token %}
+
       <div class="register-div">
+        {% if conta_criada %}
+        
+        <h2>Registrado com Sucesso!</h1>
+          <p><a href="{% url 'dumcrown:index' %}">Ir para a tela de login</a></p>
+          {% else %}
+
         <span>Nome de usuário</span>
-        <label class="register_label">
-          <input type="text" name="username" class="input-register">
+        <label for="{{ form.username.id_for_label }}" class="register_label">
+          <input type="text" class="input-register" id="{{ form.username.id_for_label }}" 
+          name="{{ form.username.html_name }}" value="{{ form.username.value|default_if_none:'' }}">
         </label>
+
+        {% for error in form.username.errors %}
+        <p class="error">{{ error }}</p>
+        {% endfor %}
+
         <span>Senha</span>
         <label class="register_label">
-          <input type="password" name="username" class="input-register">
+          <input type="password" class="input-register" id="{{ form.password1.id_for_label }}" 
+          name="{{ form.password1.html_name }}">
         </label>
+
+        {% for error in form.password1.errors %}
+        <p class="error">{{ error }}</p>
+        {% endfor %}
+
         <span>Confirmar senha</span>
         <label class="register_label">
-          <input type="password" name="username" class="input-register">
+          <input type="password" class="input-register" id="{{ form.password2.id_for_label }}" 
+          name="{{ form.password2.html_name }}">
         </label>
+
+        {% for error in form.password2.errors %}
+        <p class="error">{{ error }}</p>
+        {% endfor %}
+
         <span>E-mail</span>
         <label class="register_label">
-          <input type="text" name="email" class="input-register">
+          <input type="text" class="input-register" id="{{ form.email.id_for_label }}" 
+          name="{{ form.email.html_name }}" value="{{ form.email.value|default_if_none:'' }}">
         </label>
-        <button type="button" class="register-button">Criar conta</button>
+
+        
+        {% for error in form.email.errors %}
+        <p class="error">{{ error }}</p>
+        {% endfor %}
+   
+
+        
+       
+       
+        <button type="submit" class="register-button">Criar conta</button>
+        {% endif %}
       </div>
+      </form>
     </section>
   </main>
 </body>
