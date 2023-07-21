@@ -12,13 +12,22 @@ var config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: {
+        preload: preload,
         create: create
     }
 };
 
 var game = new Phaser.Game(config);
 
+function preload() {
+    // Carregando a imagem
+    this.load.image('khras', 'static/dumcrown/game/images/khras_eyebrown_talk.png');
+
+}
+
 function create() {
     // Conteúdo da sua cena, caso queira adicionar algo além da tela preta
+    var imagem = this.add.sprite(400, 300, 'khras');
+    imagem.setScale(0.1);
 }
 
