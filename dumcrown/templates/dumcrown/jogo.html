@@ -1,17 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    
+    <link rel="stylesheet" href="{% static 'dumcrown/game/css/style.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'dumcrown/game/node_modules/phaser/dist/phaser.min.js' %}"></script>
+    <script type="module" src="{% static 'dumcrown/game/game.js' %}"></script>
     <title>Jogo</title>
+
 </head>
 <body>
-    <h1>Bem vindo {{ nickname }} </h1>
+<div id="game-display"></div>
     
-    <p> id:{{ id }} </p>
-    <p> level:{{ level }} </p>
-    <p> experiencia:{{ experience }} </p>
-    <a href="{% url 'dumcrown:logout' %}">Sair</a>
 
 </body>
 </html>

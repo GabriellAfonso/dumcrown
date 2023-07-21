@@ -28,6 +28,7 @@ def index(request):
         else:
             print('errou')
             messages.error(request, 'Usuário ou senha inválidos.')
+            print(messages.error)
             return redirect('dumcrown:index')
 
     else:
