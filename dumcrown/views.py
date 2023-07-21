@@ -9,7 +9,9 @@ from dumcrown.forms import RegisterForm
 from .models import Player
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-
+from django.http import JsonResponse
+import traceback
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def index(request):
@@ -123,3 +125,21 @@ def jogo(request):
 def logout_view(request):
     logout(request)
     return redirect('dumcrown:index')
+
+def save_nickname(request):
+    if request.method == 'POST':
+        nickname = request.POST.get('nickname')
+        user = request.user
+
+        try:
+            player = Player.objects.get(user=user)
+            player.nickname = nickname
+            player.save()
+            return JsonResponse({'message': 'Nickname saved successfully.'})
+        except ObjectDoesNotExist:
+            return JsonResponse({'message': 'Player object not found.'}, status=404)
+        except Exception as e:
+            traceback.print_exc()
+            return JsonResponse({'message': f'Error saving nickname: {e}'}, status=500)
+
+    return JsonResponse({'message': 'Invalid request.'})

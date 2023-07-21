@@ -6,13 +6,14 @@
     
     <link rel="stylesheet" href="{% static 'dumcrown/game/css/style.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="{% static 'dumcrown/game/node_modules/phaser/dist/phaser.min.js' %}"></script>
-    <script type="module" src="{% static 'dumcrown/game/game.js' %}"></script>
     <title>Jogo</title>
-
+    
 </head>
 <body>
-<div id="game-display"></div>
+    <div id="game-display"></div>
+    <script src="{% static 'dumcrown/game/node_modules/phaser/dist/phaser.min.js' %}"></script>
+    <script type="module" src="{% static 'dumcrown/game/game.js' %}"></script>
+    <a href="{% url 'dumcrown:logout' %}">sair</a>
     
 
 </body>
