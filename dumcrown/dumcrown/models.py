@@ -6,7 +6,7 @@ from django.core.validators import MaxValueValidator
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     registred = models.BooleanField(default=False, blank=False) 
-    nickname = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=25, unique=True)
     level = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
     experience = models.PositiveBigIntegerField()
 

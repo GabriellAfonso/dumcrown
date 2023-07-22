@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'dumcrown',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +71,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'
+
+ASGI_APPLICATION = 'project.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [{'redis', 6379}],
+        }
+    }
+}
 
 
 # Database
@@ -125,4 +138,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 CORS_ALLOW_ALL_ORIGINS = True
-
