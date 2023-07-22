@@ -1,5 +1,7 @@
 const { Phaser } = window;
 import sendDataToDjango from './partials/django.js'
+
+var caminho = 'static/dumcrown/game'
 // Inicialização do Phaser
 var config = {
     type: Phaser.AUTO,
@@ -24,14 +26,22 @@ var game = new Phaser.Game(config);
 
 function preload() {
     // Carregando a imagem
-    this.load.image('khras', 'static/dumcrown/game/images/khras_eyebrown_talk.png');
-    this.load.html('nickname', 'static/dumcrown/game/name.html');
+    this.load.image('khras', caminho + '/images/khras_angry.png');
+    this.load.image('background', caminho + '/images/wallnick.jpeg');
+    this.load.html('nickname', caminho + '/name.html');
 
 }
 
 function create() {
     // Criar um elemento DOM usando o conteúdo carregado do arquivo HTML
+    const larguraCanvas = this.game.config.width;
+    const alturaCanvas = this.game.config.height;
+
+    // Adicione sua imagem ao meio do canvas
+    const wallpaper = this.add.sprite(larguraCanvas / 2, alturaCanvas / 2, 'background');
+
     const element = this.add.dom(400, 200).createFromCache('nickname');
+
 
     // Configurar ações para o botão do formulário
     const submitButton = element.getChildByID('submitButton');
@@ -49,8 +59,10 @@ function create() {
                 // Enviar o nickname para o Django usando AJAX
                 sendDataToDjango(name);
             } else {
-                this.add.dom(400, 300, 'h1', 'color: white; font-size: 15px; white-space: pre-line;',
-                    'Seu nickname deve conter mais de 3\n e menos de 25 caracteres');
+                this.add.dom(450, 300, 'h1', 'color: grey; font-weight: bold; padding: 10px; text-align: center; background-color: white; font-size: 15px; white-space: pre-line;',
+                    'O comédia, \nseu nickname deve conter mais de 3\n e menos de 25 caracteres');
+                const khras = this.add.image(700, 355, 'khras');
+                khras.setScale(0.7)
                 console.log('Nickname must have at least 3 characters and no more than 25 characters.'); // Exibir mensagem de erro no console
             }
         } else {
