@@ -9,8 +9,8 @@ services:
       - 8000:8000
     volumes:
       - ./dumcrown:/dumcrown
-      - ./data/web/static:/data/web/static/
-      - ./data/web/media:/data/web/media/
+      - ./dumcrown/static:/dumcrown/static/
+      - ./dumcrown/media:/dumcrown/media/
     env_file:
       - ./dotenv_files/.env
     depends_on:
@@ -18,7 +18,9 @@ services:
   psql:
     container_name: psql
     image: postgres:13-alpine
+    ports:
+      - 5432:5432
     volumes:
-      - ./data/postgres/data:/var/lib/postgresql/data/
+      - ./postgres/data:/var/lib/postgresql/data/
     env_file:
       - ./dotenv_files/.env

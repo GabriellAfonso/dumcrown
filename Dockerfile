@@ -1,5 +1,5 @@
-FROM python:3.11.3-alpine3.18
-LABEL mantainer="gabrieldelimaafonso@gmail.com"
+FROM python:3.10.6-alpine
+LABEL maintainer="gabrieldelimaafonso@gmail.com"
 
 # Essa variável de ambiente é usada para controlar se o Python deve 
 # gravar arquivos de bytecode (.pyc) no disco. 1 = Não, 0 = Sim
@@ -17,6 +17,9 @@ COPY scripts /scripts
 # Entra na pasta djangoapp no container
 WORKDIR /dumcrown
 
+# Adiciona permissões de execução ao arquivo "commands.sh"
+RUN chmod +x /scripts/commands.sh
+
 # A porta 8000 estará disponível para conexões externas ao container
 # É a porta que vamos usar para o Django.
 EXPOSE 8000
@@ -29,22 +32,11 @@ EXPOSE 8000
 RUN python -m venv /venv && \
   /venv/bin/pip install --upgrade pip && \
   /venv/bin/pip install -r /dumcrown/requirements.txt && \
-  adduser --disabled-password --no-create-home duser && \
-  mkdir -p /data/web/static && \
-  mkdir -p /data/web/media && \
-  chown -R duser:duser /venv && \
-  chown -R duser:duser /data/web/static && \
-  chown -R duser:duser /data/web/media && \
-  chmod -R 755 /data/web/static && \
-  chmod -R 755 /data/web/media && \
-  chmod -R +x /scripts
+  adduser --disabled-password --no-create-home duser
 
 # Adiciona a pasta scripts e venv/bin 
 # no $PATH do container.
-ENV PATH="/scripts:/venv/bin:$PATH"
+ENV PATH="/scripts:/venv/bin:${PATH}"
 
-# Muda o usuário para duser
-USER duser
-
-# Executa o arquivo scripts/commands.sh
+# Executa o arquivo commands.sh
 CMD ["commands.sh"]
