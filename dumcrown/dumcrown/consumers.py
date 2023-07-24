@@ -6,7 +6,7 @@ class PlayerConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.group_name = 'player'
-
+        print('to no consumer')
         # join to group
         await self.channel_layer.group_add(self.group_name, self.channel_name)
 

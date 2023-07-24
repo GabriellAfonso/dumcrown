@@ -7,3 +7,4 @@ msgpack>=1.0.5<1.1
 redis>=4.6.0<4.7
 sqlparse>=0.4.4<0.5
 tzdata==2023.3
+daphne==4.0.0

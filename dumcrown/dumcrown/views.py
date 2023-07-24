@@ -111,7 +111,7 @@ def jogo(request):
             player.save()
 
     player = Player.objects.get(user=user)
-        
+
 
     print(player.nickname)
     context = {

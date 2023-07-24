@@ -14,7 +14,6 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR.parent / 'data' / 'web'
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,6 +34,9 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,8 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'dumcrown',
-    'channels',
 ]
+
+# settings.py
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -82,11 +87,10 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [{'redis', 6379}],
+            'hosts': [('redis', 6379)], 
         }
     }
 }
-
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -137,16 +141,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = DATA_DIR / 'static'
+STATIC_ROOT = '/dumcrown/static/' 
 
 MEDIA_URL = '/media/'
 # /data/web/media
-MEDIA_ROOT = DATA_DIR / 'media'
+MEDIA_ROOT = '/dumcrown/media/' 
 
-# Default primary key field type
+# Default primary key field type 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 CORS_ALLOW_ALL_ORIGINS = True
+ 
