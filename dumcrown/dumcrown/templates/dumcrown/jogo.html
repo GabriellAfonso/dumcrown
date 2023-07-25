@@ -2,20 +2,30 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <style>
+        
+    </style>
     <meta charset="UTF-8">
     
+    <script>
+        var nickname = '{{ nickname }}' 
+    </script>
+
     <link rel="stylesheet" href="{% static 'dumcrown/game/css/style.css' %}">
     <link rel="shortcut icon" href="{% static 'dumcrown/images/favicon.ico' %}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo</title>
     
+
 </head>
 <body>
-    <div id="game-display"></div>
+  
+    <div id="game-display">
+    
+    </div>
     <script src="{% static 'dumcrown/game/node_modules/phaser/dist/phaser.min.js' %}"></script>
     <script type="module" src="{% static 'dumcrown/game/game.js' %}"></script>
     <a href="{% url 'dumcrown:logout' %}">sair</a>
-    
-
+    <button id="fullscreen-button">Ativar Tela Cheia</button>
 </body>
 </html>

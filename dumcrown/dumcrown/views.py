@@ -12,10 +12,8 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 import traceback
 from django.core.exceptions import ObjectDoesNotExist
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 from django.http import HttpResponse
-
+from dumcrown.consumers import PlayerConsumer
 
 
 def index(request):

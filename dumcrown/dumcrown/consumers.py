@@ -9,7 +9,7 @@ class PlayerConsumer(AsyncWebsocketConsumer):
         print('to no consumer')
         # join to group
         await self.channel_layer.group_add(self.group_name, self.channel_name)
-
+        
         await self.accept()
 
     async def disconnect(self):
@@ -18,16 +18,17 @@ class PlayerConsumer(AsyncWebsocketConsumer):
 
     # recive message from websocket
     async def receive(self, text_data):
+        print('passou no receive')
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
         event = {
             'type': 'send_message',
-            'message': message
+            'message': message,
         }        
-        
+        print(message)
         #send message to group
-        await self.channel_layer.group.send(self.group_name, event)
+        await self.channel_layer.group_send(self.group_name, event)
 
     # receive message from group
     async def send_message(self, event):
