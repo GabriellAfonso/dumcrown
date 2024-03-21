@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 
 services:
   dumcrown:
@@ -6,16 +6,19 @@ services:
     build:
       context: .
     ports:
-      - 192.168.1.105:8000:8000
+      - 8000:8000 
     volumes:
       - ./dumcrown:/dumcrown
       - ./dumcrown/static:/dumcrown/static/
       - ./dumcrown/media:/dumcrown/media/
+      - ./ssl:/ssl  
     env_file:
       - ./dotenv_files/.env
     depends_on:
       - psql
       - redis
+      - celery 
+
   redis:
     restart: always
     image: redis:6.2
@@ -23,6 +26,7 @@ services:
       - 6379:6379
     volumes:
       - redisdata:/data
+
   psql:
     container_name: psql
     image: postgres:13-alpine
@@ -33,5 +37,35 @@ services:
     env_file:
       - ./dotenv_files/.env
 
+  celery:  
+    build:
+      context: .
+    command: celery -A project worker -l info
+    volumes:
+      - ./dumcrown:/dumcrown
+      - ./dumcrown/dumcrown/static:/dumcrown/static/
+      - ./dumcrown/media:/dumcrown/media/
+    env_file:
+      - ./dotenv_files/.env
+    depends_on:
+      - psql
+      - redis
+
+  nginx:  
+    container_name: nginx
+    image: nginx:1.25.1
+    ports:
+      - 80:80 
+      - 443:443  
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/html:/usr/share/nginx/html
+      - ./ssl:/ssl  
+      - ./certbot:/usr/share/nginx/html/.well-known/acme-challenge 
+      - ./dumcrown/static:/dumcrown/static/
+    depends_on:
+      - dumcrown
+
 volumes:
   redisdata:
+  dumcrown-static:

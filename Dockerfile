@@ -17,8 +17,9 @@ COPY scripts /scripts
 # Entra na pasta djangoapp no container
 WORKDIR /dumcrown
 
-# Adiciona permissões de execução ao arquivo "commands.sh"
-RUN chmod +x /scripts/commands.sh
+# Adiciona permissões de execução ao arquivo "commands.sh" e concede permissões acessíveis a todos os arquivos
+RUN chmod +x /scripts/commands.sh && \
+    chmod -R a+rw /dumcrown
 
 # A porta 8000 estará disponível para conexões externas ao container
 # É a porta que vamos usar para o Django.

@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 
-
 class RegisterForm(UserCreationForm):
     from django.conf import settings
     settings.AUTH_PASSWORD_VALIDATORS = []
@@ -33,20 +32,24 @@ class RegisterForm(UserCreationForm):
 )   
     
     password1 = forms.CharField(
+        max_length=90,
         required=True,
         label='password',
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
         error_messages={
             'required': 'este campo é obrigatório.',
+            'max_length': 'Senha muito grande!',
     }
 )
 
     password2 = forms.CharField(
+        max_length=90,
         required=True,
         label='password2',
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
         error_messages={
             'required': 'este campo é obrigatório.',
+            'max_length': 'Senha muito grande!',
         }
 )
     

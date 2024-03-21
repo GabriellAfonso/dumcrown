@@ -9,11 +9,6 @@
   <link rel="shortcut icon" href="{% static 'dumcrown/images/favicon.ico' %}" type="image/x-icon">
   <title>Dum Crown - Register</title>
 
-  <style>
-    body {
-      background-image: url({% static 'dumcrown/images/wallpaper2.jpg' %});
-    }
-  </style>
 </head>
 
 <body>
@@ -28,7 +23,7 @@
         {% if conta_criada %}
         
         <h2>Registrado com Sucesso!</h1>
-          <p><a href="{% url 'dumcrown:index' %}">Ir para a tela de login</a></p>
+          <p><a href="{% url 'dumcrown:login' %}">Ir para a tela de login</a></p>
           {% else %}
 
         <span>Nome de usuário</span>

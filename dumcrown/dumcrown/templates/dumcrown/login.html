@@ -1,0 +1,88 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" href="{% static 'dumcrown/images/favicon.ico' %}" type="image/x-icon">
+
+  <style>
+    .wallpaper {
+      width: 100%;
+      background-image: url("{% static 'dumcrown/images/wallpaper.jpg' %}");
+      background-size: cover;
+      background-position: center;
+      flex: 1;
+    }
+  </style>
+
+  <link rel="stylesheet" href="{% static 'dumcrown/css/style.css' %}">
+
+  <script src="{% static 'dumcrown/js/script.js' %}" defer></script>
+
+  <title>Dum Crown - login</title>
+</head>
+
+<body>
+  <main>
+    <section class="login">
+      <form method="POST" action="{% url 'dumcrown:login' %}" id="django-form">
+        {% csrf_token %}
+        <div class="cima">
+          <img src="{% static 'dumcrown/images/logo_dum.png' %}" class="login_logo">
+          <label class="login_label">
+            <span>nome de usuário</span>
+            <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="input">
+          </label>
+
+          <label for="{{ form.username.id_for_label }}" class="login_label">
+            <span>senha</span>
+            <input type="password" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}"
+              class="input">
+          </label>
+
+          {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              {% if message.tags == 'error' %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <button type="submit" class="login_button" id="django-form" disabled>Login</button>
+      </form>
+          <div class="login_icons">
+            <form action="{% provider_login_url 'google' %}" method="post" id="google-form">
+              {% csrf_token %}
+              <button type="submit" class="icon_button" id="google-form">
+                <img src="{% static 'dumcrown/images/google-icon.png' %}" alt="google">
+              </button> 
+            </form>
+
+            <form action="{% provider_login_url 'github' %}" method="post" id="github-form">
+              {% csrf_token %}
+              <button type="submit" class="icon_button" id="github-form">
+                <img src="{% static 'dumcrown/images/github-icon.png' %}" alt="github">
+              </button>
+            </form>
+
+          </div>
+        </div>
+
+        <div class="baixo">
+          <a href="{% url 'dumcrown:register' %}" class="login_link">criar conta</a>
+        </div>
+     
+    </section>
+
+    <section class="wallpaper">
+    </section>
+  </main>
+</body>
+
+</html>

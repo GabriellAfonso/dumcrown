@@ -1,0 +1,24 @@
+POST http://192.168.1.106/api/singup 
+Content-Type: application/json
+
+{ "username": "ad", "password": "123456", "email": "adam@mail.com" }
+
+###
+
+POST http://192.168.1.106/api/login/ 
+Content-Type: application/json
+
+{ "username": "teste5", "password": "123456" }
+
+###
+
+GET http://192.168.1.106/api/test_token/ 
+Content-Type: application/json 
+Authorization: Token ea92cedabe9e12f85262f023a0e0b0bde442d6a4
+
+
+###
+
+GET http://192.168.1.106/api/player_data/
+Content-Type: application/json 
+Authorization: Token b333fb35011fc7551dc43ca85b23e02b8aebe103

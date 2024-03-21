@@ -1,0 +1,315 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lexend Deca', sans-serif;
+}
+
+@font-face {
+    font-family: 'Berlin Sans FB Demi';
+    src: url('Berlin_Sans_FB_Demi_Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+body {
+    overflow-x: hidden;
+
+}
+
+.home {
+    width: 100%;
+    height: 100vh;
+    display: block;
+    background: linear-gradient(45deg, #ff33ff, #810b81, #220222);
+
+}
+
+#navegation-bar {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    background-color: #333333;
+    justify-content: center;
+    z-index: 1;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+#bar {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+}
+
+#bar a {
+    color: whitesmoke;
+    text-decoration: none;
+    padding: 23px;
+
+}
+
+#bar a:hover {
+    background-color: rgb(26, 25, 25);
+}
+
+.registrar {
+    position: absolute;
+    /* Ajuste o valor conforme desejado */
+    right: 3vw;
+
+
+}
+
+.registrar a {
+    background-color: #b360ae;
+    color: #fcfcfc;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    /* Adiciona uma borda transparente */
+    transition: border-color 0.2s;/
+}
+
+.registrar a:hover {
+    border-color: rgb(209, 211, 212);
+}
+
+.dum {
+    font-family: Berlin Sans FB Demi;
+    position: absolute;
+    color: #fcfcfc;
+    /* Ajuste o valor conforme desejado */
+    left: 3vw;
+    font-size: 30px;
+}
+
+.dum:hover {
+    cursor: pointer;
+}
+
+
+
+.personagem1 {
+    position: absolute;
+    height: 500px;
+    bottom: 0;
+    left: 70px;
+    transform: translateX(-100%);
+    /* Move a imagem para fora da tela à esquerda */
+    animation: slide-in 2s forwards;
+}
+
+@keyframes slide-in {
+    to {
+        transform: translateX(0);
+        /* Anima a imagem para a posição original (sem deslocamento) */
+    }
+}
+
+
+.personagem2 {
+    position: absolute;
+    bottom: 0;
+    right: 70px;
+    transform: translateX(100%);
+    /* Move a imagem para fora da tela à esquerda */
+    animation: slide-in 2s forwards;
+}
+
+.button-jogue {
+    position: absolute;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgb(207, 207, 207);
+    padding: 15px 25px;
+    bottom: 100px;
+    left: calc(50% - 80px);
+    border-radius: 15px;
+    text-decoration: none;
+    border: 2px solid black;
+    transition: border-color 0.2s;
+    cursor: pointer;
+    font-weight: 700;
+    background-image: linear-gradient(to bottom, #1b1b1b, #474747);
+    transform: translateY(350%);
+    /* Move a imagem para fora da tela à esquerda */
+    animation: slide-in 2s forwards;
+}
+
+.button-jogue:hover {
+    background-image: linear-gradient(to bottom, #131313fb, #f30303);
+}
+
+.mobile-menu {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+    right: 0;
+}
+
+.mobile-menu div {
+    width: 30px;
+    height: 2px;
+    background: #fff;
+    margin: 8px;
+}
+
+.arena-destaque {
+    margin-top: 60px;
+}
+
+.tiers-destaque {
+    margin-top: 20vh;
+    display: flex;
+    justify-content: center;
+    /* Centraliza horizontalmente */
+    align-items: center;
+}
+
+#description {
+    height: 140vh;
+    background-color: #1b1b1b;
+}
+
+#dumcrown-description {
+    display: flex;
+
+
+}
+
+#description-text {
+    text-align: left;
+    justify-content: center;
+    display: flex;
+    max-width: 30rem;
+    margin-left: 10rem;
+    flex-direction: column;
+}
+
+#description-text h1 {
+    color: rgb(135, 23, 150);
+    margin-top: 90px;
+}
+
+#description-text p {
+
+    color: white;
+    margin-top: 20px;
+
+
+}
+
+/* Div pro mobile */
+@media (max-width: 903px) {
+    .dum {
+        left: 10vw;
+    }
+
+    .home {
+        width: 100%;
+        height: 100vh;
+        display: block;
+        z-index: 0;
+
+    }
+
+    #bar {
+        position: absolute;
+        display: flex;
+        transform: translateX(100%);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        top: 10vh;
+        right: 0;
+        width: 50vw;
+        height: 90vh;
+        background-color: #333;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    #bar.active {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    #bar a {
+        padding: 20px;
+    }
+
+    #bar a:hover {
+        background-color: #1900ff00;
+    }
+
+    .mobile-menu {
+        display: block;
+        padding-right: 10px;
+    }
+
+    .registrar {
+        display: none;
+    }
+
+    .personagem1 {
+        left: -25px;
+        bottom: -56px;
+
+
+    }
+
+    .personagem2 {
+        width: 20vh;
+        right: 800px;
+        margin-bottom: 50px;
+    }
+
+    .button-jogue {
+        bottom: 1vh;
+    }
+
+    .arena-destaque {
+        width: 90%;
+    }
+
+    .tiers-destaque img {
+        width: 90%;
+    }
+
+    #dumcrown-description {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+
+    #description-text {
+        text-align: left;
+        justify-content: center;
+        margin-left: 0rem;
+        padding: 15px;
+
+    }
+
+    #description-text h1 {
+
+        text-align: center;
+    }
+}

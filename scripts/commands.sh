@@ -13,4 +13,10 @@ echo "✅ Postgres Database Started Successfully ($POSTGRES_HOST:$POSTGRES_PORT)
 python manage.py collectstatic --noinput
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
+sleep 0.2
+
+# Iniciar Daphne
 daphne -b 0.0.0.0 -p 8000 project.asgi:application
+
+# Iniciar Nginx
+nginx -g "daemon off;"

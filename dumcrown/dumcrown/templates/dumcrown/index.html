@@ -3,76 +3,59 @@
 <html lang="pt-br">
 
 <head>
-  
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="{% static 'dumcrown/css/home.css' %}">
+    <link rel="shortcut icon" href="{% static 'dumcrown/images/favicon.ico' %}" type="image/x-icon">
+    <script src="{% static 'dumcrown/js/mobile.js' %}" defer></script>
+    <title>Dum Crown</title>
 
-  <link rel="shortcut icon" href="{% static 'dumcrown/images/favicon.ico' %}" type="image/x-icon">
-
-  <style>
-    .wallpaper {
-      width: 100%;
-      background-image: url("{% static 'dumcrown/images/wallpaper.jpg' %}");
-      background-size: cover;
-      background-position: center;
-      flex: 1;
-    }
-  </style>
-
-  <link rel="stylesheet" href="{% static 'dumcrown/css/style.css' %}">
-
-  <script src="{% static 'dumcrown/js/script.js' %}" defer></script>
-
-  <title>Dum Crown - login</title>
 </head>
 
 <body>
-  <main>
-    <section class="login">
-      <form method="POST" action="{% url 'dumcrown:index' %}">
-        {% csrf_token %}
-        <div class="cima">
-          <img src="{% static 'dumcrown/images/logo_dum.png' %}" class="login_logo">
-          <label class="login_label">
-            <span>nome de usuário</span>
-            <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="input">
-          </label>
-
-          <label for="{{ form.username.id_for_label }}" class="login_label">
-            <span>senha</span>
-            <input type="password" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}"
-              class="input">
-          </label>
-
-          {% if messages %}
-            <ul class="messages">
-              {% for message in messages %}
-              <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-          <div class="login_icons">
-            <button type="button" class="icon_button">
-              <img src="{% static 'dumcrown/images/google-icon.png' %}" alt="google">
-            </button>
-            <button type="button" class="icon_button">
-              <img src="{% static 'dumcrown/images/apple-icon.png' %}" alt="apple">
-            </button>
-          </div>
+    <nav id="navegation-bar">
+        <ul>
+            <h1 class="dum">DumCrown</h1>
+            <div class="mobile-menu" id="menu">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+            <li id="bar">
+                <a href="{% url 'dumcrown:index' %}">Home</a>
+                <a href="#">Atualizações</a>
+                <a href="#">Suporte</a>
+              
+            </li>
+            <li class="registrar">
+                <a href="{% url 'dumcrown:register' %}" id="registrar">Registre-se</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="home">
+        <img src="{% static 'dumcrown/images/esquerdo.png' %}" alt="" class="personagem1">
+        <img src="{% static 'dumcrown/images/carol.png' %}" alt="" class="personagem2">
+        <a href="{% url 'dumcrown:login' %}" class="button-jogue">JOGUE AGORA</a>
+        {% comment %} <img src="{% static 'dumcrown/images/background.jpg' %}" alt="home" class="home"> {% endcomment %}
+    </div>
+    <section id="description">
+        <div id="dumcrown-description">
+            <img src="{% static 'dumcrown/images/dumcrown_game.jpg' %}" alt="" class="arena-destaque">
+            <div id="description-text">
+                <h1>Destrua na arena!</h1>
+                <p>Dumcrown é um jogo de cartas inspirado no universo 
+                    de "Legends of Runeterra". Trata-se de um jogo online no qual 
+                    os jogadores se enfrentam em duelos de cartas estratégicos. 
+                    A dinâmica é simples: quem vencer o
+                     duelo acumula pontos, e ao atingir determinada pontuação, o jogador avança de tier.
+                </p>
+            </div>
         </div>
+        <div class="tiers-destaque">
 
-        <div class="baixo">
-          <button type="submit" class="login_button" disabled>Login</button>
-
-
-          <a href="{% url 'dumcrown:register' %}" class="login_link">criar conta</a>
+            <img src="{% static 'dumcrown/images/dumcrown_tiers.jpg' %}" alt="" >
         </div>
-      </form>
     </section>
-
-    <section class="wallpaper">
-    </section>
-  </main>
 </body>
 
 </html>
