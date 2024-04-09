@@ -1,4 +1,7 @@
-const socket = new WebSocket(`ws://127.0.0.1/ws/game/`);
+const host = window.location.hostname
+const socket = new WebSocket(`ws://${host}/ws/game/`);
+
+
 
 import { GAME } from './config/gameConfig.js';
 
