@@ -1,5 +1,3 @@
-version: '3.3'
-
 services:
   dumcrown:
     container_name: dumcrown
@@ -9,7 +7,7 @@ services:
       - 8000:8000 
     volumes:
       - ./dumcrown:/dumcrown
-      - ./dumcrown/static:/dumcrown/static/
+      - ./dumcrown/dumcrown/static:/dumcrown/static/
       - ./dumcrown/media:/dumcrown/media/
       - ./ssl:/ssl  
     env_file:

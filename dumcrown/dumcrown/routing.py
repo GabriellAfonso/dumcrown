@@ -1,7 +1,7 @@
 # routing.py
 from django.urls import re_path
-from . import consumers
+from dumcrown.server import consumer
 
 websocket_urlpatterns = [
-    re_path(r'ws/game/$', consumers.PlayerConsumer.as_asgi()),
+    re_path(r'ws/game/$', consumer.PlayerConsumer.as_asgi()),
 ]
