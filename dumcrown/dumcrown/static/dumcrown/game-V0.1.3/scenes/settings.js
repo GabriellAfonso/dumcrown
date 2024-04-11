@@ -5,7 +5,6 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax } from '../functions/functions.js';
 
-import socket from '../main.js';
 
 import { Botao } from '../functions/functions.js';
 import { sendSocket } from '../functions/functions.js';

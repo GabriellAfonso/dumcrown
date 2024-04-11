@@ -1,10 +1,4 @@
-const host = window.location.hostname
-const socket = new WebSocket(`ws://${host}/ws/game/`);
-
-
-
 import { GAME } from './config/gameConfig.js';
-
 
 import { Preloader, Loading } from './scenes/loading.js';
 import { Nickname } from './scenes/nickname.js';
@@ -23,40 +17,57 @@ import { DumArena } from './scenes/dumarena.js';
 import { StartAnimation } from './animations/scenes/startAnimation.js';
 import { Tutorial } from './scenes/tutorial.js';
 import { clientReciver } from './game_clientside/reciver.js';
+import { sendSocket } from './functions/functions.js';
 
-export default socket;
 
-// Quando a conexão é aberta
-socket.onopen = (event) => {
-    console.log('Conexão com WebSocket estabelecida.');
-    var data = {
-        'initialdata': 'start',
+export let socket;
+
+
+connectWebSocket()
+
+function connectWebSocket() {
+    const host = window.location.hostname;
+    socket = new WebSocket(`ws://${host}/ws/game/`);
+    // Quando a conexão é aberta
+    socket.onopen = (event) => {
+        console.log('Conexão com WebSocket estabelecida.');
+        // console.log(socket)
+        sendSocket('get_player_data')
     };
-    socket.send(JSON.stringify(data));
-};
 
-// Quando uma mensagem é recebida do servidor Django
-socket.onmessage = (event) => {
-    const messageData = JSON.parse(event.data);
-    // console.log(messageData)
-    const messageType = Object.keys(messageData)[0]; // Obtem o primeiro tipo de mensagem
-    const handler = clientReciver[messageType]; // Obtem o tratamento correspondente
+    socket.onerror = (error) => {
+        console.error('Erro na conexão WebSocket:', error);
+        reconnectWebSocket();
+    };
 
-    if (handler) {
-        handler(messageData);
-    }
+
+    socket.onmessage = (event) => {
+        const messageData = JSON.parse(event.data);
+        console.log(messageData)
+
+        const messageType = messageData.code;
+        const handler = clientReciver[messageType];
+
+        if (handler) {
+            handler(messageData.data);
+        }
+    };
+
+    socket.onerror = (event) => {
+        console.error('Erro no WebSocket:', event);
+    };
+
+    socket.onclose = (event) => {
+        console.log('Conexão com WebSocket fechada.');
+        reconnectWebSocket();
+    };
 }
 
-// Quando ocorre algum erro
-socket.onerror = (event) => {
-    console.error('Erro no WebSocket:', event);
-};
+function reconnectWebSocket() {
+    console.log('Tentando reconectar ao WebSocket em 3 segundos...');
+    setTimeout(connectWebSocket, 3000);
+}
 
-// Quando a conexão é fechada
-socket.onclose = (event) => {
-    console.log('Conexão com WebSocket fechada.');
-
-};
 
 GAME.scene.add('Preloader', Preloader);
 GAME.scene.add('Loading', Loading);
@@ -79,3 +90,7 @@ GAME.scene.add('DumArena', DumArena);
 GAME.scene.add('ConfigScreen', ConfigScreen);
 GAME.scene.add('Tutorial', Tutorial);
 
+
+
+
+GAME.scene.start('Preloader');

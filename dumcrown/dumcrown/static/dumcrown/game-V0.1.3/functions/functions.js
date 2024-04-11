@@ -1,7 +1,7 @@
 import { matchDB, updatePhase } from '../game_clientside/match.js';
 
 import { GAME } from '../config/gameConfig.js';
-import socket from '../main.js';
+import { socket } from '../main.js';
 
 
 export class Botao extends Phaser.GameObjects.Image {
@@ -176,11 +176,12 @@ export class MasterButton extends Phaser.GameObjects.Image {
     }
 }
 
-export function sendSocket(type, valor = '') {
-    var data = {
-        [type]: valor,
+export function sendSocket(code, data = '') {
+    var message = {
+        code: code,
+        data: data,
     };
-    socket.send(JSON.stringify(data));
+    socket.send(JSON.stringify(message));
 }
 
 

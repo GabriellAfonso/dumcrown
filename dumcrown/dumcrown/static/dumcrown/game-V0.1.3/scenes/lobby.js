@@ -8,7 +8,6 @@ import { switchScenes, logoutAjax, sleep } from '../functions/functions.js';
 import { cardsShow, Card } from '../functions/cards.js';
 import { sendSocket } from '../functions/functions.js';
 
-import socket from '../main.js';
 
 import { Botao } from '../functions/functions.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';

@@ -9,8 +9,6 @@ import { cardsShow, Card } from '../functions/cards.js';
 import { sendSocket } from '../functions/functions.js';
 import { simpleTweens } from '../animations/scripts/functions.js';
 
-import socket from '../main.js';
-
 import { Botao } from '../functions/functions.js';
 
 export class QueueTimer extends Phaser.Scene {

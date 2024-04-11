@@ -4,9 +4,6 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { Botao } from '../functions/functions.js';
 import { sendSocket } from '../functions/functions.js';
 
-import socket from '../main.js';
-
-
 
 export class Nickname extends Phaser.Scene {
     constructor() {
@@ -63,7 +60,7 @@ export class Nickname extends Phaser.Scene {
     processInputValue() {
         const inputValue = this.inputElement.value.trim();
         sendSocket('set_new_nickname', inputValue)
-        sendSocket('update_data')
+        sendSocket('get_player_data')
 
     }
 

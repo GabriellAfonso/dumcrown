@@ -1,6 +1,5 @@
 import { GAME } from '../config/gameConfig.js';
 
-import socket from '../main.js';
 
 export class CardBase extends Phaser.GameObjects.Container {
     constructor(scene, monster, name, mana, attack, defense, dragable = false) {

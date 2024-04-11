@@ -4,8 +4,6 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { player, experienceUpdated, setExperienceUpdated, players_online } from '../game_clientside/client.js';
 
 
-import socket from '../main.js';
-
 
 import { toggleFullscreen, switchScenes } from '../functions/functions.js';
 
@@ -22,7 +20,7 @@ export class HomeScreen extends Phaser.Scene {
 
 
     create() {
-        sendSocket('update_data')
+        sendSocket('get_player_data')
         const soundfx = this.scene.get('Loading');
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
@@ -92,6 +90,7 @@ export class HomeScreen extends Phaser.Scene {
         }, 0xffff00, soundfx.clickSound);
 
         const loja = new Botao(this, 100, 725, 'loja', () => {
+            sendSocket('get_player_data')
             switchScenes('StoreScreen', 'HomeScreen');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 

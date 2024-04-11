@@ -3,7 +3,6 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { switchScenes, logoutAjax } from '../functions/functions.js';
 import { cardsShow, Card } from '../functions/cards.js';
 
-import socket from '../main.js';
 
 import { Botao } from '../functions/functions.js';
 

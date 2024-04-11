@@ -56,7 +56,7 @@ export function onlineChecker(data) {
 }
 
 export function playerData(data) {
-    const message = data.initialdata;
+    const message = data;
     player.icon = message.icon;
     player.border = message.border;
     player.arena = message.arena;
@@ -70,7 +70,6 @@ export function playerData(data) {
     player.tier = message.tier
     player.musicVolume = message.volume_music;
     player.soundsVolume = message.soundsfx_volume;
-    GAME.scene.start('Preloader');
 }
 
 export function updateData(data) {
@@ -89,8 +88,8 @@ export function updateData(data) {
 }
 
 
-export function serverNicknameCheck(data) {
-    const message = data.nick_response;
+export function catchNicknameResponse(data) {
+    const message = data;
     nickServerMsg = message
     nicknameDenied = message !== 'saved';
 }

@@ -2,7 +2,6 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax, sendSocket } from '../functions/functions.js';
 import { playersRanking, rankingUpdate } from '../game_clientside/client.js';
-import socket from '../main.js';
 
 import { sleep } from '../functions/functions.js';
 import { Botao } from '../functions/functions.js';

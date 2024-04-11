@@ -6,8 +6,6 @@ import { cards, Card } from '../functions/cards.js';
 import { sleep } from '../functions/functions.js';
 import { textAnimation } from '../animations/scripts/textAnimations.js';
 
-import socket from '../main.js';
-
 import { Botao } from '../functions/functions.js';
 
 export class EmailsScreen extends Phaser.Scene {

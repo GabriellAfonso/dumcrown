@@ -4,7 +4,6 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { Botao, sleep } from '../functions/functions.js';
 import { sendSocket } from '../functions/functions.js';
 
-import socket from '../main.js';
 
 
 

@@ -13,7 +13,7 @@ class GameValidators:
 
     def __init__(self, consumer):
         self.consumer = consumer
-     
+
     async def set_new_nickname(self, user, data):
         if user.is_authenticated:
             try:
@@ -21,21 +21,21 @@ class GameValidators:
                 new_nickname = data['set_new_nickname']
 
                 if await nickname_exists(new_nickname):
-                    error_message = 'Nickname ja está em uso.' 
+                    error_message = 'Nickname ja está em uso.'
                     raise InvalidNickname
-                   
+
                 elif len(new_nickname) < 3:
                     error_message = 'Nickname muito curto.'
                     raise InvalidNickname
-                
+
                 elif len(new_nickname) > 25:
                     error_message = 'Nickname muito grande.'
                     raise InvalidNickname
-                
+
                 else:
                     player.nickname = new_nickname
                     await save_player(player)
-              
+
                     await self.consumer.send(text_data=json.dumps({'nick_response': 'saved'}))
 
             except InvalidNickname:
