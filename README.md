@@ -43,7 +43,9 @@ clone o repositório:
 ```
 git clone git@github.com:GabriellAfonso/dumcrown.git
 ```
-Vá para a pasta raiz do projeto e execute o docker compose
+Va para a pasta dotenv_files e renomeie o arquivo _.env pra .env
+
+Depois volte à pasta raiz do projeto e execute o docker compose
 ```
 docker compose up --build
 ```
