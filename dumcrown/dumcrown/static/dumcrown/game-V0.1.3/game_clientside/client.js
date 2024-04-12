@@ -72,21 +72,6 @@ export function playerData(data) {
     player.soundsVolume = message.soundsfx_volume;
 }
 
-export function updateData(data) {
-    const message = data.update_data;
-    player.icon = message.icon;
-    player.border = message.border;
-    player.arena = message.arena;
-    player.nickname = message.nickname;
-    player.level = message.level;
-    player.experience = message.experience;
-    player.crystalsCoins = message.crystals
-    player.matches = message.matches
-    player.victories = message.victories
-    player.defeats = message.defeats
-    player.tier = message.tier
-}
-
 
 export function catchNicknameResponse(data) {
     const message = data;
@@ -95,9 +80,8 @@ export function catchNicknameResponse(data) {
 }
 
 export function rankingRecive(data) {
-    const message = data.ranking_update
+    const message = data
     playersRanking = message
-    // console.log(playersRanking)
     rankingUpdate = true
     switchScenes('RankingScreen', 'HomeScreen');
 }

@@ -90,7 +90,7 @@ export class HomeScreen extends Phaser.Scene {
         }, 0xffff00, soundfx.clickSound);
 
         const loja = new Botao(this, 100, 725, 'loja', () => {
-            sendSocket('get_player_data')
+            sendSocket('add_experience', 2000)
             switchScenes('StoreScreen', 'HomeScreen');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
@@ -111,8 +111,7 @@ export class HomeScreen extends Phaser.Scene {
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const podio = new Botao(this, 670, 725, 'podio', () => {
-            sendSocket('ranking_update')
-
+            sendSocket('get_ranking')
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const jogo = new Botao(this, 1280, 640, 'play_button', () => {
@@ -252,7 +251,7 @@ export class IconPage extends Phaser.Scene {
         //icons
         const icon_khras = new Botao(this, 620, 270, 'chibi_khras', () => {
             sendSocket('icon_change', 'chibi_khras');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.icon_em_uso.destroy();
             this.icon_em_uso = this.add.image(1105, 360, 'chibi_khras');
             this.icon_em_uso.setScale(0.4);
@@ -262,7 +261,7 @@ export class IconPage extends Phaser.Scene {
 
         const icon_kronos = new Botao(this, 745, 270, 'chibi_kronos', () => {
             sendSocket('icon_change', 'chibi_kronos');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.icon_em_uso.destroy();
             this.icon_em_uso = this.add.image(1105, 360, 'chibi_kronos');
             this.icon_em_uso.setScale(0.4);
@@ -271,7 +270,7 @@ export class IconPage extends Phaser.Scene {
 
         const icon_lda = new Botao(this, 870, 270, 'chibi_lda', () => {
             sendSocket('icon_change', 'chibi_lda');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.icon_em_uso.destroy();
             this.icon_em_uso = this.add.image(1105, 360, 'chibi_lda');
             this.icon_em_uso.setScale(0.4);
@@ -286,7 +285,7 @@ export class IconPage extends Phaser.Scene {
         //border
         const border01 = new Botao(this, 620, 270, 'border01', () => {
             sendSocket('border_change', 'border01');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.border_em_uso.destroy();
             this.border_em_uso = this.add.image(1105, 360, 'border01');
             this.border_em_uso.setScale(0.4);
@@ -296,7 +295,7 @@ export class IconPage extends Phaser.Scene {
 
         const border02 = new Botao(this, 745, 270, 'border02', () => {
             sendSocket('border_change', 'border02');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.border_em_uso.destroy();
             this.border_em_uso = this.add.image(1105, 360, 'border02');
             this.border_em_uso.setScale(0.4);
@@ -305,7 +304,7 @@ export class IconPage extends Phaser.Scene {
 
         const border03 = new Botao(this, 870, 270, 'border03', () => {
             sendSocket('border_change', 'border03');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.border_em_uso.destroy();
             this.border_em_uso = this.add.image(1105, 360, 'border03');
             this.border_em_uso.setScale(0.4);
@@ -321,7 +320,7 @@ export class IconPage extends Phaser.Scene {
 
         const arena01 = new Botao(this, 620, 270, 'arena01', () => {
             sendSocket('arena_change', 'arena01');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.arena_em_uso.destroy();
             this.arena_em_uso = this.add.image(1105, 360, 'arena01');
             this.arena_em_uso.setScale(0.05);
@@ -331,7 +330,7 @@ export class IconPage extends Phaser.Scene {
 
         const arena02 = new Botao(this, 830, 270, 'arena02', () => {
             sendSocket('arena_change', 'arena02');
-            sendSocket('update_data');
+            sendSocket('get_player_data');
             this.arena_em_uso.destroy();
             this.arena_em_uso = this.add.image(1105, 360, 'arena02');
             this.arena_em_uso.setScale(0.05);

@@ -44,94 +44,84 @@ class ClientData:
         else:
             await self.consumer.send_to_client('new_nickname_response', response)
 
-    async def ranking_update(self, user, data):
-        if user.is_authenticated:
-            try:
+    async def get_ranking(self):
+        try:
+            player = await get_player(self.user)
+            ranking_players = await ranking_list()
+            position = await my_ranking(self.user, player.id)
 
-                player = await get_player(user)
+            player_data = {
+                'position': position,
+                'nickname': player.nickname,
+                'level': player.level,
+                'crown_points': player.crown_points,
+                'tier': player.tier
+            }
 
-                ranking_players = await ranking_list()
+            ranking_players.append(player_data)
+            await self.consumer.send_to_client('ranking', ranking_players)
+        except Exception as e:
+            logging.error(f'Error in ranking_update: {e}', exc_info=True)
 
-                position = await my_ranking(user, player.id)
+    async def add_experience(self, data):
+        try:
+            player = await get_player(self.user)
+            exp_to_up = player.level * 100
+            player.experience += int(data)
+            await save_player(player)
+            if player.level < 1000:
+                while player.experience >= exp_to_up:
+                    player.level += 1
+                    player.experience -= exp_to_up
+                    exp_to_up = player.level * 100
+                    await save_player(player)
 
-                player_data = {
-                    'position': position,
-                    'nickname': player.nickname,
-                    'level': player.level,
-                    'crown_points': player.crown_points,
-                    'tier': player.tier
-                }
+        except Exception as e:
+            logging.error(f'Error in add_experience: {e}', exc_info=True)
 
-                ranking_players.append(player_data)
+    async def icon_change(self, data):
+        try:
+            player = await get_player(self.user)
+            new_icon = data
 
-                await self.consumer.send(text_data=json.dumps({'ranking_update': ranking_players}))
-            except Exception as e:
-                logging.error(f'Error in ranking_update: {e}', exc_info=True)
+            player.icon = new_icon
+            await save_player(player)
 
-    async def add_experience(self, user, data):
-        if user.is_authenticated:
-            try:
-                player = await get_player(user)
-                exp_to_up = player.level * 100
-                player.experience += int(data['add_experience'])
-                await save_player(player)
-                if player.level < 1000:
-                    while player.experience >= exp_to_up:
-                        player.level += 1
-                        player.experience -= exp_to_up
-                        exp_to_up = player.level * 100
-                        await save_player(player)
+        except Exception as e:
+            logging.error(f'Error in icon_change: {e}', exc_info=True)
 
-            except Exception as e:
-                logging.error(f'Error in add_experience: {e}', exc_info=True)
+    async def border_change(self, data):
+        try:
+            player = await get_player(self.user)
+            new_border = data
 
-    async def icon_change(self, user, data):
-        if user.is_authenticated:
-            try:
-                player = await get_player(user)
-                new_icon = data['icon_change']
+            player.border = new_border
+            await save_player(player)
 
-                player.icon = new_icon
-                await save_player(player)
+        except Exception as e:
+            logging.error(f'Error in border_change: {e}', exc_info=True)
 
-            except Exception as e:
-                logging.error(f'Error in icon_change: {e}', exc_info=True)
+    async def arena_change(self, data):
+        try:
+            player = await get_player(self.user)
+            new_arena = data
 
-    async def border_change(self, user, data):
-        if user.is_authenticated:
-            try:
-                player = await get_player(user)
-                new_border = data['border_change']
+            player.arena = new_arena
+            await save_player(player)
 
-                player.border = new_border
-                await save_player(player)
+        except Exception as e:
+            logging.error(f'Error in arena_change: {e}', exc_info=True)
 
-            except Exception as e:
-                logging.error(f'Error in border_change: {e}', exc_info=True)
+    async def sound_update(self, data):
+        try:
+            player = await get_player(self.user)
+            volume_data = data
+            music = volume_data['musicVolume']
+            soundsfx = volume_data['sondsVolume']
 
-    async def arena_change(self, user, data):
-        if user.is_authenticated:
-            try:
-                player = await get_player(user)
-                new_arena = data['arena_change']
+            player.volume_music = float(music)
+            player.soundsfx_volume = float(soundsfx)
+            await save_player(player)
 
-                player.arena = new_arena
-                await save_player(player)
-
-            except Exception as e:
-                logging.error(f'Error in arena_change: {e}', exc_info=True)
-
-    async def sound_update(self, user, data):
-        if user.is_authenticated:
-            try:
-                player = await get_player(user)
-                volume_data = data['sound_update']
-                music = volume_data['musicVolume']
-                soundsfx = volume_data['sondsVolume']
-
-                player.volume_music = float(music)
-                player.soundsfx_volume = float(soundsfx)
-                await save_player(player)
-
-            except Exception as e:
-                logging.error(f'Error in sound_update: {e}', exc_info=True)
+        except Exception as e:
+            logging.error(f'Error in sound_update: {e}', exc_info=True)

@@ -1,4 +1,4 @@
-import { playerData, updateData, catchNicknameResponse, rankingRecive, onlineChecker, } from "./client.js";
+import { playerData, catchNicknameResponse, rankingRecive, onlineChecker, } from "./client.js";
 import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } from "./room.js";
 import {
     startMatch, hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
@@ -15,8 +15,7 @@ export const clientReciver = {
     new_nickname_response: catchNicknameResponse,
     message: msg,
     is_online: onlineChecker,
-    update_data: updateData,
-    ranking_update: rankingRecive,
+    ranking: rankingRecive,
     call_start: callStart,
     room_open: roomOpen,
     room_update: roomUpdate,
