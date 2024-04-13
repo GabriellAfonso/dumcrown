@@ -1,8 +1,8 @@
 import {
     room, updateRoom, setUpdateRoom, reciveMessage, setReciveMessage, RoomMessage,
-} from '../game_clientside/room.js';
+} from '../client/room.js';
 
-import { player } from '../game_clientside/client.js';
+import { player } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { switchScenes, logoutAjax, sleep } from '../functions/functions.js';
 import { cardsShow, Card } from '../functions/cards.js';

@@ -16,7 +16,7 @@ import { QueueTimer } from './scenes/queue.js';
 import { DumArena } from './scenes/dumarena.js';
 import { StartAnimation } from './animations/scenes/startAnimation.js';
 import { Tutorial } from './scenes/tutorial.js';
-import { clientReciver } from './game_clientside/reciver.js';
+import { clientReciver } from './client/reciver.js';
 import { sendSocket } from './functions/functions.js';
 
 

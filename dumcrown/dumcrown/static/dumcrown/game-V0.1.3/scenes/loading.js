@@ -1,9 +1,10 @@
-import { player } from '../game_clientside/client.js';
+import { player } from '../client/client.js';
 
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { PATH } from '../config/gameConfig.js';
 import { Botao } from '../functions/functions.js';
 import { toggleFullscreen } from '../functions/functions.js';
+import { add_text } from '../functions/texts.js';
 
 
 
@@ -193,13 +194,9 @@ export class Loading extends Phaser.Scene {
         this.load.on('complete', this.handleComplete, this);
 
         // Crie o texto da porcentagem
-        this.progressText = this.add.text(
-            centerX, // Posição X
-            640, // Posição Y
-            '0%', // Texto inicial (será atualizado)
-            { fontSize: '35px', fill: '#ffffff', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' } // Estilo do texto
-        );
-        this.progressText.setOrigin(0.5, 0.5)
+
+        this.progressText = add_text(this, centerX, 640, '0%', '35px', 0.5)
+
 
         // Inicie o carregamento dos recursos.
         this.load.start();

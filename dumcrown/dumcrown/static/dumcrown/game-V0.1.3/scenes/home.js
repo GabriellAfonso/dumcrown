@@ -1,15 +1,84 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 
-import { player, experienceUpdated, setExperienceUpdated, players_online } from '../game_clientside/client.js';
-
-
+import { player, experienceUpdated, setExperienceUpdated, players_online } from '../client/client.js';
 
 import { toggleFullscreen, switchScenes } from '../functions/functions.js';
 
 import { Botao } from '../functions/functions.js';
+import { add_text } from '../functions/texts.js'
 
 import { sendSocket } from '../functions/functions.js';
+
+
+class ExpBar {
+    constructor(scene) {
+        this.scene = scene;
+        this.initialize(scene)
+    }
+
+    initialize(scene) {
+        var expToUp = player.level * 100;
+        var progress = player.experience / expToUp;
+
+        var expBox = scene.add.rectangle(221, 140, 162, 7, 0x222222, 1);
+        expBox.setOrigin(0)
+        expBox.setInteractive();
+
+        var expBar = scene.add.graphics();
+        expBar.fillStyle(0xFFA500, 1);
+        expBar.fillRect(221, 140, 162 * progress, 7);
+
+
+        this.progressBox = scene.add.rectangle(216, 160, 172, 50, 0x222222, 1);
+        this.progressBox.setOrigin(0)
+
+        this.progressNumbers = add_text(scene, 302, 185,
+            'EXP: ' + player.experience + '/' + expToUp, '18px', 0.5)
+        this.toggleVisibility(false)
+
+        var levelContainer = scene.add.container()
+        levelContainer.setSize(172, 20)
+        levelContainer.setPosition(302, 144)
+        levelContainer.setInteractive()
+
+        // var containerRect = scene.add.rectangle(
+        //     levelContainer.x, levelContainer.y,
+        //     levelContainer.width, levelContainer.height, 0xCCCCCC, 0.4);
+        // containerRect.setStrokeStyle(2, 0x000000);
+        // containerRect.setOrigin(0.5);
+
+        var pressed = false
+
+        levelContainer.on('pointerup', () => {
+            pressed = true
+            this.toggleVisibility(true)
+        });
+
+        levelContainer.on('pointerover', () => {
+            this.toggleVisibility(true)
+        });
+
+        levelContainer.on('pointerout', () => {
+            if (!pressed) {
+                this.toggleVisibility(false)
+            }
+
+        });
+        scene.input.on('pointerdown', () => {
+            if (pressed) {
+                pressed = false
+                this.toggleVisibility(false)
+            }
+        });
+    }
+
+    toggleVisibility(isVisible) {
+        this.progressBox.setVisible(isVisible);
+        this.progressNumbers.setVisible(isVisible);
+    }
+
+}
 
 
 
@@ -24,35 +93,20 @@ export class HomeScreen extends Phaser.Scene {
         const soundfx = this.scene.get('Loading');
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
-
         const background = this.add.image(centerX, centerY, 'homescreen');
-        let circle = this.add.circle(1200, 40, 10, 0x00FF00);
-        circle.setFillStyle(0x00FF00, 1);
-
-        this.playersOnline = this.add.text(1220, 28, players_online, {
-            fontSize: '20px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-        this.playersOnline.setOrigin(0, 0);
 
         const fullscreen_button = new Botao(this, 1465, 35, 'fullscreen', () => {
             toggleFullscreen();
         }, 0xffffff);
         fullscreen_button.setScale(0.40);
 
-        this.nome = this.add.text(218, 35, player.nickname, {
-            fontSize: '28px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-        this.nome.setOrigin(0, 0);
+        let circle = this.add.circle(1200, 40, 10, 0x00FF00);
+        circle.setFillStyle(0x00FF00, 1);
 
-        this.nivel = this.add.text(223, 106, 'Lv: ' + player.level, {
-            fontSize: '25px',
-            color: 'white',
-        });
-        this.nivel.setOrigin(0, 0);
+        this.playersOnline = add_text(this, 1220, 28, players_online, '20px')
+
+        this.name = add_text(this, 218, 35, player.nickname, '28px')
+        this.level = add_text(this, 223, 106, 'Lv: ' + player.level, '25px')
 
         const perfil = new Botao(this, 115, 105, player.icon, () => {
             switchScenes('Perfil', 'HomeScreen');
@@ -64,25 +118,11 @@ export class HomeScreen extends Phaser.Scene {
         const border_perfil = this.add.image(115, 105, player.border)
         border_perfil.setScale(0.5)
 
-        var expToUp = player.level * 100;
-        var progress = player.experience / expToUp;
-
-        this.expBox = this.add.graphics();
-        this.expBox.fillStyle(0x222222, 1);
-        this.expBox.fillRect(221, 140, 162, 7);
-
-        this.expBar = this.add.graphics();
-        this.expBar.clear();
-        this.expBar.fillStyle(0xFFA500, 1);
-        this.expBar.fillRect(221, 140, 162 * progress, 7);
+        const EXPBAR = new ExpBar(this)
 
         const crystal = this.add.image(550, 45, 'crystals');
-        const crystalNumber = this.add.text(575, 30, player.crystalsCoins, {
-            fontSize: '25px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-        crystalNumber.setOrigin(0, 0)
+
+        const crystalNumber = add_text(this, 575, 30, player.crystalsCoins, '25px')
 
 
         const config = new Botao(this, 1390, 35, 'config', () => {
@@ -118,18 +158,23 @@ export class HomeScreen extends Phaser.Scene {
             switchScenes('GameLobby', 'HomeScreen');
         }, 0xffffff, soundfx.clickSound, null, true);
 
+        this.mouseText = this.add.text(centerX, 10, '', { fontSize: '20px', fill: '#ffffff' },);
+
+        // Adicione um evento de 'pointermove' à cena
+        this.input.on('pointermove', (pointer) => {
+            // Atualize o texto com as coordenadas do mouse
+            this.mouseText.setText('X: ' + pointer.x + ' Y: ' + pointer.y);
+        });
+
 
     }
 
     update() {
         this.playersOnline.text = players_online
-        if (experienceUpdated) {
-            GAME.scene.stop('HomeScreen')
-            GAME.scene.run('HomeScreen')
 
-            setExperienceUpdated(false); // Redefine a variável de controle para false após a atualização
-        }
     }
+
+
 }
 
 export class Perfil extends Phaser.Scene {
@@ -156,43 +201,19 @@ export class Perfil extends Phaser.Scene {
         const tier = this.add.image(315, 450, player.tier)
         tier.setScale(0.4)
 
-        this.nome = this.add.text(315, 350, player.nickname, {
-            fontSize: '28px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-        this.nome.setOrigin(0.5, 0.5);
+        this.name = add_text(this, 315, 350, player.nickname, '28px', 0.5)
 
-        this.partidas = this.add.text(315, 550, 'Partidas: ' + player.matches, {
-            fontSize: '28px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-        this.partidas.setOrigin(0.5, 0.5);
+        this.partidas = add_text(this, 315, 550, 'Partidas: ' + player.matches, '28px', 0.5)
+        this.vitorias = add_text(this, 315, 600, 'Vitórias: ' + player.victories, '28px', 0.5)
+        this.derrotas = add_text(this, 315, 650, 'Derrotas: ' + player.defeats, '28px', 0.5)
 
-        this.vitorias = this.add.text(315, 600, 'Vitórias: ' + player.victories, {
-            fontSize: '28px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-        this.vitorias.setOrigin(0.5, 0.5);
+        var rate = 0
+        if (player.matches) {
+            rate = (player.victories / player.matches) * 100
+        }
+        this.winrate = add_text(this, 315, 700,
+            'Taxa de vitorias: ' + rate.toFixed(1) + '%', '28px', 0.5)
 
-        this.derrotas = this.add.text(315, 650, 'Derrotas: ' + player.defeats, {
-            fontSize: '28px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-        this.derrotas.setOrigin(0.5, 0.5);
-
-        var taxa = (player.victories / player.matches) * 100
-
-        this.winrate = this.add.text(315, 700, 'Taxa de vitorias: ' + taxa.toFixed(1) + '%', {
-            fontSize: '28px',
-            fontFamily: 'Lexend Deca, sans-serif',
-            color: 'white',
-        });
-
-        this.winrate.setOrigin(0.5, 0.5);
 
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
             switchScenes('HomeScreen', 'Perfil')

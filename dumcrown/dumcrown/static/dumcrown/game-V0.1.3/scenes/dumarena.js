@@ -2,14 +2,14 @@ import {
     matchDB, updatedHp, updateRound, pass, updatedEnergy, adversaryCard, adversaryFieldUpdate, adversaryCardsAttack,
     adversaryCardsAttackUpdate, adversaryCardsDefese, adversaryCardsDefeseUpdate,
     resolveData, resolveUpdate, autopass,
-} from '../game_clientside/match.js';
+} from '../client/match.js';
 import {
     setUpdateHp, setUpdateRound, setPassValue, setAutoPassValue, setUpdatedEnergy, setAdversaryFieldUpdate, setAdversaryCardsAttackUpdate,
     setAdversaryCardsDefeseUpdate, setResolveUpdate
-} from '../game_clientside/match.js';
+} from '../client/match.js';
 
 
-import { player, areYouInGame, setAreYouInGame } from '../game_clientside/client.js';
+import { player, areYouInGame, setAreYouInGame } from '../client/client.js';
 
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 

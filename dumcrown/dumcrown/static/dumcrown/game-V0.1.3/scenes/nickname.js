@@ -1,5 +1,5 @@
 
-import { player, nicknameDenied, setNicknameDenied, nickServerMsg } from '../game_clientside/client.js';
+import { player, nicknameDenied, setNicknameDenied, nickServerMsg } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { Botao } from '../functions/functions.js';
 import { sendSocket } from '../functions/functions.js';

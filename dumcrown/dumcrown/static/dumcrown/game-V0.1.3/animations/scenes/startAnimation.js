@@ -1,6 +1,6 @@
 import { GAME, centerX, centerY } from '../../config/gameConfig.js';
 
-import { matchDB } from '../../game_clientside/match.js'
+import { matchDB } from '../../client/match.js'
 import { simpleTweens } from '../scripts/functions.js';
 
 

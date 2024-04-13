@@ -1,5 +1,5 @@
 
-import { player, setmusicVolume, setSondsVolume } from '../game_clientside/client.js';
+import { player, setmusicVolume, setSondsVolume } from '../client/client.js';
 
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
@@ -8,8 +8,8 @@ import { switchScenes, logoutAjax } from '../functions/functions.js';
 
 import { Botao } from '../functions/functions.js';
 import { sendSocket } from '../functions/functions.js';
-import { areYouInGame, setAreYouInGame } from '../game_clientside/client.js';
-import { room } from '../game_clientside/room.js';
+import { areYouInGame, setAreYouInGame } from '../client/client.js';
+import { room } from '../client/room.js';
 
 export class ConfigScreen extends Phaser.Scene {
     constructor() {
