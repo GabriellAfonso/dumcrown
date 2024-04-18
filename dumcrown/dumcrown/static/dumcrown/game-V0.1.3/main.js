@@ -17,7 +17,7 @@ import { DumArena } from './scenes/dumarena.js';
 import { StartAnimation } from './animations/scenes/startAnimation.js';
 import { Tutorial } from './scenes/tutorial.js';
 import { clientReciver } from './client/reciver.js';
-import { sendSocket } from './functions/functions.js';
+import { sendSocket, startScene, switchScenes } from './functions/functions.js';
 
 
 export let socket;
@@ -28,11 +28,12 @@ connectWebSocket()
 function connectWebSocket() {
     const host = window.location.hostname;
     socket = new WebSocket(`ws://${host}/ws/game/`);
-    // Quando a conexão é aberta
+
     socket.onopen = (event) => {
         console.log('Conexão com WebSocket estabelecida.');
-        // console.log(socket)
         sendSocket('get_player_data')
+        sendSocket('ping')
+        startScene('Preloader')
     };
 
     socket.onerror = (error) => {
@@ -43,7 +44,7 @@ function connectWebSocket() {
 
     socket.onmessage = (event) => {
         const messageData = JSON.parse(event.data);
-        console.log(messageData)
+        // console.log(messageData)
 
         const messageType = messageData.code;
         const handler = clientReciver[messageType];
@@ -93,4 +94,4 @@ GAME.scene.add('Tutorial', Tutorial);
 
 
 
-GAME.scene.start('Preloader');
+// GAME.scene.start('Preloader');

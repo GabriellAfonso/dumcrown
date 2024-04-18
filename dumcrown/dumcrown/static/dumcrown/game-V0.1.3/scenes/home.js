@@ -10,7 +10,13 @@ import { add_text } from '../functions/texts.js'
 
 import { sendSocket } from '../functions/functions.js';
 
+class Ping {
+    constructor(scene) {
+        this.scene = scene;
+        this.initialize(scene)
+    }
 
+}
 class ExpBar {
     constructor(scene) {
         this.scene = scene;

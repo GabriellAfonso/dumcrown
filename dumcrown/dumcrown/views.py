@@ -5,11 +5,11 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
-
+from django.utils import timezone
 from django.contrib.auth import authenticate, login, views
 from django.shortcuts import render, redirect
 from dumcrown.forms import RegisterForm
-from .models import Player
+from dumcrown.models.player import Player, LoginHistory
 from dumcrown_api.models import Player_data
 
 from django.contrib.auth.decorators import login_required
@@ -20,6 +20,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from dumcrown.consumers import PlayerConsumer
 from allauth.socialaccount.models import SocialAccount
+
 
 def index(request):
 
@@ -33,16 +34,18 @@ def index(request):
         context,
     )
 
+
 def login(request):
     form = AuthenticationForm(request)
-    
+
     if request.method == 'POST':
-       
+
         form = AuthenticationForm(request, data=request.POST)
 
         if form.is_valid():
             user = form.get_user()
-            auth.login(request,user)
+            auth.login(request, user)
+
             return redirect('dumcrown:jogo')
 
         else:
@@ -62,9 +65,11 @@ def login(request):
         context,
     )
 
+
 def redirect_login(request):
 
     return redirect('dumcrown:login')
+
 
 def redirect_register(request):
 
@@ -74,21 +79,13 @@ def redirect_register(request):
 def register(request):
     form = RegisterForm()
     conta_criada = False
-    
+
     if request.method == 'POST':
         form = RegisterForm(request.POST)
 
         if form.is_valid():
             # Salve o formulário de registro
             user = form.save()
-            
-            # Defina o jogador relacionado ao usuário
-            player, created = Player_data.objects.get_or_create(user=user)
-            if created:
-                # Se o jogador foi criado, salve-o
-                player.save()
-
-            # Indique que a conta foi criada com sucesso
             conta_criada = True
             context = {'conta_criada': conta_criada}
             return render(
@@ -112,31 +109,13 @@ def register(request):
 @login_required(login_url='dumcrown:login')
 def jogo(request):
 
-    if request.user.is_authenticated:
-        # O usuário está logado, você pode acessar o objeto User assim:
-        user = request.user
-        
-        # Verifica se o usuario ja existe
-        try:
-            player = Player.objects.get(user=user)
-        except Player.DoesNotExist:
-            player = None
-
-        # Se o jogador ainda não estiver vinculado a um banco de dados, vincule-o
-        if not player or not player.nickname:
-            if not player:
-                player = Player(user=user)
-            player.save()
-
-    # if request.user.is_authenticated and player.is_online:
-    #     # Redirect to an error page or display an error message
-    #     return redirect('dumcrown:login')
-
-
+    user = request.user
     player = Player.objects.get(user=user)
 
+    login_history = LoginHistory.objects.create(
+        player=player, login_time=timezone.now())
+    login_history.save()
 
-    print(player.nickname)
     context = {
         'nickname': player.nickname,
         'level': player.level,
@@ -159,9 +138,11 @@ def logout_view(request):
     # Faz logout do usuário Google, caso esteja autenticado
     try:
         if request.user.is_authenticated:
-            google_social_account = SocialAccount.objects.get(provider='google', user=request.user)
+            google_social_account = SocialAccount.objects.get(
+                provider='google', user=request.user)
             adapter = google_social_account.get_adapter(request)
-            provider_logout_url = adapter.logout(request, google_social_account)
+            provider_logout_url = adapter.logout(
+                request, google_social_account)
             return redirect(provider_logout_url)
     except SocialAccount.DoesNotExist:
         pass
@@ -196,9 +177,8 @@ def view_debug_log(request):
     with open(settings.BASE_DIR / 'project/logs/debug.log', 'r') as file:
         content = file.read()
 
-
     return render(
-                request,
-                'dumcrown/debug_log.html',
-                {'content': content}
-            )
+        request,
+        'dumcrown/debug_log.html',
+        {'content': content}
+    )

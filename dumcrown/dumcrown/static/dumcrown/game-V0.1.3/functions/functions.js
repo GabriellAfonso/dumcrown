@@ -201,6 +201,15 @@ export function switchScenes(sceneToStart, sceneToStop = '') {
     GAME.scene.run(sceneToStart);
 }
 
+export function startScene(scene) {
+    var sceneIsActive = GAME.scene.isActive(scene)
+    if (sceneIsActive) {
+        return
+    }
+    GAME.scene.start(scene);
+}
+
+
 export function sleep(scene, delay, callback) {
     scene.time.addEvent({
         delay: delay,

@@ -10,6 +10,9 @@ class ClientData:
         self.consumer = consumer
         self.user = consumer.user
 
+    async def send_pong(self):
+        await self.consumer.send_to_client('pong')
+
     async def get_player_data(self):
         try:
             player = await get_player(self.user)
@@ -21,13 +24,13 @@ class ClientData:
                 'level': player.level,
                 'experience': player.experience,
                 'crystals': player.crystals,
-                'matches': player.matches,
-                'victories': player.victories,
-                'defeats': player.defeats,
-                'volume_music': player.volume_music,
-                'soundsfx_volume': player.soundsfx_volume,
                 'crown_points': player.crown_points,
                 'tier': player.tier,
+                'matches': player.stats.matches,
+                'victories': player.stats.victories,
+                'defeats': player.stats.defeats,
+                'volume_music': player.settings.volume_music,
+                'soundsfx_volume': player.settings.soundsfx_volume,
             }
             await self.consumer.send_to_client('get_player_data', player_data)
         except Exception as e:
@@ -119,8 +122,8 @@ class ClientData:
             music = volume_data['musicVolume']
             soundsfx = volume_data['sondsVolume']
 
-            player.volume_music = float(music)
-            player.soundsfx_volume = float(soundsfx)
+            player.settings.volume_music = float(music)
+            player.settings.soundsfx_volume = float(soundsfx)
             await save_player(player)
 
         except Exception as e:

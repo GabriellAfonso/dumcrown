@@ -10,5 +10,5 @@ code_handlers = {
     'border_change': {'object': client_data, 'method': 'border_change'},
     'arena_change': {'object': client_data, 'method': 'arena_change'},
     'sound_update': {'object': client_data, 'method': 'sound_update'},
-
+    'ping': {'object': client_data, 'method': 'send_pong'},
 }

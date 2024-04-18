@@ -1,6 +1,8 @@
 import { GAME } from "../config/gameConfig.js";
 import { sendSocket, switchScenes } from "../functions/functions.js";
-
+let pingTime = 0
+let pongTime = 0
+let latency_ms
 export var player = {
     icon: '',
     border: '',
@@ -84,4 +86,20 @@ export function rankingRecive(data) {
     playersRanking = message
     rankingUpdate = true
     switchScenes('RankingScreen', 'HomeScreen');
+}
+
+export function alreadyOnline(data) {
+    window.location.href = '/logout/';
+    alert("Esta conta já está online em outra guia ou dispositivo!");
+}
+
+export function pingHandler(data) {
+    latency_ms = get_ping_latency_ms()
+    sendSocket('ping')
+}
+function get_ping_latency_ms() {
+    pongTime = Date.now();
+    var ms = pongTime - pingTime
+    pingTime = Date.now();
+    return ms
 }
