@@ -196,6 +196,8 @@ export function toggleFullscreen() {
 }
 
 export function switchScenes(sceneToStart, sceneToStop = '') {
+    var scene = GAME.scene.getScene(sceneToStop);
+    scene.events.emit('stop');
     GAME.scene.stop(sceneToStop);
     GAME.scene.stop(sceneToStart);
     GAME.scene.run(sceneToStart);

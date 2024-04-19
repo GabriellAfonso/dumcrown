@@ -16,8 +16,11 @@ import { QueueTimer } from './scenes/queue.js';
 import { DumArena } from './scenes/dumarena.js';
 import { StartAnimation } from './animations/scenes/startAnimation.js';
 import { Tutorial } from './scenes/tutorial.js';
+import { ReconnectingScreen } from './scenes/reconnecting.js';
+
 import { clientReciver } from './client/reciver.js';
 import { sendSocket, startScene, switchScenes } from './functions/functions.js';
+import { disconnected } from './client/client.js';
 
 
 export let socket;
@@ -34,11 +37,13 @@ function connectWebSocket() {
         sendSocket('get_player_data')
         sendSocket('ping')
         startScene('Preloader')
+        GAME.scene.stop('ReconnectingScreen');
     };
 
     socket.onerror = (error) => {
         console.error('Erro na conexão WebSocket:', error);
         reconnectWebSocket();
+        startScene('ReconnectingScreen')
     };
 
 
@@ -60,7 +65,9 @@ function connectWebSocket() {
 
     socket.onclose = (event) => {
         console.log('Conexão com WebSocket fechada.');
+        disconnected()
         reconnectWebSocket();
+        startScene('ReconnectingScreen')
     };
 }
 
@@ -93,5 +100,6 @@ GAME.scene.add('Tutorial', Tutorial);
 
 
 
+GAME.scene.add('ReconnectingScreen', ReconnectingScreen);
 
 // GAME.scene.start('Preloader');

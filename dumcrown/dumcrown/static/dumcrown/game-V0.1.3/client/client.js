@@ -2,7 +2,7 @@ import { GAME } from "../config/gameConfig.js";
 import { sendSocket, switchScenes } from "../functions/functions.js";
 let pingTime = 0
 let pongTime = 0
-let latency_ms
+export let latency_ms
 export var player = {
     icon: '',
     border: '',
@@ -101,5 +101,13 @@ function get_ping_latency_ms() {
     pongTime = Date.now();
     var ms = pongTime - pingTime
     pingTime = Date.now();
-    return ms
+    var latency = Math.floor(ms)
+    if (latency > 999) {
+        latency = 999
+    }
+    return latency
+}
+
+export function disconnected() {
+    latency_ms = 999
 }

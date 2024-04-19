@@ -1,7 +1,7 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 
-import { player, experienceUpdated, setExperienceUpdated, players_online } from '../client/client.js';
+import { player, experienceUpdated, setExperienceUpdated, players_online, latency_ms } from '../client/client.js';
 
 import { toggleFullscreen, switchScenes } from '../functions/functions.js';
 
@@ -11,11 +11,40 @@ import { add_text } from '../functions/texts.js'
 import { sendSocket } from '../functions/functions.js';
 
 class Ping {
-    constructor(scene) {
+    constructor(scene, x, y) {
         this.scene = scene;
-        this.initialize(scene)
+        this.initialize(scene, x, y)
     }
 
+    initialize(scene, x, y) {
+        this.ping = scene.add.image(x, y, 'signal01');
+        // this.ping.setScale(0.06)
+        this.ms = add_text(scene, x + 35, y, latency_ms, '16px', 0.5)
+        this.update()
+    }
+
+    latencyCheck() {
+        if (latency_ms <= 70) {
+            return 'signal01'
+        }
+
+        if (latency_ms <= 180) {
+            return 'signal02'
+        }
+
+        if (latency_ms <= 300) {
+            return 'signal03'
+        }
+
+        return 'signal04'
+    }
+
+    update() {
+        this.updatePing = setInterval(() => {
+            this.ping.setTexture(this.latencyCheck())
+            this.ms.setText(latency_ms)
+        }, 1000)
+    }
 }
 class ExpBar {
     constructor(scene) {
@@ -106,10 +135,6 @@ export class HomeScreen extends Phaser.Scene {
         }, 0xffffff);
         fullscreen_button.setScale(0.40);
 
-        let circle = this.add.circle(1200, 40, 10, 0x00FF00);
-        circle.setFillStyle(0x00FF00, 1);
-
-        this.playersOnline = add_text(this, 1220, 28, players_online, '20px')
 
         this.name = add_text(this, 218, 35, player.nickname, '28px')
         this.level = add_text(this, 223, 106, 'Lv: ' + player.level, '25px')
@@ -145,7 +170,7 @@ export class HomeScreen extends Phaser.Scene {
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const deck = new Botao(this, 328, 725, 'deck', () => {
-            switchScenes('DecksScreen', 'HomeScreen');
+            switchScenes('ReconnectingScreen', 'HomeScreen');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const amigos = new Botao(this, 442, 725, 'amigos', () => {
@@ -172,12 +197,22 @@ export class HomeScreen extends Phaser.Scene {
             this.mouseText.setText('X: ' + pointer.x + ' Y: ' + pointer.y);
         });
 
+        this.PingSignal = new Ping(this, 1260, 28)
+
+        this.addEvents()
+
 
     }
 
     update() {
-        this.playersOnline.text = players_online
 
+
+    }
+
+    addEvents() {
+        this.events.on('stop', () => {
+            clearTimeout(this.PingSignal.updatePing);
+        });
     }
 
 

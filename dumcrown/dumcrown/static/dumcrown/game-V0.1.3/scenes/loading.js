@@ -133,7 +133,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('exit_button', PATH + '/images/botoes/exit_button.png');
         this.load.image('giveup', PATH + '/images/botoes/give_up_button.png');
 
-        //coisas
+        //utils
         this.load.image('vs', PATH + '/images/utils/vs.png');
         this.load.image('crystals', PATH + '/images/utils/crystals.png');
         this.load.image('hpbar', PATH + '/images/utils/hpbar.png');
@@ -147,6 +147,12 @@ export class Loading extends Phaser.Scene {
         this.load.image('sword01', PATH + '/images/utils/sword01.png');
         this.load.image('sword02', PATH + '/images/utils/sword02.png');
         this.load.image('timer', PATH + '/images/utils/timer.png');
+        this.load.image('loading_circle', PATH + '/images/utils/loading_circle.png');
+
+        this.load.image('signal01', PATH + '/images/utils/connection_signal01.png');
+        this.load.image('signal02', PATH + '/images/utils/connection_signal02.png');
+        this.load.image('signal03', PATH + '/images/utils/connection_signal03.png');
+        this.load.image('signal04', PATH + '/images/utils/connection_signal04.png');
 
 
         //cards
