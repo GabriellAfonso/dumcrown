@@ -9,6 +9,7 @@ import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js'
 
 import { sendSocket } from '../functions/functions.js';
+import { CardObject } from '../cards/base.js';
 
 class Ping {
     constructor(scene, x, y) {
@@ -129,6 +130,9 @@ export class HomeScreen extends Phaser.Scene {
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
         const background = this.add.image(centerX, centerY, 'homescreen');
+        const lor = this.add.image(centerX - 200, centerY, 'runeterra');
+        lor.setScale(1.05)
+        var testando = new CardObject(this)
 
         const fullscreen_button = new Botao(this, 1465, 35, 'fullscreen', () => {
             toggleFullscreen();
