@@ -9,34 +9,62 @@ export class CardObject extends Phaser.GameObjects.Container {
         this.y = centerY
         this.setSize(328, 489);
 
-        this.cardMonster = scene.add.image(0, 0, 'smoothcriminal_card');
 
+        this.id = 0
+
+        this.cardMonster = scene.add.image(0, 0, 'darkage1_card');
         this.cardLayout = scene.add.image(0, 0, 'cardlayout-neutro');
 
-        // this.nameText = add_text(scene, 0, 60, 'AS PRESAS', '25px', 0.5)
-        this.nameText = scene.add.text(0, 70, 'SMOOTH CRIMINAL',
+        this.name = scene.add.text(0, 70, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', });
-        this.nameText.setOrigin(0.5, 0.5);
+        this.name.setOrigin(0.5, 0.5);
 
-        var texto = 'quando esta carta esta em campo \nTodas as cartas recebem X efeito \npor 17 segundos'
-        this.effect = scene.add.text(0, 140, texto,
+        this.description = scene.add.text(0, 140, '',
             { fontSize: '17px', fill: '#ffffff', align: 'center', fontFamily: 'sans-serif', });
-        this.effect.setOrigin(0.5, 0.5);
+        this.description.setOrigin(0.5, 0.5);
 
-        this.energyText = scene.add.text(-117, -180, 5,
+        this.energy = scene.add.text(-117, -192, '',
             { fontSize: '50px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
-        this.energyText.setOrigin(0.5, 0.5);
+        this.energy.setOrigin(0.5, 0.5);
 
-        this.attackText = scene.add.text(-117, 215, 10,
+        this.attack = scene.add.text(-117, 215, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
-        this.attackText.setOrigin(0.5, 0.5);
+        this.attack.setOrigin(0.5, 0.5);
 
-        this.defenseText = scene.add.text(117, 215, 8,
+        this.defense = scene.add.text(117, 215, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
-        this.defenseText.setOrigin(0.5, 0.5);
+        this.defense.setOrigin(0.5, 0.5);
 
 
-        this.add([this.cardMonster, this.cardLayout, this.effect, this.nameText, this.energyText, this.attackText, this.defenseText]);
+        this.add([this.cardMonster, this.cardLayout, this.description, this.name, this.energy, this.attack, this.defense]);
         this.scene.add.existing(this);
+    }
+
+    createCard(data) {
+        this.id = data.id
+        this.cardMonster.setTexture(data.monster)
+        this.name.text = data.name
+        this.description.text = data.description
+        this.energy.text = data.energy
+        this.attack.text = data.attack
+        this.defense.text = data.defense
+    }
+}
+
+export class JhonCopper extends CardObject {
+    constructor(scene) {
+        super(scene)
+
+        var card = {
+            id: 1,
+            monster: 'jhon_card',
+            name: 'JHON COPPER',
+            description: 'descriçao aqui',
+            energy: 4,
+            attack: 8,
+            defense: 6,
+        }
+
+        this.createCard(card)
     }
 }

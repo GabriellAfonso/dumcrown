@@ -31,7 +31,7 @@ export class RoomScreen extends Phaser.Scene {
         this.add.image(centerX, centerY, 'vs');
 
         const x_close = new Botao(this, 1340, 105, 'x_close', () => {
-            sendSocket('leave_room', room.id)
+            sendSocket('leave_room')
 
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.4)

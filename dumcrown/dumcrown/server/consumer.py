@@ -31,7 +31,8 @@ class PlayerConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         try:
-            self.user = self.scope["user"]
+            self.user = self.scope["user"].id
+            print('conectado', self.user)
             self.channel = self.channel_name
             await self.accept()
             if await self.check_player_already_online():
@@ -69,6 +70,9 @@ class PlayerConsumer(AsyncWebsocketConsumer):
 
         except Exception as e:
             logging.error(f'Error in receive: {e}', exc_info=True)
+
+    async def receive_from_consumer(self, event):
+        await self.send(text_data=json.dumps(event))
 
     # receive message from group
 

@@ -182,7 +182,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('ballhan_card', PATH + '/images/cards/monsters/card18.png');
         this.load.image('darknecessites_card', PATH + '/images/cards/monsters/card19.png');
         this.load.image('anomaly_card', PATH + '/images/cards/monsters/card20.png');
-        this.load.image('jhon_card', PATH + '/images/cards/monsters/card21.png');
+        this.load.image('jhon_card', PATH + '/images/cards/monsters/jhon_copper.png');
         this.load.image('carol_card', PATH + '/images/cards/monsters/card22.png');
         this.load.image('darkage4_card', PATH + '/images/cards/monsters/card23.png');
         this.load.image('rhioros_ghost', PATH + '/images/cards/monsters/card24.png');

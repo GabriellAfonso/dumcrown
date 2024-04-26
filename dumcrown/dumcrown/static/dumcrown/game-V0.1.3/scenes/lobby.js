@@ -66,9 +66,13 @@ export class GameLobby extends Phaser.Scene {
 
         const inputRoom = this.add.dom(1100, 50, this.inputRoom);
         this.joinButton = new Botao(this, 1220, 52, 'enter_room', () => {
-            sendSocket('join_room', this.inputRoom.value.trim())
+            if (this.inputRoom.value) {
+                sendSocket('join_room', this.inputRoom.value.trim())
+            }
+
 
         });
+
 
 
         this.gameLobbyContainer.add(x_close)
@@ -113,7 +117,7 @@ export class GameLobby extends Phaser.Scene {
     createRoom(sceneKey) {
         if (!this.game.scene.isActive(sceneKey) && !this.game.scene.isActive('QueueTimer')) {
             this.game.scene.run(sceneKey);
-            sendSocket('create_room', '')
+            sendSocket('create_room')
         }
     }
 

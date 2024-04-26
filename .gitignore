@@ -1,6 +1,7 @@
 certbot
 ssl
 postgres
+node_modules
 
 # Django #
 *.log

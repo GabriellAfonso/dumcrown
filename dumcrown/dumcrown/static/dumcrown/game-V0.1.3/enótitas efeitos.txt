@@ -1,0 +1,26 @@
+limitar quantos tipos de enótitas pode ter por deck
+
+cartas geradas, cartas que só existem quando sao sumonadas por outras cartas
+
+se a carta matar x unidades acontece algo
+
+
+fazer cartas de feitiço de cada enótita que funciona em todos ou apenas da mesma enótita
+feitiço que duplica carta
+
+cartas que roubam vida quando atacam
+
+feitiço, sacrifica sua defesa pra dar true damage
+
+talvez alguma forma de trocar sua propria vida por um buff
+
+feitiço, congela uma carta inimiga
+
+
+efeito curar carta
+
+fusao: cartas de fusao que estrarem em combate 3 vezes ativarão seu "haki" ganhando mais ataque e mais defesa
+
+emissao: ideia(eles podem fabricar qualquer coisa atravez do corpo, entao eles aleatoriamente pode pegar alguns effeitos diferentes exclusivous ou nao exclusivo da "raça" deles)
+
+mutaçao: 
