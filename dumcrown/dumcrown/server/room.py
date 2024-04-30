@@ -131,6 +131,8 @@ class GameRoom:
         try:
             # ver em qual sala eu estou e me desconectar dela
             room_id = await self.find_player_room(self.user)
+            if room_id is None:
+                return
 
             room = self.rooms.get(room_id)
 
@@ -138,7 +140,6 @@ class GameRoom:
             player2_channel = room.get('player2', {}).get('channel')
 
             if room['owner'] == self.user:
-                # TODO: clear room imbutido no room_close
                 await self.consumer.send_to_client('room_close')
                 await self.consumer.channel_layer.group_discard(room_id, self.consumer.channel_name)
 
@@ -182,10 +183,12 @@ class GameRoom:
 
     async def find_player_room(self, player_id):
         for room_id, room_info in self.rooms.items():
-            if room_info['player1']['id'] == player_id:
+            room_player1_id = room_info.get('player1', {}).get('id')
+            room_player2_id = room_info.get('player2', {}).get('id')
+
+            if room_player1_id == player_id or room_player2_id == player_id:
                 return room_id
-            elif room_info['player2']['id'] == player_id:
-                return room_id
+
         return None
 
     async def generate_room_id(self):

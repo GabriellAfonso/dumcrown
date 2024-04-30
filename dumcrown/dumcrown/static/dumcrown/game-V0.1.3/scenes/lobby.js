@@ -54,13 +54,6 @@ export class GameLobby extends Phaser.Scene {
         this.inputRoom.style.textAlign = "center"
         this.inputRoom.placeholder = "Sala";
 
-        this.inputRoom.addEventListener("keyup", function (event) {
-            // Verificar se a tecla pressionada é "Enter"
-            if (event.key === "Enter") {
-                // Emitir um evento pointerup para o botão de entrada
-                joinButton.emit('pointerup');
-            }
-        });
 
 
 
@@ -72,6 +65,16 @@ export class GameLobby extends Phaser.Scene {
 
 
         });
+
+        this.inputRoom.addEventListener("keyup", (event) => {
+            // Verificar se a tecla pressionada é "Enter"
+            if (event.key === "Enter") {
+                if (this.inputRoom.value) {
+                    sendSocket('join_room', this.inputRoom.value.trim())
+                }
+            }
+        });
+
 
 
 

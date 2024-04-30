@@ -34,6 +34,7 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             self.user = self.scope["user"].id
             print('conectado', self.user)
             self.channel = self.channel_name
+            self.game_room = GameRoom(self)
             await self.accept()
             if await self.check_player_already_online():
                 return
@@ -48,7 +49,9 @@ class PlayerConsumer(AsyncWebsocketConsumer):
         try:
             if self.connection_denied:
                 return
+
             print('passou no disconnect')
+            await self.game_room.leave_room()
             await player_disconnected(self.user)
         except Exception as e:
             logging.error(f'Error in disconnect: {e}', exc_info=True)
