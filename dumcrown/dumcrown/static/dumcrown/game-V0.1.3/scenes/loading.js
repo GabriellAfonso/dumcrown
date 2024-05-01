@@ -5,6 +5,7 @@ import { PATH } from '../config/gameConfig.js';
 import { Botao } from '../functions/functions.js';
 import { toggleFullscreen } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
+import { loadSFX } from '../soundfx/sounds.js';
 
 
 
@@ -53,7 +54,7 @@ export class Loading extends Phaser.Scene {
         this.load.audio('home_sound', PATH + '/soundfx/home_sound.mp3')
         this.load.audio('arena_music', PATH + '/soundfx/arena_music.mp3')
         this.load.audio('uiselect_sound', PATH + '/soundfx/uiselect.flac')
-        this.load.audio('snapclick_sound', PATH + '/soundfx/snapclick.wav')
+        this.load.audio('click_sound_01', PATH + '/soundfx/snapclick.wav')
 
         //background
         this.load.image('blackground', PATH + '/images/backgrounds/black_screen.jpg');
@@ -104,9 +105,9 @@ export class Loading extends Phaser.Scene {
         this.load.image('soscreen', PATH + '/images/botoes/soscreen.png');
         this.load.image('deck', PATH + '/images/botoes/deck.png');
         this.load.image('amigos', PATH + '/images/botoes/amigos.png');
-        this.load.image('config', PATH + '/images/botoes/config.png');
+        this.load.image('config_button', PATH + '/images/botoes/config.png');
         this.load.image('envelope', PATH + '/images/botoes/envelope.png');
-        this.load.image('loja', PATH + '/images/botoes/loja.png');
+        this.load.image('store_button', PATH + '/images/botoes/loja.png');
         this.load.image('missoes', PATH + '/images/botoes/missoes.png');
         this.load.image('podio', PATH + '/images/botoes/podio.png');
         this.load.image('x_close', PATH + '/images/botoes/x.png');
@@ -222,11 +223,11 @@ export class Loading extends Phaser.Scene {
         // Remova a barra de progresso após o carregamento completo, se necessário.
         this.progressBox.destroy();
         this.progressBar.destroy();
-
+        loadSFX()
         this.hoverSound = GAME.sound.add('hover_sound');
         this.clickSound = GAME.sound.add('click_sound');
+        this.snapclick = GAME.sound.add('click_sound_01')
         this.closeSound = GAME.sound.add('close_sound');
-        this.snapclick = GAME.sound.add('snapclick_sound')
         this.uiselect = GAME.sound.add('uiselect_sound');
 
 
@@ -257,7 +258,7 @@ export class Loading extends Phaser.Scene {
             if (player.nickname.length === 0) {
                 GAME.scene.start('Nickname');
             } else {
-                GAME.scene.start('HomeScreen');
+                GAME.scene.start('HomeScene');
             }
         }, 0xffff00);
         entrar.setScale(0.6)

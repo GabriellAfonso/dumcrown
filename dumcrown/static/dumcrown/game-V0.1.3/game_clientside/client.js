@@ -100,5 +100,5 @@ export function rankingRecive(data) {
     playersRanking = message
     // console.log(playersRanking)
     rankingUpdate = true
-    switchScenes('RankingScreen', 'HomeScreen');
+    switchScenes('RankingScreen', 'HomeScene');
 }

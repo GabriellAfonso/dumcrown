@@ -24,7 +24,7 @@ export class GameLobby extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'play_background');
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScreen', 'GameLobby')
+            switchScenes('HomeScene', 'GameLobby')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
         this.gameLobbyContainer = this.add.container(0, 0);

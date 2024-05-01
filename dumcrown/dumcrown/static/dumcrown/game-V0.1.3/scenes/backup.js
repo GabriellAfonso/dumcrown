@@ -657,7 +657,7 @@ export class DumArena extends Phaser.Scene {
 
                             const continue_button = new Botao(this, centerX, 600, 'start_button', () => {
 
-                                switchScenes('HomeScreen', 'DumArena');
+                                switchScenes('HomeScene', 'DumArena');
                             }, 0xffff00,);
                             continue_button.alpha = 0
 
@@ -742,7 +742,7 @@ export class DumArena extends Phaser.Scene {
 
                             const continue_button = new Botao(this, centerX, 600, 'start_button', () => {
 
-                                switchScenes('HomeScreen', 'DumArena');
+                                switchScenes('HomeScene', 'DumArena');
                             }, 0xffff00,);
                             continue_button.alpha = 0
 

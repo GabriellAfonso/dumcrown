@@ -17,7 +17,7 @@ export class RankingScreen extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'ranking_background');
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScreen', 'RankingScreen')
+            switchScenes('HomeScene', 'RankingScreen')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
 

@@ -15,9 +15,9 @@ import { sendSocket } from '../functions/functions.js';
 
 
 
-export class HomeScreen extends Phaser.Scene {
+export class HomeScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'HomeScreen' });
+        super({ key: 'HomeScene' });
     }
 
 
@@ -27,7 +27,7 @@ export class HomeScreen extends Phaser.Scene {
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
 
-        const background = this.add.image(centerX, centerY, 'homescreen');
+        const background = this.add.image(centerX, centerY, 'HomeScene');
         let circle = this.add.circle(1200, 40, 10, 0x00FF00);
         circle.setFillStyle(0x00FF00, 1);
 
@@ -57,7 +57,7 @@ export class HomeScreen extends Phaser.Scene {
         this.nivel.setOrigin(0, 0);
 
         const perfil = new Botao(this, 115, 105, player.icon, () => {
-            switchScenes('Perfil', 'HomeScreen');
+            switchScenes('Perfil', 'HomeScene');
 
         }, 0xffffff, soundfx.clickSound);
 
@@ -88,27 +88,27 @@ export class HomeScreen extends Phaser.Scene {
 
 
         const config = new Botao(this, 1390, 35, 'config', () => {
-            switchScenes('ConfigScreen', 'HomeScreen');
+            switchScenes('ConfigScreen', 'HomeScene');
         }, 0xffff00, soundfx.clickSound);
 
         const loja = new Botao(this, 100, 725, 'loja', () => {
-            switchScenes('StoreScreen', 'HomeScreen');
+            switchScenes('StoreScreen', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const missoes = new Botao(this, 214, 725, 'missoes', () => {
-            switchScenes('MissionsScreen', 'HomeScreen');
+            switchScenes('MissionsScreen', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const deck = new Botao(this, 328, 725, 'deck', () => {
-            switchScenes('DecksScreen', 'HomeScreen');
+            switchScenes('DecksScreen', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const amigos = new Botao(this, 442, 725, 'amigos', () => {
-            switchScenes('FriendsScreen', 'HomeScreen');
+            switchScenes('FriendsScreen', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const envelope = new Botao(this, 556, 725, 'envelope', () => {
-            switchScenes('EmailsScreen', 'HomeScreen');
+            switchScenes('EmailsScreen', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const podio = new Botao(this, 670, 725, 'podio', () => {
@@ -117,7 +117,7 @@ export class HomeScreen extends Phaser.Scene {
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const jogo = new Botao(this, 1280, 640, 'play_button', () => {
-            switchScenes('GameLobby', 'HomeScreen');
+            switchScenes('GameLobby', 'HomeScene');
         }, 0xffffff, soundfx.clickSound, null, true);
 
 
@@ -126,8 +126,8 @@ export class HomeScreen extends Phaser.Scene {
     update() {
         this.playersOnline.text = players_online
         if (experienceUpdated) {
-            GAME.scene.stop('HomeScreen')
-            GAME.scene.run('HomeScreen')
+            GAME.scene.stop('HomeScene')
+            GAME.scene.run('HomeScene')
 
             setExperienceUpdated(false); // Redefine a variável de controle para false após a atualização
         }
@@ -148,7 +148,7 @@ export class Perfil extends Phaser.Scene {
         const perfil = new Botao(this, 315, 210, player.icon, () => {
             x_close.disableInteractive();
             perfil.disableInteractive();
-            switchScenes('IconPage', 'HomeScreen');
+            switchScenes('IconPage', 'HomeScene');
         }, 0xcccccc, soundfx.clickSound);
         perfil.setScale(0.7);
 
@@ -197,7 +197,7 @@ export class Perfil extends Phaser.Scene {
         this.winrate.setOrigin(0.5, 0.5);
 
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScreen', 'Perfil')
+            switchScenes('HomeScene', 'Perfil')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
 

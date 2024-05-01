@@ -22,7 +22,7 @@ export class ConfigScreen extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'config_background');
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScreen', 'ConfigScreen')
+            switchScenes('HomeScene', 'ConfigScreen')
 
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)

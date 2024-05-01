@@ -86,7 +86,7 @@ export class Nickname extends Phaser.Scene {
                 setNicknameDenied(null);
                 GAME.scene.stop('Nickname');
                 GAME.scene.stop('Tutorial');
-                GAME.scene.start('HomeScreen');
+                GAME.scene.start('HomeScene');
                 GAME.scene.start('Tutorial');
                 this.tutorial = this.scene.get('Tutorial')
                 this.tutorial.index = 1

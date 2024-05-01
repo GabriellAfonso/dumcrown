@@ -2,6 +2,7 @@ import { matchDB, updatePhase } from '../client/match.js';
 
 import { GAME } from '../config/gameConfig.js';
 import { socket } from '../main.js';
+import { sfx } from '../soundfx/sounds.js';
 
 
 export class Botao extends Phaser.GameObjects.Image {
@@ -60,6 +61,9 @@ export class Botao extends Phaser.GameObjects.Image {
         }
     }
 }
+
+
+
 
 export class MasterButton extends Phaser.GameObjects.Image {
     constructor(scene, x, y, callback,

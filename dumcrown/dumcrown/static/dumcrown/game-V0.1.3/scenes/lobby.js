@@ -19,11 +19,11 @@ export class GameLobby extends Phaser.Scene {
 
     create() {
         const soundfx = this.scene.get('Loading');
-
-
         const background = this.add.image(centerX, centerY, 'play_background');
+
+
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScreen', 'GameLobby')
+            switchScenes('HomeScene', 'GameLobby')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
         this.gameLobbyContainer = this.add.container(0, 0);
@@ -41,40 +41,44 @@ export class GameLobby extends Phaser.Scene {
 
         }, null, null, null, true);
 
-        this.inputRoom = document.createElement("input");
-        this.inputRoom.type = "text";
-        this.inputRoom.id = "inputRoom";
-        this.inputRoom.style.width = "80px";
-        this.inputRoom.style.height = "30px";
-        this.inputRoom.style.fontSize = "20px";
-        this.inputRoom.style.outline = "none";
-        this.inputRoom.style.borderRadius = "10px";
-        this.inputRoom.style.backgroundColor = "#555555";
-        this.inputRoom.style.border = "2px solid #555555";
-        this.inputRoom.style.textAlign = "center"
-        this.inputRoom.placeholder = "Sala";
+        // this.inputRoom = document.createElement("input");
+        // this.inputRoom.type = "text";
+        // this.inputRoom.id = "inputRoom";
+        // this.inputRoom.style.width = "80px";
+        // this.inputRoom.style.height = "30px";
+        // this.inputRoom.style.fontSize = "20px";
+        // this.inputRoom.style.outline = "none";
+        // this.inputRoom.style.borderRadius = "10px";
+        // this.inputRoom.style.backgroundColor = "#555555";
+        // this.inputRoom.style.border = "2px solid #555555";
+        // this.inputRoom.style.textAlign = "center"
+        // this.inputRoom.placeholder = "Sala";
 
 
 
 
-        const inputRoom = this.add.dom(1100, 50, this.inputRoom);
+        var inputRoom = this.add.dom(1100, 50, 'input', {
+            type: 'text', id: 'inputRoom',
+            width: '80px', height: '30px',
+            fontSize: '20px', outline: 'none', borderRadius: '10px',
+            backgroundColor: '#555555', border: '2px solid #555555',
+            textAlign: 'center',
+        });
+
         this.joinButton = new Botao(this, 1220, 52, 'enter_room', () => {
-            if (this.inputRoom.value) {
-                sendSocket('join_room', this.inputRoom.value.trim())
+            if (inputRoom.node.value) {
+                sendSocket('join_room', inputRoom.node.value.trim())
             }
 
 
         });
 
-        this.inputRoom.addEventListener("keyup", (event) => {
-            // Verificar se a tecla pressionada é "Enter"
-            if (event.key === "Enter") {
-                if (this.inputRoom.value) {
-                    sendSocket('join_room', this.inputRoom.value.trim())
-                }
+
+        this.input.keyboard.on('keydown-ENTER', (event) => {
+            if (document.activeElement === inputRoom.node && inputRoom.node.value) {
+                sendSocket('join_room', inputRoom.node.value.trim());
             }
         });
-
 
 
 
@@ -84,7 +88,7 @@ export class GameLobby extends Phaser.Scene {
         this.gameLobbyContainer.add(this.joinButton)
 
         if (this.game.scene.isActive('QueueTimer')) {
-            this.inputRoom.disabled = true;
+            inputRoom.disabled = true;
             this.joinButton.disableInteractive()
         }
         this.completeAnimation = true

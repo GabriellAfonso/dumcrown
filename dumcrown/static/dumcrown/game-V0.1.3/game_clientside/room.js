@@ -67,7 +67,7 @@ export function callStart() {
 //     room.player2_icon = message.player2.icon
 //     room.player1Nickname = message.player1.nickname
 //     room.player2Nickname = message.player2.nickname
-//     switchScenes('RoomScreen', 'HomeScreen')
+//     switchScenes('RoomScreen', 'HomeScene')
 // }
 
 export function roomUpdate(data) {

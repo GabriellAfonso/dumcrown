@@ -17,7 +17,7 @@ export class MissionsScreen extends Phaser.Scene {
         const background = this.add.image(centerX, centerY, 'missions_background');
         const building = this.add.image(centerX, centerY, 'building');
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScreen', 'MissionsScreen')
+            switchScenes('HomeScene', 'MissionsScreen')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
 

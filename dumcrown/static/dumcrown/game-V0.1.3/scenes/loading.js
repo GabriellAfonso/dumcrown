@@ -57,7 +57,7 @@ export class Loading extends Phaser.Scene {
         //background
         this.load.image('blackground', PATH + '/images/backgrounds/black_screen.jpg');
         this.load.image('blank_background', PATH + '/images/backgrounds/blank_screen.jpg');
-        this.load.image('homescreen', PATH + '/images/backgrounds/homescreen.jpg');
+        this.load.image('HomeScene', PATH + '/images/backgrounds/HomeScene.jpg');
         this.load.image('perfil_background', PATH + '/images/backgrounds/perfil_background.jpg');
         this.load.image('iconpage_background', PATH + '/images/backgrounds/iconpage_background.png');
         this.load.image('config_background', PATH + '/images/backgrounds/config_background.jpg');
@@ -252,7 +252,7 @@ export class Loading extends Phaser.Scene {
             if (player.nickname.length === 0) {
                 GAME.scene.start('Nickname');
             } else {
-                GAME.scene.start('HomeScreen');
+                GAME.scene.start('HomeScene');
             }
         }, 0xffff00);
         entrar.setScale(0.6)

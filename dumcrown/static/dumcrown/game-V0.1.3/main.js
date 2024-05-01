@@ -8,7 +8,7 @@ import { GAME } from './config/gameConfig.js';
 
 import { Preloader, Loading } from './scenes/loading.js';
 import { Nickname } from './scenes/nickname.js';
-import { HomeScreen, Perfil, IconPage } from './scenes/home.js';
+import { HomeScene, Perfil, IconPage } from './scenes/home.js';
 import { ConfigScreen } from './scenes/settings.js';
 import { StoreScreen } from './scenes/store.js';
 import { MissionsScreen } from './scenes/missions.js';
@@ -61,7 +61,7 @@ socket.onclose = (event) => {
 GAME.scene.add('Preloader', Preloader);
 GAME.scene.add('Loading', Loading);
 GAME.scene.add('Nickname', Nickname);
-GAME.scene.add('HomeScreen', HomeScreen);
+GAME.scene.add('HomeScene', HomeScene);
 GAME.scene.add('Perfil', Perfil);
 GAME.scene.add('IconPage', IconPage);
 GAME.scene.add('StoreScreen', StoreScreen);

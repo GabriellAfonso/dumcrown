@@ -36,7 +36,7 @@ export function gameWin(scene) {
                     crownPoints.alpha = 0
 
                     const continue_button = new Botao(scene, centerX, 650, 'exit_button', () => {
-                        switchScenes('HomeScreen', 'DumArena');
+                        switchScenes('HomeScene', 'DumArena');
                         const soundfx = scene.scene.get('Loading');
                         soundfx.arena_music.stop()
                         soundfx.music.play()
@@ -132,7 +132,7 @@ export function gameLoss(scene) {
 
                     const continue_button = new Botao(scene, centerX, 650, 'exit_button', () => {
 
-                        switchScenes('HomeScreen', 'DumArena');
+                        switchScenes('HomeScene', 'DumArena');
                         const soundfx = scene.scene.get('Loading');
                         soundfx.arena_music.stop()
                         soundfx.music.play()

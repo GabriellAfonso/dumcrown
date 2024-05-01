@@ -85,7 +85,7 @@ export function rankingRecive(data) {
     const message = data
     playersRanking = message
     rankingUpdate = true
-    switchScenes('RankingScreen', 'HomeScreen');
+    switchScenes('RankingScreen', 'HomeScene');
 }
 
 export function alreadyOnline(data) {
