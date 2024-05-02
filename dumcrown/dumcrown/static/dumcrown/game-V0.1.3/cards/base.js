@@ -1,6 +1,6 @@
 import { GAME, centerX, centerY } from "../config/gameConfig.js";
 import { add_text } from "../functions/texts.js";
-
+import { cardData } from "./data.js";
 export class CardObject extends Phaser.GameObjects.Container {
     constructor(scene) {
         super(scene);
@@ -8,7 +8,7 @@ export class CardObject extends Phaser.GameObjects.Container {
         this.x = centerX + 200
         this.y = centerY
         this.setSize(328, 489);
-
+        this.scene = scene;
 
         this.id = 0
 
@@ -37,7 +37,7 @@ export class CardObject extends Phaser.GameObjects.Container {
 
 
         this.add([this.cardImage, this.cardLayout, this.description, this.name, this.energy, this.attack, this.defense]);
-        this.scene.add.existing(this);
+        // this.scene.add.existing(this);
     }
 
     createCard(data) {
