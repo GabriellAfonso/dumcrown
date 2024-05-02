@@ -64,6 +64,7 @@ export class GameLobby extends Phaser.Scene {
             backgroundColor: '#555555', border: '2px solid #555555',
             textAlign: 'center',
         });
+        inputRoom.node.placeholder = "Room";
 
         this.joinButton = new Botao(this, 1220, 52, 'enter_room', () => {
             if (inputRoom.node.value) {

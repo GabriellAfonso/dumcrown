@@ -5,10 +5,11 @@ import { cardsShow, Card } from '../functions/cards.js';
 
 
 import { Botao } from '../functions/functions.js';
+import { close_button } from '../functions/buttons.js';
 
-export class DecksScreen extends Phaser.Scene {
+export class DecksScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'DecksScreen' });
+        super({ key: 'DecksScene' });
     }
 
     create() {
@@ -16,11 +17,12 @@ export class DecksScreen extends Phaser.Scene {
 
 
         const background = this.add.image(centerX, centerY, 'decks_background');
-        const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScene', 'DecksScreen')
-        }, 0xffff00, soundfx.closeSound);
-        x_close.setScale(0.5)
-        x_close.setDepth(4)
+        const close = close_button(this, 1440, 40, 'HomeScene', 'DecksScene')
+        // const x_close = new Botao(this, 1440, 40, 'x_close', () => {
+        //     switchScenes('HomeScene', 'DecksScene')
+        // }, 0xffff00, soundfx.closeSound);
+        // x_close.setScale(0.5)
+        close.setDepth(4)
 
 
         const card = cardsShow(this);

@@ -4,9 +4,9 @@ import { switchScenes, logoutAjax } from '../functions/functions.js';
 
 import { Botao } from '../functions/functions.js';
 
-export class MissionsScreen extends Phaser.Scene {
+export class MissionsScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'MissionsScreen' });
+        super({ key: 'MissionsScene' });
     }
 
     create() {
@@ -15,7 +15,7 @@ export class MissionsScreen extends Phaser.Scene {
         const background = this.add.image(centerX, centerY, 'missions_background');
         const building = this.add.image(centerX, centerY, 'building');
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScene', 'MissionsScreen')
+            switchScenes('HomeScene', 'MissionsScene')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
 

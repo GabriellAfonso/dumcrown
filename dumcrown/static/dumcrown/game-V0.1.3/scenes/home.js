@@ -96,19 +96,19 @@ export class HomeScene extends Phaser.Scene {
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const missoes = new Botao(this, 214, 725, 'missoes', () => {
-            switchScenes('MissionsScreen', 'HomeScene');
+            switchScenes('MissionsScene', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const deck = new Botao(this, 328, 725, 'deck', () => {
-            switchScenes('DecksScreen', 'HomeScene');
+            switchScenes('DecksScene', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const amigos = new Botao(this, 442, 725, 'amigos', () => {
-            switchScenes('FriendsScreen', 'HomeScene');
+            switchScenes('FriendsScene', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const envelope = new Botao(this, 556, 725, 'envelope', () => {
-            switchScenes('EmailsScreen', 'HomeScene');
+            switchScenes('EmailsScene', 'HomeScene');
         }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
 
         const podio = new Botao(this, 670, 725, 'podio', () => {

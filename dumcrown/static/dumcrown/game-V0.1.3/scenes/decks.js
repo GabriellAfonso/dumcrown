@@ -7,9 +7,9 @@ import socket from '../main.js';
 
 import { Botao } from '../functions/functions.js';
 
-export class DecksScreen extends Phaser.Scene {
+export class DecksScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'DecksScreen' });
+        super({ key: 'DecksScene' });
     }
 
     create() {
@@ -18,7 +18,7 @@ export class DecksScreen extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'decks_background');
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScene', 'DecksScreen')
+            switchScenes('HomeScene', 'DecksScene')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
         x_close.setDepth(4)

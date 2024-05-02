@@ -8,9 +8,9 @@ import { textAnimation } from '../animations/scripts/textAnimations.js';
 
 import { Botao } from '../functions/functions.js';
 
-export class EmailsScreen extends Phaser.Scene {
+export class EmailsScene extends Phaser.Scene {
     constructor() {
-        super({ key: 'EmailsScreen' });
+        super({ key: 'EmailsScene' });
     }
 
     create() {
@@ -19,7 +19,7 @@ export class EmailsScreen extends Phaser.Scene {
         const background = this.add.image(centerX, centerY, 'emails_background');
         const building = this.add.image(centerX, centerY, 'building');
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScene', 'EmailsScreen')
+            switchScenes('HomeScene', 'EmailsScene')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
         x_close.depth = 150

@@ -168,35 +168,33 @@ export class HomeScene extends Phaser.Scene {
             switchScenes('StoreScreen', 'HomeScene');
         }, { hoverSound: sfx.houverSound });
 
+        const missionsButton = new Button(this, 214, 725, 'missions_button', () => {
+            switchScenes('MissionsScene', 'HomeScene');
+        }, { hoverSound: sfx.houverSound });
 
-        const missoes = new Botao(this, 214, 725, 'missoes', () => {
-            switchScenes('MissionsScreen', 'HomeScene');
-        }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
+        const decksButton = new Button(this, 328, 725, 'decks_button', () => {
+            switchScenes('DecksScene', 'HomeScene');
+        }, { hoverSound: sfx.houverSound });
 
-        const deck = new Botao(this, 328, 725, 'deck', () => {
-            switchScenes('ReconnectingScreen', 'HomeScene');
-        }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
+        const friendsButton = new Button(this, 442, 725, 'friends_button', () => {
+            switchScenes('FriendsScene', 'HomeScene');
+        }, { hoverSound: sfx.houverSound });
 
-        const amigos = new Botao(this, 442, 725, 'amigos', () => {
-            switchScenes('FriendsScreen', 'HomeScene');
-        }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
-
-        const envelope = new Botao(this, 556, 725, 'envelope', () => {
-            switchScenes('EmailsScreen', 'HomeScene');
-
-        }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
-
-        const podio = new Botao(this, 670, 725, 'podio', () => {
+        const emailButton = new Button(this, 556, 725, 'email_button', () => {
+            switchScenes('EmailsScene', 'HomeScene');
+        }, { hoverSound: sfx.houverSound });
+        const rankingButton = new Button(this, 670, 725, 'ranking_button', () => {
             sendSocket('get_ranking')
-        }, 0xffff00, soundfx.clickSound, soundfx.hoverSound);
+        }, { hoverSound: sfx.houverSound });
 
-        const jogo = new Botao(this, 1280, 640, 'play_button', () => {
+
+        const playButton = new Button(this, 1280, 640, 'play_button', () => {
             switchScenes('GameLobby', 'HomeScene');
-        }, 0xffffff, soundfx.clickSound, null, true);
+        }, { useHoverEffect: true });
+
+
 
         this.mouseText = this.add.text(centerX, 10, '', { fontSize: '20px', fill: '#ffffff' },);
-
-        // Adicione um evento de 'pointermove' à cena
         this.input.on('pointermove', (pointer) => {
             // Atualize o texto com as coordenadas do mouse
             this.mouseText.setText('X: ' + pointer.x + ' Y: ' + pointer.y);
