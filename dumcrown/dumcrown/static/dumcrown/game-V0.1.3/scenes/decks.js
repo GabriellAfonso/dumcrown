@@ -17,11 +17,7 @@ export class DecksScene extends Phaser.Scene {
 
 
         const background = this.add.image(centerX, centerY, 'decks_background');
-        const close = close_button(this, 1440, 40, 'HomeScene', 'DecksScene')
-        // const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-        //     switchScenes('HomeScene', 'DecksScene')
-        // }, 0xffff00, soundfx.closeSound);
-        // x_close.setScale(0.5)
+        const close = close_button(this, 1460, 35, 'HomeScene', 'DecksScene', 0.4)
         close.setDepth(4)
 
 
@@ -42,6 +38,12 @@ export class DecksScene extends Phaser.Scene {
         deckcontainer.setMask(new Phaser.Display.Masks.GeometryMask(this, mask));
         deckcontainer.setSize(1100, 3600)
         deckcontainer.setDepth(1);
+        var containerRect = this.add.rectangle(
+            0, 0,
+            deckcontainer.width + 1000, deckcontainer.height + 500, 0xCCCCCC, 0.4);
+        containerRect.setStrokeStyle(2, 0x000000);
+        containerRect.setOrigin(0.5);
+        deckcontainer.add(containerRect);
         card.c1.setDepth(0);
         card.c2.setDepth(0);
         card.c3.setDepth(0);

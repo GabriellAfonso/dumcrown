@@ -65,7 +65,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('config_background', PATH + '/images/backgrounds/config_background.jpg');
         this.load.image('store_background', PATH + '/images/backgrounds/loja_screen.jpg');
         this.load.image('missions_background', PATH + '/images/backgrounds/missoes_screen.jpg');
-        this.load.image('decks_background', PATH + '/images/backgrounds/decks_screen.jpg');
+        this.load.image('decks_background', PATH + '/images/backgrounds/decks_background.png');
         this.load.image('friends_background', PATH + '/images/backgrounds/amigos_background.jpg');
         this.load.image('emails_background', PATH + '/images/backgrounds/emails_screen.jpg');
         this.load.image('ranking_background', PATH + '/images/backgrounds/ranking_screen.jpg');
@@ -100,39 +100,41 @@ export class Loading extends Phaser.Scene {
         this.load.image('diamond', PATH + '/images/tier_shields/diamond.png');
         this.load.image('master', PATH + '/images/tier_shields/master.png');
 
-        //botoes
-        this.load.image('fullscreen', PATH + '/images/botoes/fullscreen.png');
-        this.load.image('soscreen', PATH + '/images/botoes/soscreen.png');
-        this.load.image('decks_button', PATH + '/images/botoes/deck.png');
-        this.load.image('friends_button', PATH + '/images/botoes/amigos.png');
-        this.load.image('config_button', PATH + '/images/botoes/config.png');
-        this.load.image('email_button', PATH + '/images/botoes/envelope.png');
-        this.load.image('store_button', PATH + '/images/botoes/loja.png');
-        this.load.image('missions_button', PATH + '/images/botoes/missoes.png');
-        this.load.image('ranking_button', PATH + '/images/botoes/podio.png');
-        this.load.image('x_close', PATH + '/images/botoes/x.png');
-        this.load.image('aba_icone', PATH + '/images/botoes/aba_icone.png');
-        this.load.image('aba_moldura', PATH + '/images/botoes/aba_moldura.png');
-        this.load.image('aba_arena', PATH + '/images/botoes/arena_button.png');
+        //buttons 
+        this.load.image('fullscreen', PATH + '/images/buttons/fullscreen.png');
+        this.load.image('soscreen', PATH + '/images/buttons/soscreen.png');
+        this.load.image('decks_button', PATH + '/images/buttons/deck.png');
+        this.load.image('friends_button', PATH + '/images/buttons/amigos.png');
+        this.load.image('config_button', PATH + '/images/buttons/config.png');
+        this.load.image('email_button', PATH + '/images/buttons/envelope.png');
+        this.load.image('store_button', PATH + '/images/buttons/loja.png');
+        this.load.image('missions_button', PATH + '/images/buttons/missoes.png');
+        this.load.image('ranking_button', PATH + '/images/buttons/podio.png');
+        this.load.image('x_close', PATH + '/images/buttons/x.png');
+        this.load.image('aba_icone', PATH + '/images/buttons/aba_icone.png');
+        this.load.image('aba_moldura', PATH + '/images/buttons/aba_moldura.png');
+        this.load.image('aba_arena', PATH + '/images/buttons/arena_button.png');
+
+        this.load.image('decks_select_button', PATH + '/images/buttons/decks_select_button.png');
 
 
-        this.load.image('logout', PATH + '/images/botoes/sair.png');
-        this.load.image('save_config', PATH + '/images/botoes/salvar.png');
-        this.load.image('aba_select', PATH + '/images/botoes/select.png');
-        this.load.image('geral', PATH + '/images/botoes/geral.png');
-        this.load.image('audio', PATH + '/images/botoes/audio.png');
-        this.load.image('conta', PATH + '/images/botoes/conta.png');
-        this.load.image('sobre', PATH + '/images/botoes/sobre.png');
-        this.load.image('entrar_button', PATH + '/images/botoes/entrar.png');
-        this.load.image('play_button', PATH + '/images/botoes/play.png');
-        this.load.image('Create_room_button', PATH + '/images/botoes/create_room.png');
-        this.load.image('find_match_button', PATH + '/images/botoes/find_match.png');
-        this.load.image('enter_room', PATH + '/images/botoes/entrar_button.png');
-        this.load.image('start_button', PATH + '/images/botoes/start.png');
-        this.load.image('button_off', PATH + '/images/botoes/button_off.png');
-        this.load.image('button_on', PATH + '/images/botoes/button_on.png');
-        this.load.image('exit_button', PATH + '/images/botoes/exit_button.png');
-        this.load.image('giveup', PATH + '/images/botoes/give_up_button.png');
+        this.load.image('logout', PATH + '/images/buttons/sair.png');
+        this.load.image('save_config', PATH + '/images/buttons/salvar.png');
+        this.load.image('aba_select', PATH + '/images/buttons/select.png');
+        this.load.image('geral', PATH + '/images/buttons/geral.png');
+        this.load.image('audio', PATH + '/images/buttons/audio.png');
+        this.load.image('conta', PATH + '/images/buttons/conta.png');
+        this.load.image('sobre', PATH + '/images/buttons/sobre.png');
+        this.load.image('entrar_button', PATH + '/images/buttons/entrar.png');
+        this.load.image('play_button', PATH + '/images/buttons/play.png');
+        this.load.image('Create_room_button', PATH + '/images/buttons/create_room.png');
+        this.load.image('find_match_button', PATH + '/images/buttons/find_match.png');
+        this.load.image('enter_room', PATH + '/images/buttons/entrar_button.png');
+        this.load.image('start_button', PATH + '/images/buttons/start.png');
+        this.load.image('button_off', PATH + '/images/buttons/button_off.png');
+        this.load.image('button_on', PATH + '/images/buttons/button_on.png');
+        this.load.image('exit_button', PATH + '/images/buttons/exit_button.png');
+        this.load.image('giveup', PATH + '/images/buttons/give_up_button.png');
 
         //utils
         this.load.image('vs', PATH + '/images/utils/vs.png');

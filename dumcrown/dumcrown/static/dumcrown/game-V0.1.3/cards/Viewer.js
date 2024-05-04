@@ -1,7 +1,7 @@
 import { CardObject } from "./base.js"
 
 
-export class DeckObject extends CardObject {
+export class CardViewer extends CardObject {
     constructor(scene) {
         super(scene)
 

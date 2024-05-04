@@ -213,6 +213,7 @@ export class HomeScene extends Phaser.Scene {
     }
 
     addEvents() {
+        this.title = add_text(this, 954, 35, 'DECKS', '30px', 0.5)
         this.events.on('stop', () => {
             clearTimeout(this.PingSignal.updatePing);
         });
