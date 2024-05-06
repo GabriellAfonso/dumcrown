@@ -30,56 +30,113 @@ class WrapperContainer {
 //TODO: BASEAR A LOGICA NO BAU DO MINECRAFT
 
 class VerticalScrollContainer extends Phaser.GameObjects.Container {
-    constructor(scene, x, y, width, height) {
+    constructor(scene, x, y) {
         super(scene, x, y);
-        this.width = width;
-        this.height = height;
+        this.width = 1;
+        this.height = 1;
         this.items = [];
-
-        // Criar uma máscara retangular
-        const maskGraphics = this.scene.make.graphics();
-        maskGraphics.fillStyle(0xffffff);
-        //foi o unico jeito de centralizar a mascara no container
-        maskGraphics.fillRect(x - width / 2, y - height / 2, width, height);
-        const maskShape = maskGraphics.createGeometryMask();
-        this.setMask(maskShape);
-
-        // Habilitar interatividade para permitir a rolagem
-        this.setInteractive({ draggable: true, cursor: 'pointer' });
-        this.on('drag', this.onDrag);
 
         scene.add.existing(this);
 
-        var containerRect = scene.add.rectangle(
-            0, 0,
-            this.width, this.height, 0xCCCCCC, 0.4);
-        containerRect.setStrokeStyle(2, 0x000000);
-        containerRect.setOrigin(0.5);
-        this.add(containerRect);
     }
 
     addItem(item) {
-        this.items.push(item);
         this.add(item);
-        this.updateLayout();
+        this.items.push(item);
+
     }
 
-    updateLayout() {
-        let offsetY = 0;
+    updateLayout(scale, xGap, yGap) {
+        // this.setScale(0.4)
+        const maxItemsPerRow = 4;
+        const totalItems = this.items.length;
+        const numRows = Math.ceil(totalItems / maxItemsPerRow); // Calcular o número de linhas necessárias
+
+        let xPos, yPos;
+        this.width = maxItemsPerRow * (this.items[0].width * scale + xGap);
+        this.height = numRows * (this.items[0].height * scale + yGap);
+        this.y = this.height / 2 + 70;
+
+        for (let i = 0; i < totalItems; i++) {
+            const item = this.items[i];
+            item.width = item.width * scale
+            item.height = item.height * scale
+
+            // Calcular a posição x e y com base no índice do item e no número máximo de itens por linha
+            xPos = (i % maxItemsPerRow) * (item.width + xGap) - (maxItemsPerRow - 1) * (item.width + xGap) / 2;
+            yPos = Math.floor(i / maxItemsPerRow) * (item.height + yGap);
+
+
+            item.x = xPos;
+            item.y = yPos - this.displayOriginY + item.height / 2 + 10;
+            // var a = item.getID()
+            // console.log(item.y)
+            // console.log(a)
+            item.setVisible(true);
+            item.setScale(scale);
+
+        }
+
+
+
+        this.createMask()
+
+        this.containerDisplay()
+        this.setInteractive({ draggable: true, cursor: 'pointer' });
+
+        this.on('drag', this.onDrag);
+        this.on('pointerdown', this.checkClick);
+        console.log('terminou')
+    }
+
+    checkClick(pointer) {
+        console.log(this.y)
         this.items.forEach(item => {
-            item.y = offsetY;
-            offsetY += item.height;
+            item.setInteractive()
         });
+        setTimeout(() => {
+            this.items.forEach(item => {
+                item.disableInteractive()
+            });
+        }, 200)
     }
 
     onDrag(pointer, dragX, dragY) {
+
         if (this.input.dragStartY !== undefined) {
             const dy = this.input.dragStartY - dragY;
-            this.items.forEach(item => {
-                item.y -= dy;
-            });
+
+            // Calcular o limite superior com base na altura do contêiner
+
+            const upperLimit = this.displayOriginY + this.initialMaskY// Ajuste conforme necessário
+            const lowerLimit = -this.height / 2 + 660
+            console.log(lowerLimit)
+
+            // Limitar o arraste para o intervalo [0, upperLimit]
+            this.y = Phaser.Math.Clamp(this.y - dy, lowerLimit, upperLimit);
+
+            // Atualizar a posição inicial de arrastar para o próximo movimento
             this.input.dragStartY = dragY;
         }
+    }
+
+    createMask() {
+        this.initialMaskY = this.y - this.height / 2
+        this.maskGraphics = this.scene.make.graphics();
+        this.maskGraphics.fillStyle(0xffffff);
+        //foi o unico jeito de centralizar a mascara no container
+        this.maskGraphics.fillRect(this.x - this.width / 2, this.initialMaskY, this.width, 670);
+        this.maskShape = this.maskGraphics.createGeometryMask();
+        this.setMask(this.maskShape);
+    }
+
+    containerDisplay() {
+        this.containerRect = this.scene.add.rectangle(
+            0, 0,
+            this.width, this.height, 0xCCC44C, 0.4);
+        this.containerRect.setStrokeStyle(2, 0x000000);
+        this.containerRect.setOrigin(0.5);
+        this.add(this.containerRect);
     }
 }
 export class EmailsScene extends Phaser.Scene {
@@ -118,10 +175,17 @@ export class EmailsScene extends Phaser.Scene {
 
 
 
-        this.container = new VerticalScrollContainer(this, centerX, centerY, 400, 400)
-        this.cards = createAllCards(this)
-        this.cards[10].setVisible(true)
-        this.container.addItem(this.cards[10])
+        this.container = new VerticalScrollContainer(this, 954, centerY)
+        this.cards = createAllCards(this, true)
+
+        // this.cards[10].setVisible(true)
+        for (let id in this.cards) {
+            if (this.cards.hasOwnProperty(id)) {
+                this.container.addItem(this.cards[id]);
+
+            }
+        }
+        this.container.updateLayout(0.6, 60, 40);
     }
 
     update() {

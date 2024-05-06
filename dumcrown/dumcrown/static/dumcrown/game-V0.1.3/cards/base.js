@@ -60,6 +60,14 @@ export class CardObject extends Phaser.GameObjects.Container {
     getID() {
         return this.id
     }
+
+    showCase() {
+        this.on('pointerup', () => {
+            console.log('clicou na carta')
+            // Inicia a cena 'CardDetailScene' e passa os detalhes da carta
+
+        });
+    }
 }
 
 export class JhonCopper extends CardObject {
@@ -234,7 +242,7 @@ export class RhiorosGhost extends CardObject {
     }
 }
 
-export function createAllCards(scene) {
+export function createAllCards(scene, showCase = false) {
     const cardClasses = [
         JhonCopper, CarolArlet, mortem, kronos, DarkAge, Khras, Skillet,
         CDC, Okada, SmoothCriminal, Boogie, Spring, Polaroid, Maniac, Crazy,
@@ -246,6 +254,9 @@ export function createAllCards(scene) {
     cardClasses.forEach(CardClass => {
         var card = new CardClass(scene);
         var id = card.getID()
+        if (showCase) {
+            card.showCase()
+        }
         cards[id] = card
     });
 
