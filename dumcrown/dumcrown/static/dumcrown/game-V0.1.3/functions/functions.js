@@ -1,6 +1,6 @@
 import { matchDB, updatePhase } from '../client/match.js';
 
-import { GAME } from '../config/gameConfig.js';
+import { GAME, centerX } from '../config/gameConfig.js';
 import { socket } from '../main.js';
 import { sfx } from '../soundfx/sounds.js';
 
@@ -225,6 +225,14 @@ export function sleep(scene, delay, callback) {
     });
 }
 
+
+export function showCoordinates(scene) {
+    scene.mouseText = scene.add.text(centerX, 30, '', { fontSize: '20px', fill: '#ffffff' },);
+    scene.mouseText.setOrigin(0.5)
+    scene.input.on('pointermove', (pointer) => {
+        scene.mouseText.setText('X: ' + pointer.x + ' Y: ' + pointer.y);
+    });
+}
 
 export function logoutAjax() {
     $.ajax({

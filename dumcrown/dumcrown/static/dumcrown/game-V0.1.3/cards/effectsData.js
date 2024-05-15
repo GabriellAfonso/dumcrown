@@ -1,6 +1,6 @@
-export const cardData = {
+export const effectsData = {
     1: {
-        id: 1,
+        id: 'e1',
         image: 'jhon_card',
         name: 'JHON COPPER',
         description: '...',

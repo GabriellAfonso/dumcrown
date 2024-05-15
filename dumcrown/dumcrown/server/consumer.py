@@ -39,7 +39,6 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             if await self.check_player_already_online():
                 return
 
-            print('continuou')
             await player_connected(self.user, self.channel)
 
         except Exception as e:

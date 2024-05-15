@@ -11,6 +11,7 @@ import { sendSocket } from '../functions/functions.js';
 
 import { Botao } from '../functions/functions.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';
+import { Button } from '../functions/buttons.js';
 
 export class GameLobby extends Phaser.Scene {
     constructor() {
@@ -20,7 +21,6 @@ export class GameLobby extends Phaser.Scene {
     create() {
         const soundfx = this.scene.get('Loading');
         const background = this.add.image(centerX, centerY, 'play_background');
-
 
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
             switchScenes('HomeScene', 'GameLobby')
@@ -41,43 +41,26 @@ export class GameLobby extends Phaser.Scene {
 
         }, null, null, null, true);
 
-        // this.inputRoom = document.createElement("input");
-        // this.inputRoom.type = "text";
-        // this.inputRoom.id = "inputRoom";
-        // this.inputRoom.style.width = "80px";
-        // this.inputRoom.style.height = "30px";
-        // this.inputRoom.style.fontSize = "20px";
-        // this.inputRoom.style.outline = "none";
-        // this.inputRoom.style.borderRadius = "10px";
-        // this.inputRoom.style.backgroundColor = "#555555";
-        // this.inputRoom.style.border = "2px solid #555555";
-        // this.inputRoom.style.textAlign = "center"
-        // this.inputRoom.placeholder = "Sala";
 
-
-
-
-        var inputRoom = this.add.dom(1100, 50, 'input', {
+        this.inputRoom = this.add.dom(1100, 50, 'input', {
             type: 'text', id: 'inputRoom',
             width: '80px', height: '30px',
             fontSize: '20px', outline: 'none', borderRadius: '10px',
             backgroundColor: '#555555', border: '2px solid #555555',
             textAlign: 'center',
         });
-        inputRoom.node.placeholder = "Room";
+        this.inputRoom.node.placeholder = "Room";
 
         this.joinButton = new Botao(this, 1220, 52, 'enter_room', () => {
-            if (inputRoom.node.value) {
-                sendSocket('join_room', inputRoom.node.value.trim())
+            if (this.inputRoom.node.value) {
+                sendSocket('join_room', this.inputRoom.node.value.trim())
             }
-
-
         });
 
 
         this.input.keyboard.on('keydown-ENTER', (event) => {
-            if (document.activeElement === inputRoom.node && inputRoom.node.value) {
-                sendSocket('join_room', inputRoom.node.value.trim());
+            if (document.activeElement === this.inputRoom.node && this.inputRoom.node.value) {
+                sendSocket('join_room', this.inputRoom.node.value.trim());
             }
         });
 
@@ -89,11 +72,13 @@ export class GameLobby extends Phaser.Scene {
         this.gameLobbyContainer.add(this.joinButton)
 
         if (this.game.scene.isActive('QueueTimer')) {
-            inputRoom.disabled = true;
+            this.inputRoom.disabled = true;
             this.joinButton.disableInteractive()
         }
         this.completeAnimation = true
 
+
+        this.addEvents()
     }
 
     update() {
@@ -127,6 +112,20 @@ export class GameLobby extends Phaser.Scene {
             this.game.scene.run(sceneKey);
             sendSocket('create_room')
         }
+    }
+
+    addEvents() {
+        this.events.on('disableAll', () => {
+            this.disableAllInteractive()
+        });
+    }
+
+    disableAllInteractive() {
+        this.gameLobbyContainer.list.forEach(element => {
+            element.disableInteractive();
+        });
+
+        this.inputRoom.node.disabled = true;
     }
 
 }

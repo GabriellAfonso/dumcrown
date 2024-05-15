@@ -131,9 +131,7 @@ export class HomeScene extends Phaser.Scene {
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
         const background = this.add.image(centerX, centerY, 'homescreen');
-        const lor = this.add.image(centerX - 200, centerY, 'runeterra');
-        lor.setScale(1.05)
-        var testando = new JhonCopper(this)
+
 
         const fullscreen_button = new Botao(this, 1465, 35, 'fullscreen', () => {
             toggleFullscreen();
@@ -193,13 +191,6 @@ export class HomeScene extends Phaser.Scene {
         }, { useHoverEffect: true });
 
 
-
-        this.mouseText = this.add.text(centerX, 10, '', { fontSize: '20px', fill: '#ffffff' },);
-        this.input.on('pointermove', (pointer) => {
-            // Atualize o texto com as coordenadas do mouse
-            this.mouseText.setText('X: ' + pointer.x + ' Y: ' + pointer.y);
-        });
-
         this.PingSignal = new Ping(this, 1260, 28)
 
         this.addEvents()
@@ -213,7 +204,6 @@ export class HomeScene extends Phaser.Scene {
     }
 
     addEvents() {
-        this.title = add_text(this, 954, 35, 'DECKS', '30px', 0.5)
         this.events.on('stop', () => {
             clearTimeout(this.PingSignal.updatePing);
         });

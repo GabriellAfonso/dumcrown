@@ -8,7 +8,10 @@ import { switchScenes, logoutAjax, sleep } from '../functions/functions.js';
 import { cardsShow, Card } from '../functions/cards.js';
 import { sendSocket } from '../functions/functions.js';
 
+import { sfx } from '../soundfx/sounds.js';
+
 import { Botao } from '../functions/functions.js';
+import { Button, close_button } from '../functions/buttons.js';
 
 
 export class RoomScreen extends Phaser.Scene {
@@ -17,24 +20,18 @@ export class RoomScreen extends Phaser.Scene {
     }
 
     create() {
-        const soundfx = this.scene.get('Loading');
+
         const lobby = this.scene.get('GameLobby')
-
-        lobby.gameLobbyContainer.list.forEach(element => {
-            element.disableInteractive();
-        });
-
-        lobby.inputRoom.disabled = true;
+        lobby.events.emit('disableAll')
 
 
         const background = this.add.image(centerX, centerY, 'room_screen');
         this.add.image(centerX, centerY, 'vs');
 
-        const x_close = new Botao(this, 1340, 105, 'x_close', () => {
+        const close = new Button(this, 1340, 105, 'x_close', () => {
             sendSocket('leave_room')
-
-        }, 0xffff00, soundfx.closeSound);
-        x_close.setScale(0.4)
+        }, { clickSound: sfx.closeSound })
+        close.setScale(0.4)
 
 
 
