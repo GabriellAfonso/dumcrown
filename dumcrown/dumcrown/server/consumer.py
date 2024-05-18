@@ -2,7 +2,6 @@ import logging
 import json
 import asyncio
 from django.utils import timezone
-from celery import current_app
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from .room import GameRoom
@@ -84,32 +83,6 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             'data': data,
         }
         await self.send(text_data=json.dumps(message))
-
-    async def send_message(self, event):
-        message_types = {'message',
-                         'player_data',
-                         'addexp',
-                         'room_update',
-                         'room_close',
-                         'clear_room',
-                         'start_match',
-                         'match_update',
-                         'player_pass',
-                         'round_update',
-                         'hp_update',
-                         'energy_update',
-                         'adversary_field',
-                         'adversary_attack',
-                         'adversary_defese',
-                         'resolve',
-                         'damage_Result',
-                         }
-
-        for message_type in message_types:
-            if message_type in event:
-                message_data = {message_type: event[message_type]}
-                await self.send(text_data=json.dumps(message_data))
-                break
 
     async def check_player_already_online(self):
         already_online = await player_is_online(self.user)

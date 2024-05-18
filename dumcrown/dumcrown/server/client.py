@@ -2,6 +2,7 @@ import logging
 import json
 from .validators import validate_nickname
 from .functions import get_player, save_player, ranking_list, my_ranking
+from .cards_data.units import units_data
 
 
 class ClientData:
@@ -35,6 +36,9 @@ class ClientData:
             await self.consumer.send_to_client('get_player_data', player_data)
         except Exception as e:
             logging.error(f'Error in get_player_data: {e}', exc_info=True)
+
+    async def get_cards(self):
+        await self.consumer.send_to_client('get_cards', units_data)
 
     async def set_new_nickname(self, data):
         player = await get_player(self.user)

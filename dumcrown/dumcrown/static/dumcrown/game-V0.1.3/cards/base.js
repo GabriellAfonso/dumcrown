@@ -1,6 +1,6 @@
 import { GAME, centerX, centerY } from "../config/gameConfig.js";
 import { add_text } from "../functions/texts.js";
-import { monstersData } from "./monstersData.js";
+import { unitsData } from "../client/client.js";
 export class CardObject extends Phaser.GameObjects.Container {
     constructor(scene) {
         super(scene);
@@ -74,7 +74,7 @@ export class JhonCopper extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[1])
+        this.createCard(unitsData[1])
     }
 }
 
@@ -82,7 +82,7 @@ export class CarolArlet extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[2])
+        this.createCard(unitsData[2])
     }
 }
 
@@ -90,7 +90,7 @@ export class mortem extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[3])
+        this.createCard(unitsData[3])
     }
 }
 
@@ -98,7 +98,7 @@ export class kronos extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[4])
+        this.createCard(unitsData[4])
     }
 }
 
@@ -106,7 +106,7 @@ export class DarkAge extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[5])
+        this.createCard(unitsData[5])
     }
 }
 
@@ -114,7 +114,7 @@ export class Khras extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[6])
+        this.createCard(unitsData[6])
     }
 }
 
@@ -122,7 +122,7 @@ export class Skillet extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[7])
+        this.createCard(unitsData[7])
     }
 }
 
@@ -130,7 +130,7 @@ export class CDC extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[8])
+        this.createCard(unitsData[8])
     }
 }
 
@@ -138,7 +138,7 @@ export class Okada extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[9])
+        this.createCard(unitsData[9])
     }
 }
 
@@ -146,7 +146,7 @@ export class SmoothCriminal extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[10])
+        this.createCard(unitsData[10])
     }
 }
 
@@ -154,7 +154,7 @@ export class Boogie extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[11])
+        this.createCard(unitsData[11])
     }
 }
 
@@ -162,7 +162,7 @@ export class Spring extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[12])
+        this.createCard(unitsData[12])
     }
 }
 
@@ -171,7 +171,7 @@ export class Polaroid extends CardObject {
         super(scene)
 
 
-        this.createCard(monstersData[13])
+        this.createCard(unitsData[13])
     }
 }
 
@@ -179,7 +179,7 @@ export class Maniac extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[14])
+        this.createCard(unitsData[14])
     }
 }
 
@@ -188,7 +188,7 @@ export class Crazy extends CardObject {
         super(scene)
 
 
-        this.createCard(monstersData[15])
+        this.createCard(unitsData[15])
     }
 }
 
@@ -196,7 +196,7 @@ export class Ojays extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[16])
+        this.createCard(unitsData[16])
     }
 }
 
@@ -204,7 +204,7 @@ export class NeonB extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[17])
+        this.createCard(unitsData[17])
     }
 }
 
@@ -213,7 +213,7 @@ export class Ballhan extends CardObject {
         super(scene)
 
 
-        this.createCard(monstersData[18])
+        this.createCard(unitsData[18])
     }
 }
 
@@ -221,7 +221,7 @@ export class DarkNecessites extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[19])
+        this.createCard(unitsData[19])
     }
 }
 
@@ -230,7 +230,7 @@ export class Anomaly extends CardObject {
         super(scene)
 
 
-        this.createCard(monstersData[20])
+        this.createCard(unitsData[20])
     }
 }
 
@@ -238,7 +238,7 @@ export class RhiorosGhost extends CardObject {
     constructor(scene) {
         super(scene)
 
-        this.createCard(monstersData[21])
+        this.createCard(unitsData[21])
     }
 }
 

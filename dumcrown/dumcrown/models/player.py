@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.contrib.postgres.fields import ArrayField
 
+# initial_cards = []
+
 
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -12,6 +14,7 @@ class Player(models.Model):
     border = models.CharField(max_length=40, default='border01')
     arena = models.CharField(max_length=40, default='arena01')
     level = models.PositiveIntegerField(default=1)
+    # cards = ArrayField(default=initial_cards)
     experience = models.PositiveBigIntegerField(default=0)
     crystals = models.PositiveBigIntegerField(default=0)
     tier = models.CharField(max_length=15, default='bronze')

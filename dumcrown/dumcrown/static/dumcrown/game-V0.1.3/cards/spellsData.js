@@ -1,4 +1,4 @@
-export const effectsData = {
+export const spellsData = {
     1: {
         id: 'e1',
         image: 'jhon_card',

@@ -4,6 +4,7 @@ client_data = ClientData
 game_room = GameRoom
 
 code_handlers = {
+    'get_cards': {'object': client_data, 'method': 'get_cards'},
     'get_player_data': {'object': client_data, 'method': 'get_player_data'},
     'set_new_nickname': {'object': client_data, 'method': 'set_new_nickname'},
     'get_ranking': {'object': client_data, 'method': 'get_ranking'},

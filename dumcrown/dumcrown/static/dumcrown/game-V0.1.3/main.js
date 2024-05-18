@@ -36,6 +36,7 @@ function connectWebSocket() {
 
     socket.onopen = (event) => {
         console.log('Conexão com WebSocket estabelecida.');
+        sendSocket('get_cards')
         sendSocket('get_player_data')
         sendSocket('ping')
         startScene('Preloader')

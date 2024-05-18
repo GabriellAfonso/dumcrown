@@ -1,4 +1,4 @@
-export const monstersData = {
+const unitsData = {
     1: {
         id: 1,
         image: 'jhon_card',
