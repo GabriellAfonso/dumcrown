@@ -3,7 +3,7 @@ import { sendSocket, switchScenes } from "../functions/functions.js";
 let pingTime = 0
 let pongTime = 0
 export let latency_ms
-export let unitsData
+export let cardsDATA
 export var player = {
     icon: '',
     border: '',
@@ -11,6 +11,7 @@ export var player = {
     nickname: '',
     level: '',
     experience: '',
+    cards: [],
     musicVolume: 1,
     soundsVolume: 1,
     crystalsCoins: '',
@@ -60,8 +61,8 @@ export function onlineChecker(data) {
 
 export function receiveCards(data) {
     const message = data;
-    unitsData = data
-    console.log(unitsData)
+    cardsDATA = data
+    console.log(cardsDATA)
 
 }
 export function playerData(data) {
@@ -72,6 +73,7 @@ export function playerData(data) {
     player.nickname = message.nickname;
     player.level = message.level;
     player.experience = message.experience;
+    player.cards = message.cards
     player.crystalsCoins = message.crystals
     player.matches = message.matches
     player.victories = message.victories

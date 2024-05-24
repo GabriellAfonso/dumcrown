@@ -190,6 +190,14 @@ export class Loading extends Phaser.Scene {
         this.load.image('anomaly_card', PATH + '/images/cards/monsters/anomaly.png');
         this.load.image('rhioros_ghost_card', PATH + '/images/cards/monsters/rhioros_ghost.png');
 
+        //spells
+        this.load.image('spellcardlayout', PATH + '/images/cards/spell-layout.png');
+        this.load.image('shield_spell', PATH + '/images/cards/spells/shield.jpeg');
+        this.load.image('hand_spell', PATH + '/images/cards/spells/hand.jpeg');
+        this.load.image('ax_spell', PATH + '/images/cards/spells/ax.jpeg');
+        this.load.image('yellow_spell', PATH + '/images/cards/spells/yellow.jpeg');
+        this.load.image('potion_spell', PATH + '/images/cards/spells/potion.jpeg');
+
 
 
 

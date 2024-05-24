@@ -8,8 +8,9 @@ import { textAnimation } from '../animations/scripts/textAnimations.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
-import { createAllCards } from '../cards/base.js';
+import { createAllCards } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
+import { player } from '../client/client.js';
 
 
 export class EmailsScene extends Phaser.Scene {
@@ -54,13 +55,13 @@ export class EmailsScene extends Phaser.Scene {
         this.mainContainer.destroy()
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, true)
         this.cards = createAllCards(this, true)
-
-        // this.cards[10].setVisible(true)
         for (let id in this.cards) {
-            if (this.cards.hasOwnProperty(id)) {
+            console.log(id)
+            if (this.cards.hasOwnProperty(id) && player.cards.includes(String(id))) {
                 this.mainContainer.addItem(this.cards[id]);
             }
         }
+
         this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
     }
     myDecks() {

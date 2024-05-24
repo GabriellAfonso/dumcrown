@@ -10,7 +10,7 @@ import { Button, close_button } from '../functions/buttons.js';
 import { add_text } from '../functions/texts.js'
 
 import { sendSocket } from '../functions/functions.js';
-import { CardObject, JhonCopper } from '../cards/base.js';
+
 
 export class IconPage extends Phaser.Scene {
     constructor() {

@@ -10,7 +10,7 @@ import { Button, close_button } from '../functions/buttons.js';
 import { add_text } from '../functions/texts.js'
 
 import { sendSocket } from '../functions/functions.js';
-import { CardObject, JhonCopper } from '../cards/base.js';
+import { ShieldSpell } from '../cards/spells.js';
 
 class Ping {
     constructor(scene, x, y) {
@@ -132,12 +132,12 @@ export class HomeScene extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'homescreen');
 
-
         const fullscreen_button = new Botao(this, 1465, 35, 'fullscreen', () => {
             toggleFullscreen();
         }, 0xffffff);
         fullscreen_button.setScale(0.40);
-
+        var teste = new ShieldSpell(this)
+        teste.setVisible(true)
 
         this.name = add_text(this, 218, 35, player.nickname, '28px')
         this.level = add_text(this, 223, 106, 'Lv: ' + player.level, '25px')
