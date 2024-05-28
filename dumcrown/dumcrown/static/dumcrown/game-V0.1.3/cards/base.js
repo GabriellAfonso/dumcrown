@@ -53,9 +53,20 @@ export class CardObject extends Phaser.GameObjects.Container {
         this.attack.text = data.attack
         this.defense.text = data.defense
     }
-    // visible(bolean) {
-    //     this.setVisible(bolean)
-    // }
+
+    clone() {
+        let clone = new CardObject(this.scene);
+        clone.createCard({
+            id: this.id,
+            image: this.cardImage.texture.key,
+            name: this.name.text,
+            description: this.description.text,
+            energy: this.energy.text,
+            attack: this.attack.text,
+            defense: this.defense.text,
+        });
+        return clone;
+    }
 
     getID() {
         return this.id
@@ -63,7 +74,7 @@ export class CardObject extends Phaser.GameObjects.Container {
 
     showCase() {
         this.on('pointerup', () => {
-            console.log('clicou na carta')
+            GAME.scene.run('CardDetailScene', this);
             // Inicia a cena 'CardDetailScene' e passa os detalhes da carta
 
         });
@@ -94,7 +105,7 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
         this.name.setOrigin(0.5, 0.5);
 
         this.description = scene.add.text(0, 140, '',
-            { fontSize: '17px', fill: '#ffffff', align: 'center', fontFamily: 'sans-serif', });
+            { fontSize: '18px', fill: '#ffffff', align: 'center', fontFamily: 'sans-serif', wordWrap: { width: 300, useAdvancedWrap: true } });
         this.description.setOrigin(0.5, 0.5);
 
         this.energy = scene.add.text(-117, -192, '',
@@ -114,9 +125,18 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
         this.description.text = data.description
         this.energy.text = data.energy
     }
-    // visible(bolean) {
-    //     this.setVisible(bolean)
-    // }
+
+    clone() {
+        let clone = new SpellCardObject(this.scene);
+        clone.createCard({
+            id: this.id,
+            image: this.cardImage.texture.key,
+            name: this.name.text,
+            description: this.description.text,
+            energy: this.energy.text
+        });
+        return clone;
+    }
 
     getID() {
         console.log('pegou id ', this.id)
@@ -125,9 +145,7 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
 
     showCase() {
         this.on('pointerup', () => {
-            console.log('clicou na carta')
-            // Inicia a cena 'CardDetailScene' e passa os detalhes da carta
-
+            GAME.scene.run('CardDetailScene', this);
         });
     }
 }

@@ -192,11 +192,11 @@ export class Loading extends Phaser.Scene {
 
         //spells
         this.load.image('spellcardlayout', PATH + '/images/cards/spell-layout.png');
-        this.load.image('shield_spell', PATH + '/images/cards/spells/shield.jpeg');
-        this.load.image('hand_spell', PATH + '/images/cards/spells/hand.jpeg');
-        this.load.image('ax_spell', PATH + '/images/cards/spells/ax.jpeg');
-        this.load.image('yellow_spell', PATH + '/images/cards/spells/yellow.jpeg');
-        this.load.image('potion_spell', PATH + '/images/cards/spells/potion.jpeg');
+        this.load.image('someones_shield', PATH + '/images/cards/spells/someones_shield.jpeg');
+        this.load.image('magic_barrier', PATH + '/images/cards/spells/magic_barrier.jpeg');
+        this.load.image('sacrificial_fire', PATH + '/images/cards/spells/sacrificial_fire.jpeg');
+        this.load.image('life_potion', PATH + '/images/cards/spells/life_potion.jpeg');
+        this.load.image('summoned_ax', PATH + '/images/cards/spells/summoned_ax.jpeg');
 
 
 

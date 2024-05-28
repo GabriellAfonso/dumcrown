@@ -29,7 +29,6 @@ export let socket;
 
 
 connectWebSocket()
-
 function connectWebSocket() {
     const host = window.location.hostname;
     socket = new WebSocket(`ws://${host}/ws/game/`);
@@ -44,11 +43,13 @@ function connectWebSocket() {
     };
 
     socket.onerror = (error) => {
-        console.error('Erro na conexão WebSocket:', error);
-        reconnectWebSocket();
-        startScene('ReconnectingScreen')
+        // console.error('Erro na conexão WebSocket:', error);
+        // Evite que os erros de reconexão sejam exibidos no console
+        if (error.code !== 'ECONNREFUSED') {
+            reconnectWebSocket();
+            startScene('ReconnectingScreen')
+        }
     };
-
 
     socket.onmessage = (event) => {
         const messageData = JSON.parse(event.data);
@@ -62,10 +63,6 @@ function connectWebSocket() {
         }
     };
 
-    socket.onerror = (event) => {
-        console.error('Erro no WebSocket:', event);
-    };
-
     socket.onclose = (event) => {
         console.log('Conexão com WebSocket fechada.');
         disconnected()
@@ -75,7 +72,7 @@ function connectWebSocket() {
 }
 
 function reconnectWebSocket() {
-    console.log('Tentando reconectar ao WebSocket em 3 segundos...');
+    console.log('Tentando se reconectar');
     setTimeout(connectWebSocket, 3000);
 }
 
