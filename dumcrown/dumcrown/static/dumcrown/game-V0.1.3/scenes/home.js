@@ -11,6 +11,7 @@ import { add_text } from '../functions/texts.js'
 
 import { sendSocket } from '../functions/functions.js';
 import { SomeonesShield } from '../cards/spells.js';
+import { instantiateCards } from '../cards/functions.js';
 
 class Ping {
     constructor(scene, x, y) {
@@ -136,8 +137,8 @@ export class HomeScene extends Phaser.Scene {
             toggleFullscreen();
         }, 0xffffff);
         fullscreen_button.setScale(0.40);
-        var teste = new SomeonesShield(this)
-        teste.setVisible(true)
+
+
 
         this.name = add_text(this, 218, 35, player.nickname, '28px')
         this.level = add_text(this, 223, 106, 'Lv: ' + player.level, '25px')

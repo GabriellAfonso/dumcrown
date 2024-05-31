@@ -12,6 +12,7 @@ export var player = {
     level: '',
     experience: '',
     cards: [],
+    decks: [],
     musicVolume: 1,
     soundsVolume: 1,
     crystalsCoins: '',
@@ -62,7 +63,6 @@ export function onlineChecker(data) {
 export function receiveCards(data) {
     const message = data;
     cardsDATA = data
-    console.log(cardsDATA)
 
 }
 export function playerData(data) {
@@ -74,6 +74,7 @@ export function playerData(data) {
     player.level = message.level;
     player.experience = message.experience;
     player.cards = message.cards
+    player.decks = message.decks
     player.crystalsCoins = message.crystals
     player.matches = message.matches
     player.victories = message.victories
@@ -81,6 +82,7 @@ export function playerData(data) {
     player.tier = message.tier
     player.musicVolume = message.volume_music;
     player.soundsVolume = message.soundsfx_volume;
+    console.log('decks: ', player.decks)
 }
 
 

@@ -42,7 +42,7 @@ export class Nickname extends Phaser.Scene {
         // Define a altura do botão conforme necessário
         this.buttonElement.type = "submit";
 
-        this.game.scene.run('Tutorial')
+        // this.game.scene.run('Tutorial')
 
         const inputConfirm = this.add.dom(centerX, 400, this.buttonElement);
 
@@ -87,9 +87,9 @@ export class Nickname extends Phaser.Scene {
                 GAME.scene.stop('Nickname');
                 GAME.scene.stop('Tutorial');
                 GAME.scene.start('HomeScene');
-                GAME.scene.start('Tutorial');
-                this.tutorial = this.scene.get('Tutorial')
-                this.tutorial.index = 1
+                // GAME.scene.start('Tutorial');
+                // this.tutorial = this.scene.get('Tutorial')
+                // this.tutorial.index = 1
 
             }
 

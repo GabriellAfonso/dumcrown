@@ -2,11 +2,9 @@ import { GAME, centerX, centerY } from "../config/gameConfig.js";
 import { add_text } from "../functions/texts.js";
 import { cardsDATA } from "../client/client.js";
 export class CardObject extends Phaser.GameObjects.Container {
-    constructor(scene) {
+    constructor(scene, data = {}) {
         super(scene);
 
-        this.x = centerX + 200
-        this.y = centerY
         this.setSize(328, 489);
         this.scene = scene;
 
@@ -42,9 +40,14 @@ export class CardObject extends Phaser.GameObjects.Container {
         this.add([this.cardImage, this.cardLayout, this.description, this.name, this.energy, this.attack, this.defense]);
         this.scene.add.existing(this);
         this.setVisible(false)
+
+        if (data) {
+            this.createCard(data)
+        }
     }
 
     createCard(data) {
+        console.log('carta cirada ', data)
         this.id = data.id
         this.cardImage.setTexture(data.image)
         this.name.text = data.name
@@ -82,11 +85,11 @@ export class CardObject extends Phaser.GameObjects.Container {
 }
 
 export class SpellCardObject extends Phaser.GameObjects.Container {
-    constructor(scene) {
+    constructor(scene, data = {}) {
         super(scene);
 
-        this.x = centerX
-        this.y = centerY
+
+
         this.setSize(328, 489);
         this.scene = scene;
 
@@ -116,9 +119,14 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
         this.add([this.cardImage, this.cardLayout, this.description, this.name, this.energy,]);
         this.scene.add.existing(this);
         this.setVisible(false)
+
+        if (data) {
+            this.createCard(data)
+        }
     }
 
     createCard(data) {
+        console.log('spell cirada ', data)
         this.id = data.id
         this.cardImage.setTexture(data.image)
         this.name.text = data.name

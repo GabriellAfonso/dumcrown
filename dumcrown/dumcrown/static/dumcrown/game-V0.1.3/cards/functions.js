@@ -1,5 +1,7 @@
 import { unitsClasses } from "./units.js";
 import { spellsClasses } from "./spells.js";
+import { CardObject, SpellCardObject } from "./base.js";
+import { cardsDATA } from "../client/client.js";
 
 const allCards = unitsClasses.concat(spellsClasses)
 
@@ -17,4 +19,29 @@ export function createAllCards(scene, showCase = false) {
     });
 
     return cards;
+}
+
+export function instantiateCards(scene, data) {
+    const cards = {};
+
+    data.forEach(cardID => {
+        const cardData = cardsDATA[cardID];
+        const cardInstance = createCardInstance(scene, cardID, cardData);
+        cardInstance.showCase()
+        cards[cardData.id] = cardInstance;
+    });
+
+    return cards;
+}
+
+function createCardInstance(scene, cardID, cardData) {
+    if (isSpellCard(cardID)) {
+        return new SpellCardObject(scene, cardData);
+    } else {
+        return new CardObject(scene, cardData);
+    }
+}
+
+function isSpellCard(cardID) {
+    return cardID.charAt(0) === 's';
 }

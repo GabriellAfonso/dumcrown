@@ -8,6 +8,8 @@ def get_player(user):
         'connection',
         'settings',
         'stats'
+    ).prefetch_related(
+        'decks'
     ).get(user=user)
 
 

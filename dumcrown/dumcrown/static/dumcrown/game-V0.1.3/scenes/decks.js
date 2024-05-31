@@ -8,7 +8,7 @@ import { textAnimation } from '../animations/scripts/textAnimations.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
-import { createAllCards } from '../cards/functions.js';
+import { createAllCards, instantiateCards } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { player } from '../client/client.js';
 
@@ -51,24 +51,39 @@ export class DecksScene extends Phaser.Scene {
 
     }
     myCards() {
-        this.title.text = 'CARTAS'
         this.mainContainer.destroy()
+        this.title.text = 'CARTAS'
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, true)
-        this.cards = createAllCards(this, true)
+        // this.cards = createAllCards(this, true)
+        this.cards = instantiateCards(this, player.cards)
         for (let id in this.cards) {
-            console.log(id)
-            if (this.cards.hasOwnProperty(id) && player.cards.includes(String(id))) {
-                this.mainContainer.addItem(this.cards[id]);
-            }
+            this.mainContainer.addItem(this.cards[id]);
         }
-
         this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
     }
     myDecks() {
-        this.title.text = 'DECKS'
         this.mainContainer.destroy()
+        this.title.text = 'DECKS'
+        this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
+        for (var deck in player.decks) {
+            var deck_img = this.add.image(0, 0, 'runeterra')
+            this.mainContainer.addItem(deck_img)
+        }
+        this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
+
     }
 
+    // myDecks() {
+    //     this.title.text = 'DECKS'
+    //     this.mainContainer.destroy()
+    //     this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
+    //     for (var deck in player.decks) {
+    //         var deck_img = this.add.image(0, 0, 'runeterra')
+    //         this.mainContainer.addItem(deck_img)
+    //     }
+    //     this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
+
+    // }
 
     update() {
         // Lógica de atualização do jogo (executada continuamente durante o jogo).

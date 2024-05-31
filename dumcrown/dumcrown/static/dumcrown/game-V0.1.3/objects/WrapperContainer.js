@@ -210,6 +210,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
     destroy() {
         if (this.scrollable) {
+            this.scene.input.off('wheel');
             this.scrollBar.destroy();
             this.scrollThumb.destroy();
         }

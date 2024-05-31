@@ -4,9 +4,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.contrib.postgres.fields import ArrayField
 
-initial_cards = ['1', '2', '3', '5', '8',
-                 '9', '11', '12', '13', '15', '18', '21',
-                 's1', 's8', 's2', 's5', 's7']
+from .default_values import initial_cards
 
 
 class Player(models.Model):
@@ -16,7 +14,8 @@ class Player(models.Model):
     border = models.CharField(max_length=40, default='border01')
     arena = models.CharField(max_length=40, default='arena01')
     level = models.PositiveIntegerField(default=1)
-    cards = ArrayField(models.CharField(max_length=10), default=initial_cards)
+    cards = ArrayField(models.CharField(
+        max_length=10), default=initial_cards())
     experience = models.PositiveBigIntegerField(default=0)
     crystals = models.PositiveBigIntegerField(default=0)
     tier = models.CharField(max_length=15, default='bronze')
@@ -70,3 +69,13 @@ class Stats(models.Model):
     matches = models.PositiveBigIntegerField(default=0)
     victories = models.PositiveBigIntegerField(default=0)
     defeats = models.PositiveBigIntegerField(default=0)
+
+
+class Deck(models.Model):
+    player = models.ForeignKey(
+        Player, on_delete=models.CASCADE, related_name='decks')
+    name = models.CharField(max_length=25)
+    cards = ArrayField(models.CharField(max_length=10))
+
+    def __str__(self):
+        return f'Deck {self.name} of player {self.player.nickname}'

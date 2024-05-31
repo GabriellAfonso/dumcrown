@@ -1,5 +1,5 @@
 from django.contrib import admin
-from dumcrown.models.player import Player, Connection, LoginHistory
+from dumcrown.models.player import Player, Connection, LoginHistory, Deck
 
 
 @admin.register(Player)
@@ -14,6 +14,11 @@ class ConnectionAdmin(admin.ModelAdmin):
 
 @admin.register(LoginHistory)
 class LoginHistoryAdmin(admin.ModelAdmin):
+    ...
+
+
+@admin.register(Deck)
+class DeckAdmin(admin.ModelAdmin):
     ...
 
 

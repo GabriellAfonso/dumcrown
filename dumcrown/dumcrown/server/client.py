@@ -18,6 +18,8 @@ class ClientData:
     async def get_player_data(self):
         try:
             player = await get_player(self.user)
+            decks_data = [{'name': deck.name, 'cards': list(
+                deck.cards)} for deck in player.decks.all()]
             player_data = {
                 'icon': player.icon,
                 'border': player.border,
@@ -26,6 +28,7 @@ class ClientData:
                 'level': player.level,
                 'experience': player.experience,
                 'cards': player.cards,
+                'decks': decks_data,
                 'crystals': player.crystals,
                 'crown_points': player.crown_points,
                 'tier': player.tier,
