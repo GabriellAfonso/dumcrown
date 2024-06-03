@@ -11,6 +11,7 @@ import { add_text } from '../functions/texts.js';
 import { createAllCards, instantiateCards } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { player } from '../client/client.js';
+import { instantiateDecks } from '../objects/deck_layout.js';
 
 
 export class DecksScene extends Phaser.Scene {
@@ -65,9 +66,14 @@ export class DecksScene extends Phaser.Scene {
         this.mainContainer.destroy()
         this.title.text = 'DECKS'
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
-        for (var deck in player.decks) {
-            var deck_img = this.add.image(0, 0, 'runeterra')
-            this.mainContainer.addItem(deck_img)
+        //faz uma funçao de posiçoes fixas pros 8 decks e q se fodaaaa
+        this.decks = instantiateDecks(this, player.decks)
+        this.decks2 = instantiateDecks(this, player.decks)
+        for (let deck in this.decks) {
+            this.mainContainer.addItem(this.decks[deck]);
+        }
+        for (let deck in this.decks2) {
+            this.mainContainer.addItem(this.decks2[deck]);
         }
         this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
 

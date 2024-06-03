@@ -5,7 +5,7 @@ export class CardObject extends Phaser.GameObjects.Container {
     constructor(scene, data = {}) {
         super(scene);
 
-        this.setSize(328, 489);
+        this.setSize(328, 483);
         this.scene = scene;
 
         this.inGame = false
@@ -90,7 +90,7 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
 
 
 
-        this.setSize(328, 489);
+        this.setSize(328, 483);
         this.scene = scene;
 
         this.inGame = false

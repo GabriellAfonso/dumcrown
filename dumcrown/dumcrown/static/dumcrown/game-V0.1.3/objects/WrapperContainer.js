@@ -1,3 +1,4 @@
+import { showCoordinates } from "../functions/functions.js";
 
 
 export class WrapperContainer extends Phaser.GameObjects.Container {
@@ -14,7 +15,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
     addItem(item) {
         this.add(item);
-        this.items.push(item);
+        this.items.push(item)
     }
 
     updateLayout(scale, initialY, xGap, yGap, itemsPerRow) {
@@ -39,6 +40,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
             item.y = yPos - this.displayOriginY + itemHeight / 2 + 10;
             item.setVisible(true);
             item.setScale(scale);
+
         }
 
 
@@ -52,6 +54,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
         this.setupEventListeners()
         this.setInteractive({ draggable: true });
+
 
     }
 
