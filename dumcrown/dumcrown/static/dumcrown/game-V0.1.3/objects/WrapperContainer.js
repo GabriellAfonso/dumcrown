@@ -40,7 +40,13 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
             item.y = yPos - this.displayOriginY + itemHeight / 2 + 10;
             item.setVisible(true);
             item.setScale(scale);
+            const p = this.getGlobalPosition(item)
 
+            item.emit('scaleChange', p.x, p.y)
+
+            // Agora 'globalPoint.x' e 'globalPoint.y' são as coordenadas da imagem relativas à cena
+            console.log('Global X:', p.x);
+            console.log('Global Y:', p.y);
         }
 
 
@@ -130,7 +136,17 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         return Phaser.Math.Clamp(positionPercentage, 0, 100);
     }
 
+    getGlobalPosition(item) {
+        let matrix = this.getWorldTransformMatrix();
 
+        let localX = item.x;
+        let localY = item.y;
+
+        let localPoint = new Phaser.Math.Vector2(localX, localY);
+
+        let globalPoint = matrix.transformPoint(localPoint.x, localPoint.y);
+        return globalPoint
+    }
     containerDisplay() {
         this.containerRect = this.scene.add.rectangle(
             0, 0,

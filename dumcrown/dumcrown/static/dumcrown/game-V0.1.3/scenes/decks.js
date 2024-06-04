@@ -23,7 +23,7 @@ export class DecksScene extends Phaser.Scene {
         const soundfx = this.scene.get('Loading');
 
         const background = this.add.image(centerX, centerY, 'decks_background');
-        // showCoordinates(this)
+        //showCoordinates(this)
         const close = close_button(this, 1460, 35, 'HomeScene', 'DecksScene', 0.4)
         close.setDepth(4)
 
@@ -68,13 +68,10 @@ export class DecksScene extends Phaser.Scene {
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
         //faz uma funçao de posiçoes fixas pros 8 decks e q se fodaaaa
         this.decks = instantiateDecks(this, player.decks)
-        this.decks2 = instantiateDecks(this, player.decks)
         for (let deck in this.decks) {
             this.mainContainer.addItem(this.decks[deck]);
         }
-        for (let deck in this.decks2) {
-            this.mainContainer.addItem(this.decks2[deck]);
-        }
+
         this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
 
     }

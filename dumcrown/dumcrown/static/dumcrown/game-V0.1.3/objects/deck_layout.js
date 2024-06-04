@@ -11,8 +11,7 @@ export class DeckLayout extends Phaser.GameObjects.Container {
         this.y = centerY;
         this.id = 0;
         this.shape = this.scene.make.graphics()
-        this.shape.fillStyle(0xffffff); // A cor não importa, mas é necessário definir
-        this.shape.fillRect(this.x - this.width / 2, this.y - this.height / 2, this.width * this.scale, this.height * this.scale);
+
         // this.scene.add.existing(this.shape)
         this.deckImage = scene.add.image(0, -60, data.image);
         this.deckImage.setScale((this.scale * 1.1))
@@ -29,16 +28,16 @@ export class DeckLayout extends Phaser.GameObjects.Container {
         this.name.setOrigin(0.5, 0.5);
 
         // Função para atualizar a máscara
-        this.updateMask = function () {
+        this.updateMask = function (x = this.x, y = this.y) {
 
             this.shape.clear()
             this.shape.fillStyle(0xffffff); // A cor não importa, mas é necessário definir
-            this.shape.fillRect(this.x - this.width * this.scale / 2, this.y - this.height * this.scale / 2, this.width * this.scale, this.height * this.scale);
+            this.shape.fillRoundedRect(x - this.width * this.scale / 2, y - this.height * this.scale / 2, this.width * this.scale, this.height * this.scale, 30 * this.scale);
             console.log(this.x - this.width * this.scale / 2)
             this.mask2 = this.shape.createGeometryMask();
 
             // Aplica a nova máscara à imagem
-            this.setMask(this.mask2);
+            this.deckImage.setMask(this.mask2);
         }
 
         // Adiciona um evento para atualizar a máscara sempre que a escala do contêiner for alterada
