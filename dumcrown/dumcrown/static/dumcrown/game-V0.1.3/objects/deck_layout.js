@@ -46,6 +46,7 @@ export class DeckLayout extends Phaser.GameObjects.Container {
 
         // this.updateMask()
         this.add([this.deckImage, this.deckBorder, this.name]);
+        this.setInteractive({ cursor: 'pointer' })
         this.scene.add.existing(this);
     }
 

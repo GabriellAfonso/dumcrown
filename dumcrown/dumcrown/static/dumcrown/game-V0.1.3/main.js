@@ -8,7 +8,7 @@ import { IconPage } from './scenes/iconPage.js';
 import { ConfigScreen } from './scenes/settings.js';
 import { StoreScreen } from './scenes/store.js';
 import { MissionsScene } from './scenes/missions.js';
-import { DecksScene, CardDetailScene } from './scenes/decks.js';
+import { DecksScene, CardDetailScene, DeckEditorScene } from './scenes/decks.js';
 import { FriendsScene } from './scenes/friends.js';
 import { EmailsScene } from './scenes/emails.js';
 import { RankingScreen } from './scenes/ranking.js';
@@ -46,7 +46,6 @@ function connectWebSocket() {
         // console.error('Erro na conexão WebSocket:', error);
         // Evite que os erros de reconexão sejam exibidos no console
         if (error.code !== 'ECONNREFUSED') {
-            reconnectWebSocket();
             startScene('ReconnectingScreen')
         }
     };
@@ -87,6 +86,7 @@ GAME.scene.add('StoreScreen', StoreScreen);
 GAME.scene.add('MissionsScene', MissionsScene);
 GAME.scene.add('DecksScene', DecksScene);
 GAME.scene.add('CardDetailScene', CardDetailScene);
+GAME.scene.add('DeckEditorScene', DeckEditorScene);
 GAME.scene.add('FriendsScene', FriendsScene);
 GAME.scene.add('EmailsScene', EmailsScene);
 GAME.scene.add('RankingScreen', RankingScreen);

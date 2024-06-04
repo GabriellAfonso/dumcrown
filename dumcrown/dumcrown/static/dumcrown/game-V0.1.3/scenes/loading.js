@@ -116,6 +116,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('aba_arena', PATH + '/images/buttons/arena_button.png');
 
         this.load.image('decks_select_button', PATH + '/images/buttons/decks_select_button.png');
+        this.load.image('add_new_deck', PATH + '/images/buttons/add_new_deck.png');
 
 
         this.load.image('logout', PATH + '/images/buttons/sair.png');

@@ -1,6 +1,6 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
-import { switchScenes, logoutAjax, showCoordinates } from '../functions/functions.js';
+import { switchScenes, logoutAjax, showCoordinates, startScene } from '../functions/functions.js';
 import { simpleTweens } from '../animations/scripts/functions.js';
 import { cards, Card } from '../functions/cards.js';
 import { sleep } from '../functions/functions.js';
@@ -65,17 +65,53 @@ export class DecksScene extends Phaser.Scene {
     myDecks() {
         this.mainContainer.destroy()
         this.title.text = 'DECKS'
+        var newDeckButton = new Button(this, 0, 0, 'add_new_deck', () => {
+            startScene('DeckEditorScene')
+        })
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
-        //faz uma funçao de posiçoes fixas pros 8 decks e q se fodaaaa
         this.decks = instantiateDecks(this, player.decks)
+        // this.decks2 = instantiateDecks(this, player.decks)
+        // this.decks3 = instantiateDecks(this, player.decks)
+        // this.decks4 = instantiateDecks(this, player.decks)
+        // this.decks5 = instantiateDecks(this, player.decks)
+        // this.decks6 = instantiateDecks(this, player.decks)
+        // this.decks7 = instantiateDecks(this, player.decks)
+        // this.decks8 = instantiateDecks(this, player.decks)
         for (let deck in this.decks) {
             this.mainContainer.addItem(this.decks[deck]);
         }
+        // for (let deck in this.decks2) {
+        //     this.mainContainer.addItem(this.decks2[deck]);
+        // }
+        // for (let deck in this.decks3) {
+        //     this.mainContainer.addItem(this.decks3[deck]);
+        // }
+        // for (let deck in this.decks4) {
+        //     this.mainContainer.addItem(this.decks4[deck]);
+        // }
 
-        this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
+        // for (let deck in this.decks5) {
+        //     this.mainContainer.addItem(this.decks5[deck]);
+        // }
+        // for (let deck in this.decks6) {
+        //     this.mainContainer.addItem(this.decks6[deck]);
+        // }
+        // for (let deck in this.decks7) {
+        //     this.mainContainer.addItem(this.decks7[deck]);
+        // }
+        // for (let deck in this.decks8) {
+        //     this.mainContainer.addItem(this.decks8[deck]);
+        // }
+        this.mainContainer.addItem(newDeckButton)
+
+        this.mainContainer.updateLayout(0.55, 110, 80, 60, 4);
 
     }
 
+    editDeck() {
+        this.mainContainer.destroy()
+
+    }
     // myDecks() {
     //     this.title.text = 'DECKS'
     //     this.mainContainer.destroy()
@@ -125,5 +161,30 @@ export class CardDetailScene extends Phaser.Scene {
             GAME.scene.stop('CardDetailScene')
             // showCard.destroy()
         });
+    }
+}
+
+
+export class DeckEditorScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'DeckEditorScene' });
+    }
+
+    // O método init permite receber os parâmetros passados ao iniciar a cena
+    init(data = {}) {
+        this.deckData = data;
+    }
+
+    create() {
+        const background = this.add.image(centerX, centerY, 'decks_background');
+        const close = close_button(this, 1460, 35, 'DecksScene', 'DeckEditorScene', 0.4)
+        close.setDepth(4)
+        this.mainContainer = new WrapperContainer(this, 954, centerY, 670, true)
+        // this.cards = createAllCards(this, true)
+        this.cards = instantiateCards(this, player.cards)
+        for (let id in this.cards) {
+            this.mainContainer.addItem(this.cards[id]);
+        }
+        this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
     }
 }
