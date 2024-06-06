@@ -114,6 +114,8 @@ export class Loading extends Phaser.Scene {
         this.load.image('aba_icone', PATH + '/images/buttons/aba_icone.png');
         this.load.image('aba_moldura', PATH + '/images/buttons/aba_moldura.png');
         this.load.image('aba_arena', PATH + '/images/buttons/arena_button.png');
+        this.load.image('save_deck', PATH + '/images/buttons/save_deck.png');
+
 
         this.load.image('decks_select_button', PATH + '/images/buttons/decks_select_button.png');
         this.load.image('add_new_deck', PATH + '/images/buttons/add_new_deck.png');
@@ -164,6 +166,8 @@ export class Loading extends Phaser.Scene {
         this.load.image('cardlayout-neutro', PATH + '/images/cards/layout-neutro.png');
         this.load.image('minicardlayout', PATH + '/images/cards/mini-card-layout.png');
         this.load.image('deck_border', PATH + '/images/cards/deck_border.png');
+        this.load.image('compressed_unit_layout', PATH + '/images/cards/compressed_unit_layout.png');
+        this.load.image('compressed_spell_layout', PATH + '/images/cards/compressed_spell_layout.png');
 
         this.load.image('verse_card', PATH + '/images/cards/verse_card.png');
         this.load.image('cards_deck', PATH + '/images/cards/deck.png');

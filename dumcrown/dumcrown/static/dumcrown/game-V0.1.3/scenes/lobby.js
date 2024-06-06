@@ -50,7 +50,10 @@ export class GameLobby extends Phaser.Scene {
             textAlign: 'center',
         });
         this.inputRoom.node.placeholder = "Room";
+        this.input.on('pointerdown', () => {
 
+            this.inputRoom.node.blur();
+        });
         this.joinButton = new Botao(this, 1220, 52, 'enter_room', () => {
             if (this.inputRoom.node.value) {
                 sendSocket('join_room', this.inputRoom.node.value.trim())

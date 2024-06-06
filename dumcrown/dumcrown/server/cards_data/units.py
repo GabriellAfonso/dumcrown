@@ -1,6 +1,7 @@
 units_data = {
     1: {
         "id": 1,
+        "type": "unit",
         "image": "jhon_card",
         "name": "JHON COPPER",
         "description": "",
@@ -10,6 +11,7 @@ units_data = {
     },
     2: {
         "id": 2,
+        "type": "unit",
         "image": "carol_card",
         "name": "CAROL ARLET",
         "description": "",
@@ -19,6 +21,7 @@ units_data = {
     },
     3: {
         "id": 3,
+        "type": "unit",
         "image": "mortem_card",
         "name": "MORTEM",
         "description": "",
@@ -28,6 +31,7 @@ units_data = {
     },
     4: {
         "id": 4,
+        "type": "unit",
         "image": "kronos_card",
         "name": "KRONOS",
         "description": "",
@@ -37,6 +41,7 @@ units_data = {
     },
     5: {
         "id": 5,
+        "type": "unit",
         "image": "darkage1_card",
         "name": "DARK AGE",
         "description": "",
@@ -46,6 +51,7 @@ units_data = {
     },
     6: {
         "id": 6,
+        "type": "unit",
         "image": "khras_card",
         "name": "KHRAS",
         "description": "",
@@ -55,6 +61,7 @@ units_data = {
     },
     7: {
         "id": 7,
+        "type": "unit",
         "image": "skillet_card",
         "name": "SKILLET",
         "description": "",
@@ -64,6 +71,7 @@ units_data = {
     },
     8: {
         "id": 8,
+        "type": "unit",
         "image": "cdc_card",
         "name": "CDC",
         "description": "",
@@ -73,6 +81,7 @@ units_data = {
     },
     9: {
         "id": 9,
+        "type": "unit",
         "image": "okada_card",
         "name": "OKADA",
         "description": "",
@@ -82,6 +91,7 @@ units_data = {
     },
     10: {
         "id": 10,
+        "type": "unit",
         "image": "smoothcriminal_card",
         "name": "SMOOTH CRIMINAL",
         "description": "",
@@ -91,6 +101,7 @@ units_data = {
     },
     11: {
         "id": 11,
+        "type": "unit",
         "image": "boogie_card",
         "name": "BOOGIE",
         "description": "",
@@ -100,6 +111,7 @@ units_data = {
     },
     12: {
         "id": 12,
+        "type": "unit",
         "image": "spring_card",
         "name": "SPRING",
         "description": "",
@@ -109,6 +121,7 @@ units_data = {
     },
     13: {
         "id": 13,
+        "type": "unit",
         "image": "polaroid_card",
         "name": "POLAROID",
         "description": "",
@@ -118,6 +131,7 @@ units_data = {
     },
     14: {
         "id": 14,
+        "type": "unit",
         "image": "maniac_card",
         "name": "MANIAC",
         "description": "",
@@ -127,6 +141,7 @@ units_data = {
     },
     15: {
         "id": 15,
+        "type": "unit",
         "image": "crazy_card",
         "name": "CRAZY",
         "description": "",
@@ -136,6 +151,7 @@ units_data = {
     },
     16: {
         "id": 16,
+        "type": "unit",
         "image": "theojays_card",
         "name": "THE O'JAYS",
         "description": "",
@@ -145,6 +161,7 @@ units_data = {
     },
     17: {
         "id": 17,
+        "type": "unit",
         "image": "neonb_card",
         "name": "NEON B.",
         "description": "",
@@ -154,6 +171,7 @@ units_data = {
     },
     18: {
         "id": 18,
+        "type": "unit",
         "image": "ballhan_card",
         "name": "BALLHAN",
         "description": "",
@@ -163,6 +181,7 @@ units_data = {
     },
     19: {
         "id": 19,
+        "type": "unit",
         "image": "darknecessites_card",
         "name": "DARK NECESSITES",
         "description": "",
@@ -172,6 +191,7 @@ units_data = {
     },
     20: {
         "id": 20,
+        "type": "unit",
         "image": "anomaly_card",
         "name": "ANOMALY",
         "description": "",
@@ -181,6 +201,7 @@ units_data = {
     },
     21: {
         "id": 21,
+        "type": "unit",
         "image": "rhioros_ghost_card",
         "name": "RHIOROS GHOST",
         "description": "",

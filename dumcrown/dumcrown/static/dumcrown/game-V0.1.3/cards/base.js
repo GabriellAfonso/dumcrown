@@ -1,6 +1,7 @@
 import { GAME, centerX, centerY } from "../config/gameConfig.js";
 import { add_text } from "../functions/texts.js";
 import { cardsDATA } from "../client/client.js";
+import { Button } from "../functions/buttons.js";
 export class CardObject extends Phaser.GameObjects.Container {
     constructor(scene, data = {}) {
         super(scene);
@@ -47,7 +48,6 @@ export class CardObject extends Phaser.GameObjects.Container {
     }
 
     createCard(data) {
-        console.log('carta cirada ', data)
         this.id = data.id
         this.cardImage.setTexture(data.image)
         this.name.text = data.name
@@ -81,7 +81,19 @@ export class CardObject extends Phaser.GameObjects.Container {
             // Inicia a cena 'CardDetailScene' e passa os detalhes da carta
 
         });
+
     }
+    deckEdit() {
+        this.on('pointerup', () => {
+
+            console.log('soltou')
+            console.log(this.getID())
+        });
+        this.addCard = this.scene.add.image(0, 0, 'add_new_deck');
+        this.add(this.addCard)
+
+    }
+
 }
 
 export class SpellCardObject extends Phaser.GameObjects.Container {
@@ -95,6 +107,7 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
 
         this.inGame = false
         this.sample = false
+        this.isDrag = false
 
         this.id = 's0'
 
@@ -126,7 +139,6 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
     }
 
     createCard(data) {
-        console.log('spell cirada ', data)
         this.id = data.id
         this.cardImage.setTexture(data.image)
         this.name.text = data.name
@@ -155,7 +167,54 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
         this.on('pointerup', () => {
             GAME.scene.run('CardDetailScene', this);
         });
+        this.on('pointermove', function (pointer) {
+
+
+        });
     }
+    deckEdit() {
+        this.on('pointerup', () => {
+
+            console.log('soltou')
+            console.log(this.getID())
+        });
+        this.addCard = this.scene.add.image(0, 0, 'add_new_deck');
+        this.add(this.addCard)
+
+    }
+}
+export class compressedCardObject extends Phaser.GameObjects.Container {
+    constructor(scene, data = {}) {
+        super(scene);
+        this.scene = scene;
+
+        this.id = '0'
+        this.x = 204
+        this.y = 180
+        this.cardLayout = scene.add.image(0, 0, '');
+        // this.setScale(0.3)
+
+        if (data.type == 'unit') {
+            this.cardLayout.setTexture('compressed_unit_layout')
+        } else {
+            this.cardLayout.setTexture('compressed_spell_layout')
+        }
+
+        this.name = scene.add.text(0, 0, data.name,
+            { fontSize: '18px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', });
+        this.name.setOrigin(0.5, 0.5);
+
+        this.energy = scene.add.text(-123, 0, data.energy,
+            { fontSize: '29px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
+        this.energy.setOrigin(0.5, 0.5);
+
+
+        this.add([this.cardLayout, this.name, this.energy,]);
+        this.scene.add.existing(this);
+        this.setVisible(true)
+    }
+
+
 }
 
 

@@ -8,10 +8,11 @@ import { textAnimation } from '../animations/scripts/textAnimations.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
-import { createAllCards, instantiateCards } from '../cards/functions.js';
+import { compressedDeck, createAllCards, instantiateCards } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
-import { player } from '../client/client.js';
+import { cardsDATA, player } from '../client/client.js';
 import { instantiateDecks } from '../objects/deck_layout.js';
+import { compressedCardObject } from '../cards/base.js';
 
 
 export class DecksScene extends Phaser.Scene {
@@ -26,24 +27,24 @@ export class DecksScene extends Phaser.Scene {
         //showCoordinates(this)
         const close = close_button(this, 1460, 35, 'HomeScene', 'DecksScene', 0.4)
         close.setDepth(4)
-
+        this.input.topOnly = false;
         this.title = add_text(this, 954, 35, '', '30px', 0.5)
         this.title.setStyle({ fontStyle: 'bold' })
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
         this.myDecks()
 
 
-        this.decksButton = new Button(this, 204, 155, 'decks_select_button', () => {
+        this.decksButton = new Button(this, 202, 155, 'decks_select_button', () => {
             this.myDecks()
         })
-        this.decksButtonText = add_text(this, 204, 155, 'MEUS DECKS', '25px', 0.5)
+        this.decksButtonText = add_text(this, 202, 155, 'MEUS DECKS', '25px', 0.5)
         this.decksButtonText.setStyle({ fontStyle: 'bold' })
 
 
-        this.cardsButton = new Button(this, 204, 255, 'decks_select_button', () => {
+        this.cardsButton = new Button(this, 202, 255, 'decks_select_button', () => {
             this.myCards()
         })
-        this.cardsButtonText = add_text(this, 204, 255, 'MINHAS CARTAS', '25px', 0.5)
+        this.cardsButtonText = add_text(this, 202, 255, 'MINHAS CARTAS', '25px', 0.5)
         this.cardsButtonText.setStyle({ fontStyle: 'bold' })
 
 
@@ -179,10 +180,33 @@ export class DeckEditorScene extends Phaser.Scene {
         const background = this.add.image(centerX, centerY, 'decks_background');
         const close = close_button(this, 1460, 35, 'DecksScene', 'DeckEditorScene', 0.4)
         close.setDepth(4)
+        showCoordinates(this)
+
+        this.deckname = this.add.dom(202, 60, 'input', {
+            type: 'text', id: 'deckname',
+            width: '300px', height: '60px',
+            fontSize: '25px', outline: 'none', borderRadius: '10px',
+            backgroundColor: '#44334f', border: '2px solid #555555',
+            textAlign: 'center',
+        });
+        this.deckname.node.placeholder = "Nome do Deck";
+        this.input.on('pointerdown', () => {
+            this.deckname.node.blur();
+        });
+
+        this.saveDeckButton = new Button(this, 202, 660, 'save_deck', () => {
+
+        })
+        this.saveDeckButton.setScale(0.8)
+        compressedDeck(player.decks[0].cards)
+        // var teste = new compressedCardObject(this, cardsDATA['1'])
+        var teste2 = new compressedCardObject(this, cardsDATA['s1'])
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, true)
-        // this.cards = createAllCards(this, true)
         this.cards = instantiateCards(this, player.cards)
         for (let id in this.cards) {
+            this.cards[id].off('pointerup')
+            this.cards[id].deckEdit()
+
             this.mainContainer.addItem(this.cards[id]);
         }
         this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);

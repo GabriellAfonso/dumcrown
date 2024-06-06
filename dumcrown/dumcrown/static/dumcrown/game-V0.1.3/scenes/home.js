@@ -1,7 +1,7 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 
-import { player, experienceUpdated, setExperienceUpdated, players_online, latency_ms } from '../client/client.js';
+import { player, experienceUpdated, setExperienceUpdated, players_online, latency_ms, cardsDATA } from '../client/client.js';
 
 import { toggleFullscreen, switchScenes } from '../functions/functions.js';
 import { sfx } from '../soundfx/sounds.js';
@@ -13,6 +13,7 @@ import { sendSocket } from '../functions/functions.js';
 import { SomeonesShield } from '../cards/spells.js';
 import { instantiateCards } from '../cards/functions.js';
 import { DeckLayout } from '../objects/deck_layout.js';
+import { compressedCardObject } from '../cards/base.js';
 
 class Ping {
     constructor(scene, x, y) {
@@ -140,9 +141,8 @@ export class HomeScene extends Phaser.Scene {
         fullscreen_button.setScale(0.40);
 
         var datateste = { image: 'jhon_card', name: 'deck agressivo', }
-        var teste = new DeckLayout(this, datateste)
-        teste.setScale(0.5)
-        teste.emit('scaleChange')
+        var teste = new compressedCardObject(this, cardsDATA['1'])
+
         this.name = add_text(this, 218, 35, player.nickname, '28px')
         this.level = add_text(this, 223, 106, 'Lv: ' + player.level, '25px')
 

@@ -82,7 +82,7 @@ export function playerData(data) {
     player.tier = message.tier
     player.musicVolume = message.volume_music;
     player.soundsVolume = message.soundsfx_volume;
-    console.log('decks: ', player.decks)
+    console.log('decks ', player.decks[0])
 }
 
 

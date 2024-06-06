@@ -9,7 +9,6 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.width = 1;
         this.height = 1;
         this.items = [];
-
         scene.add.existing(this);
     }
 
@@ -44,9 +43,6 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
             item.emit('scaleChange', p.x, p.y)
 
-            // Agora 'globalPoint.x' e 'globalPoint.y' são as coordenadas da imagem relativas à cena
-            console.log('Global X:', p.x);
-            console.log('Global Y:', p.y);
         }
 
 

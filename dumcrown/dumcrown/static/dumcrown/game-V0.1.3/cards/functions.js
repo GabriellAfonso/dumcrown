@@ -45,3 +45,19 @@ function createCardInstance(scene, cardID, cardData) {
 function isSpellCard(cardID) {
     return cardID.charAt(0) === 's';
 }
+
+export function compressedDeck(data) {
+    const unitGroups = {};
+
+    data.forEach(id => {
+        const baseId = id.split('(')[0]; // Obtém apenas o número base do ID
+        if (!unitGroups[baseId]) {
+            unitGroups[baseId] = [];
+        }
+        unitGroups[baseId].push(id);
+    });
+
+    for (const baseId in unitGroups) {
+        console.log(`Grupo para o ID ${baseId}:`, unitGroups[baseId]);
+    }
+}
