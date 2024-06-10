@@ -67,45 +67,19 @@ export class DecksScene extends Phaser.Scene {
         this.mainContainer.destroy()
         this.title.text = 'DECKS'
         var newDeckButton = new Button(this, 0, 0, 'add_new_deck', () => {
-            startScene('DeckEditorScene')
+            switchScenes('DeckEditorScene', 'DecksScene')
         })
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
+
         this.decks = instantiateDecks(this, player.decks)
-        // this.decks2 = instantiateDecks(this, player.decks)
-        // this.decks3 = instantiateDecks(this, player.decks)
-        // this.decks4 = instantiateDecks(this, player.decks)
-        // this.decks5 = instantiateDecks(this, player.decks)
-        // this.decks6 = instantiateDecks(this, player.decks)
-        // this.decks7 = instantiateDecks(this, player.decks)
-        // this.decks8 = instantiateDecks(this, player.decks)
+
         for (let deck in this.decks) {
             this.mainContainer.addItem(this.decks[deck]);
         }
-        // for (let deck in this.decks2) {
-        //     this.mainContainer.addItem(this.decks2[deck]);
-        // }
-        // for (let deck in this.decks3) {
-        //     this.mainContainer.addItem(this.decks3[deck]);
-        // }
-        // for (let deck in this.decks4) {
-        //     this.mainContainer.addItem(this.decks4[deck]);
-        // }
-
-        // for (let deck in this.decks5) {
-        //     this.mainContainer.addItem(this.decks5[deck]);
-        // }
-        // for (let deck in this.decks6) {
-        //     this.mainContainer.addItem(this.decks6[deck]);
-        // }
-        // for (let deck in this.decks7) {
-        //     this.mainContainer.addItem(this.decks7[deck]);
-        // }
-        // for (let deck in this.decks8) {
-        //     this.mainContainer.addItem(this.decks8[deck]);
-        // }
         this.mainContainer.addItem(newDeckButton)
 
         this.mainContainer.updateLayout(0.55, 110, 80, 60, 4);
+        this.mainContainer.disableInteractive()
 
     }
 
@@ -166,49 +140,3 @@ export class CardDetailScene extends Phaser.Scene {
 }
 
 
-export class DeckEditorScene extends Phaser.Scene {
-    constructor() {
-        super({ key: 'DeckEditorScene' });
-    }
-
-    // O método init permite receber os parâmetros passados ao iniciar a cena
-    init(data = {}) {
-        this.deckData = data;
-    }
-
-    create() {
-        const background = this.add.image(centerX, centerY, 'decks_background');
-        const close = close_button(this, 1460, 35, 'DecksScene', 'DeckEditorScene', 0.4)
-        close.setDepth(4)
-        showCoordinates(this)
-
-        this.deckname = this.add.dom(202, 60, 'input', {
-            type: 'text', id: 'deckname',
-            width: '300px', height: '60px',
-            fontSize: '25px', outline: 'none', borderRadius: '10px',
-            backgroundColor: '#44334f', border: '2px solid #555555',
-            textAlign: 'center',
-        });
-        this.deckname.node.placeholder = "Nome do Deck";
-        this.input.on('pointerdown', () => {
-            this.deckname.node.blur();
-        });
-
-        this.saveDeckButton = new Button(this, 202, 660, 'save_deck', () => {
-
-        })
-        this.saveDeckButton.setScale(0.8)
-        compressedDeck(player.decks[0].cards)
-        // var teste = new compressedCardObject(this, cardsDATA['1'])
-        var teste2 = new compressedCardObject(this, cardsDATA['s1'])
-        this.mainContainer = new WrapperContainer(this, 954, centerY, 670, true)
-        this.cards = instantiateCards(this, player.cards)
-        for (let id in this.cards) {
-            this.cards[id].off('pointerup')
-            this.cards[id].deckEdit()
-
-            this.mainContainer.addItem(this.cards[id]);
-        }
-        this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
-    }
-}

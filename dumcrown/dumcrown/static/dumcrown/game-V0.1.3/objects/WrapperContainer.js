@@ -15,6 +15,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
     addItem(item) {
         this.add(item);
         this.items.push(item)
+        // console.log('item ', item)
     }
 
     updateLayout(scale, initialY, xGap, yGap, itemsPerRow) {
@@ -83,9 +84,14 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
         if (this.scrollable) {
             this.on('drag', this.drag);
-            this.scene.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
-                this.onMouseWheel(deltaY);
-            });
+            this.on('pointerover', () => {
+                this.scene.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+                    this.onMouseWheel(deltaY);
+                });
+            })
+            this.on('pointerout', () => {
+                this.scene.input.off('wheel');
+            })
         }
     }
 
@@ -97,7 +103,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.y = Phaser.Math.Clamp(this.y - scrollSpeed, this.containerLowerLimit, this.containerUpperLimit);
         this.setScrollThumbPosition(this.containerPosition)
 
-        console.log(this.containerPosition);
+        // console.log(this.containerPosition);
     }
 
 
@@ -107,9 +113,13 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
             item.setInteractive()
         });
         setTimeout(() => {
-            this.items.forEach(item => {
-                item.disableInteractive()
-            });
+            if (this.scene) {
+                this.items.forEach(item => {
+                    item.disableInteractive()
+                });
+            }
+
+
         }, 200)
     }
 
@@ -226,8 +236,11 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
     destroy() {
         if (this.scrollable) {
             this.scene.input.off('wheel');
-            this.scrollBar.destroy();
-            this.scrollThumb.destroy();
+            if (this.scrollBar) {
+                this.scrollBar.destroy();
+                this.scrollThumb.destroy();
+            }
+
         }
         if (this.maskGraphics) {
             this.maskGraphics.destroy();

@@ -204,7 +204,7 @@ export function switchScenes(sceneToStart, sceneToStop = '') {
     scene.events.emit('stop');
     GAME.scene.stop(sceneToStop);
     GAME.scene.stop(sceneToStart);
-    GAME.scene.run(sceneToStart);
+    GAME.scene.run(sceneToStart, { null: null });
 }
 
 export function startScene(scene) {

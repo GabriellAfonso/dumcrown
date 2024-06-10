@@ -1,6 +1,6 @@
 import { unitsClasses } from "./units.js";
 import { spellsClasses } from "./spells.js";
-import { CardObject, SpellCardObject } from "./base.js";
+import { CardObject, SpellCardObject, compressedCardObject } from "./base.js";
 import { cardsDATA } from "../client/client.js";
 
 const allCards = unitsClasses.concat(spellsClasses)
@@ -46,18 +46,28 @@ function isSpellCard(cardID) {
     return cardID.charAt(0) === 's';
 }
 
-export function compressedDeck(data) {
+export function compressedDeck(scene, data) {
     const unitGroups = {};
+    const idCounts = {};
 
+    // Primeiro, conte as ocorrências de cada ID base
     data.forEach(id => {
         const baseId = id.split('(')[0]; // Obtém apenas o número base do ID
-        if (!unitGroups[baseId]) {
-            unitGroups[baseId] = [];
+        if (idCounts[baseId]) {
+            idCounts[baseId]++;
+        } else {
+            idCounts[baseId] = 1;
         }
-        unitGroups[baseId].push(id);
     });
 
-    for (const baseId in unitGroups) {
-        console.log(`Grupo para o ID ${baseId}:`, unitGroups[baseId]);
-    }
+    // Agora, crie os objetos com a quantidade correta
+    Object.keys(idCounts).forEach(baseId => {
+        const quantity = idCounts[baseId];
+        const object = new compressedCardObject(scene, cardsDATA[baseId]);
+        object.setQuantity(quantity);
+        unitGroups[baseId] = object;
+    });
+
+    console.log(unitGroups);
+    return unitGroups;
 }

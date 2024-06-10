@@ -189,8 +189,7 @@ export class compressedCardObject extends Phaser.GameObjects.Container {
         this.scene = scene;
 
         this.id = '0'
-        this.x = 204
-        this.y = 180
+        this.setSize(297, 57);
         this.cardLayout = scene.add.image(0, 0, '');
         // this.setScale(0.3)
 
@@ -204,16 +203,23 @@ export class compressedCardObject extends Phaser.GameObjects.Container {
             { fontSize: '18px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', });
         this.name.setOrigin(0.5, 0.5);
 
+        this.quantity = scene.add.text(127, 0, '1',
+            { fontSize: '29px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
+        this.quantity.setOrigin(0.5, 0.5);
+
         this.energy = scene.add.text(-123, 0, data.energy,
             { fontSize: '29px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
         this.energy.setOrigin(0.5, 0.5);
 
 
-        this.add([this.cardLayout, this.name, this.energy,]);
+        this.add([this.cardLayout, this.name, this.energy, this.quantity]);
         this.scene.add.existing(this);
         this.setVisible(true)
     }
 
+    setQuantity(number) {
+        this.quantity.text = number
+    }
 
 }
 

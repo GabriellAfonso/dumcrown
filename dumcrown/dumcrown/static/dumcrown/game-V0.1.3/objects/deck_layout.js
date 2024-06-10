@@ -1,5 +1,5 @@
 import { cardsDATA } from "../client/client.js";
-import { centerX, centerY } from "../config/gameConfig.js";
+import { GAME, centerX, centerY } from "../config/gameConfig.js";
 
 export class DeckLayout extends Phaser.GameObjects.Container {
     constructor(scene, data = {}) {
@@ -7,12 +7,9 @@ export class DeckLayout extends Phaser.GameObjects.Container {
 
         this.setSize(324, 483);
         this.scene = scene;
-        this.x = centerX;
-        this.y = centerY;
-        this.id = 0;
+        this.deckDATA = data
         this.shape = this.scene.make.graphics()
 
-        // this.scene.add.existing(this.shape)
         this.deckImage = scene.add.image(0, -60, data.image);
         this.deckImage.setScale((this.scale * 1.1))
         this.deckBorder = scene.add.image(0, 0, 'deck_border');
@@ -27,49 +24,41 @@ export class DeckLayout extends Phaser.GameObjects.Container {
         });
         this.name.setOrigin(0.5, 0.5);
 
-        // Função para atualizar a máscara
-        this.updateMask = function (x = this.x, y = this.y) {
-
-            this.shape.clear()
-            this.shape.fillStyle(0xffffff); // A cor não importa, mas é necessário definir
-            this.shape.fillRoundedRect(x - this.width * this.scale / 2, y - this.height * this.scale / 2, this.width * this.scale, this.height * this.scale, 30 * this.scale);
-            console.log(this.x - this.width * this.scale / 2)
-            this.mask2 = this.shape.createGeometryMask();
-
-            // Aplica a nova máscara à imagem
-            this.deckImage.setMask(this.mask2);
-        }
-
-        // Adiciona um evento para atualizar a máscara sempre que a escala do contêiner for alterada
         this.on('scaleChange', this.updateMask, this);
-        // this.on('scaleChangeContainer', this.updateMaskContainer, this);
 
-        // this.updateMask()
         this.add([this.deckImage, this.deckBorder, this.name]);
         this.setInteractive({ cursor: 'pointer' })
         this.scene.add.existing(this);
+
+        this.addEvents()
     }
 
-    updateMaskContainer(xp, yp) {
-        // Limpa a máscara existente
-        this.deckImage.clearMask();
+    updateMask(x = this.x, y = this.y) {
+        const Xcentered = x - this.width * this.scale / 2
+        const Ycentered = y - this.height * this.scale / 2
+        const width = this.width * this.scale
+        const height = this.height * this.scale
+        const radius = 30 * this.scale
+        this.shape.clear()
+        this.shape.fillStyle(0xffffff);
+        this.shape.fillRoundedRect(Xcentered, Ycentered, width, height, radius);
 
-        // Cria um novo objeto gráfico para desenhar a máscara
-        // this.shape = this.scene.make.graphics({ x: 478, y: 90 })
-
-        console.log('n deu error?');
-        console.log(this.width, this.height, this.scale)
-
-        // Desenha um retângulo com cantos arredondados
-        // x, y, width, height, cornerRadius
-        // Cria a máscara a partir do gráfico
-        this.add(this.shape);
-        this.mask2 = this.shape.createGeometryMask();
-
-        // Aplica a nova máscara à imagem
-        this.deckImage.setMask(this.mask2);
-        console.log(this.shape.x)
+        const mask = this.shape.createGeometryMask();
+        this.deckImage.setMask(mask);
     }
+
+    //clicar faz abrir a cena deck editor com o deck selecionado
+    editDeck(data) {
+        GAME.scene.run('DeckEditorScene', data)
+
+    }
+
+    addEvents() {
+        this.on('pointerup', () => {
+            this.editDeck(this.deckDATA)
+        })
+    }
+
 }
 
 
