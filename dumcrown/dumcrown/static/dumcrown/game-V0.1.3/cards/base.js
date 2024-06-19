@@ -87,7 +87,8 @@ export class CardObject extends Phaser.GameObjects.Container {
         this.on('pointerup', () => {
 
             console.log('soltou')
-            console.log(this.getID())
+            const cardID = this.getID()
+            this.scene.events.emit('addToDeck', cardID)
         });
         this.addCard = this.scene.add.image(0, 0, 'add_new_deck');
         this.add(this.addCard)
@@ -159,7 +160,6 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
     }
 
     getID() {
-        console.log('pegou id ', this.id)
         return this.id
     }
 
@@ -176,7 +176,8 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
         this.on('pointerup', () => {
 
             console.log('soltou')
-            console.log(this.getID())
+            const cardID = this.getID()
+            this.scene.events.emit('addToDeck', cardID)
         });
         this.addCard = this.scene.add.image(0, 0, 'add_new_deck');
         this.add(this.addCard)

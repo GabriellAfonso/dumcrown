@@ -9,6 +9,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.width = 1;
         this.height = 1;
         this.items = [];
+
         scene.add.existing(this);
     }
 
@@ -19,6 +20,8 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
     }
 
     updateLayout(scale, initialY, xGap, yGap, itemsPerRow) {
+        this.resetContainer()
+
         const maxItemsPerRow = itemsPerRow;
         const totalItems = this.items.length;
         const numRows = Math.ceil(totalItems / maxItemsPerRow);
@@ -47,20 +50,45 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         }
 
 
-
         this.createMask()
 
-        if (this.scrollable) {
+        if (this.scrollValidator()) {
             this.createScrollbar()
             this.setLimits()
+
         }
 
-        this.setupEventListeners()
-        this.setInteractive({ draggable: true });
 
+        this.setupEventListeners()
+        this.setInteractive({ draggable: true, cursor: 'pointer' });
+        this.input.hitArea.setSize(this.width, this.height)
 
     }
 
+
+    resetContainer() {
+
+        this.removeAllListeners()
+        if (this.scrollable) {
+            this.scene.input.off('wheel');
+            if (this.scrollBar) {
+                this.scrollBar.destroy();
+                this.scrollThumb.destroy();
+            }
+
+        }
+        if (this.maskGraphics) {
+            this.maskGraphics.destroy();
+        }
+    }
+    // removeInteractive() {
+    //     this.disableInteractive(); // Desabilita a interatividade
+
+    //     // Limpa completamente a interatividade
+    //     this.input.hitArea = null;
+    //     this.input.enabled = false;
+    //     this.input.stopPropagation = false;
+    // }
     createMask() {
         this.initialMaskY = this.y - this.height / 2
         this.maskGraphics = this.scene.make.graphics();
@@ -82,9 +110,10 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
     setupEventListeners() {
         this.on('pointerdown', this.checkClick);
 
-        if (this.scrollable) {
+        if (this.scrollable && this.height > this.maskHeight) {
             this.on('drag', this.drag);
             this.on('pointerover', () => {
+                console.log('ta em cima')
                 this.scene.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
                     this.onMouseWheel(deltaY);
                 });
@@ -93,6 +122,12 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
                 this.scene.input.off('wheel');
             })
         }
+    }
+    scrollValidator() {
+        if (this.scrollable && this.height > this.maskHeight) {
+            return true
+        }
+        return false
     }
 
     onMouseWheel(deltaY) {
@@ -161,7 +196,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.containerRect.setOrigin(0.5);
         this.add(this.containerRect);
     }
-    //TODO
+
     createScrollbar() {
         const scrollbarWidth = 10; // largura da barra de rolagem
         this.scrollThumbHeight = 40; // altura igual à altura da máscara
@@ -215,6 +250,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.scrollThumb.on('dragend', () => {
             this.scrollThumb.dragStartY = undefined; // Limpa a posição inicial do arrastar
         });
+
     }
     moveContent() {
         const scrollableHeight = this.height - this.maskHeight;
@@ -232,7 +268,12 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
         this.scrollThumbPosition = percentage;
     }
-
+    scrollToLowerLimit() {
+        if (this.scrollValidator()) {
+            this.y = this.containerLowerLimit;
+            this.setScrollThumbPosition(100);
+        }
+    }
     destroy() {
         if (this.scrollable) {
             this.scene.input.off('wheel');

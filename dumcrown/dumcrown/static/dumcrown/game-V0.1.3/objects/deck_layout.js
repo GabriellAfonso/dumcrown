@@ -68,7 +68,7 @@ export function instantiateDecks(scene, data) {
     data.forEach(deck => {
         const firstCardID = deck.cards[10]
         const deckImage = cardsDATA[firstCardID].image
-        const deckData = { image: deckImage, name: deck.name, cards: deck.cards }
+        const deckData = { id: deck.id, image: deckImage, name: deck.name, cards: deck.cards }
         const deckInstance = new DeckLayout(scene, deckData);
 
         decks[deck.name] = deckInstance;

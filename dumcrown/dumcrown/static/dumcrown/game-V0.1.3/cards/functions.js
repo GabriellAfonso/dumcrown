@@ -71,3 +71,8 @@ export function compressedDeck(scene, data) {
     console.log(unitGroups);
     return unitGroups;
 }
+
+export function compressCard(scene, cardID) {
+    const object = new compressedCardObject(scene, cardsDATA[cardID]);
+    return object
+}
