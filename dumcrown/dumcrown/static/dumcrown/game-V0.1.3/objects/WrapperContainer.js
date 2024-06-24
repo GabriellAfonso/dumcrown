@@ -19,22 +19,47 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         // console.log('item ', item)
     }
 
+    removeItem(item) {
+        // Remove o item do container do Phaser
+        this.remove(item);
+        console.log(item)
+
+        // Encontra o índice do item no array items
+        const index = this.items.findIndex(i => i === item);
+
+        // Se o item for encontrado, remova-o do array items
+        if (index !== -1) {
+            this.items.splice(index, 1);
+            console.log('item encontrado')
+            item.destroy()
+            return
+        }
+        console.log('item nao encontrado')
+
+    }
+
     updateLayout(scale, initialY, xGap, yGap, itemsPerRow) {
-        this.resetContainer()
+        this.resetContainer();
 
         const maxItemsPerRow = itemsPerRow;
         const totalItems = this.items.length;
-        const numRows = Math.ceil(totalItems / maxItemsPerRow);
+        const numRows = Math.max(1, Math.ceil(totalItems / maxItemsPerRow));
 
         let xPos, yPos;
-        this.width = maxItemsPerRow * (this.items[0].width * scale + xGap);
-        this.height = numRows * (this.items[0].height * scale + yGap);
+        if (totalItems > 0) {
+            this.width = maxItemsPerRow * (this.items[0].width * scale + xGap);
+            this.height = numRows * (this.items[0].height * scale + yGap);
+        } else {
+            this.width = maxItemsPerRow * (1 * scale + xGap);
+            this.height = numRows * (1 * scale + yGap);
+        }
+
         this.y = this.height / 2 + initialY;
 
         for (let i = 0; i < totalItems; i++) {
             const item = this.items[i];
-            const itemWidth = item.width * scale
-            const itemHeight = item.height * scale
+            const itemWidth = item.width * scale;
+            const itemHeight = item.height * scale;
 
             xPos = (i % maxItemsPerRow) * (itemWidth + xGap) - (maxItemsPerRow - 1) * (itemWidth + xGap) / 2;
             yPos = Math.floor(i / maxItemsPerRow) * (itemHeight + yGap);
@@ -43,26 +68,20 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
             item.y = yPos - this.displayOriginY + itemHeight / 2 + 10;
             item.setVisible(true);
             item.setScale(scale);
-            const p = this.getGlobalPosition(item)
-
-            item.emit('scaleChange', p.x, p.y)
-
+            const p = this.getGlobalPosition(item);
+            item.emit('scaleChange', p.x, p.y);
         }
 
-
-        this.createMask()
+        this.createMask();
 
         if (this.scrollValidator()) {
-            this.createScrollbar()
-            this.setLimits()
-
+            this.createScrollbar();
+            this.setLimits();
         }
 
-
-        this.setupEventListeners()
+        this.addEventListeners();
         this.setInteractive({ draggable: true, cursor: 'pointer' });
-        this.input.hitArea.setSize(this.width, this.height)
-
+        this.input.hitArea.setSize(this.width, this.height);
     }
 
 
@@ -107,7 +126,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.thumbLowerLimit = this.initialMaskY + this.maskHeight - this.scrollThumbHeight / 2;
     }
 
-    setupEventListeners() {
+    addEventListeners() {
         this.on('pointerdown', this.checkClick);
 
         if (this.scrollable && this.height > this.maskHeight) {

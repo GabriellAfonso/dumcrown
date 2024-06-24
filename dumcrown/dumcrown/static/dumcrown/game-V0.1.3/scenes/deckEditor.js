@@ -66,6 +66,25 @@ class DeckIDManager {
         // Retorna a contagem do ID especificado, ou 0 se o ID não estiver na lista
         return this.idCount[id] || 0;
     }
+
+    removeCard(target) {
+        target = target.toString();
+        const index = this.idList.indexOf(target);
+
+        if (index !== -1) {
+            // Remove a string da lista
+            this.idList.splice(index, 1);
+            this.idCount[target]--;
+            if (this.idCount[target] === 0) {
+                delete this.idCount[target];
+            }
+            console.log(`ID '${target}' removido. Contagem atual: ${this.idCount[target] || 0}`);
+            return true;
+        } else {
+            console.log(`ID '${target}' não encontrado na lista.`);
+            return false;
+        }
+    }
 }
 
 
@@ -141,6 +160,7 @@ export class DeckEditorScene extends Phaser.Scene {
 
         this.events.on('shutdown', this.shutdown, this);
         this.events.on('addToDeck', this.addToDeck, this)
+        this.events.on('remove_from_deck', this.RemoveFromDeck, this)
 
     }
     addToDeck(cardID) {
@@ -156,14 +176,21 @@ export class DeckEditorScene extends Phaser.Scene {
             }
             //TODO: quando mudar o numero subir o container pra onde foi alterado
             this.compressedDict[cardID].setQuantity(quantity);
+        }
+    }
+    RemoveFromDeck(card) {
+        console.log(card.id)
+        this.deckManager.removeCard(card.id)
+        const quantity = this.deckManager.getIDCount(card.id)
+        this.compressedDict[card.id].setQuantity(quantity);
 
+        if (quantity == 0) {
+
+            this.compressedDeckContainer.removeItem(card)
+            this.compressedDeckContainer.updateLayout(1, 150, 20, 10, 1)
 
         }
-
-
-
-
-
+        //tirar do container caso tirar todas
     }
     shutdown() {
 

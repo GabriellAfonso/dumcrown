@@ -189,7 +189,7 @@ export class compressedCardObject extends Phaser.GameObjects.Container {
         super(scene);
         this.scene = scene;
 
-        this.id = '0'
+        this.id = data.id
         this.setSize(297, 57);
         this.cardLayout = scene.add.image(0, 0, '');
         // this.setScale(0.3)
@@ -216,10 +216,19 @@ export class compressedCardObject extends Phaser.GameObjects.Container {
         this.add([this.cardLayout, this.name, this.energy, this.quantity]);
         this.scene.add.existing(this);
         this.setVisible(true)
+        this.addEventListeners()
     }
 
     setQuantity(number) {
         this.quantity.text = number
+    }
+
+    addEventListeners() {
+        this.on('pointerup', this.remove)
+    }
+
+    remove() {
+        this.scene.events.emit('remove_from_deck', this)
     }
 
 }
