@@ -1,6 +1,6 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
-import { switchScenes, logoutAjax, showCoordinates, startScene } from '../functions/functions.js';
+import { switchScenes, logoutAjax, showCoordinates, startScene, sendSocket } from '../functions/functions.js';
 import { simpleTweens } from '../animations/scripts/functions.js';
 import { cards, Card } from '../functions/cards.js';
 import { sleep } from '../functions/functions.js';
@@ -131,6 +131,7 @@ export class DeckEditorScene extends Phaser.Scene {
                 cards: this.deckManager.getIDList(),
             }
             console.log(data)
+            sendSocket('save_deck', data)
         })
         this.saveDeckButton.setScale(0.8)
 
@@ -144,6 +145,7 @@ export class DeckEditorScene extends Phaser.Scene {
 
             for (const [key, item] of Object.entries(deck)) {
                 this.compressedDeckContainer.addItem(item)
+                this.compressedDict[item.id] = item
             }
             this.compressedDeckContainer.updateLayout(1, 150, 20, 10, 1)
         }
@@ -179,22 +181,21 @@ export class DeckEditorScene extends Phaser.Scene {
         }
     }
     RemoveFromDeck(card) {
-        console.log(card.id)
+
+        console.log('remove from deck')
         this.deckManager.removeCard(card.id)
         const quantity = this.deckManager.getIDCount(card.id)
         this.compressedDict[card.id].setQuantity(quantity);
 
         if (quantity == 0) {
-
             this.compressedDeckContainer.removeItem(card)
             this.compressedDeckContainer.updateLayout(1, 150, 20, 10, 1)
-
         }
-        //tirar do container caso tirar todas
     }
     shutdown() {
 
         this.events.off('addToDeck')
+        this.events.off('remove_from_deck')
         console.log('Scene shutdown, deckData cleared');
     }
 

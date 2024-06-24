@@ -51,8 +51,7 @@ export function compressedDeck(scene, data) {
     const idCounts = {};
 
     // Primeiro, conte as ocorrências de cada ID base
-    data.forEach(id => {
-        const baseId = id.split('(')[0]; // Obtém apenas o número base do ID
+    data.forEach(baseId => {
         if (idCounts[baseId]) {
             idCounts[baseId]++;
         } else {
