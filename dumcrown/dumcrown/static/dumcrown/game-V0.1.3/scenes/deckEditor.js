@@ -126,12 +126,15 @@ export class DeckEditorScene extends Phaser.Scene {
 
         this.saveDeckButton = new Button(this, 202, 660, 'save_deck', () => {
             var data = {
-                id: this.deckData.id,
+                id: this.deckData.id !== undefined ? this.deckData.id : 0,
                 name: this.deckname.node.value,
                 cards: this.deckManager.getIDList(),
             }
+
+            //TODO: verificar se tem 30 cartas
             console.log(data)
             sendSocket('save_deck', data)
+            sendSocket('get_player_data');
         })
         this.saveDeckButton.setScale(0.8)
 

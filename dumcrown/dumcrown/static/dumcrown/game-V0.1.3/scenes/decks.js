@@ -1,6 +1,6 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
-import { switchScenes, logoutAjax, showCoordinates, startScene } from '../functions/functions.js';
+import { switchScenes, logoutAjax, showCoordinates, startScene, sendSocket } from '../functions/functions.js';
 import { simpleTweens } from '../animations/scripts/functions.js';
 import { cards, Card } from '../functions/cards.js';
 import { sleep } from '../functions/functions.js';

@@ -63,6 +63,16 @@ def save_player(player):
 
 
 @database_sync_to_async
+def save_deck(deck):
+    deck.save()
+
+
+@database_sync_to_async
+def create_deck(player, data):
+    player.decks.create(name=data['name'], cards=data['cards'])
+
+
+@database_sync_to_async
 def nickname_exists(new_nickname):
     from dumcrown.models.player import Player
     return Player.objects.filter(nickname=new_nickname).exists()

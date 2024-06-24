@@ -1,7 +1,7 @@
 import logging
 import json
 from .validators import validate_nickname
-from .functions import get_player, save_player, ranking_list, my_ranking
+from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck
 from .cards_data.units import units_data
 from .cards_data.spells import spells_data
 
@@ -133,7 +133,31 @@ class ClientData:
 
             player.settings.volume_music = float(music)
             player.settings.soundsfx_volume = float(soundsfx)
+
+            # nao funciona, vai ter um botao pra salvar player.settings
             await save_player(player)
 
         except Exception as e:
             logging.error(f'Error in sound_update: {e}', exc_info=True)
+
+    async def save_deck(self, data):
+        print(data)
+        player = await get_player(self.user)
+
+        deck = None
+        async for d in player.decks.filter(id=data['id']):
+            deck = d
+            break
+
+        if deck:
+            print('editando deck')
+            deck.name = data['name']
+            deck.cards = data['cards']
+            await save_deck(deck)
+            return
+
+        # cria o deck
+        # adicionar limite de quantos decks pode criar
+        print('criando deck')
+        await create_deck(player, data)
+        return
