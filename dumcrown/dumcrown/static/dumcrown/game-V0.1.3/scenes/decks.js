@@ -87,17 +87,6 @@ export class DecksScene extends Phaser.Scene {
         this.mainContainer.destroy()
 
     }
-    // myDecks() {
-    //     this.title.text = 'DECKS'
-    //     this.mainContainer.destroy()
-    //     this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
-    //     for (var deck in player.decks) {
-    //         var deck_img = this.add.image(0, 0, 'runeterra')
-    //         this.mainContainer.addItem(deck_img)
-    //     }
-    //     this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
-
-    // }
 
     update() {
         // Lógica de atualização do jogo (executada continuamente durante o jogo).

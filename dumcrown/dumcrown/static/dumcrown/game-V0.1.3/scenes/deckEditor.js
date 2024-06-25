@@ -118,10 +118,9 @@ export class DeckEditorScene extends Phaser.Scene {
         this.input.on('pointerdown', () => {
             this.deckname.node.blur();
         });
-        this.a =
 
 
-            this.compressedDeckContainer = new WrapperContainer(this, 204, centerY, 400, true)
+        this.compressedDeckContainer = new WrapperContainer(this, 204, centerY, 400, true)
 
 
         this.saveDeckButton = new Button(this, 202, 660, 'save_deck', () => {
@@ -141,6 +140,7 @@ export class DeckEditorScene extends Phaser.Scene {
 
 
         if (Object.keys(this.deckData).length > 1) {
+            this.createDeleteButton()
             this.deckManager.addList(this.deckData.cards)
             this.deckname.node.value = this.deckData.name
             var deck = compressedDeck(this, this.deckData.cards)
@@ -194,6 +194,15 @@ export class DeckEditorScene extends Phaser.Scene {
             this.compressedDeckContainer.removeItem(card)
             this.compressedDeckContainer.updateLayout(1, 150, 20, 10, 1)
         }
+    }
+
+    createDeleteButton() {
+        this.deleteDeckButton = new Button(this, 1300, 30, 'delete_deck', () => {
+
+        }, { color: 0xff0ff0, })
+        this.deleteDeckButton.setScale(0.4)
+        this.deleteDeckText = add_text(this, 1300, 30, 'DELETAR DECK', '15px', 0.5)
+        this.deleteDeckText.setStyle({ fontStyle: 'bold' })
     }
     shutdown() {
 

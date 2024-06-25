@@ -149,6 +149,11 @@ class ClientData:
             deck = d
             break
 
+# maior que 30 uma mensagem, menor que trinta outra mensagem
+        if len(data['cards']) != 30:
+            print(f'{len(data["cards"])} cartas')
+            return
+
         if deck:
             print('editando deck')
             deck.name = data['name']

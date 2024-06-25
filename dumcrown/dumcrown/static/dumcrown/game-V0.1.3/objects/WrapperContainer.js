@@ -38,7 +38,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
     }
 
-    updateLayout(scale, initialY, xGap, yGap, itemsPerRow) {
+    updateLayout(scale, initialY, xGap, yGap, itemsPerRow, initGap = 10) {
         this.resetContainer();
 
         const maxItemsPerRow = itemsPerRow;
@@ -65,7 +65,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
             yPos = Math.floor(i / maxItemsPerRow) * (itemHeight + yGap);
 
             item.x = xPos;
-            item.y = yPos - this.displayOriginY + itemHeight / 2 + 10;
+            item.y = yPos - this.displayOriginY + itemHeight / 2 + initGap;
             item.setVisible(true);
             item.setScale(scale);
             const p = this.getGlobalPosition(item);
@@ -217,10 +217,10 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
     }
 
     createScrollbar() {
-        const scrollbarWidth = 10; // largura da barra de rolagem
+        const scrollbarWidth = 6; // largura da barra de rolagem
         this.scrollThumbHeight = 40; // altura igual à altura da máscara
         this.scrollRange = this.maskHeight - this.scrollThumbHeight;
-        const scrollbarColor = 0x666666; // cor d console.log('Y:', this.thumbLowerLimit)a barra de rolagem
+        const scrollbarColor = 0x07735d; // cor d console.log('Y:', this.thumbLowerLimit)a barra de rolagem
 
         this.scrollBar = this.scene.add.rectangle(
             this.x + this.width / 2 + scrollbarWidth / 2, // posição à direita do contêiner
