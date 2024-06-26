@@ -140,8 +140,6 @@ export class HomeScene extends Phaser.Scene {
         }, 0xffffff);
         fullscreen_button.setScale(0.40);
 
-        var datateste = { image: 'jhon_card', name: 'deck agressivo', }
-        var teste = new compressedCardObject(this, cardsDATA['1'])
 
         this.name = add_text(this, 218, 35, player.nickname, '28px')
         this.level = add_text(this, 223, 106, 'Lv: ' + player.level, '25px')
@@ -152,6 +150,8 @@ export class HomeScene extends Phaser.Scene {
         }, 0xffffff, soundfx.clickSound);
 
         perfil.setScale(0.5);
+
+
 
 
         const border_perfil = this.add.image(115, 105, player.border)

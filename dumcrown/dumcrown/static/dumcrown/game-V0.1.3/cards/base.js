@@ -90,8 +90,21 @@ export class CardObject extends Phaser.GameObjects.Container {
             const cardID = this.getID()
             this.scene.events.emit('addToDeck', cardID)
         });
-        this.addCard = this.scene.add.image(0, 0, 'add_new_deck');
-        this.add(this.addCard)
+        this.on('lockCard', () => {
+            this.cardPoster.destroy()
+            this.cardPoster = this.scene.add.image(0, 0, 'locked_card');
+            this.add(this.cardPoster)
+            console.log('max card aqui')
+        })
+        this.on('unlockCard', () => {
+            this.cardPoster.destroy()
+            this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
+            this.add(this.cardPoster)
+            console.log('max card aqui')
+        })
+
+        this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
+        this.add(this.cardPoster)
 
     }
 
@@ -174,13 +187,25 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
     }
     deckEdit() {
         this.on('pointerup', () => {
-
             console.log('soltou')
             const cardID = this.getID()
             this.scene.events.emit('addToDeck', cardID)
         });
-        this.addCard = this.scene.add.image(0, 0, 'add_new_deck');
-        this.add(this.addCard)
+        this.on('lockCard', () => {
+            this.cardPoster.destroy()
+            this.cardPoster = this.scene.add.image(0, 0, 'locked_card');
+            this.add(this.cardPoster)
+            console.log('max card aqui')
+        })
+        this.on('unlockCard', () => {
+            this.cardPoster.destroy()
+            this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
+            this.add(this.cardPoster)
+            console.log('max card aqui')
+        })
+
+        this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
+        this.add(this.cardPoster)
 
     }
 }

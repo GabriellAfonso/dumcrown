@@ -160,6 +160,11 @@ export class DeckEditorScene extends Phaser.Scene {
             this.cards[id].deckEdit()
 
             this.mainContainer.addItem(this.cards[id]);
+
+            const quantity = this.deckManager.getIDCount(id)
+            if (quantity == 3) {
+                this.cards[id].emit('lockCard')
+            }
         }
         this.mainContainer.updateLayout(0.55, 80, 80, 60, 4);
 
@@ -179,13 +184,17 @@ export class DeckEditorScene extends Phaser.Scene {
                 this.compressedDeckContainer.updateLayout(1, 150, 20, 10, 1)
                 this.compressedDeckContainer.scrollToLowerLimit()
             }
+            if (quantity == 3) {
+                this.cards[cardID].emit('lockCard')
+            }
             //TODO: quando mudar o numero subir o container pra onde foi alterado
             this.compressedDict[cardID].setQuantity(quantity);
         }
     }
     RemoveFromDeck(card) {
-
         console.log('remove from deck')
+        this.cards[card.id].emit('unlockCard')
+
         this.deckManager.removeCard(card.id)
         const quantity = this.deckManager.getIDCount(card.id)
         this.compressedDict[card.id].setQuantity(quantity);
