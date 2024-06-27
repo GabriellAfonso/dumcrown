@@ -245,6 +245,22 @@ export class compressedCardObject extends Phaser.GameObjects.Container {
     }
 
     setQuantity(number) {
+        if (number < this.quantity.text) {
+            if (!this.fx1) {
+                this.fx1 = this.postFX.addGlow(0xFF0000, 0, 0, false, 0.1, 12);
+            }
+
+            this.scene.tweens.add({
+                targets: this.fx1,
+                outerStrength: 1,
+                yoyo: true,
+                duration: 200,
+                ease: 'linear',
+                onComplete: () => {
+
+                }
+            });
+        }
         this.quantity.text = number
     }
 

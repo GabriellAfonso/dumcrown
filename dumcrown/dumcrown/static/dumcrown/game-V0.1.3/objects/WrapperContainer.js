@@ -1,4 +1,4 @@
-import { showCoordinates } from "../functions/functions.js";
+import { showCoordinates, sleep } from "../functions/functions.js";
 
 
 export class WrapperContainer extends Phaser.GameObjects.Container {
@@ -9,6 +9,8 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.width = 1;
         this.height = 1;
         this.items = [];
+        this.scrollThumbPosition = 0
+        this.teste = true
 
         scene.add.existing(this);
     }
@@ -19,19 +21,22 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         // console.log('item ', item)
     }
 
-    removeItem(item) {
+    removeItem(item, delay = 0) {
         // Remove o item do container do Phaser
-        this.remove(item);
+
         console.log(item)
 
         // Encontra o índice do item no array items
         const index = this.items.findIndex(i => i === item);
 
-        // Se o item for encontrado, remova-o do array items
         if (index !== -1) {
-            this.items.splice(index, 1);
+
             console.log('item encontrado')
-            item.destroy()
+            sleep(this.scene, delay, () => {
+                this.items.splice(index, 1);
+                this.remove(item);
+                item.destroy()
+            })
             return
         }
         console.log('item nao encontrado')
@@ -56,6 +61,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
         this.y = this.height / 2 + initialY;
 
+
         for (let i = 0; i < totalItems; i++) {
             const item = this.items[i];
             const itemWidth = item.width * scale;
@@ -75,6 +81,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.createMask();
 
         if (this.scrollValidator()) {
+            this.moveContent()
             this.createScrollbar();
             this.setLimits();
         }
@@ -116,6 +123,16 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.maskGraphics.fillRect(this.x - this.width / 2, this.initialMaskY, this.width, this.maskHeight);
         this.maskShape = this.maskGraphics.createGeometryMask();
         this.setMask(this.maskShape);
+        this.maskBounds = new Phaser.Geom.Rectangle(
+            this.x - this.width / 2,
+            this.initialMaskY,
+            this.width,
+            this.maskHeight
+        );
+
+    }
+    isPointerInMask(pointer) {
+        return this.maskBounds.contains(pointer.x, pointer.y);
     }
 
     setLimits() {
@@ -163,18 +180,23 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
 
     checkClick(pointer) {
-        this.items.forEach(item => {
-            item.setInteractive()
-        });
-        setTimeout(() => {
-            if (this.scene) {
-                this.items.forEach(item => {
-                    item.disableInteractive()
-                });
-            }
+        if (this.isPointerInMask(pointer)) {
+            this.items.forEach(item => {
+                item.setInteractive()
+            });
+            setTimeout(() => {
+                if (this.scene) {
+                    this.items.forEach(item => {
+                        item.disableInteractive()
+                    });
+                }
 
 
-        }, 200)
+            }, 200)
+        } else {
+            console.log('ta fora')
+        }
+
     }
 
     drag(pointer, dragX, dragY) {
@@ -239,7 +261,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         );
         this.scrollThumb.setOrigin(0.5); // define a origem no topo do retângulo
         this.scrollThumb.setInteractive({ draggable: true, cursor: 'pointer' });
-        this.scrollThumbPosition = 0
+
         this.scrollThumb.on('dragstart', (pointer, dragX, dragY) => {
             this.scrollThumb.dragStartY = this.scrollThumb.y; // Registra a posição inicial do arrastar
         });
@@ -269,6 +291,10 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         this.scrollThumb.on('dragend', () => {
             this.scrollThumb.dragStartY = undefined; // Limpa a posição inicial do arrastar
         });
+        if (this.scrollThumbPosition !== 0) {
+
+            this.setScrollThumbPosition(this.scrollThumbPosition)
+        }
 
     }
     moveContent() {

@@ -200,8 +200,10 @@ export class DeckEditorScene extends Phaser.Scene {
         this.compressedDict[card.id].setQuantity(quantity);
 
         if (quantity == 0) {
-            this.compressedDeckContainer.removeItem(card)
-            this.compressedDeckContainer.updateLayout(1, 150, 20, 10, 1)
+            this.compressedDeckContainer.removeItem(card, 200)
+            sleep(this, 200, () => {
+                this.compressedDeckContainer.updateLayout(1, 150, 20, 10, 1)
+            })
         }
     }
 

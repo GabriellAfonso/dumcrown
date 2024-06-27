@@ -50,6 +50,7 @@ export class DeckLayout extends Phaser.GameObjects.Container {
     //clicar faz abrir a cena deck editor com o deck selecionado
     editDeck(data) {
         GAME.scene.run('DeckEditorScene', data)
+        GAME.scene.stop('DecksScene')
 
     }
 
