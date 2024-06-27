@@ -1,7 +1,7 @@
 import logging
 import json
 from .validators import validate_nickname
-from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck
+from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck, delete_deck
 from .cards_data.units import units_data
 from .cards_data.spells import spells_data
 
@@ -141,7 +141,6 @@ class ClientData:
             logging.error(f'Error in sound_update: {e}', exc_info=True)
 
     async def save_deck(self, data):
-        print(data)
         player = await get_player(self.user)
 
         deck = None
@@ -149,20 +148,28 @@ class ClientData:
             deck = d
             break
 
-# maior que 30 uma mensagem, menor que trinta outra mensagem
         if len(data['cards']) != 30:
-            print(f'{len(data["cards"])} cartas')
+            await self.consumer.send_to_client('deck_editor_error', 'seu deck deve conter 30 cartas')
             return
 
         if deck:
-            print('editando deck')
             deck.name = data['name']
             deck.cards = data['cards']
             await save_deck(deck)
+            await self.consumer.send_to_client('deck_editor_success', 'Deck salvo com Sucesso!')
             return
 
-        # cria o deck
-        # adicionar limite de quantos decks pode criar
-        print('criando deck')
         await create_deck(player, data)
+        await self.consumer.send_to_client('deck_editor_success', 'Deck criado com Sucesso!')
         return
+
+    async def delete_deck(self, data):
+        player = await get_player(self.user)
+
+        deck = None
+        async for d in player.decks.filter(id=data['id']):
+            deck = d
+            break
+
+        if deck:
+            await delete_deck(player, deck.id)

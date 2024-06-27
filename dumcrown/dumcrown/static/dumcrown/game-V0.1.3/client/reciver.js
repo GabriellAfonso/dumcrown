@@ -1,4 +1,7 @@
-import { receiveCards, playerData, catchNicknameResponse, rankingRecive, onlineChecker, alreadyOnline, pingHandler } from "./client.js";
+import {
+    receiveCards, playerData, catchNicknameResponse, rankingRecive, onlineChecker, alreadyOnline, pingHandler,
+    deckEditorError, deckEditorSuccess
+} from "./client.js";
 import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } from "./room.js";
 import {
     startMatch, hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
@@ -26,6 +29,9 @@ export const clientReciver = {
     room_close: roomClose,
     clear_room: clearRoom,
     room_error_msg: roomErrorMsg,
+
+    deck_editor_error: deckEditorError,
+    deck_editor_success: deckEditorSuccess,
 
     start_match: startMatch,
     match_update: matchUpdate,

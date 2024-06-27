@@ -122,3 +122,16 @@ function get_ping_latency_ms() {
 export function disconnected() {
     latency_ms = 999
 }
+
+export function deckEditorError(data) {
+    const message = data
+    const deckEditor = GAME.scene.getScene('DeckEditorScene');
+    deckEditor.events.emit('invalidDeck', message);
+
+}
+
+export function deckEditorSuccess(data) {
+    const message = data
+    const deckEditor = GAME.scene.getScene('DeckEditorScene');
+    deckEditor.events.emit('successDeck', message);
+}

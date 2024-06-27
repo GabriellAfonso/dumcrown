@@ -1,7 +1,7 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax, showCoordinates, startScene, sendSocket } from '../functions/functions.js';
-import { simpleTweens } from '../animations/scripts/functions.js';
+import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
 import { cards, Card } from '../functions/cards.js';
 import { sleep } from '../functions/functions.js';
 import { textAnimation } from '../animations/scripts/textAnimations.js';
@@ -13,11 +13,13 @@ import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { cardsDATA, player } from '../client/client.js';
 import { instantiateDecks } from '../objects/deck_layout.js';
 import { compressedCardObject } from '../cards/base.js';
+import { Warning } from '../objects/warning.js';
 
 
 
 class DeckIDManager {
-    constructor() {
+    constructor(scene) {
+        this.scene = scene
         this.idList = [];
         this.idCount = {};
         this.maxCountPerID = 3;
@@ -42,6 +44,7 @@ class DeckIDManager {
         // Verificar se o ID específico não excede o limite máximo de 3
         if (this.idCount[id] >= this.maxCountPerID) {
             console.log(`O ID '${id}' não pode ser adicionado mais de ${this.maxCountPerID} vezes.`);
+            this.scene.maxCardMessage()
             return false;
         }
 
@@ -103,7 +106,10 @@ export class DeckEditorScene extends Phaser.Scene {
         const close = close_button(this, 1460, 35, 'DecksScene', 'DeckEditorScene', 0.4)
         close.setDepth(4)
         this.compressedDict = {}
-        this.deckManager = new DeckIDManager();
+        this.deckManager = new DeckIDManager(this);
+        this.completeMaxCardMessage = true
+        this.completeInvalidDeckMessage = true
+        this.completeSuccessDeckMessage = true
 
 
 
@@ -170,6 +176,8 @@ export class DeckEditorScene extends Phaser.Scene {
 
         this.events.on('shutdown', this.shutdown, this);
         this.events.on('addToDeck', this.addToDeck, this)
+        this.events.on('invalidDeck', this.invalidDeck, this)
+        this.events.on('successDeck', this.SuccessMessage, this)
         this.events.on('remove_from_deck', this.RemoveFromDeck, this)
 
     }
@@ -208,17 +216,84 @@ export class DeckEditorScene extends Phaser.Scene {
     }
 
     createDeleteButton() {
+        var data = {
+            id: this.deckData.id !== undefined ? this.deckData.id : 0,
+            name: this.deckname.node.value,
+            cards: this.deckManager.getIDList(),
+        }
         this.deleteDeckButton = new Button(this, 1300, 30, 'delete_deck', () => {
-
+            sendSocket('delete_deck', data)
+            sendSocket('get_player_data');
+            sleep(this, 200, () => {
+                switchScenes('DecksScene', 'DeckEditorScene')
+            })
         }, { color: 0xff0ff0, })
         this.deleteDeckButton.setScale(0.4)
         this.deleteDeckText = add_text(this, 1300, 30, 'DELETAR DECK', '15px', 0.5)
         this.deleteDeckText.setStyle({ fontStyle: 'bold' })
     }
+
+    maxCardMessage() {
+        if (this.completeMaxCardMessage) {
+            this.completeMaxCardMessage = false
+
+            this.message = this.add.text(centerX, centerY - 50, 'quantidade máxima da mesma carta',
+                {
+                    fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
+                    fontStyle: 'bold', fill: '#FFD700'
+                })
+            this.message.alpha = 0
+            this.message.setOrigin(0.5)
+            this.messageAnimation = simpleTextTweens(this, this.message, centerX, centerY, 10, 0, 200, 1, () => {
+                simpleTextTweens(this, this.message, centerX, centerY, 10, 0, 500, 0, () => {
+                    this.completeMaxCardMessage = true
+                }, 1400)
+            })
+        }
+    }
+
+    SuccessMessage(message) {
+        if (this.completeSuccessDeckMessage) {
+            this.completeSuccessDeckMessage = false
+
+            this.message2 = this.add.text(centerX, centerY - 50, message,
+                {
+                    fontSize: '60px', fontFamily: 'Lexend Deca, sans-serif',
+                    fontStyle: 'bold', fill: '#32CD32'
+                })
+            this.message2.alpha = 0
+            this.message2.setOrigin(0.5)
+            this.messageAnimation = simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 200, 1, () => {
+                simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 500, 0, () => {
+                    this.completeSuccessDeckMessage = true
+                }, 1400)
+            })
+        }
+    }
+    invalidDeck(message) {
+        if (this.completeInvalidDeckMessage) {
+            this.completeInvalidDeckMessage = false
+
+            this.message2 = this.add.text(centerX, centerY - 50, message,
+                {
+                    fontSize: '40px', fontFamily: 'Lexend Deca, sans-serif',
+                    fontStyle: 'bold', fill: '#FFD700'
+                })
+            this.message2.alpha = 0
+            this.message2.setOrigin(0.5)
+            this.messageAnimation = simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 200, 1, () => {
+                simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 500, 0, () => {
+                    this.completeInvalidDeckMessage = true
+                }, 1400)
+            })
+        }
+    }
     shutdown() {
 
         this.events.off('addToDeck')
         this.events.off('remove_from_deck')
+        this.events.off('invalidDeck')
+        this.events.off('successDeck')
         console.log('Scene shutdown, deckData cleared');
     }
 

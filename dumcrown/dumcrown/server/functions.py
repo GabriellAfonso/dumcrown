@@ -73,6 +73,11 @@ def create_deck(player, data):
 
 
 @database_sync_to_async
+def delete_deck(player, deck_id):
+    player.decks.filter(id=deck_id).delete()
+
+
+@database_sync_to_async
 def nickname_exists(new_nickname):
     from dumcrown.models.player import Player
     return Player.objects.filter(nickname=new_nickname).exists()
