@@ -87,7 +87,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         }
 
         this.addEventListeners();
-        this.setInteractive({ draggable: true, cursor: 'pointer' });
+        this.setInteractive({ draggable: true });
         this.input.hitArea.setSize(this.width, this.height);
     }
 

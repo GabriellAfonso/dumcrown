@@ -62,8 +62,7 @@ export function compressedDeck(scene, data) {
     // Agora, crie os objetos com a quantidade correta
     Object.keys(idCounts).forEach(baseId => {
         const quantity = idCounts[baseId];
-        const object = new compressedCardObject(scene, cardsDATA[baseId]);
-        object.setQuantity(quantity);
+        const object = new compressedCardObject(scene, cardsDATA[baseId], quantity);
         unitGroups[baseId] = object;
     });
 

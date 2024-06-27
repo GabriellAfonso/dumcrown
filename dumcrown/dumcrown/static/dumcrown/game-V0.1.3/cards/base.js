@@ -210,7 +210,7 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
     }
 }
 export class compressedCardObject extends Phaser.GameObjects.Container {
-    constructor(scene, data = {}) {
+    constructor(scene, data = {}, quantity = 1) {
         super(scene);
         this.scene = scene;
 
@@ -229,7 +229,7 @@ export class compressedCardObject extends Phaser.GameObjects.Container {
             { fontSize: '18px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', });
         this.name.setOrigin(0.5, 0.5);
 
-        this.quantity = scene.add.text(127, 0, '1',
+        this.quantity = scene.add.text(127, 0, quantity,
             { fontSize: '29px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
         this.quantity.setOrigin(0.5, 0.5);
 
@@ -245,22 +245,26 @@ export class compressedCardObject extends Phaser.GameObjects.Container {
     }
 
     setQuantity(number) {
+        this.postFX.clear()
+        let color
+
         if (number < this.quantity.text) {
-            if (!this.fx1) {
-                this.fx1 = this.postFX.addGlow(0xFF0000, 0, 0, false, 0.1, 12);
-            }
-
-            this.scene.tweens.add({
-                targets: this.fx1,
-                outerStrength: 1,
-                yoyo: true,
-                duration: 200,
-                ease: 'linear',
-                onComplete: () => {
-
-                }
-            });
+            color = 0xFF0000 //red
+        } else if (number > this.quantity.text) {
+            color = 0x32CD32 // green
         }
+
+        this.fx = this.postFX.addGlow(color, 0, 0, false, 0.1, 12);
+        this.scene.tweens.add({
+            targets: this.fx,
+            outerStrength: 1,
+            yoyo: true,
+            duration: 200,
+            ease: 'linear',
+            onComplete: () => {
+
+            }
+        });
         this.quantity.text = number
     }
 
