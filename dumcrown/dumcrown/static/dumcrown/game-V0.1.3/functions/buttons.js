@@ -72,6 +72,7 @@ export class Button extends Phaser.GameObjects.Image {
             this.clearTint();
         });
     }
+
 }
 
 export function close_button(scene, x, y, open, close, scale = 0.5) {

@@ -31,7 +31,7 @@ export class DecksScene extends Phaser.Scene {
         this.title = add_text(this, 954, 35, '', '30px', 0.5)
         this.title.setStyle({ fontStyle: 'bold' })
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
-        this.myDecks()
+
 
 
         this.decksButton = new Button(this, 202, 155, 'decks_select_button', () => {
@@ -47,7 +47,7 @@ export class DecksScene extends Phaser.Scene {
         this.cardsButtonText = add_text(this, 202, 255, 'MINHAS CARTAS', '25px', 0.5)
         this.cardsButtonText.setStyle({ fontStyle: 'bold' })
 
-
+        this.myDecks()
 
 
 
@@ -55,6 +55,8 @@ export class DecksScene extends Phaser.Scene {
     myCards() {
         this.mainContainer.destroy()
         this.title.text = 'CARTAS'
+        this.cardsButton.setTexture('decks_select_button_active')
+        this.decksButton.setTexture('decks_select_button')
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, true)
         // this.cards = createAllCards(this, true)
         this.cards = instantiateCards(this, player.cards)
@@ -66,6 +68,8 @@ export class DecksScene extends Phaser.Scene {
     myDecks() {
         this.mainContainer.destroy()
         this.title.text = 'DECKS'
+        this.decksButton.setTexture('decks_select_button_active')
+        this.cardsButton.setTexture('decks_select_button')
         var newDeckButton = new Button(this, 0, 0, 'add_new_deck', () => {
             switchScenes('DeckEditorScene', 'DecksScene')
         })
