@@ -1,5 +1,6 @@
 import json
 from django.utils import timezone
+from channels.db import database_sync_to_async
 from .functions import get_player, save_player, nickname_exists
 
 
@@ -33,3 +34,8 @@ async def validate_nickname(nickname):
 
     except Exception as e:
         print(f'Erro no set_new_nickname: {e}')
+
+
+@database_sync_to_async
+def validate_deck_name(player, deck_name):
+    return player.decks.filter(name=deck_name).first()

@@ -130,6 +130,16 @@ export class DeckEditorScene extends Phaser.Scene {
 
 
         this.saveDeckButton = new Button(this, 202, 660, 'save_deck', () => {
+            if (this.deckname.node.value.length < 1) {
+                this.invalidDeck('Seu deck precisa de um nome')
+                return
+            }
+
+            if (this.deckname.node.value.length > 15) {
+                this.invalidDeck('Nome pode conter só ate 15 caracteres')
+                return
+            }
+
             var data = {
                 id: this.deckData.id !== undefined ? this.deckData.id : 0,
                 name: this.deckname.node.value,

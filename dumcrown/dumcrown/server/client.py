@@ -1,6 +1,6 @@
 import logging
 import json
-from .validators import validate_nickname
+from .validators import validate_nickname, validate_deck_name
 from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck, delete_deck
 from .cards_data.units import units_data
 from .cards_data.spells import spells_data
@@ -150,6 +150,11 @@ class ClientData:
 
         if len(data['cards']) != 30:
             await self.consumer.send_to_client('deck_editor_error', 'seu deck deve conter 30 cartas')
+            return
+
+        existing_deck = await validate_deck_name(player, data['name'])
+        if existing_deck:
+            await self.consumer.send_to_client('deck_editor_error', 'Já existe um deck com esse nome')
             return
 
         if deck:
