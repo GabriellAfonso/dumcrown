@@ -62,11 +62,4 @@ Com certeza, valeu muito a pena todos os meses de estudo e esforço dedicados a 
 Primeiramente, gostaria de agradecer ao meu irmão Daniel, que me ajudou bastante desenhando as cartas, ícones e imagens do jogo,
 e também aos nossos amigos que nos ajudaram testando o jogo e nos dando mais ideias. Muito obrigado pelo apoio!
 
-## Próximos Passos
 
-Criar um jogo é um objetivo meu desde criança, então não termina por aqui. 
-Esse projeto foi apenas um rascunho que utilizei para aprender, e agora estou trabalhando em um projeto mais completo e estruturado,
-que irei fazer utilizando a engine Godot para fazer o jogo tanto para desktop quanto mobile e o Django para fazer a parte do servidor.
-Os respectivos repositórios estão linkados abaixo.
-
-* [Dumcrown-Godot](https://github.com/GabriellAfonso/dumcrown-godot)
