@@ -4,14 +4,15 @@ import {
 
 import { player } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
-import { switchScenes, logoutAjax, sleep } from '../functions/functions.js';
+import { switchScenes, logoutAjax, sleep, showCoordinates } from '../functions/functions.js';
 import { cardsShow, Card } from '../functions/cards.js';
 import { sendSocket } from '../functions/functions.js';
 
 
 import { Botao } from '../functions/functions.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';
-import { Button } from '../functions/buttons.js';
+import { Button, close_button } from '../functions/buttons.js';
+import { add_text } from '../functions/texts.js';
 
 export class GameLobby extends Phaser.Scene {
     constructor() {
@@ -20,26 +21,18 @@ export class GameLobby extends Phaser.Scene {
 
     create() {
         const soundfx = this.scene.get('Loading');
-        const background = this.add.image(centerX, centerY, 'play_background');
+        const background = this.add.image(centerX, centerY, 'lobby_background');
+        const close = close_button(this, 1440, 40, 'HomeScene', 'GameLobby')
 
-        const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScene', 'GameLobby')
-        }, 0xffff00, soundfx.closeSound);
-        x_close.setScale(0.5)
         this.gameLobbyContainer = this.add.container(0, 0);
 
-
-        const randomMatch = new Botao(this, 375, centerY, 'find_match_button', () => {
-
+        const findMatch = new Button(this, 375, centerY, 'find_match_button', () => {
             this.queue('QueueTimer')
+        }, { useHoverEffect: true })
 
-        });
-
-        const createRoom = new Botao(this, 1125, centerY, 'Create_room_button', () => {
-
+        const personalized = new Button(this, 1125, centerY, 'personalized_button', () => {
             this.createRoom('RoomScreen')
-
-        }, null, null, null, true);
+        }, { useHoverEffect: true })
 
 
         this.inputRoom = this.add.dom(1100, 50, 'input', {
@@ -69,9 +62,9 @@ export class GameLobby extends Phaser.Scene {
 
 
 
-        this.gameLobbyContainer.add(x_close)
-        this.gameLobbyContainer.add(randomMatch)
-        this.gameLobbyContainer.add(createRoom)
+        this.gameLobbyContainer.add(close)
+        this.gameLobbyContainer.add(findMatch)
+        this.gameLobbyContainer.add(personalized)
         this.gameLobbyContainer.add(this.joinButton)
 
         if (this.game.scene.isActive('QueueTimer')) {
@@ -82,6 +75,10 @@ export class GameLobby extends Phaser.Scene {
 
 
         this.addEvents()
+    }
+
+    choiceDeck(callback) {
+        //background preto interativo
     }
 
     update() {
@@ -129,6 +126,18 @@ export class GameLobby extends Phaser.Scene {
         });
 
         this.inputRoom.node.disabled = true;
+    }
+
+    addQueueButton() {
+        var back = this.add.graphics();
+        back.fillStyle(0xff0000, 1.0);
+        back.fillRect(375 - 200, centerY - 250, 400, 500);
+
+
+        add_text(this, 375, centerY - 40, 'Encontrar', '60px', 0.5)
+        add_text(this, 375, centerY + 40, 'Partida', '60px', 0.5)
+
+
     }
 
 }

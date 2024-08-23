@@ -3,6 +3,7 @@ import json
 from .validators import validate_nickname, validate_deck_name
 from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck, delete_deck
 from .cards_data.units import units_data
+from channels.db import database_sync_to_async
 from .cards_data.spells import spells_data
 
 
@@ -143,21 +144,18 @@ class ClientData:
     async def save_deck(self, data):
         player = await get_player(self.user)
 
-        deck = None
-        async for d in player.decks.filter(id=data['id']):
-            deck = d
-            break
+        deck = await self.get_deck(player, data['id'])
 
         if len(data['cards']) != 30:
             await self.consumer.send_to_client('deck_editor_error', 'seu deck deve conter 30 cartas')
             return
 
-        existing_deck = await validate_deck_name(player, data['name'])
-        if existing_deck:
-            await self.consumer.send_to_client('deck_editor_error', 'Já existe um deck com esse nome')
-            return
-
         if deck:
+            conflicting_deck = await validate_deck_name(player, deck.id, data['name'])
+            if conflicting_deck:
+                await self.consumer.send_to_client('deck_editor_error', 'Já existe um deck com esse nome')
+                return
+
             deck.name = data['name']
             deck.cards = data['cards']
             await save_deck(deck)
@@ -165,6 +163,7 @@ class ClientData:
             return
 
         await create_deck(player, data)
+
         await self.consumer.send_to_client('deck_editor_success', 'Deck criado com Sucesso!')
         return
 
@@ -178,3 +177,7 @@ class ClientData:
 
         if deck:
             await delete_deck(player, deck.id)
+
+    @database_sync_to_async
+    def get_deck(self, player, deck_id):
+        return player.decks.filter(id=deck_id).first()

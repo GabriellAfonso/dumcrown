@@ -37,5 +37,5 @@ async def validate_nickname(nickname):
 
 
 @database_sync_to_async
-def validate_deck_name(player, deck_name):
-    return player.decks.filter(name=deck_name).first()
+def validate_deck_name(player, deck_id, deck_name):
+    return player.decks.filter(name=deck_name).exclude(id=deck_id).first()

@@ -16,6 +16,8 @@ class Player(models.Model):
     level = models.PositiveIntegerField(default=1)
     cards = ArrayField(models.CharField(
         max_length=10), default=initial_cards())
+    current_deck = models.ForeignKey('Deck', on_delete=models.SET_NULL, null=True,
+                                     blank=True, related_name='current_deck_for_players')
     experience = models.PositiveBigIntegerField(default=0)
     crystals = models.PositiveBigIntegerField(default=0)
     tier = models.CharField(max_length=15, default='bronze')

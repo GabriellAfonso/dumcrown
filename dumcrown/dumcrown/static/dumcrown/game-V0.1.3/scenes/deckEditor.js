@@ -35,7 +35,9 @@ class DeckIDManager {
         var id = id.toString()
         // Verificar se o total de IDs não excede o limite máximo
         if (this.idList.length >= this.maxTotalIDs) {
-            console.log("Não é possível adicionar mais IDs. Limite total de 30 IDs alcançado.");
+
+            var msg = "Não é possível adicionar mais de 30 cartas"
+            this.scene.invalidDeck(msg)
             return false;
         }
 

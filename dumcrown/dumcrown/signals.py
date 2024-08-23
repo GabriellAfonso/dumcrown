@@ -12,8 +12,10 @@ def create_player(sender, instance, created, **kwargs):
         Settings.objects.create(player=player)
         Connection.objects.create(player=player)
         Stats.objects.create(player=player)
-        Deck.objects.create(player=player, name='Default',
-                            cards=initial_deck())
+        default_deck = Deck.objects.create(
+            player=player, name='Default', cards=initial_deck())
+        player.current_deck = default_deck
+        player.save()
 
 
 @receiver(post_save, sender=LoginHistory)

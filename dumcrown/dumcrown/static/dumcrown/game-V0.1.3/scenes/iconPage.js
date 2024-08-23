@@ -3,7 +3,7 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { player, experienceUpdated, setExperienceUpdated, players_online, latency_ms } from '../client/client.js';
 
-import { toggleFullscreen, switchScenes } from '../functions/functions.js';
+import { toggleFullscreen, switchScenes, showCoordinates } from '../functions/functions.js';
 import { sfx } from '../soundfx/sounds.js';
 import { Botao } from '../functions/functions.js';
 import { Button, close_button } from '../functions/buttons.js';
@@ -19,7 +19,7 @@ export class IconPage extends Phaser.Scene {
 
     create() {
         const soundfx = this.scene.get('Loading');
-
+        showCoordinates(this)
         this.background = this.add.graphics();
         this.background.fillStyle(0x222222, 0.85);
         this.background.fillRect(0, 0, 1500, 800);

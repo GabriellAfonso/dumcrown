@@ -69,7 +69,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('friends_background', PATH + '/images/backgrounds/amigos_background.jpg');
         this.load.image('emails_background', PATH + '/images/backgrounds/emails_screen.jpg');
         this.load.image('ranking_background', PATH + '/images/backgrounds/ranking_screen.jpg');
-        this.load.image('play_background', PATH + '/images/backgrounds/play_background.jpg');
+        this.load.image('lobby_background', PATH + '/images/backgrounds/lobby_background.png');
         this.load.image('room_screen', PATH + '/images/backgrounds/room_screen.png');
         this.load.image('victory_background', PATH + '/images/backgrounds/victory_background.png');
         this.load.image('loss_background', PATH + '/images/backgrounds/loss_background.png');
@@ -119,8 +119,8 @@ export class Loading extends Phaser.Scene {
         this.load.image('save_deck', PATH + '/images/buttons/save_deck.png');
 
 
-        this.load.image('decks_select_button', PATH + '/images/buttons/decks_select_button.png');
-        this.load.image('decks_select_button_active', PATH + '/images/buttons/decks_select_button_active.png');
+        this.load.image('decks_select_button', PATH + '/images/buttons/button_layout_01.png');
+        this.load.image('decks_select_button_active', PATH + '/images/buttons/button_layout_01_selected.png');
         this.load.image('add_new_deck', PATH + '/images/buttons/add_new_deck.png');
         this.load.image('delete_deck', PATH + '/images/buttons/delete_deck_button.png');
         this.load.image('add_to_deck', PATH + '/images/buttons/card_to_compress.png');
@@ -137,8 +137,8 @@ export class Loading extends Phaser.Scene {
         this.load.image('sobre', PATH + '/images/buttons/sobre.png');
         this.load.image('entrar_button', PATH + '/images/buttons/entrar.png');
         this.load.image('play_button', PATH + '/images/buttons/play.png');
-        this.load.image('Create_room_button', PATH + '/images/buttons/create_room.png');
-        this.load.image('find_match_button', PATH + '/images/buttons/find_match.png');
+        this.load.image('personalized_button', PATH + '/images/buttons/personalized_button.png');
+        this.load.image('find_match_button', PATH + '/images/buttons/find_match_button.png');
         this.load.image('enter_room', PATH + '/images/buttons/entrar_button.png');
         this.load.image('start_button', PATH + '/images/buttons/start.png');
         this.load.image('button_off', PATH + '/images/buttons/button_off.png');
