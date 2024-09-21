@@ -4,18 +4,32 @@ services:
     build:
       context: .
     ports:
-      - 8000:8000 
+      - 8001:8001 
     volumes:
       - ./dumcrown:/dumcrown
-      - ./dumcrown/dumcrown/static:/dumcrown/static/
+      - ./dumcrown/dumcrown/static/dumcrown:/dumcrown/static/dumcrown
       - ./dumcrown/media:/dumcrown/media/
-      - ./ssl:/ssl  
     env_file:
       - ./dotenv_files/.env
     depends_on:
-      - psql
-      - redis
-      - celery 
+      - psql_dum
+      - redis 
+
+
+  nginx_dum:  
+    container_name: nginx_dum
+    image: nginx:1.25.1
+    ports:
+      - 80:80 
+      - 443:443  
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/html:/usr/share/nginx/html
+      - ./dumcrown/static:/dumcrown/static/
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt 
+      - ./certbot-challenge:/usr/share/nginx/html/.well-known/acme-challenge
+    depends_on:
+      - dumcrown
 
   redis:
     restart: always
@@ -25,45 +39,23 @@ services:
     volumes:
       - redisdata:/data
 
-  psql:
-    container_name: psql
+  psql_dum:
+    container_name: psql_dum
     image: postgres:13-alpine
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
       - ./postgres/data:/var/lib/postgresql/data/
     env_file:
       - ./dotenv_files/.env
 
-  celery:  
-    build:
-      context: .
-    command: celery -A project worker -l info
+  certbot:
+    build: ./certbot
     volumes:
-      - ./dumcrown:/dumcrown
-      - ./dumcrown/dumcrown/static:/dumcrown/static/
-      - ./dumcrown/media:/dumcrown/media/
-    env_file:
-      - ./dotenv_files/.env
-    depends_on:
-      - psql
-      - redis
-
-  nginx:  
-    container_name: nginx
-    image: nginx:1.25.1
-    ports:
-      - 80:80 
-      - 443:443  
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/html:/usr/share/nginx/html
-      - ./ssl:/ssl  
-      - ./certbot:/usr/share/nginx/html/.well-known/acme-challenge 
-      - ./dumcrown/static:/dumcrown/static/
-    depends_on:
-      - dumcrown
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt
+      - ./certbot/var/lib/letsencrypt:/var/lib/letsencrypt
+      - ./certbot-challenge:/usr/share/nginx/html/.well-known/acme-challenge
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
   redisdata:
-  dumcrown-static:

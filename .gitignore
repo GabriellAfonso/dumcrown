@@ -2,6 +2,8 @@ certbot
 ssl
 postgres
 node_modules
+package-lock.json
+package.json
 
 # Django #
 *.log
@@ -9,7 +11,8 @@ node_modules
 *.pyc
 __pycache__
 db.sqlite3
-media
+dumcrown/static
+dumcrown/media
 
 # Backup files # 
 *.bak 
