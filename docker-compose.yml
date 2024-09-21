@@ -49,13 +49,5 @@ services:
     env_file:
       - ./dotenv_files/.env
 
-  certbot:
-    build: ./certbot
-    volumes:
-      - ./certbot/etc/letsencrypt:/etc/letsencrypt
-      - ./certbot/var/lib/letsencrypt:/var/lib/letsencrypt
-      - ./certbot-challenge:/usr/share/nginx/html/.well-known/acme-challenge
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
 volumes:
   redisdata:
