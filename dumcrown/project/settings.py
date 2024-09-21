@@ -20,7 +20,6 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'channels',
     'daphne',
-    'celery',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -181,19 +180,6 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 
-# celery
-
-# Configuração para usar o Redis como backend de mensagens
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
-
-# Configurações adicionais do Celery
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = TIME_ZONE
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
@@ -204,3 +190,10 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 TEMPLATE_DEBUG = True
+
+if not DEBUG:
+    print('Debug off')
+    CSRF_TRUSTED_ORIGINS = ['https://dumcrown.com.br']
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    CORS_ALLOW_ALL_ORIGINS = False

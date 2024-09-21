@@ -17,7 +17,6 @@ from django.http import JsonResponse
 import traceback
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-from dumcrown.consumers import PlayerConsumer
 from allauth.socialaccount.models import SocialAccount
 
 

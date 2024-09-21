@@ -5,7 +5,6 @@ from django.utils import timezone
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from .room import GameRoom
-from .match import GameMatch
 from .functions import player_connected, player_disconnected, player_is_online
 from .codes import code_handlers
 

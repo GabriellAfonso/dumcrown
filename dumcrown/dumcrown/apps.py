@@ -8,7 +8,7 @@ class DumcrownConfig(AppConfig):
     def ready(self):
         import dumcrown.signals
         disconnect_all_players()
-        print('deconecto')
+        print('all players disconnected')
 
 
 def disconnect_all_players():
