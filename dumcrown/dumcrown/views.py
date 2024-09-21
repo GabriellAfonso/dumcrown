@@ -10,7 +10,6 @@ from django.contrib.auth import authenticate, login, views
 from django.shortcuts import render, redirect
 from dumcrown.forms import RegisterForm
 from dumcrown.models.player import Player, LoginHistory
-from dumcrown_api.models import Player_data
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout

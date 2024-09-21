@@ -18,8 +18,6 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
-    'rest_framework',
-    'rest_framework.authtoken',
     'channels',
     'daphne',
     'celery',
@@ -41,7 +39,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
 
     'dumcrown',
-    'dumcrown_api',
 ]
 
 SITE_ID = 1
