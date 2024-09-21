@@ -1,0 +1,4 @@
+FROM certbot/certbot
+VOLUME /etc/letsencrypt
+VOLUME /var/lib/letsencrypt
+VOLUME /usr/share/nginx/html/.well-known/acme-challenge
