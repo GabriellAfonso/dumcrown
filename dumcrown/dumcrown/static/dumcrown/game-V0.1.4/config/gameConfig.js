@@ -1,4 +1,5 @@
 export const PATH = 'static/dumcrown/game-V0.1.4';
+//teste
 
 export var config = {
     type: Phaser.AUTO,
