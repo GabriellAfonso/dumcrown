@@ -5,12 +5,12 @@ export class DeckLayout extends Phaser.GameObjects.Container {
     constructor(scene, data = {}) {
         super(scene);
 
-        this.setSize(324, 483);
+        this.setSize(320, 483);
         this.scene = scene;
         this.deckDATA = data
         this.shape = this.scene.make.graphics()
 
-        this.deckImage = scene.add.image(0, -60, data.image);
+        this.deckImage = scene.add.image(0, -10, data.image);
         this.deckImage.setScale((this.scale * 1.1))
         this.deckBorder = scene.add.image(0, 0, 'deck_border');
 
@@ -37,10 +37,10 @@ export class DeckLayout extends Phaser.GameObjects.Container {
         const Xcentered = x - this.width * this.scale / 2
         const Ycentered = y - this.height * this.scale / 2
         const width = this.width * this.scale
-        const height = this.height * this.scale
+        const height = this.height * this.scale - 25
         const radius = 30 * this.scale
         this.shape.clear()
-        this.shape.fillStyle(0xffffff);
+        this.shape.fillStyle(0xffffff, 0.4);
         this.shape.fillRoundedRect(Xcentered, Ycentered, width, height, radius);
 
         const mask = this.shape.createGeometryMask();
