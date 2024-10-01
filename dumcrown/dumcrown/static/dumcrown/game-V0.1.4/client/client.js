@@ -13,6 +13,7 @@ export var player = {
     experience: '',
     cards: [],
     decks: [],
+    current_deck: 0,
     musicVolume: 1,
     soundsVolume: 1,
     crystalsCoins: '',
@@ -75,6 +76,7 @@ export function playerData(data) {
     player.experience = message.experience;
     player.cards = message.cards
     player.decks = message.decks
+    player.current_deck = message.current_deck
     player.crystalsCoins = message.crystals
     player.matches = message.matches
     player.victories = message.victories
@@ -82,7 +84,7 @@ export function playerData(data) {
     player.tier = message.tier
     player.musicVolume = message.volume_music;
     player.soundsVolume = message.soundsfx_volume;
-    console.log('decks ', player.decks[0])
+    console.log(player.current_deck)
 }
 
 

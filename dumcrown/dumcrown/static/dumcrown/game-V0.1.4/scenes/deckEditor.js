@@ -45,7 +45,6 @@ class DeckIDManager {
 
         // Verificar se o ID específico não excede o limite máximo de 3
         if (this.idCount[id] >= this.maxCountPerID) {
-            console.log(`O ID '${id}' não pode ser adicionado mais de ${this.maxCountPerID} vezes.`);
             this.scene.maxCardMessage()
             return false;
         }
@@ -58,8 +57,6 @@ class DeckIDManager {
             this.idCount[id] = 1;
         }
 
-
-        console.log(`ID '${id}' adicionado. Contagem atual: ${this.idCount[id]}`);
         return true;
     }
 
@@ -83,7 +80,6 @@ class DeckIDManager {
             if (this.idCount[target] === 0) {
                 delete this.idCount[target];
             }
-            console.log(`ID '${target}' removido. Contagem atual: ${this.idCount[target] || 0}`);
             return true;
         } else {
             console.log(`ID '${target}' não encontrado na lista.`);
@@ -192,6 +188,8 @@ export class DeckEditorScene extends Phaser.Scene {
         this.events.on('successDeck', this.SuccessMessage, this)
         this.events.on('remove_from_deck', this.RemoveFromDeck, this)
 
+        this.createActiveDeckButton()
+
     }
     addToDeck(cardID) {
         console.log('addeu', cardID)
@@ -227,6 +225,43 @@ export class DeckEditorScene extends Phaser.Scene {
         }
     }
 
+
+    createActiveDeckButton() {
+        this.activeDeck = false
+
+        if (this.deckData.id == player.current_deck) {
+            this.activeDeck = true
+        }
+
+        var text
+
+
+        if (this.activeDeck) {
+            text = add_text(this, 954, 30, 'Deck Ativo', '30px', 0.5)
+            text.setStyle({ fontStyle: 'bold' })
+            return
+        }
+
+        text = add_text(this, 954, 30, 'Ativar Deck', '30px', 0.5)
+        text.setStyle({ fontStyle: 'bold' })
+        text.alpha = 0.5
+
+
+        this.activeDeckButton = new Button(this, 954, 30, 'delete_deck', () => {
+            sendSocket('activate_deck', this.deckData)
+            sendSocket('get_player_data')
+
+            sleep(this, 300, () => {
+                this.scene.restart();
+            })
+
+        }, { color: 0xff0ff0, })
+        this.activeDeckButton.setScale(0.4)
+        this.activeDeckButton.alpha = 0.0000000000000004
+
+        return
+    }
+
     createDeleteButton() {
         var data = {
             id: this.deckData.id !== undefined ? this.deckData.id : 0,
@@ -236,7 +271,7 @@ export class DeckEditorScene extends Phaser.Scene {
         this.deleteDeckButton = new Button(this, 1300, 30, 'delete_deck', () => {
             sendSocket('delete_deck', data)
             sendSocket('get_player_data');
-            sleep(this, 200, () => {
+            sleep(this, 300, () => {
                 switchScenes('DecksScene', 'DeckEditorScene')
             })
         }, { color: 0xff0ff0, })

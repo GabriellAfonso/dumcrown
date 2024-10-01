@@ -17,7 +17,7 @@ class Player(models.Model):
     cards = ArrayField(models.CharField(
         max_length=10), default=initial_cards())
     current_deck = models.ForeignKey('Deck', on_delete=models.SET_NULL, null=True,
-                                     blank=True, related_name='current_deck_for_players')
+                                     blank=True, related_name='current_deck')
     experience = models.PositiveBigIntegerField(default=0)
     crystals = models.PositiveBigIntegerField(default=0)
     tier = models.CharField(max_length=15, default='bronze')
@@ -80,4 +80,12 @@ class Deck(models.Model):
     cards = ArrayField(models.CharField(max_length=10))
 
     def __str__(self):
-        return f'Deck {self.name} of player {self.player.nickname}'
+        return f'Name: {self.name} - - - Player: {self.player.nickname}'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'cards': self.cards,
+            'player': self.player.id,
+        }

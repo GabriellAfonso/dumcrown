@@ -7,9 +7,10 @@ def get_player(user):
     return Player.objects.select_related(
         'connection',
         'settings',
-        'stats'
+        'stats',
+        'current_deck',
     ).prefetch_related(
-        'decks'
+        'decks',
     ).get(user=user)
 
 
@@ -75,6 +76,11 @@ def create_deck(player, data):
 @database_sync_to_async
 def delete_deck(player, deck_id):
     player.decks.filter(id=deck_id).delete()
+
+
+@database_sync_to_async
+def get_deck(player, deck_id):
+    return player.decks.get(id=deck_id)
 
 
 @database_sync_to_async

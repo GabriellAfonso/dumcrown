@@ -1,7 +1,7 @@
 import logging
 import json
 from .validators import validate_nickname, validate_deck_name
-from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck, delete_deck
+from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck, delete_deck, get_deck
 from .cards_data.units import units_data
 from channels.db import database_sync_to_async
 from .cards_data.spells import spells_data
@@ -19,8 +19,7 @@ class ClientData:
     async def get_player_data(self):
         try:
             player = await get_player(self.user)
-            decks_data = [{'id': deck.id, 'name': deck.name, 'cards': list(
-                deck.cards)} for deck in player.decks.all()]
+
             player_data = {
                 'icon': player.icon,
                 'border': player.border,
@@ -29,7 +28,8 @@ class ClientData:
                 'level': player.level,
                 'experience': player.experience,
                 'cards': player.cards,
-                'decks': decks_data,
+                'decks': [deck.to_dict() for deck in player.decks.all()],
+                'current_deck': player.current_deck.id,
                 'crystals': player.crystals,
                 'crown_points': player.crown_points,
                 'tier': player.tier,
@@ -144,7 +144,7 @@ class ClientData:
     async def save_deck(self, data):
         player = await get_player(self.user)
 
-        deck = await self.get_deck(player, data['id'])
+        deck = await get_deck(player, data['id'])
 
         if len(data['cards']) != 30:
             await self.consumer.send_to_client('deck_editor_error', 'seu deck deve conter 30 cartas')
@@ -178,6 +178,10 @@ class ClientData:
         if deck:
             await delete_deck(player, deck.id)
 
-    @database_sync_to_async
-    def get_deck(self, player, deck_id):
-        return player.decks.filter(id=deck_id).first()
+    async def activate_deck(self, data):
+        # nao ta indo
+        player = await get_player(self.user)
+        deck = await get_deck(player, data['id'])
+        # talvez pegar a instancia de deck com id e usar a instancia pra substituir
+        player.current_deck = deck
+        await save_player(player)

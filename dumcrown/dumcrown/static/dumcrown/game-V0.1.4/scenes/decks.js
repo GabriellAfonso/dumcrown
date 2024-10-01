@@ -21,6 +21,7 @@ export class DecksScene extends Phaser.Scene {
     }
 
     create() {
+
         const soundfx = this.scene.get('Loading');
 
         const background = this.add.image(centerX, centerY, 'decks_background');
