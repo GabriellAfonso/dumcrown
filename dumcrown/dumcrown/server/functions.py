@@ -80,7 +80,7 @@ def delete_deck(player, deck_id):
 
 @database_sync_to_async
 def get_deck(player, deck_id):
-    return player.decks.get(id=deck_id)
+    return player.decks.filter(id=deck_id).first()
 
 
 @database_sync_to_async

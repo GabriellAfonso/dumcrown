@@ -29,7 +29,7 @@ class ClientData:
                 'experience': player.experience,
                 'cards': player.cards,
                 'decks': [deck.to_dict() for deck in player.decks.all()],
-                'current_deck': player.current_deck.id,
+                'current_deck': player.current_deck.id if player.current_deck else None,
                 'crystals': player.crystals,
                 'crown_points': player.crown_points,
                 'tier': player.tier,
@@ -142,9 +142,13 @@ class ClientData:
             logging.error(f'Error in sound_update: {e}', exc_info=True)
 
     async def save_deck(self, data):
+        # TODO criar um timer pra essa funçao nao poder ser chamada duas vezes seguidas
+        # ou criar uma forma de nao enviar duas vezes o deck sem id caso trave o cliente ou sei la
+        # TODO nao deixar criar mais que 8 deck fazer um if < 8:
         player = await get_player(self.user)
 
         deck = await get_deck(player, data['id'])
+        print('sao os decks do player', len(player.decks.all()))
 
         if len(data['cards']) != 30:
             await self.consumer.send_to_client('deck_editor_error', 'seu deck deve conter 30 cartas')

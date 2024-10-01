@@ -9,7 +9,7 @@ import { ConfigScreen } from './scenes/settings.js';
 import { StoreScreen } from './scenes/store.js';
 import { MissionsScene } from './scenes/missions.js';
 import { DecksScene, CardDetailScene, } from './scenes/decks.js';
-import { DeckEditorScene } from './scenes/deckEditor.js';
+import { DeckEditorScene, ConfirmDeleteDeck } from './scenes/deckEditor.js';
 import { FriendsScene } from './scenes/friends.js';
 import { EmailsScene } from './scenes/emails.js';
 import { RankingScreen } from './scenes/ranking.js';
@@ -98,6 +98,7 @@ GAME.scene.add('StartAnimation', StartAnimation);
 GAME.scene.add('DumArena', DumArena);
 GAME.scene.add('ConfigScreen', ConfigScreen);
 GAME.scene.add('Tutorial', Tutorial);
+GAME.scene.add('ConfirmDeleteDeck', ConfirmDeleteDeck);
 
 
 

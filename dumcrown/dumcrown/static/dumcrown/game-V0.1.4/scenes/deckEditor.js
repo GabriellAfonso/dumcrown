@@ -107,7 +107,6 @@ export class DeckEditorScene extends Phaser.Scene {
         this.deckManager = new DeckIDManager(this);
         this.completeMaxCardMessage = true
         this.completeInvalidDeckMessage = true
-        this.completeSuccessDeckMessage = true
 
 
 
@@ -144,10 +143,12 @@ export class DeckEditorScene extends Phaser.Scene {
                 cards: this.deckManager.getIDList(),
             }
 
-            //TODO: verificar se tem 30 cartas
             console.log(data)
             sendSocket('save_deck', data)
             sendSocket('get_player_data');
+            sleep(this, 200, () => {
+                switchScenes('DecksScene', 'DeckEditorScene')
+            })
         })
         this.saveDeckButton.setScale(0.8)
 
@@ -155,6 +156,7 @@ export class DeckEditorScene extends Phaser.Scene {
 
         if (Object.keys(this.deckData).length > 1) {
             this.createDeleteButton()
+            this.createActiveDeckButton()
             this.deckManager.addList(this.deckData.cards)
             this.deckname.node.value = this.deckData.name
             var deck = compressedDeck(this, this.deckData.cards)
@@ -185,10 +187,10 @@ export class DeckEditorScene extends Phaser.Scene {
         this.events.on('shutdown', this.shutdown, this);
         this.events.on('addToDeck', this.addToDeck, this)
         this.events.on('invalidDeck', this.invalidDeck, this)
-        this.events.on('successDeck', this.SuccessMessage, this)
+
         this.events.on('remove_from_deck', this.RemoveFromDeck, this)
 
-        this.createActiveDeckButton()
+
 
     }
     addToDeck(cardID) {
@@ -229,7 +231,7 @@ export class DeckEditorScene extends Phaser.Scene {
     createActiveDeckButton() {
         this.activeDeck = false
 
-        if (this.deckData.id == player.current_deck) {
+        if (this.deckData.id === player.current_deck) {
             this.activeDeck = true
         }
 
@@ -269,11 +271,7 @@ export class DeckEditorScene extends Phaser.Scene {
             cards: this.deckManager.getIDList(),
         }
         this.deleteDeckButton = new Button(this, 1300, 30, 'delete_deck', () => {
-            sendSocket('delete_deck', data)
-            sendSocket('get_player_data');
-            sleep(this, 300, () => {
-                switchScenes('DecksScene', 'DeckEditorScene')
-            })
+            GAME.scene.run('ConfirmDeleteDeck', data)
         }, { color: 0xff0ff0, })
         this.deleteDeckButton.setScale(0.4)
         this.deleteDeckText = add_text(this, 1300, 30, 'DELETAR DECK', '15px', 0.5)
@@ -299,24 +297,7 @@ export class DeckEditorScene extends Phaser.Scene {
         }
     }
 
-    SuccessMessage(message) {
-        if (this.completeSuccessDeckMessage) {
-            this.completeSuccessDeckMessage = false
 
-            this.message2 = this.add.text(centerX, centerY - 50, message,
-                {
-                    fontSize: '60px', fontFamily: 'Lexend Deca, sans-serif',
-                    fontStyle: 'bold', fill: '#32CD32'
-                })
-            this.message2.alpha = 0
-            this.message2.setOrigin(0.5)
-            this.messageAnimation = simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 200, 1, () => {
-                simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 500, 0, () => {
-                    this.completeSuccessDeckMessage = true
-                }, 1400)
-            })
-        }
-    }
     invalidDeck(message) {
         if (this.completeInvalidDeckMessage) {
             this.completeInvalidDeckMessage = false
@@ -344,6 +325,55 @@ export class DeckEditorScene extends Phaser.Scene {
         console.log('Scene shutdown, deckData cleared');
     }
 
+}
+
+
+export class ConfirmDeleteDeck extends Phaser.Scene {
+    constructor() {
+        super({ key: 'ConfirmDeleteDeck' });
+    }
+    init(data) {
+        this.deckData = data;
+    }
+    create() {
+        // showCoordinates(this)
+        const background = this.add.image(centerX, centerY, 'blackground');
+        background.setInteractive()
+        background.alpha = 0.8
+        background.on('pointerup', () => {
+            GAME.scene.stop('ConfirmDeleteDeck')
+        });
+
+
+        this.confirmDeleteBox = this.add.image(centerX, centerY, 'basic_warning')
+        this.message = add_text(this, centerX, 320, 'Tem certeza de que deseja\n excluir este deck?', '40px', 0.5)
+        this.message.setStyle({ fontStyle: 'bold', align: 'center', stroke: '#000000', strokeThickness: 1 })
+
+        const close = close_button(this, 1075, 220, '', 'ConfirmDeleteDeck', 0.4)
+
+        this.deleteButton = new Button(this, centerX - 200, 532, 'delete_button', () => {
+            sendSocket('delete_deck', this.deckData)
+            sendSocket('get_player_data');
+            sleep(this, 250, () => {
+                GAME.scene.stop('ConfirmDeleteDeck')
+                switchScenes('DecksScene', 'DeckEditorScene')
+            })
+        }, { color: 0xff0ff0, })
+
+        this.deleteDeckText = add_text(this, centerX - 200, 532, 'DELETAR', '30px', 0.5)
+        this.deleteDeckText.setStyle({ fontStyle: 'bold' })
+
+        this.cancelButton = new Button(this, centerX + 200, 532, 'cancel_button', () => {
+            GAME.scene.stop('ConfirmDeleteDeck')
+        }, { color: 0xff0ff0, })
+
+        this.cancelText = add_text(this, centerX + 200, 532, 'CANCELAR', '30px', 0.5)
+        this.cancelText.setStyle({ fontStyle: 'bold' })
+    }
+
+    update() {
+        // Lógica de atualização do jogo (executada continuamente durante o jogo).
+    }
 }
 
 

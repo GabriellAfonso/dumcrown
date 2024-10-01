@@ -125,6 +125,8 @@ export class Loading extends Phaser.Scene {
         this.load.image('delete_deck', PATH + '/images/buttons/delete_deck_button.png');
         this.load.image('add_to_deck', PATH + '/images/buttons/card_to_compress.png');
         this.load.image('locked_card', PATH + '/images/buttons/locked_card.png');
+        this.load.image('delete_button', PATH + '/images/buttons/delete_button.png');
+        this.load.image('cancel_button', PATH + '/images/buttons/cancel_button.png');
 
 
 

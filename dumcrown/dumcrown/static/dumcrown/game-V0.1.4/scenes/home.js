@@ -14,6 +14,7 @@ import { SomeonesShield } from '../cards/spells.js';
 import { instantiateCards } from '../cards/functions.js';
 import { DeckLayout } from '../objects/deck_layout.js';
 import { compressedCardObject } from '../cards/base.js';
+import { simpleTextTweens } from '../animations/scripts/functions.js';
 
 class Ping {
     constructor(scene, x, y) {
@@ -130,6 +131,7 @@ export class HomeScene extends Phaser.Scene {
 
     create() {
         sendSocket('get_player_data')
+        this.completeNoActiveDeckMsg = true
         const soundfx = this.scene.get('Loading');
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
@@ -192,7 +194,12 @@ export class HomeScene extends Phaser.Scene {
 
 
         const playButton = new Button(this, 1280, 640, 'play_button', () => {
-            switchScenes('GameLobby', 'HomeScene');
+            if (player.current_deck) {
+                switchScenes('GameLobby', 'HomeScene');
+            }
+            else {
+                this.noActiveDeckMsg()
+            }
         }, { useHoverEffect: true });
 
 
@@ -206,6 +213,26 @@ export class HomeScene extends Phaser.Scene {
     update() {
 
 
+    }
+
+    noActiveDeckMsg() {
+        console.log('chamou', this.completeNoActiveDeckMsg)
+        if (this.completeNoActiveDeckMsg) {
+            this.completeNoActiveDeckMsg = false
+
+            this.message = this.add.text(centerX, centerY - 50, 'Você precisa de um deck ativo para jogar',
+                {
+                    fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
+                    fontStyle: 'bold', fill: '#FFD700'
+                })
+            this.message.alpha = 0
+            this.message.setOrigin(0.5)
+            this.messageAnimation = simpleTextTweens(this, this.message, centerX, centerY, 10, 0, 200, 1, () => {
+                simpleTextTweens(this, this.message, centerX, centerY, 10, 0, 500, 0, () => {
+                    this.completeNoActiveDeckMsg = true
+                }, 1400)
+            })
+        }
     }
 
     addEvents() {

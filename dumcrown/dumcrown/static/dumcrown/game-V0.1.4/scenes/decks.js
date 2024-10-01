@@ -1,7 +1,7 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax, showCoordinates, startScene, sendSocket } from '../functions/functions.js';
-import { simpleTweens } from '../animations/scripts/functions.js';
+import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
 import { cards, Card } from '../functions/cards.js';
 import { sleep } from '../functions/functions.js';
 import { textAnimation } from '../animations/scripts/textAnimations.js';
@@ -23,6 +23,7 @@ export class DecksScene extends Phaser.Scene {
     create() {
 
         const soundfx = this.scene.get('Loading');
+        this.completeSuccessDeckMessage = true
 
         const background = this.add.image(centerX, centerY, 'decks_background');
         //showCoordinates(this)
@@ -50,6 +51,7 @@ export class DecksScene extends Phaser.Scene {
 
         this.myDecks()
 
+        this.events.on('successDeck', this.SuccessMessage, this)
 
 
     }
@@ -91,6 +93,24 @@ export class DecksScene extends Phaser.Scene {
     editDeck() {
         this.mainContainer.destroy()
 
+    }
+    SuccessMessage(message) {
+        if (this.completeSuccessDeckMessage) {
+            this.completeSuccessDeckMessage = false
+
+            this.message2 = this.add.text(centerX, centerY - 50, message,
+                {
+                    fontSize: '60px', fontFamily: 'Lexend Deca, sans-serif',
+                    fontStyle: 'bold', fill: '#32CD32'
+                })
+            this.message2.alpha = 0
+            this.message2.setOrigin(0.5)
+            this.messageAnimation = simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 200, 1, () => {
+                simpleTextTweens(this, this.message2, centerX, centerY, 10, 0, 500, 0, () => {
+                    this.completeSuccessDeckMessage = true
+                }, 1400)
+            })
+        }
     }
 
     update() {
