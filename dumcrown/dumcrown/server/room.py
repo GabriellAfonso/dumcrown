@@ -25,7 +25,7 @@ class GameRoom:
 
             playerData = {'channel': self.consumer.channel_name,
                           'nickname': player.nickname,
-                          'arena': player.arena,
+                          'board': player.board,
                           'icon': player.icon,
                           'border': player.border,
                           'level': player.level,
@@ -198,7 +198,7 @@ class GameRoom:
         data = {'id': player.id,
                 'channel': player.connection.channel,
                 'nickname': player.nickname,
-                'arena': player.arena,
+                'board': player.board,
                 'icon': player.icon,
                 'border': player.border,
                 'level': player.level,

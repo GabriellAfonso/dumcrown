@@ -7,7 +7,7 @@ export let cardsDATA
 export var player = {
     icon: '',
     border: '',
-    arena: '',
+    board: '',
     nickname: '',
     level: '',
     experience: '',
@@ -70,7 +70,7 @@ export function playerData(data) {
     const message = data;
     player.icon = message.icon;
     player.border = message.border;
-    player.arena = message.arena;
+    player.board = message.board;
     player.nickname = message.nickname;
     player.level = message.level;
     player.experience = message.experience;

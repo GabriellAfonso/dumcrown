@@ -4,6 +4,8 @@ from datetime import datetime
 
 # se a pessoa nao tiver energia pra fazer nenhuma açao, passar a vez
 # player 1 sempre começa, sera escolhido aleatoriamente quem sera o player1
+
+# ou a partida vai se gerenciar ou vou fazer um matchManager
 class Match:
 
     def __init__(self, player1, player2, match_id):
@@ -20,7 +22,18 @@ class Match:
         self.start_match()
 
     def start_match(self):
-        pass
+        print('Começou')
+        self.shuffle_decks()
+        self.inital_draw()
+
+    def shuffle_decks(self):
+        self.player1.deck.shuffle()
+        self.player2.deck.shuffle()
+
+    def inital_draw(self):
+        for i in range(0, 4):
+            self.player1.hand.draw_card()
+            self.player2.hand.draw_card()
 
     def record_action(self, action):
         self.history.append(action)

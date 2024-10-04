@@ -23,7 +23,7 @@ class ClientData:
             player_data = {
                 'icon': player.icon,
                 'border': player.border,
-                'arena': player.arena,
+                'board': player.board,
                 'nickname': player.nickname,
                 'level': player.level,
                 'experience': player.experience,
@@ -114,16 +114,16 @@ class ClientData:
         except Exception as e:
             logging.error(f'Error in border_change: {e}', exc_info=True)
 
-    async def arena_change(self, data):
+    async def board_change(self, data):
         try:
             player = await get_player(self.user)
-            new_arena = data
+            new_board = data
 
-            player.arena = new_arena
+            player.board = new_board
             await save_player(player)
 
         except Exception as e:
-            logging.error(f'Error in arena_change: {e}', exc_info=True)
+            logging.error(f'Error in board_change: {e}', exc_info=True)
 
     async def sound_update(self, data):
         try:

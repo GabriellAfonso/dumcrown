@@ -1,11 +1,11 @@
-from hand import PlayerHand
-from deck import PlayerDeck
+from .hand import PlayerHand
+from .deck import PlayerDeck
 
 
 class Player:
 
     def __init__(self, data):
-        self.user_id = data['user']
+        self.user_id = data['id']
         self.nickname = data['nickname']
         self.icon = data['icon']
         self.border = data['border']
@@ -15,6 +15,7 @@ class Player:
         self.energy = 0
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
+        print('nickname: ', self.nickname)
 
     def add_hp(self, points):
         self.hp += points

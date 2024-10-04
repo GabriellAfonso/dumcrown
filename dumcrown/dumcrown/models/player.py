@@ -12,7 +12,7 @@ class Player(models.Model):
     nickname = models.CharField(max_length=25, blank=True, default='')
     icon = models.CharField(max_length=40, default='chibi_khras')
     border = models.CharField(max_length=40, default='border01')
-    arena = models.CharField(max_length=40, default='arena01')
+    board = models.CharField(max_length=40, default='arena01')
     level = models.PositiveIntegerField(default=1)
     cards = ArrayField(models.CharField(
         max_length=10), default=initial_cards())

@@ -12,6 +12,14 @@ class PlayerDeck:
 
     def shuffle(self):
         random.shuffle(self.player_deck)
+        print('deck embaralhado')
 
-    def get_player_deck(self):
+    def get_deck(self):
+        # print(self.player_deck)
         return self.player_deck
+
+    def pop_card(self):
+        self.player_deck.pop(0)
+
+    def add_card(self, card):
+        self.player_deck.append(card)

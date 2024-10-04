@@ -15,6 +15,12 @@ def get_player(user):
 
 
 @database_sync_to_async
+def get_user(user_id):
+    from django.contrib.auth.models import User
+    return User.objects.get(id=user_id)
+
+
+@database_sync_to_async
 def get_online_players():
     from dumcrown.models.player import Player
     players_online_count = Player.objects.filter(is_online=True).count()
@@ -81,6 +87,12 @@ def delete_deck(player, deck_id):
 @database_sync_to_async
 def get_deck(player, deck_id):
     return player.decks.filter(id=deck_id).first()
+
+
+@database_sync_to_async
+def get_deck_cards(player, deck_id):
+    deck = player.decks.filter(id=deck_id).first()
+    return deck.cards
 
 
 @database_sync_to_async
