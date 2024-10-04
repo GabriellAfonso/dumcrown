@@ -83,6 +83,13 @@ export class Loading extends Phaser.Scene {
         this.load.image('arena01', PATH + '/images/arenas/dumarena01.png');
         this.load.image('arena02', PATH + '/images/arenas/dumarena02.png');
 
+        //default board
+        this.load.image('default_board', PATH + '/images/boards/default/board.png');
+        this.load.image('default_board_button', PATH + '/images/boards/default/button/board_button_active.png');
+        this.load.image('default_board_energy_holder', PATH + '/images/boards/default/energy/energy_placeholder.png');
+
+
+
         //icons
         this.load.image('khras_talk', PATH + '/images/khras_eyebrown_talk.png');
         this.load.image('chibi_khras', PATH + '/images/icones/khras.png');
