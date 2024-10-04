@@ -85,6 +85,14 @@ class PlayerConsumer(AsyncWebsocketConsumer):
         }
         await self.send(text_data=json.dumps(message))
 
+    async def send_to_group(self, group, code, data=''):
+        message = {
+            'type': 'receive_from_consumer',
+            'code': code,
+            'data': data,
+        }
+        await self.channel_layer.group_send(group, message)
+
     async def check_player_already_online(self):
         already_online = await player_is_online(self.user)
 

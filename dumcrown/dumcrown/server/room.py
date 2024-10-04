@@ -4,6 +4,8 @@ import random
 import asyncio
 from .functions import get_player
 
+# TODO uma classe pra salas e fila pra gerenciar melhor
+
 
 class GameRoom:
     rooms = {}
@@ -117,12 +119,7 @@ class GameRoom:
             room['player2'] = await self.get_player_data(player)
             await self.consumer.channel_layer.group_add(room_id, self.channel)
 
-            await self.consumer.channel_layer.group_send(room_id, {
-                'type': 'receive_from_consumer',
-                'code': 'room_update',
-                'data': self.rooms[room_id],
-            })
-
+            await self.consumer.send_to_group(room_id, 'room_update', self.rooms[room_id])
             await self.consumer.send_to_client('room_open')
         except Exception as e:
             logging.error(f'Error in join_room: {e}', exc_info=True)
@@ -208,34 +205,34 @@ class GameRoom:
                 'crown_points': player.crown_points, }
         return data
 
-    async def delete_room(self, user='', data=''):
-        try:
-            room_id = data['delete_room']
-            room = self.rooms.get(room_id)
+    # async def delete_room(self, user='', data=''):
+    #     try:
+    #         room_id = data['delete_room']
+    #         room = self.rooms.get(room_id)
 
-            player1_channel = room['player1']['channel']
-            player2_channel = room['player2']['channel']
+    #         player1_channel = room['player1']['channel']
+    #         player2_channel = room['player2']['channel']
 
-            if player1_channel == self.consumer.channel_name or player2_channel == self.consumer.channel_name:
+    #         if player1_channel == self.consumer.channel_name or player2_channel == self.consumer.channel_name:
 
-                await self.consumer.channel_layer.group_send(room_id, {
-                    'type': 'send_message',
-                    'clear_room': 'clear',
-                })
+    #             await self.consumer.channel_layer.group_send(room_id, {
+    #                 'type': 'send_message',
+    #                 'clear_room': 'clear',
+    #             })
 
-                try:
-                    await self.consumer.channel_layer.group_discard(room_id, player1_channel)
-                except:
-                    logging.error(
-                        'player 1 provavelmente ja se desconectou', exc_info=True)
+    #             try:
+    #                 await self.consumer.channel_layer.group_discard(room_id, player1_channel)
+    #             except:
+    #                 logging.error(
+    #                     'player 1 provavelmente ja se desconectou', exc_info=True)
 
-                try:
-                    await self.consumer.channel_layer.group_discard(room_id, player2_channel)
-                except:
-                    logging.error(
-                        'player 2 provavelmente ja se desconectou', exc_info=True)
+    #             try:
+    #                 await self.consumer.channel_layer.group_discard(room_id, player2_channel)
+    #             except:
+    #                 logging.error(
+    #                     'player 2 provavelmente ja se desconectou', exc_info=True)
 
-                del self.rooms[room_id]
+    #             del self.rooms[room_id]
 
-        except Exception as e:
-            logging.error(f'Error in delete_room: {e}', exc_info=True)
+    #     except Exception as e:
+    #         logging.error(f'Error in delete_room: {e}', exc_info=True)
