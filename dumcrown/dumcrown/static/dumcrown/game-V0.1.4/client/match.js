@@ -121,8 +121,8 @@ export function startMatch(data) {
     GAME.scene.stop('RoomScreen')
     GAME.scene.run('StartAnimation')
     setTimeout(() => {
-        var input = GAME.scene.getScene('GameLobby').inputRoom
-        input.destroy()
+        var lobby = GAME.scene.getScene('GameLobby')
+        lobby.delInput()
         GAME.scene.start('DumMatch')
         setTimeout(() => {
             GAME.scene.stop('StartAnimation')

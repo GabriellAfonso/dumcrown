@@ -127,6 +127,10 @@ export class DeckEditorScene extends Phaser.Scene {
 
 
         this.saveDeckButton = new Button(this, 202, 660, 'save_deck', () => {
+            this.saveDeckButton.disableInteractive()
+            sleep(this, 300, () => {
+                this.saveDeckButton.setInteractive()
+            })
             if (this.deckname.node.value.length < 1) {
                 this.invalidDeck('Seu deck precisa de um nome')
                 return
@@ -146,9 +150,7 @@ export class DeckEditorScene extends Phaser.Scene {
             console.log(data)
             sendSocket('save_deck', data)
             sendSocket('get_player_data');
-            sleep(this, 200, () => {
-                switchScenes('DecksScene', 'DeckEditorScene')
-            })
+            //o switch scene ta no client
         })
         this.saveDeckButton.setScale(0.8)
 

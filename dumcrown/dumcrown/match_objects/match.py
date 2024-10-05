@@ -14,6 +14,7 @@ class Match:
         self.player1 = player1
         self.player2 = player2
 
+        self.button_state = 0
         self.turn = 0  # Indica de quem é a vez (pode ser 1 ou 2).
         self.offensive_turn = 0  # Indica de quem é o turno ofensivo do round
         self.timestamp = datetime.now()
@@ -42,6 +43,7 @@ class Match:
             'player1': self.player1.get_player_data(),
             'player2': self.player2.get_player_data(),
 
+            'button_state': self.button_state,
             'turn': self.turn,
             'offensive_turn': self.offensive_turn,
         }

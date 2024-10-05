@@ -39,7 +39,7 @@ export class DumMatch extends Phaser.Scene {
         });
 
         this.match = new MatchManager(this, matchData)
-        this.match.start()
+        // this.match.start()
 
 
     }

@@ -136,6 +136,7 @@ export function deckEditorError(data) {
 
 export function deckEditorSuccess(data) {
     const message = data
+    switchScenes('DecksScene', 'DeckEditorScene')
     const deckEditor = GAME.scene.getScene('DecksScene');
     deckEditor.events.emit('successDeck', message);
 }

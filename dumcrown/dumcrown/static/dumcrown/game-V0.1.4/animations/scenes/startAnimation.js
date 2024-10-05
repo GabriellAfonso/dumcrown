@@ -15,7 +15,7 @@ export class StartAnimation extends Phaser.Scene {
         this.background.alpha = 0
         this.background.setInteractive({ cursor: 'default' })
 
-        simpleTweens(this, this.background, centerX, centerY, 1, 0, 0, 800, () => { }, 0.7)
+        simpleTweens(this, this.background, centerX, centerY, 1, 0, 0, 800, () => { }, 0.8)
 
         this.player1_icon = this.add.image(centerX - 350, centerY, matchData.player1.icon);
         this.player1_icon.setScale(0.5)

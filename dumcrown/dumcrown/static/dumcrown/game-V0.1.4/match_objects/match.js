@@ -15,13 +15,16 @@ export class MatchManager {
         this.round = match.round;
         this.player1 = match.player1;
         this.player2 = match.player2;
+        this.buttonState = match.button_state
+        this.buttonTexture = ['default_board_button', 'default_board_button_active']
 
         this.turn = match.turn; // Indica de quem é a vez (pode ser 1 ou 2)
-        this.offensiveTurn = match.offensiveTurn; // Indica de quem é o turno ofensivo do round
+        this.offensiveTurn = match.offensive_turn; // Indica de quem é o turno ofensivo do round
         this.history = [];
 
         this.player = this.get_player();
         this.enemy = this.get_enemy();
+        this.start()
     }
 
     get_player() {
@@ -60,7 +63,10 @@ export class MatchManager {
         this.enemyBoard.setScale(1, -1);
     }
     create_button() {
-        this.button = this.scene.add.image(1396, centerY, 'default_board_button_active');
+        console.log(this.buttonTexture)
+        console.log(this.buttonState)
+        console.log(this.buttonTexture[this.buttonState])
+        this.button = this.scene.add.image(1396, centerY, this.buttonTexture[this.buttonState]);
     }
 
     create_icons() {

@@ -137,7 +137,22 @@ export class GameLobby extends Phaser.Scene {
         add_text(this, 375, centerY - 40, 'Encontrar', '60px', 0.5)
         add_text(this, 375, centerY + 40, 'Partida', '60px', 0.5)
 
-
     }
+    delInput() {
+        this.inputRoom.destroy()
+        let graphics = this.add.graphics();
+        const width = 80
+        const height = 30
+
+        // Define a cor de preenchimento e a opacidade (opcional)
+        graphics.fillStyle(0x555555, 1);  // Cor vermelha com opacidade 1 (totalmente opaco)
+
+        graphics.fillRoundedRect(1100 - width / 2, 50 - height / 2, 80, 30, 10);
+        graphics.lineStyle(2, 0x555555, 1);
+
+        // Desenha a borda do retângulo com bordas arredondadas
+        graphics.strokeRoundedRect(1100 - width / 2, 50 - height / 2, 80, 30, 10);;
+    }
+
 
 }
