@@ -5,6 +5,7 @@ let pongTime = 0
 export let latency_ms
 export let cardsDATA
 export var player = {
+    id: '',
     icon: '',
     border: '',
     board: '',
@@ -68,6 +69,7 @@ export function receiveCards(data) {
 }
 export function playerData(data) {
     const message = data;
+    player.id = message.id;
     player.icon = message.icon;
     player.border = message.border;
     player.board = message.board;

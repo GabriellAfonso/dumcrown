@@ -1,6 +1,6 @@
 import { GAME, centerX, centerY } from '../../config/gameConfig.js';
 
-import { matchDB } from '../../client/match.js'
+import { matchData } from '../../client/match.js'
 import { simpleTweens } from '../scripts/functions.js';
 
 
@@ -17,13 +17,13 @@ export class StartAnimation extends Phaser.Scene {
 
         simpleTweens(this, this.background, centerX, centerY, 1, 0, 0, 800, () => { }, 0.7)
 
-        this.player1_icon = this.add.image(centerX - 350, centerY, matchDB.player1.icon);
+        this.player1_icon = this.add.image(centerX - 350, centerY, matchData.player1.icon);
         this.player1_icon.setScale(0.5)
         this.player1_icon.setAlpha(0)
-        this.player1_border = this.add.image(centerX - 350, centerY, matchDB.player1.border);
+        this.player1_border = this.add.image(centerX - 350, centerY, matchData.player1.border);
         this.player1_border.setScale(0.5)
         this.player1_border.setAlpha(0)
-        this.player1_nickname = this.add.text(centerX - 350, centerY + 100, matchDB.player1.nickname,
+        this.player1_nickname = this.add.text(centerX - 350, centerY + 100, matchData.player1.nickname,
             {
                 fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
                 fontStyle: 'bold', fill: '#fff'
@@ -33,13 +33,13 @@ export class StartAnimation extends Phaser.Scene {
         this.player1_nickname.setAlpha(0)
 
 
-        this.player2_icon = this.add.image(centerX + 350, centerY, matchDB.player2.icon);
+        this.player2_icon = this.add.image(centerX + 350, centerY, matchData.player2.icon);
         this.player2_icon.setScale(0.5)
         this.player2_icon.setAlpha(0)
-        this.player2_border = this.add.image(centerX + 350, centerY, matchDB.player2.border);
+        this.player2_border = this.add.image(centerX + 350, centerY, matchData.player2.border);
         this.player2_border.setScale(0.5)
         this.player2_border.setAlpha(0)
-        this.player2_nickname = this.add.text(centerX + 350, centerY + 100, matchDB.player2.nickname,
+        this.player2_nickname = this.add.text(centerX + 350, centerY + 100, matchData.player2.nickname,
             {
                 fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
                 fontStyle: 'bold', fill: '#fff'

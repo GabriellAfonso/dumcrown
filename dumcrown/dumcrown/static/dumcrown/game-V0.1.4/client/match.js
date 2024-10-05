@@ -2,40 +2,7 @@ import { GAME } from '../config/gameConfig.js';
 import { sendSocket } from '../functions/functions.js';
 
 
-export var matchDB = {
-    id: '',
-    round: 0,
-    phase: 0,
-    turn: null,
-    attacking: null,
-
-
-    'player1': {
-        channel: '',
-        ready: null,
-        icon: 'empty',
-        border: 'empty',
-        nickname: '',
-        arena: '',
-        hp: '',
-        energy: 0,
-        deck: [],
-
-    },
-    'player2': {
-        channel: '',
-        ready: null,
-        icon: 'empty',
-        border: 'empty',
-        nickname: '',
-        arena: '',
-        hp: '',
-        energy: 0,
-        deck: [],
-
-    },
-
-};
+export var matchData = {}
 
 export var updatedHp = false
 
@@ -140,34 +107,7 @@ export function clearAdversaryCards() {
 
 
 export function startMatch(data) {
-    const message = data.start_match;
-    matchDB.id = message.match_id
-    matchDB.round = message.round
-    matchDB.phase = message.phase
-    matchDB.turn = message.turn
-    matchDB.attacking = message.attacking
-
-
-    matchDB.player1.channel = message.player1.channel
-    matchDB.player1.ready = message.player1.ready
-    matchDB.player1.icon = message.player1.icon
-    matchDB.player1.border = message.player1.border
-    matchDB.player1.nickname = message.player1.nickname
-    matchDB.player1.arena = message.player1.arena
-    matchDB.player1.hp = message.player1.hp
-    matchDB.player1.energy = message.player1.energy
-    matchDB.player1.deck = message.player1.deck
-
-
-    matchDB.player2.channel = message.player2.channel
-    matchDB.player2.ready = message.player2.ready
-    matchDB.player2.icon = message.player2.icon
-    matchDB.player2.border = message.player2.border
-    matchDB.player2.nickname = message.player2.nickname
-    matchDB.player2.arena = message.player2.arena
-    matchDB.player2.hp = message.player2.hp
-    matchDB.player2.energy = message.player2.energy
-    matchDB.player2.deck = message.player2.deck
+    matchData = data
 
     if (GAME.scene.isActive('QueueTimer')) {
         const QueueTimer = GAME.scene.getScene('QueueTimer');
@@ -181,9 +121,13 @@ export function startMatch(data) {
     GAME.scene.stop('RoomScreen')
     GAME.scene.run('StartAnimation')
     setTimeout(() => {
-        GAME.scene.stop('StartAnimation')
-        GAME.scene.stop('GameLobby')
-        GAME.scene.start('DumArena')
+        var input = GAME.scene.getScene('GameLobby').inputRoom
+        input.destroy()
+        GAME.scene.start('DumMatch')
+        setTimeout(() => {
+            GAME.scene.stop('StartAnimation')
+            GAME.scene.stop('GameLobby')
+        }, 1500)
     }, 3000)
 
 

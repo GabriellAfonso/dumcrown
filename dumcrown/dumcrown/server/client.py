@@ -21,6 +21,7 @@ class ClientData:
             player = await get_player(self.user)
 
             player_data = {
+                'id': player.id,
                 'icon': player.icon,
                 'border': player.border,
                 'board': player.board,

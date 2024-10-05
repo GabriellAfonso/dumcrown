@@ -1,4 +1,4 @@
-import { matchDB, updatePhase } from '../client/match.js';
+import { matchData, updatePhase } from '../client/match.js';
 
 import { GAME, centerX } from '../config/gameConfig.js';
 import { socket } from '../main.js';
@@ -95,13 +95,13 @@ export class MasterButton extends Phaser.GameObjects.Image {
 
             if (this.buttonMode === 'ready') {
                 this.setMode('wait')
-                sendSocket('ready', matchDB.id)
+                sendSocket('ready', matchData.id)
             } else if (this.buttonMode === 'pass') {
 
-                if (matchDB.phase != 4) {
-                    sendSocket('pass', matchDB.id)
+                if (matchData.phase != 4) {
+                    sendSocket('pass', matchData.id)
                 }
-                if (matchDB.phase == 4) {
+                if (matchData.phase == 4) {
                     updatePhase(5)
                     this.setMode('wait')
                     if (scene.firstDefeseHitBox) {
@@ -121,7 +121,7 @@ export class MasterButton extends Phaser.GameObjects.Image {
                     }
                     scene.resolveDict[scene.iAm] = scene.yourDefeseCards
                     scene.resolveDict[scene.enemyAre] = scene.adversaryCardsAttack
-                    sendSocket('resolve', [matchDB.id, scene.resolveDict])
+                    sendSocket('resolve', [matchData.id, scene.resolveDict])
 
 
                 }
@@ -167,10 +167,10 @@ export class MasterButton extends Phaser.GameObjects.Image {
         }
         if (mode === 'pass') {
 
-            if (matchDB.phase == 3) {
+            if (matchData.phase == 3) {
                 this.buttonText.text = 'Atacar'
             }
-            else if (matchDB.phase == 4) {
+            else if (matchData.phase == 4) {
                 this.buttonText.text = 'Resolver'
             } else {
                 this.buttonText.text = 'passar'

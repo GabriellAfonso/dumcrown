@@ -10,7 +10,7 @@ class PlayerHand:
         self.deck.pop_card()
 
     def get_hand(self):
-        print(self.player_hand)
+
         return self.player_hand
 
     def swap_card(self, index):

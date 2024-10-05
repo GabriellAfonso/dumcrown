@@ -32,7 +32,11 @@ class MatchManager:
             player1 = Player(p1)
             player2 = Player(p2)
 
-            m = Match(player1, player2, match_id)
+            match = Match(player1, player2, match_id)
+
+            self.matches[match_id] = match
+
+            await self.consumer.send_to_group(match_id, 'start_match', self.matches[match_id].get_match_data())
 
         except Exception as e:
             logging.error(f'Error in start_match: {e}', exc_info=True)
@@ -47,7 +51,6 @@ class MatchManager:
                 'border': player.border,
                 'deck': await get_deck_cards(player, player.current_deck.id),
                 }
-        print(data)
         return data
 
     async def player_ready(self, user, data):

@@ -35,5 +35,17 @@ class Match:
             self.player1.hand.draw_card()
             self.player2.hand.draw_card()
 
+    def get_match_data(self):
+        match = {
+            'id': self.id,
+            'round': self.round,
+            'player1': self.player1.get_player_data(),
+            'player2': self.player2.get_player_data(),
+
+            'turn': self.turn,
+            'offensive_turn': self.offensive_turn,
+        }
+        return match
+
     def record_action(self, action):
         self.history.append(action)

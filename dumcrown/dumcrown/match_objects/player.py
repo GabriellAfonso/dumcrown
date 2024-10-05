@@ -28,3 +28,18 @@ class Player:
 
     def remove_energy(self, points):
         self.energy -= points
+
+    def get_player_data(self):
+        player = {
+            'id': self.user_id,
+            'nickname': self.nickname,
+            'icon': self.icon,
+            'border': self.border,
+            'board': self.board,
+
+            'hp': self.hp,
+            'energy': self.energy,
+            'deck': self.deck.get_deck(),
+            'hand': self.hand.get_hand(),
+        }
+        return player
