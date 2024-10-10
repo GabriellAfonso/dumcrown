@@ -63,18 +63,4 @@ export class DeckLayout extends Phaser.GameObjects.Container {
 }
 
 
-export function instantiateDecks(scene, data) {
-    const decks = {};
 
-    data.forEach(deck => {
-        const firstCardID = deck.cards[9]
-        const deckImage = cardsDATA[firstCardID].image
-        const deckData = { id: deck.id, image: deckImage, name: deck.name, cards: deck.cards }
-        const deckInstance = new DeckLayout(scene, deckData);
-
-        decks[deck.name] = deckInstance;
-    });
-    console.log('data', decks)
-    return decks;
-
-}

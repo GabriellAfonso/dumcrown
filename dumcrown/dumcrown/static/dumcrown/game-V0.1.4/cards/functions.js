@@ -2,6 +2,7 @@ import { unitsClasses } from "./units.js";
 import { spellsClasses } from "./spells.js";
 import { CardObject, SpellCardObject, compressedCardObject } from "./base.js";
 import { cardsDATA } from "../client/client.js";
+import { DeckLayout } from "../objects/deck_layout.js";
 
 const allCards = unitsClasses.concat(spellsClasses)
 
@@ -36,9 +37,9 @@ export function instantiateCards(scene, data) {
 
 function createCardInstance(scene, cardID, cardData) {
     if (isSpellCard(cardID)) {
-        return new SpellCardObject(scene, cardData);
+        return new SpellCardObject(scene, cardID, cardData);
     } else {
-        return new CardObject(scene, cardData);
+        return new CardObject(scene, cardID, cardData);
     }
 }
 
@@ -74,3 +75,36 @@ export function compressCard(scene, cardID) {
     const object = new compressedCardObject(scene, cardsDATA[cardID]);
     return object
 }
+
+export function createPlayerCards(scene, data) {
+    const cards = {};
+
+    data.forEach(cardID => {
+        const id = idCleaner(cardID)
+        const cardData = cardsDATA[id];
+        const cardInstance = createCardInstance(scene, cardID, cardData);
+        cards[cardID] = cardInstance;
+    });
+
+    return cards;
+}
+function idCleaner(cardID) {
+    return cardID.replace(/\([A-Z]\)/g, '');
+}
+
+export function instantiateDecks(scene, data) {
+    const decks = {};
+
+    data.forEach(deck => {
+        const firstCardID = idCleaner(deck.cards[9])
+        const deckImage = cardsDATA[firstCardID].image
+        const deckData = { id: deck.id, image: deckImage, name: deck.name, cards: deck.cards }
+        const deckInstance = new DeckLayout(scene, deckData);
+
+        decks[deck.name] = deckInstance;
+    });
+    console.log('data', decks)
+    return decks;
+
+}
+

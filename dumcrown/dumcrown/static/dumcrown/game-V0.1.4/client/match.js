@@ -108,6 +108,7 @@ export function clearAdversaryCards() {
 
 export function startMatch(data) {
     matchData = data
+    console.log(matchData)
 
     if (GAME.scene.isActive('QueueTimer')) {
         const QueueTimer = GAME.scene.getScene('QueueTimer');

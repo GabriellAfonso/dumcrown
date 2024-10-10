@@ -11,7 +11,7 @@ import { add_text } from '../functions/texts.js';
 import { compressCard, compressedDeck, createAllCards, instantiateCards } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { cardsDATA, player } from '../client/client.js';
-import { instantiateDecks } from '../objects/deck_layout.js';
+// import { instantiateDecks } from '../objects/deck_layout.js';
 import { compressedCardObject } from '../cards/base.js';
 import { Warning } from '../objects/warning.js';
 

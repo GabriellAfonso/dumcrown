@@ -16,7 +16,7 @@ import { RankingScreen } from './scenes/ranking.js';
 import { GameLobby } from './scenes/lobby.js';
 import { RoomScreen } from './scenes/room.js';
 import { QueueTimer } from './scenes/queue.js';
-import { DumMatch } from './scenes/dums_match.js';
+import { DumMatch } from './scenes/dumsMatch.js';
 import { StartAnimation } from './animations/scenes/startAnimation.js';
 import { Tutorial } from './scenes/tutorial.js';
 import { ReconnectingScreen } from './scenes/reconnecting.js';

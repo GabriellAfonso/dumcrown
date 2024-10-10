@@ -1,4 +1,5 @@
 from django.db import models
+from collections import defaultdict
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
@@ -82,10 +83,28 @@ class Deck(models.Model):
     def __str__(self):
         return f'Name: {self.name} - - - Player: {self.player.nickname}'
 
+    def format_cards(self):
+        card_count = defaultdict(int)
+        formatted_cards = []
+
+        for card in self.cards:
+            card_count[card] += 1
+            if card_count[card] == 1:
+                formatted_cards.append(f'{card}')
+            elif card_count[card] == 2:
+                formatted_cards.append(f'{card}(A)')
+            elif card_count[card] == 3:
+                formatted_cards.append(f'{card}(B)')
+            else:
+                formatted_cards.append(
+                    f'{card}({chr(65 + card_count[card] - 2)})')
+
+        return formatted_cards
+
     def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
-            'cards': self.cards,
+            'cards': self.format_cards(),
             'player': self.player.id,
         }

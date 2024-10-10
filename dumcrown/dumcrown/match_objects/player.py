@@ -11,7 +11,7 @@ class Player:
         self.border = data['border']
         self.board = data['board']
 
-        self.hp = 30
+        self.hp = 100
         self.energy = 0
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)

@@ -2,8 +2,9 @@ import { GAME, centerX, centerY } from "../config/gameConfig.js";
 import { add_text } from "../functions/texts.js";
 import { cardsDATA } from "../client/client.js";
 import { Button } from "../functions/buttons.js";
+
 export class CardObject extends Phaser.GameObjects.Container {
-    constructor(scene, data = {}) {
+    constructor(scene, id, data = {}) {
         super(scene);
 
         this.setSize(328, 483);
@@ -43,12 +44,12 @@ export class CardObject extends Phaser.GameObjects.Container {
         this.setVisible(false)
 
         if (data) {
-            this.createCard(data)
+            this.createCard(id, data)
         }
     }
 
-    createCard(data) {
-        this.id = data.id
+    createCard(id, data) {
+        this.id = id
         this.cardImage.setTexture(data.image)
         this.name.text = data.name
         this.description.text = data.description
