@@ -1,6 +1,6 @@
 units_data = {
-    1: {
-        "id": 1,
+    '1': {
+        "id": '1',
         "type": "unit",
         "image": "jhon_card",
         "name": "JHON COPPER",
@@ -9,8 +9,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    2: {
-        "id": 2,
+    '2': {
+        "id": '2',
         "type": "unit",
         "image": "carol_card",
         "name": "CAROL ARLET",
@@ -19,8 +19,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    3: {
-        "id": 3,
+    '3': {
+        "id": '3',
         "type": "unit",
         "image": "mortem_card",
         "name": "MORTEM",
@@ -29,8 +29,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    4: {
-        "id": 4,
+    '4': {
+        "id": '4',
         "type": "unit",
         "image": "kronos_card",
         "name": "KRONOS",
@@ -39,8 +39,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    5: {
-        "id": 5,
+    '5': {
+        "id": '5',
         "type": "unit",
         "image": "darkage1_card",
         "name": "DARK AGE",
@@ -49,8 +49,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    6: {
-        "id": 6,
+    '6': {
+        "id": '6',
         "type": "unit",
         "image": "khras_card",
         "name": "KHRAS",
@@ -59,8 +59,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    7: {
-        "id": 7,
+    '7': {
+        "id": '7',
         "type": "unit",
         "image": "skillet_card",
         "name": "SKILLET",
@@ -69,8 +69,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    8: {
-        "id": 8,
+    '8': {
+        "id": '8',
         "type": "unit",
         "image": "cdc_card",
         "name": "CDC",
@@ -79,8 +79,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    9: {
-        "id": 9,
+    '9': {
+        "id": '9',
         "type": "unit",
         "image": "okada_card",
         "name": "OKADA",
@@ -89,8 +89,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    10: {
-        "id": 10,
+    '10': {
+        "id": '10',
         "type": "unit",
         "image": "smoothcriminal_card",
         "name": "SMOOTH CRIMINAL",
@@ -99,8 +99,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    11: {
-        "id": 11,
+    '11': {
+        "id": '11',
         "type": "unit",
         "image": "boogie_card",
         "name": "BOOGIE",
@@ -109,8 +109,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    12: {
-        "id": 12,
+    '12': {
+        "id": '12',
         "type": "unit",
         "image": "spring_card",
         "name": "SPRING",
@@ -119,8 +119,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    13: {
-        "id": 13,
+    '13': {
+        "id": '13',
         "type": "unit",
         "image": "polaroid_card",
         "name": "POLAROID",
@@ -129,8 +129,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    14: {
-        "id": 14,
+    '14': {
+        "id": '14',
         "type": "unit",
         "image": "maniac_card",
         "name": "MANIAC",
@@ -139,8 +139,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    15: {
-        "id": 15,
+    '15': {
+        "id": '15',
         "type": "unit",
         "image": "crazy_card",
         "name": "CRAZY",
@@ -149,8 +149,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    16: {
-        "id": 16,
+    '16': {
+        "id": '16',
         "type": "unit",
         "image": "theojays_card",
         "name": "THE O'JAYS",
@@ -159,8 +159,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    17: {
-        "id": 17,
+    '17': {
+        "id": '17',
         "type": "unit",
         "image": "neonb_card",
         "name": "NEON B.",
@@ -169,8 +169,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    18: {
-        "id": 18,
+    '18': {
+        "id": '18',
         "type": "unit",
         "image": "ballhan_card",
         "name": "BALLHAN",
@@ -179,8 +179,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    19: {
-        "id": 19,
+    '19': {
+        "id": '19',
         "type": "unit",
         "image": "darknecessites_card",
         "name": "DARK NECESSITES",
@@ -189,8 +189,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    20: {
-        "id": 20,
+    '20': {
+        "id": '20',
         "type": "unit",
         "image": "anomaly_card",
         "name": "ANOMALY",
@@ -199,8 +199,8 @@ units_data = {
         "attack": 8,
         "defense": 6,
     },
-    21: {
-        "id": 21,
+    '21': {
+        "id": '21',
         "type": "unit",
         "image": "rhioros_ghost_card",
         "name": "RHIOROS GHOST",

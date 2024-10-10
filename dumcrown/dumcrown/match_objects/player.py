@@ -40,6 +40,7 @@ class Player:
             'hp': self.hp,
             'energy': self.energy,
             'deck': self.deck.get_deck(),
+            'deck_obj': self.deck.get_deck_obj(),
             'hand': self.hand.get_hand(),
         }
         return player

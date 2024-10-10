@@ -18,3 +18,4 @@ player2 = Player(player2_data)
 partida = Match(player1, player2, 4256)
 
 # partida.player1.hand.get_deck()
+print(player1.deck.get_deck())
