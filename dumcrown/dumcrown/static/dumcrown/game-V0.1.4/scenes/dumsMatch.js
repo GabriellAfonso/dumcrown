@@ -9,10 +9,11 @@ export class DumMatch extends Phaser.Scene {
 
 
     create() {
-
+        sendSocket('get_cards') // atualiza as cartas antes da partida começar
         this.startAnimation()
         this.match = new MatchManager(this, matchData)
         // showCoordinates(this)
+        // fase das 4 cartas iniciais
 
     }
 

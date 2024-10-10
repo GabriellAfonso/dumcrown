@@ -1,3 +1,4 @@
+import { initialDraw } from '../animations/match/initialDraw.js';
 import { createPlayerCards, instantiateCards } from '../cards/functions.js';
 import { player } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
@@ -25,13 +26,32 @@ export class MissionsScene extends Phaser.Scene {
         x_close.setScale(0.5)
 
         // console.log(player.decks[0].cards)
-        this.cards = createPlayerCards(this, player.decks[0].cards)
+        var deck = player.decks[0].cards
+        this.cards = createPlayerCards(this, deck)
 
-        console.log(this.cards['1(A)'].getID())
-
+        console.log(this.cards['1(A)'])
+        this.hand = [
+            deck[0],
+            deck[1],
+            deck[2],
+            deck[3],
+        ]
+        this.initial_draw()
 
     }
+    initial_draw() {
+        var list = []
+        for (let card of this.hand) {
+            var c = this.getCardObj(card)
+            list.push(c)
+        }
+        initialDraw(this, list)
+    }
 
+    getCardObj(id) {
+        return this.cards[id]
+
+    }
 
     update() {
         // Lógica de atualização do jogo (executada continuamente durante o jogo).

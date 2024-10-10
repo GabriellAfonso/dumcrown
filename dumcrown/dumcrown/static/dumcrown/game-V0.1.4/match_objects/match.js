@@ -1,4 +1,5 @@
 
+import { createPlayerCards } from '../cards/functions.js';
 import { player } from '../client/client.js';
 import { centerX, centerY } from '../config/gameConfig.js';
 
@@ -53,6 +54,7 @@ export class MatchManager {
         this.createDecks()
         this.createHp()
         this.createEnergy()
+        this.instantiateCards()
     }
 
 
@@ -118,5 +120,12 @@ export class MatchManager {
 
     createPlayerHand() {
 
+    }
+
+    instantiateCards() {
+        //player
+        this.playerCards = createPlayerCards(this.scene, this.player.deck)
+        //enemy
+        this.enemyCards = createPlayerCards(this.scene, this.enemy.deck)
     }
 }

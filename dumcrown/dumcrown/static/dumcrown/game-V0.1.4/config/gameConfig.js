@@ -27,8 +27,9 @@ export var config = {
     texture: {
         linear: true,
     },
-    roundPixels: true
-
+    roundPixels: true,
+    autoFocus: true,
+    autoPause: false
 };
 export const GAME = new Phaser.Game(config);
 
