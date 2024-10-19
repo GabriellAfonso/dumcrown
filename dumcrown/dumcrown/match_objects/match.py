@@ -14,7 +14,6 @@ class Match:
         self.player1 = player1
         self.player2 = player2
 
-        self.button_state = 0
         self.turn = 0  # Indica de quem é a vez (pode ser 1 ou 2).
         self.offensive_turn = 0  # Indica de quem é o turno ofensivo do round
         self.timestamp = datetime.now()
@@ -25,13 +24,22 @@ class Match:
     def start_match(self):
         print('Começou')
         self.shuffle_decks()
-        self.inital_draw()
+        # self.inital_draw()
 
     def shuffle_decks(self):
         self.player1.deck.shuffle()
         self.player2.deck.shuffle()
 
+    def who_i_am(self, player_id):
+        print('player id', self.player1.get_id())
+        if self.player1.get_id() == player_id:
+            return self.player1
+
+        return self.player2
+
     def inital_draw(self):
+        self.player1.change_button(1, 'Pronto')
+        self.player2.change_button(1, 'Pronto')
         for i in range(0, 4):
             self.player1.hand.draw_card()
             self.player2.hand.draw_card()
@@ -43,7 +51,6 @@ class Match:
             'player1': self.player1.get_player_data(),
             'player2': self.player2.get_player_data(),
 
-            'button_state': self.button_state,
             'turn': self.turn,
             'offensive_turn': self.offensive_turn,
         }

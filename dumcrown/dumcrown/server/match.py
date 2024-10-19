@@ -35,8 +35,9 @@ class MatchManager:
             match = Match(player1, player2, match_id)
 
             self.matches[match_id] = match
-
             await self.consumer.send_to_group(match_id, 'start_match', self.matches[match_id].get_match_data())
+
+            asyncio.create_task(self.initial_draw(match_id))
 
         except Exception as e:
             logging.error(f'Error in start_match: {e}', exc_info=True)
@@ -52,6 +53,22 @@ class MatchManager:
                 'deck': await get_deck_cards(player, player.current_deck.id),
                 }
         return data
+
+    async def initial_draw(self, match_id):
+        print('entrou no initialdraw')
+        await asyncio.sleep(6)
+        self.matches[match_id].inital_draw()
+        await self.consumer.send_to_group(match_id, 'initial_draw', self.matches[match_id].get_match_data())
+
+    async def swap_cards(self, data):
+        if not data['cards']:
+            return  # o jogo precisa continuar, provavelmente enviar algo
+        match = self.matches[data['match_id']]
+
+        player = match.who_i_am(self.user)
+        player.hand.swap_cards(data['cards'])
+        new_hand = player.hand.get_hand()
+        await self.consumer.send_to_client('swapped_cards', match.get_match_data())
 
     async def player_ready(self, user, data):
         try:

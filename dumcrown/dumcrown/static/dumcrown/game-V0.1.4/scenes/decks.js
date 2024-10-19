@@ -79,6 +79,7 @@ export class DecksScene extends Phaser.Scene {
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, false)
 
         this.decks = instantiateDecks(this, player.decks)
+        console.log(player.decks)
 
         for (let deck in this.decks) {
             this.mainContainer.addItem(this.decks[deck]);

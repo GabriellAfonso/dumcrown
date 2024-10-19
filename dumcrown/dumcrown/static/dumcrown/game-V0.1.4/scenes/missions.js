@@ -1,4 +1,4 @@
-import { initialDraw } from '../animations/match/initialDraw.js';
+
 import { createPlayerCards, instantiateCards } from '../cards/functions.js';
 import { player } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
@@ -6,6 +6,7 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { switchScenes, logoutAjax, showCoordinates } from '../functions/functions.js';
 
 import { Botao } from '../functions/functions.js';
+import { InitialDrawManager } from '../match_objects/initialDrawManager.js';
 import { MatchManager } from '../match_objects/match.js';
 import { data } from './data.js';
 
@@ -16,10 +17,14 @@ export class MissionsScene extends Phaser.Scene {
 
     create() {
         const soundfx = this.scene.get('Loading');
-        this.match = new MatchManager(this, data)
+        // this.match = new MatchManager(this)
 
         // const background = this.add.image(centerX, centerY, 'missions_background');
         // const building = this.add.image(centerX, centerY, 'building');
+        const background = this.add.image(centerX, centerY, 'default_board');
+        const background2 = this.add.image(centerX, centerY, 'arena01');
+        background2.alpha = 0.4
+        background2.setScale(0.5)
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
             switchScenes('HomeScene', 'MissionsScene')
         }, 0xffff00, soundfx.closeSound);
@@ -27,16 +32,21 @@ export class MissionsScene extends Phaser.Scene {
 
         // console.log(player.decks[0].cards)
         var deck = player.decks[0].cards
+        console.log(deck)
         this.cards = createPlayerCards(this, deck)
+        console.log(this.cards)
 
-        console.log(this.cards['1(A)'])
+        console.log(this.cards['s1'])
+        this.cards['s1'].setVisible(true)
+        this.cards['s1'].setPosition(centerX, centerY)
         this.hand = [
             deck[0],
             deck[1],
             deck[2],
             deck[3],
+
         ]
-        this.initial_draw()
+        // this.initial_draw()
 
     }
     initial_draw() {
@@ -45,7 +55,8 @@ export class MissionsScene extends Phaser.Scene {
             var c = this.getCardObj(card)
             list.push(c)
         }
-        initialDraw(this, list)
+        var initialDraw = new InitialDrawManager(this, list)
+        initialDraw.drawCards()
     }
 
     getCardObj(id) {

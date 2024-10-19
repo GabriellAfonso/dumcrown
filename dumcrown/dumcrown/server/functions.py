@@ -92,7 +92,7 @@ def get_deck(player, deck_id):
 @database_sync_to_async
 def get_deck_cards(player, deck_id):
     deck = player.decks.filter(id=deck_id).first()
-    dict = deck.to_dict()
+    dict = deck.get_to_match()
     cards = dict['cards']
     return cards
 

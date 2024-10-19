@@ -86,7 +86,6 @@ class Deck(models.Model):
     def format_cards(self):
         card_count = defaultdict(int)
         formatted_cards = []
-
         for card in self.cards:
             card_count[card] += 1
             if card_count[card] == 1:
@@ -102,6 +101,14 @@ class Deck(models.Model):
         return formatted_cards
 
     def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'cards': self.cards,
+            'player': self.player.id,
+        }
+
+    def get_to_match(self):
         return {
             'id': self.id,
             'name': self.name,

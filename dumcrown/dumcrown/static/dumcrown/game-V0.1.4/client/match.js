@@ -133,6 +133,32 @@ export function startMatch(data) {
 
 
 }
+
+export function initialDraw(data) {
+    matchData = data
+    var matchScene = GAME.scene.getScene('DumMatch')
+    matchScene.events.emit('initialDraw')
+}
+export function swappedCards(data) {
+    matchData = data
+    emitToMatch('swapCards')
+    //pregar as cartas do cardsToSwap pra pegar os objetos que estao na tela fazer animaçao de retirada
+    //refazer animaçao de entrada das cartas, sem o botao de substituir
+
+
+}
+export function example(data) {
+
+}
+
+function getMatchScene() {
+    return GAME.scene.getScene('DumMatch')
+}
+function emitToMatch(event) {
+    var match = getMatchScene()
+    match.events.emit(event)
+}
+
 export function matchUpdate(data) {
     const message = data.match_update;
 

@@ -13,9 +13,10 @@ class PlayerDeck:
 
     def __init__(self, deck):
         self._deck = deck
-        print(deck)
+
         self.deck_obj = {}
         self.create_deck_obj(deck)
+        print(self.deck_obj)
 
     def create_deck_obj(self, deck):
         for card in range(len(deck)):
@@ -50,7 +51,7 @@ class PlayerDeck:
         for id, card in self.deck_obj.items():
             deck[id] = card.get_data()
 
-        print('aqui vai o deck', deck)
+        # print('aqui vai o deck', deck)
         print('-'*30)
         return deck
 

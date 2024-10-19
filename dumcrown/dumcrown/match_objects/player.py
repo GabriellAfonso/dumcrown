@@ -15,7 +15,8 @@ class Player:
         self.energy = 0
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
-        print('nickname: ', self.nickname)
+        self.button_state = 0
+        self.button_text = ''
 
     def add_hp(self, points):
         self.hp += points
@@ -28,6 +29,13 @@ class Player:
 
     def remove_energy(self, points):
         self.energy -= points
+
+    def change_button(self, state, text):
+        self.button_state = state
+        self.button_text = text
+
+    def get_id(self):
+        return self.user_id
 
     def get_player_data(self):
         player = {
@@ -42,5 +50,7 @@ class Player:
             'deck': self.deck.get_deck(),
             'deck_obj': self.deck.get_deck_obj(),
             'hand': self.hand.get_hand(),
+            'button_state': self.button_state,
+            'button_text': self.button_text,
         }
         return player

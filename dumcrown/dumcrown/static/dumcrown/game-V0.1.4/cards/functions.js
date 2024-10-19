@@ -71,8 +71,11 @@ export function compressedDeck(scene, data) {
     return unitGroups;
 }
 
+//alguem usa essa funçao??
 export function compressCard(scene, cardID) {
-    const object = new compressedCardObject(scene, cardsDATA[cardID]);
+    var id = idCleaner(cardID)
+    console.log(id)
+    const object = new compressedCardObject(scene, cardsDATA[id]);
     return object
 }
 

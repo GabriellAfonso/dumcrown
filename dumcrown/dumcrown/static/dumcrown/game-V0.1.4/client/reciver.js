@@ -4,7 +4,7 @@ import {
 } from "./client.js";
 import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } from "./room.js";
 import {
-    startMatch, hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
+    startMatch, initialDraw, swappedCards, hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
     adversaryAttack, adversaryDefese, resolveConflit, autoResolve, roundUpdate,
 } from "./match.js";
 
@@ -34,6 +34,11 @@ export const clientReciver = {
     deck_editor_success: deckEditorSuccess,
 
     start_match: startMatch,
+    initial_draw: initialDraw,
+    swapped_cards: swappedCards,
+
+
+
     match_update: matchUpdate,
     player_pass: playerPass,
     energy_update: energyUpdate,

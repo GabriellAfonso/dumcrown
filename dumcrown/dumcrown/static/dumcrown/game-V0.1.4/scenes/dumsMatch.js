@@ -1,6 +1,7 @@
 import { matchData } from "../client/match.js";
-import { showCoordinates } from "../functions/functions.js";
+import { sendSocket, showCoordinates, sleep } from "../functions/functions.js";
 import { MatchManager } from "../match_objects/match.js";
+import { cardsToSwap } from "../match_objects/swapButton.js";
 
 export class DumMatch extends Phaser.Scene {
     constructor() {
@@ -12,6 +13,7 @@ export class DumMatch extends Phaser.Scene {
         sendSocket('get_cards') // atualiza as cartas antes da partida começar
         this.startAnimation()
         this.match = new MatchManager(this, matchData)
+        this.addEvents()
         // showCoordinates(this)
         // fase das 4 cartas iniciais
 
@@ -22,7 +24,14 @@ export class DumMatch extends Phaser.Scene {
     update() {
 
     }
-
+    addEvents() {
+        this.events.on('initialDraw', () => {
+            this.match.initialDrawn()
+        });
+        this.events.on('swapCards', () => {
+            this.match.swapCards(cardsToSwap)
+        });
+    }
     startAnimation() {
         const camera = this.cameras.main;
         camera.setZoom(2);

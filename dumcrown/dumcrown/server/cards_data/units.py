@@ -2,8 +2,8 @@ units_data = {
     '1': {
         "id": '1',
         "type": "unit",
-        "image": "jhon_card",
-        "name": "JHON COPPER",
+        "image": "john_card",
+        "name": "JOHN COPPER",
         "description": "",
         "energy": 4,
         "attack": 8,

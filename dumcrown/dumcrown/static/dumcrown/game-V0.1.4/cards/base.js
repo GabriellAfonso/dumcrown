@@ -30,11 +30,11 @@ export class CardObject extends Phaser.GameObjects.Container {
             { fontSize: '50px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
         this.energy.setOrigin(0.5, 0.5);
 
-        this.attack = scene.add.text(-117, 215, '',
+        this.attack = scene.add.text(-117, 212, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
         this.attack.setOrigin(0.5, 0.5);
 
-        this.defense = scene.add.text(117, 215, '',
+        this.defense = scene.add.text(117, 212, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
         this.defense.setOrigin(0.5, 0.5);
 
@@ -86,8 +86,6 @@ export class CardObject extends Phaser.GameObjects.Container {
     }
     deckEdit() {
         this.on('pointerup', () => {
-
-            console.log('soltou')
             const cardID = this.getID()
             this.scene.events.emit('addToDeck', cardID)
         });
@@ -95,27 +93,35 @@ export class CardObject extends Phaser.GameObjects.Container {
             this.cardPoster.destroy()
             this.cardPoster = this.scene.add.image(0, 0, 'locked_card');
             this.add(this.cardPoster)
-            console.log('max card aqui')
         })
         this.on('unlockCard', () => {
             this.cardPoster.destroy()
             this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
             this.add(this.cardPoster)
-            console.log('max card aqui')
         })
 
         this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
         this.add(this.cardPoster)
+    }
 
+    swapMode(data = 'swap') {
+        if (data == 'undo') {
+            this.disabledCard.destroy()
+            this.scaleX /= 0.95;
+            this.scaleY /= 0.95;
+            return
+        }
+        this.scaleX *= 0.95;
+        this.scaleY *= 0.95;
+        this.disabledCard = this.scene.add.image(0, 0, 'disabled_card')
+        this.add(this.disabledCard);
     }
 
 }
 
 export class SpellCardObject extends Phaser.GameObjects.Container {
-    constructor(scene, data = {}) {
+    constructor(scene, id, data = {}) {
         super(scene);
-
-
 
         this.setSize(328, 483);
         this.scene = scene;
@@ -148,7 +154,7 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
         this.scene.add.existing(this);
         this.setVisible(false)
 
-        if (data) {
+        if (id, data) {
             this.createCard(data)
         }
     }
@@ -196,18 +202,28 @@ export class SpellCardObject extends Phaser.GameObjects.Container {
             this.cardPoster.destroy()
             this.cardPoster = this.scene.add.image(0, 0, 'locked_card');
             this.add(this.cardPoster)
-            console.log('max card aqui')
         })
         this.on('unlockCard', () => {
             this.cardPoster.destroy()
             this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
             this.add(this.cardPoster)
-            console.log('max card aqui')
         })
 
         this.cardPoster = this.scene.add.image(0, 0, 'add_to_deck');
         this.add(this.cardPoster)
 
+    }
+    swapMode(data = 'swap') {
+        if (data == 'undo') {
+            this.disabledCard.destroy()
+            this.scaleX /= 0.95;
+            this.scaleY /= 0.95;
+            return
+        }
+        this.scaleX *= 0.95;
+        this.scaleY *= 0.95;
+        this.disabledCard = this.scene.add.image(0, 0, 'disabled_card')
+        this.add(this.disabledCard);
     }
 }
 export class compressedCardObject extends Phaser.GameObjects.Container {

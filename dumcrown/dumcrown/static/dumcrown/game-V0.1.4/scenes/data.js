@@ -88,6 +88,7 @@ export var data = {
         ]
     },
     "button_state": 0,
+    "button_text": '',
     "turn": 0,
     "offensive_turn": 0
 }

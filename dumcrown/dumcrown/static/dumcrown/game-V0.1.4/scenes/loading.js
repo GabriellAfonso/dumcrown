@@ -135,6 +135,9 @@ export class Loading extends Phaser.Scene {
         this.load.image('aba_moldura', PATH + '/images/buttons/aba_moldura.png');
         this.load.image('aba_arena', PATH + '/images/buttons/arena_button.png');
         this.load.image('save_deck', PATH + '/images/buttons/save_deck.png');
+        this.load.image('swap_button', PATH + '/images/buttons/swap_button.jpg');
+        this.load.image('swap_button_off', PATH + '/images/buttons/swap_button_off.jpg');
+        this.load.image('swap_button_undo', PATH + '/images/buttons/swap_button_undo.jpg');
 
 
         this.load.image('decks_select_button', PATH + '/images/buttons/button_layout_01.png');
@@ -191,6 +194,7 @@ export class Loading extends Phaser.Scene {
         //cards
         this.load.image('runeterra', PATH + '/images/cards/runeterra.png');
         this.load.image('cardlayout-neutro', PATH + '/images/cards/layout-neutro.png');
+        this.load.image('disabled_card', PATH + '/images/cards/disabled_card.png');
         this.load.image('minicardlayout', PATH + '/images/cards/mini-card-layout.png');
         this.load.image('deck_border', PATH + '/images/cards/deck_border.png');
         this.load.image('compressed_unit_layout', PATH + '/images/cards/compressed_unit_layout.png');
@@ -198,7 +202,7 @@ export class Loading extends Phaser.Scene {
 
         this.load.image('verse_card', PATH + '/images/cards/verse_card.png');
         this.load.image('cards_deck', PATH + '/images/cards/deck.png');
-        this.load.image('jhon_card', PATH + '/images/cards/monsters/jhon_copper.png');
+        this.load.image('john_card', PATH + '/images/cards/monsters/john_copper.png');
         this.load.image('carol_card', PATH + '/images/cards/monsters/carol_arlet.png');
         this.load.image('mortem_card', PATH + '/images/cards/monsters/mortem.png');
         this.load.image('kronos_card', PATH + '/images/cards/monsters/kronos.png');
