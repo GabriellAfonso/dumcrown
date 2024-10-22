@@ -7,6 +7,7 @@ import { add_text } from '../functions/texts.js';
 import { MatchButton } from './button.js';
 import { InitialDrawManager } from './initialDrawManager.js';
 import { matchData as match } from '../client/match.js';
+import { clearCardsToSwap } from './swapButton.js';
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
 //vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
@@ -156,6 +157,10 @@ export class MatchManager {
     }
 
     swapCards(oldCards) {
+        if (!oldCards) {
+            return
+        }
+
         var old = Object.values(oldCards)
 
         var oldCardsObj = []
@@ -173,10 +178,28 @@ export class MatchManager {
             }
         }
         this.initialDrawManager.swapCards(oldCardsObj, newCardsObj)
+
     }
 
     getCardObj(id) {
         var card = this.playerCards[id]
         return card
+    }
+
+    updateData() {
+        this.button.update()
+    }
+
+
+    updateRound() {
+
+    }
+
+    colectInitialDraw() {
+
+    }
+
+    deleteMatch() {
+        clearCardsToSwap()
     }
 }

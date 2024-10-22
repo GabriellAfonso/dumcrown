@@ -781,6 +781,7 @@ export class DumArena extends Phaser.Scene {
     }
 
     turnMessages() {
+        HandCardAnimation
 
         this.turnMessage = this.add.text(centerX, 275, '',
             {

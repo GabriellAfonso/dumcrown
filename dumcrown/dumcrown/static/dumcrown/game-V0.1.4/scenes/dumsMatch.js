@@ -31,6 +31,12 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('swapCards', () => {
             this.match.swapCards(cardsToSwap)
         });
+        this.events.on('updateData', () => {
+            this.match.updateData()
+        });
+        this.events.on('round1', () => {
+            this.match.firstRound()
+        });
     }
     startAnimation() {
         const camera = this.cameras.main;

@@ -6,6 +6,7 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { switchScenes, logoutAjax, showCoordinates } from '../functions/functions.js';
 
 import { Botao } from '../functions/functions.js';
+import { MatchHand } from '../match_objects/hand.js';
 import { InitialDrawManager } from '../match_objects/initialDrawManager.js';
 import { MatchManager } from '../match_objects/match.js';
 import { data } from './data.js';
@@ -40,12 +41,21 @@ export class MissionsScene extends Phaser.Scene {
         this.cards['s1'].setVisible(true)
         this.cards['s1'].setPosition(centerX, centerY)
         this.hand = [
-            deck[0],
-            deck[1],
-            deck[2],
-            deck[3],
-
+            this.cards['2'],
+            this.cards['s7'],
+            this.cards['s1'],
+            this.cards['s2'],
+            this.cards['18'],
+            this.cards['s5'],
+            this.cards['21'],
         ]
+        console.log(this.hand)
+        for (var card of this.hand) {
+            card.setVisible(true)
+        }
+        this.mao = new MatchHand(this, '')
+        console.log(this.hand)
+        this.mao.disabledHandAnimation(this.hand)
         // this.initial_draw()
 
     }

@@ -1,4 +1,5 @@
 from datetime import datetime
+import asyncio
 # vai receber os dados de player 1 e player2 e vai gerenciar a partida inteira
 
 
@@ -38,11 +39,16 @@ class Match:
         return self.player2
 
     def inital_draw(self):
-        self.player1.change_button(1, 'Pronto')
-        self.player2.change_button(1, 'Pronto')
+        self.player1.change_button(1, 'PRONTO')
+        self.player2.change_button(1, 'PRONTO')
         for i in range(0, 4):
             self.player1.hand.draw_card()
             self.player2.hand.draw_card()
+
+    def initial_auto_pass(self):
+        print('iniciou auto pass')
+        asyncio.create_task(self.player1.set_auto_pass())
+        asyncio.create_task(self.player2.set_auto_pass())
 
     def get_match_data(self):
         match = {
@@ -58,3 +64,23 @@ class Match:
 
     def record_action(self, action):
         self.history.append(action)
+
+    def all_players_ready(self):
+        p1 = self.player1.get_ready()
+        p2 = self.player2.get_ready()
+        return p1 and p2
+
+    def set_turn(self, turn):
+        self.turn = turn
+        if turn == 1:
+            self.player1.change_button(1, 'SUA VEZ')
+            self.player2.change_button(0, 'TURNO DO OPONENTE')
+        elif turn == 2:
+            self.player2.change_button(1, 'SUA VEZ')
+            self.player1.change_button(0, 'TURNO DO OPONENTE')
+
+    def toggle_turn(self):
+        if self.turn == 1:
+            self.set_turn(2)
+        else:
+            self.set_turn(1)

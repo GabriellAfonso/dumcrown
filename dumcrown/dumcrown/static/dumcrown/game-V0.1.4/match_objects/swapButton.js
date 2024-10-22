@@ -27,8 +27,8 @@ export class SwapButton extends Phaser.GameObjects.Image {
 
     }
 
-    clearVar() {
-        cardsToSwap = {}
-    }
-
 }
+
+export function clearCardsToSwap() {
+    cardsToSwap = {}
+} 

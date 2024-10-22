@@ -37,7 +37,7 @@ class MatchManager:
             self.matches[match_id] = match
             await self.consumer.send_to_group(match_id, 'start_match', self.matches[match_id].get_match_data())
 
-            asyncio.create_task(self.initial_draw(match_id))
+            asyncio.create_task(self.initial_draw(match))
 
         except Exception as e:
             logging.error(f'Error in start_match: {e}', exc_info=True)
@@ -54,21 +54,44 @@ class MatchManager:
                 }
         return data
 
-    async def initial_draw(self, match_id):
-        print('entrou no initialdraw')
+    async def initial_draw(self, match):
         await asyncio.sleep(6)
-        self.matches[match_id].inital_draw()
-        await self.consumer.send_to_group(match_id, 'initial_draw', self.matches[match_id].get_match_data())
+        match.inital_draw()
+        await self.consumer.send_to_group(match.id, 'initial_draw', match.get_match_data())
+        match.initial_auto_pass()
+        asyncio.create_task(self.round1(match))
 
-    async def swap_cards(self, data):
-        if not data['cards']:
-            return  # o jogo precisa continuar, provavelmente enviar algo
+    async def ready(self, data):
         match = self.matches[data['match_id']]
-
         player = match.who_i_am(self.user)
-        player.hand.swap_cards(data['cards'])
-        new_hand = player.hand.get_hand()
-        await self.consumer.send_to_client('swapped_cards', match.get_match_data())
+        player.cancel_auto_pass()
+
+        player.button_wait()
+        player.set_ready(True)
+
+        if data['cards']:
+            await self.swap_cards(player, data['cards'], match)
+
+        await self.consumer.send_to_client('update_match_data', match.get_match_data())
+
+    async def swap_cards(self, player, cards, match):
+        print('swapou')
+        player.hand.swap_cards(cards)
+        await self.consumer.send_to_client('update_match_data', match.get_match_data())
+        await self.consumer.send_to_client('swapped_cards')
+
+    async def round1(self, match):
+        while not match.all_players_ready():
+            await asyncio.sleep(1)
+
+        print('players prontos')
+
+        match.set_turn(1)
+        await self.consumer.send_to_group(match.id, 'round_1', match.get_match_data())
+        # destruir botoes de swap se tiver
+        # recolher cartas pra mao
+        # escurecer de leve a tela e mostrar Rond1
+        #
 
     async def player_ready(self, user, data):
         try:

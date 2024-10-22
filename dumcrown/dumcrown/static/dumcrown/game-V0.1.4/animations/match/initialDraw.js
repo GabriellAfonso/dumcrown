@@ -1,7 +1,7 @@
 import { cardOnField } from "../../client/match.js";
 import { centerX, centerY } from "../../config/gameConfig.js";
 import { sleep } from "../../functions/functions.js";
-import { cardsToSwap, SwapButton } from "../../match_objects/swapButton.js";
+import { cardsToSwap, clearCardsToSwap, SwapButton } from "../../match_objects/swapButton.js";
 import { simpleTweens } from "../scripts/functions.js";
 
 export function showCard(scene, cardObject, finalX,) {
@@ -121,7 +121,7 @@ export function removeCard(scene, cardObject) {
 }
 
 export function removeSwapButtons() {
-    swapButons[0].clearVar()
+    clearCardsToSwap()
     swapButons.forEach(button => {
         button.destroy()
     })

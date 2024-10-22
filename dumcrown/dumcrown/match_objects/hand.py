@@ -15,6 +15,7 @@ class PlayerHand:
 
     def swap_cards(self, cards):
         for card_id in cards.values():
+            print('mao', self.hand)
             index = self.hand.index(card_id)
             self.deck.add_card(card_id)
             self.hand.pop(index)

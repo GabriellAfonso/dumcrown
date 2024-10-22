@@ -139,13 +139,23 @@ export function initialDraw(data) {
     var matchScene = GAME.scene.getScene('DumMatch')
     matchScene.events.emit('initialDraw')
 }
-export function swappedCards(data) {
-    matchData = data
+export function swappedCards() {
+
     emitToMatch('swapCards')
     //pregar as cartas do cardsToSwap pra pegar os objetos que estao na tela fazer animaçao de retirada
     //refazer animaçao de entrada das cartas, sem o botao de substituir
 
 
+}
+
+export function updateMatchData(data) {
+    matchData = data
+    console.log(matchData)
+    emitToMatch('updateData')
+}
+export function round1(data) {
+    matchData = data
+    emitToMatch('round1')
 }
 export function example(data) {
 

@@ -133,6 +133,7 @@ export class CardDetailScene extends Phaser.Scene {
     create() {
         // Agora você pode acessar os detalhes da carta usando this.cardDetails
         const card = this.cardDetails;
+        console.log(card)
 
         const background = this.add.image(centerX, centerY, 'blackground');
         background.setInteractive()

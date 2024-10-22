@@ -54,20 +54,23 @@ export class MatchButton {
         console.log(this.buttonTexture[this.buttonState])
 
         this.button = this.scene.add.image(1396, centerY, this.buttonTexture[this.buttonState]);
-        this.buttonText = add_text(this.scene, 1396, centerY, this.text, '30px', 0.5)
+        this.buttonText = add_text(this.scene, 1396, centerY, this.text, '25px', 0.5)
+        this.buttonText.setAlign('center');
+        this.buttonText.setWordWrapWidth(180, true);
+        this.buttonText.setStyle({ fontStyle: 'bold' });
         this.setEvents()
     }
     setEvents() {
         this.button.on('pointerup', () => {
             this.button.disableInteractive()
             console.log(this.text)
-            if (this.text == 'Pronto') {
+            if (this.text == 'PRONTO') {
                 console.log('mandando pro servidor', cardsToSwap)
                 var data = {
                     match_id: match.id,
                     cards: cardsToSwap,
                 }
-                sendSocket('swap_cards', data)
+                sendSocket('ready', data)
 
             }
             //com base no texto do botao definir oq ele vai fazer
