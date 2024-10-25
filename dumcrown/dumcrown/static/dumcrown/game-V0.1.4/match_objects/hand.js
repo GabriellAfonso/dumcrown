@@ -21,7 +21,7 @@ export class MatchHand {
         this.createClosedHandBox()
     }
     createClosedHandBox() {
-        this.closedHandBox = this.scene.add.rectangle(1294, 688, 400, 220, 0xffffff, 0.3)
+        this.closedHandBox = this.scene.add.rectangle(1294, 688, 400, 220, 0xffffff, 0)
         this.closedHandBox.depth = 10
         this.closedHandBox.setInteractive({ cursor: 'pointer' })
         this.closedHandBox.on('pointerup', () => {
@@ -54,7 +54,21 @@ export class MatchHand {
 
         if (config) {
             config.forEach((cfg, i) => {
-                simpleTweens(this.scene, this.hand[i], cfg[0], cfg[1], 0.40, i + 1, cfg[2], cfg[3]);
+                // simpleTweens(this.scene, this.hand[i], cfg[0], cfg[1], 0.40, i + 1, cfg[2], cfg[3]);
+                this.hand[i].textScale = 0.4
+                this.scene.tweens.add({
+                    targets: this.hand[i],
+                    x: cfg[0],
+                    y: cfg[1],
+                    scale: 0.4,
+                    depth: i + 1,
+                    angle: cfg[2],
+                    duration: cfg[3],
+                    ease: 'Power2',
+                    onComplete: () => {
+
+                    },
+                });
                 this.hand[i].closedHandMode()
             });
         }
@@ -77,9 +91,9 @@ export class MatchHand {
             // Use um loop for para animar cada carta
             for (let i = 0; i < length; i++) {
                 const pos = positions[i];
-                console.log(this.hand[i])
 
                 // Chame a função simpleTweens para cada carta com suas posições correspondentes
+                this.hand[i].textScale = 0.5
                 simpleTweens(this.scene, this.hand[i], pos.x, pos.y, 0.50, depthValue, pos.angle, 300, () => {
                     this.hand[i].openHandMode()
                 }, 1);

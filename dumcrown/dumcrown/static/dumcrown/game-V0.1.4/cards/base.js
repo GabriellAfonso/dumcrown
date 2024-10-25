@@ -6,12 +6,12 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
     constructor(scene, id, data = {}, config = {}) {
         super(scene);
 
-        this.setSize(191, 290);
+        this.setSize(328, 483);
         this.scene = scene;
         this.handModeActive = false
         this.sample = false;
         this.id = id;
-
+        this.constEnergyFontSize = 50
         // Configuração básica da carta
         this.cardImage = scene.add.image(0, 0, config.imageKey || 'default_image');
         this.cardImage.setScale(config.imageScale || 1);
@@ -40,7 +40,16 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         //     this.createCard(id, data);
         // }
     }
+    set textScale(value) {
+        this.energy.setScale(1 / value)
+        var nfsEnergy = this.constEnergyFontSize * value
+        var energyFontSize = nfsEnergy + 'px'
+        this.energy.setFontSize(energyFontSize);
+    }
 
+    get textScale() {
+        return null
+    }
     createCard(id, data) {
         this.id = id;
         this.cardImage.setTexture(data.image);
@@ -202,6 +211,10 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             this.cardAreaBox.destroy();  // Remove o objeto da cena
             this.cardAreaBox = null;
         }
+    }
+
+    reSize() {
+
     }
 }
 

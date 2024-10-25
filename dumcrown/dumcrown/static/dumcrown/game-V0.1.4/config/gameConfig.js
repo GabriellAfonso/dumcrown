@@ -14,22 +14,21 @@ export var config = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 1500,
         interpolation: {
-            antialias: false, // ou false, dependendo da sua escolha
-            quality: 'nearest' // ou 'nearest'
+            antialias: true, // ou false, dependendo da sua escolha
+            quality: 'linear' // ou 'nearest'
         }
 
     },
-    render: {
-        pixelArt: false,
-        antialias: true,
-    },
-
     texture: {
         linear: true,
     },
-    roundPixels: true,
+
+    antialiasGL: true,
+    antialias: true,
     autoFocus: true,
-    autoPause: false
+    autoPause: false,
+    resolution: window.devicePixelRatio,
+
 };
 export const GAME = new Phaser.Game(config);
 

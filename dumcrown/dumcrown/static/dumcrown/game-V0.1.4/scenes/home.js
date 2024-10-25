@@ -164,7 +164,18 @@ export class HomeScene extends Phaser.Scene {
         carta.setVisible(true)
 
         carta.setPosition(centerX, centerY)
+        // carta.setScale(0.5)
+        carta.scale = 0.5
+        const gameConfig = this.game.config;
 
+        console.log('Configurações do Jogo:', gameConfig);
+
+        // Acessando configurações específicas
+        console.log('Tipo:', gameConfig.type);
+        console.log('Resolução:', gameConfig.resolution);
+
+        // Acessando configurações de escala
+        console.log('Escala:', gameConfig.scale);
 
         const border_perfil = this.add.image(115, 105, player.border)
         border_perfil.setScale(0.5)
