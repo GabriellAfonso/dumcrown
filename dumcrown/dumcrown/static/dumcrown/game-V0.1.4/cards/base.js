@@ -6,9 +6,9 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
     constructor(scene, id, data = {}, config = {}) {
         super(scene);
 
-        this.setSize(328, 483);
+        this.setSize(191, 290);
         this.scene = scene;
-        this.inGame = false;
+        this.handModeActive = false
         this.sample = false;
         this.id = id;
 
@@ -17,6 +17,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.cardImage.setScale(config.imageScale || 1);
 
         this.cardLayout = scene.add.image(0, 0, config.layoutKey || 'default_layout');
+
 
         this.name = scene.add.text(0, 70, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', });
@@ -30,7 +31,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             { fontSize: '50px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
         this.energy.setOrigin(0.5, 0.5);
 
-        this.add([this.cardImage, this.cardLayout, this.description, this.name, this.energy]);
+        this.add([this.cardImage, this.cardLayout, this.description, this.name, this.energy,]);
 
         this.scene.add.existing(this);
         this.setVisible(false);
@@ -102,6 +103,105 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.scaleY *= 0.95;
         this.disabledCard = this.scene.add.image(0, 0, 'disabled_card');
         this.add(this.disabledCard);
+    }
+    openHandMode() {
+        let startX = null
+        let startY = null
+        this.cardIsDragging = false
+
+        this.restPosition = {
+            x: this.x,
+            y: this.y,
+            angle: this.angle,
+            depth: this.depth,
+        }
+
+        if (this.handModeActive) {
+            return
+        }
+
+        this.handModeActive = true
+        this.cardAreaBox = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0);
+        this.add(this.cardAreaBox)
+        this.cardAreaBox.setInteractive();
+
+        let activeTween = null;
+
+        this.cardAreaBox.on('pointerdown', (pointer) => {
+            if (activeTween) {
+                activeTween.stop();
+            }
+            this.cardIsDragging = true
+            startX = pointer.x;
+            startY = pointer.y;
+
+            this.cardAreaBox.scale = 30
+
+            activeTween = this.scene.tweens.add({
+                targets: this,
+                y: 517, // Move a carta para cima
+                angle: 0,
+                depth: 10,
+                scale: 0.65,
+                duration: 400,
+                ease: 'Power2',
+            });
+        });
+
+
+        this.cardAreaBox.on('pointerup', () => {
+            if (activeTween) {
+                activeTween.stop();
+            }
+            this.cardIsDragging = false
+            this.cardAreaBox.scale = 1
+
+            this.scene.tweens.add({
+                targets: this,
+                x: this.restPosition.x,
+                y: this.restPosition.y,
+                angle: this.restPosition.angle,
+                depth: this.restPosition.depth,
+                scale: 0.5,
+                duration: 200,
+                ease: 'Power2',
+            });
+        });
+
+        this.cardAreaBox.on('pointermove', (pointer) => {
+
+
+            if (this.cardIsDragging) {
+                const deltaX = pointer.x - startX;
+                const deltaY = pointer.y - startY;
+                if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
+                    activeTween.stop()
+                    this.angle = 0
+                    this.scale = 0.32
+                    this.depth = 50
+                    this.x = pointer.x
+                    this.y = pointer.y
+
+
+                }
+
+
+            }
+        });
+    }
+    closedHandMode() {
+        if (!this.handModeActive) {
+            return;
+        }
+
+        // Define `handModeActive` como falso, indicando que o modo fechado está ativo agora
+        this.handModeActive = false;
+
+        if (this.cardAreaBox) {
+            this.cardAreaBox.removeInteractive();
+            this.cardAreaBox.destroy();  // Remove o objeto da cena
+            this.cardAreaBox = null;
+        }
     }
 }
 

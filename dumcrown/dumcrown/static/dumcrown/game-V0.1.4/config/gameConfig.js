@@ -14,7 +14,7 @@ export var config = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 1500,
         interpolation: {
-            antialias: true, // ou false, dependendo da sua escolha
+            antialias: false, // ou false, dependendo da sua escolha
             quality: 'nearest' // ou 'nearest'
         }
 

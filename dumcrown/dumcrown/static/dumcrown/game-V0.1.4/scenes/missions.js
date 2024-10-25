@@ -23,9 +23,9 @@ export class MissionsScene extends Phaser.Scene {
         // const background = this.add.image(centerX, centerY, 'missions_background');
         // const building = this.add.image(centerX, centerY, 'building');
         const background = this.add.image(centerX, centerY, 'default_board');
-        const background2 = this.add.image(centerX, centerY, 'arena01');
-        background2.alpha = 0.4
-        background2.setScale(0.5)
+        // const background2 = this.add.image(centerX, centerY, 'arena01');
+        // background2.alpha = 0.4
+        // background2.setScale(0.5)
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
             switchScenes('HomeScene', 'MissionsScene')
         }, 0xffff00, soundfx.closeSound);
@@ -49,15 +49,15 @@ export class MissionsScene extends Phaser.Scene {
             this.cards['s5'],
             this.cards['21'],
         ]
-        console.log(this.hand)
+
         for (var card of this.hand) {
             card.setVisible(true)
         }
-        this.mao = new MatchHand(this, '')
-        console.log(this.hand)
-        this.mao.disabledHandAnimation(this.hand)
-        // this.initial_draw()
+        this.mao = new MatchHand(this, this.hand)
 
+        this.mao.closedHandAnimation()
+        // this.initial_draw()
+        showCoordinates(this)
     }
     initial_draw() {
         var list = []

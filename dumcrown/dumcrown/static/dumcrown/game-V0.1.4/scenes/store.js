@@ -20,6 +20,15 @@ export class StoreScreen extends Phaser.Scene {
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
 
+        const invisibleObject = this.add.rectangle(400, 300, 100, 100, 0xffffff, 1); // 0 na opacidade torna-o invisível
+        invisibleObject.setInteractive();
+        invisibleObject.alpha = 0
+        invisibleObject.input.alwaysEnabled = true;
+        // Adicionar evento de clique
+        invisibleObject.on('pointerdown', function () {
+            console.log('Objeto invisível clicado!');
+        });
+
     }
 
     update() {

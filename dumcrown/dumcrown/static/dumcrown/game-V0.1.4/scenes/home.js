@@ -13,7 +13,7 @@ import { sendSocket } from '../functions/functions.js';
 import { SomeonesShield } from '../cards/spells.js';
 import { instantiateCards } from '../cards/functions.js';
 import { DeckLayout } from '../objects/deck_layout.js';
-import { compressedCardObject } from '../cards/base.js';
+import { CardObject, compressedCardObject } from '../cards/base.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';
 
 class Ping {
@@ -152,8 +152,18 @@ export class HomeScene extends Phaser.Scene {
         }, 0xffffff, soundfx.clickSound);
 
         perfil.setScale(0.5);
+        var data = {
+            "image": "khras_card",
+            "name": "KHRAS",
+            "description": "Que show da xuxa é esse???",
+            "energy": 4,
+            "attack": 8,
+            "defense": 6,
+        }
+        var carta = new CardObject(this, '1', data)
+        carta.setVisible(true)
 
-
+        carta.setPosition(centerX, centerY)
 
 
         const border_perfil = this.add.image(115, 105, player.border)

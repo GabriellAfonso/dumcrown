@@ -194,6 +194,7 @@ export class Loading extends Phaser.Scene {
         //cards
         this.load.image('runeterra', PATH + '/images/cards/runeterra.png');
         this.load.image('cardlayout-neutro', PATH + '/images/cards/layout-neutro.png');
+        this.load.image('card_mask', PATH + '/images/cards/card_mask.png');
         this.load.image('disabled_card', PATH + '/images/cards/disabled_card.png');
         this.load.image('minicardlayout', PATH + '/images/cards/mini-card-layout.png');
         this.load.image('deck_border', PATH + '/images/cards/deck_border.png');
