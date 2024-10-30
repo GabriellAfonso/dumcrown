@@ -122,7 +122,10 @@ export function removeCard(scene, cardObject) {
 
 export function removeSwapButtons() {
     clearCardsToSwap()
-    swapButons.forEach(button => {
-        button.destroy()
-    })
+    if (swapButons) {
+        swapButons.forEach(button => {
+            button.destroy()
+        })
+    }
+
 }

@@ -47,8 +47,8 @@ class Match:
 
     def initial_auto_pass(self):
         print('iniciou auto pass')
-        asyncio.create_task(self.player1.set_auto_pass())
-        asyncio.create_task(self.player2.set_auto_pass())
+        asyncio.create_task(self.player1.set_auto_ready())
+        asyncio.create_task(self.player2.set_auto_ready())
 
     def get_match_data(self):
         match = {
@@ -69,6 +69,11 @@ class Match:
         p1 = self.player1.get_ready()
         p2 = self.player2.get_ready()
         return p1 and p2
+
+    def new_round(self):
+        self.round += 1
+        self.player1.hand.draw_card()
+        self.player2.hand.draw_card()
 
     def set_turn(self, turn):
         self.turn = turn

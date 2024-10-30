@@ -8,6 +8,9 @@ import { MatchButton } from './button.js';
 import { InitialDrawManager } from './initialDrawManager.js';
 import { matchData as match } from '../client/match.js';
 import { clearCardsToSwap } from './swapButton.js';
+import { MatchHand } from './hand.js';
+import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
+import { sleep } from '../functions/functions.js';
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
 //vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
@@ -18,7 +21,7 @@ export class MatchManager {
     constructor(scene) {
         this.scene = scene
         this.id = match.id;
-        this.round = match.round;
+        // this.round = match.round;
         // this.player1 = match.player1;
         // this.player2 = match.player2;
         this.button = new MatchButton(scene)
@@ -39,6 +42,9 @@ export class MatchManager {
 
     get enemy() {
         return this.get_enemy();
+    }
+    get match() {
+        return match
     }
 
     get_player() {
@@ -69,6 +75,7 @@ export class MatchManager {
         this.createHp()
         this.createEnergy()
         this.instantiateCards()
+        this.createPlayerHand()
     }
 
 
@@ -101,7 +108,7 @@ export class MatchManager {
         this.playerDeck.setScale(0.7)
         this.playerFirsDeckCard = this.scene.add.image(346 - 10, 669 - 7, 'verse_card');
         this.playerFirsDeckCard.setScale(0.4)
-        this.playerFirsDeckCard.setDepth(2)
+        this.playerFirsDeckCard.setDepth(1)
         //enemy
         this.enemyDeck = this.scene.add.image(346, 100, 'cards_deck');
         this.enemyDeck.setScale(0.7, -0.7)
@@ -135,6 +142,12 @@ export class MatchManager {
 
     createPlayerHand() {
 
+        // var handObj = []
+        // for (var id of this.player.hand) {
+        //     var card = this.getCardObj(id)
+        //     handObj.push(card)
+        // }
+        this.playerHand = new MatchHand(this.scene)
     }
 
     instantiateCards() {
@@ -179,6 +192,62 @@ export class MatchManager {
         }
         this.initialDrawManager.swapCards(oldCardsObj, newCardsObj)
 
+    }
+    firstRound() {
+        console.log('first round')
+
+        for (const id of this.player.hand.slice(0, -1)) {
+            const card = this.getCardObj(id);
+            this.playerHand.addCard(card);
+        } // pega todos menos o ultimo
+        this.initialDrawManager.finish(this.playerHand.hand)
+        this.playerHand.closedHandAnimation()
+        sleep(this.scene, 400, () => {
+            this.round(this.match.round)
+        })
+
+
+
+
+        //update button
+    }
+
+    round(number) {
+        var blackground = this.scene.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
+        blackground.alpha = 0
+        simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
+            sleep(this.scene, 2000, () => {
+                simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
+                    blackground.destroy()
+                }, 0)
+            })
+
+        }, 0.7)
+
+        this.roundText = this.scene.add.text(centerX, centerY, 'RODADA ' + number,
+            {
+                fontSize: '100px', fontFamily: 'Lexend Deca, sans-serif',
+                fontStyle: 'bold', fill: '#ffd700'
+            })
+        this.roundText.setOrigin(0.5, 0.5)
+        this.roundText.alpha = 0;
+        this.roundText.setShadow(2, 2, '#000', 2, false, true);
+        simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 1, () => {
+            simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 0, () => {
+                sleep(this.scene, 1500, () => {
+                    this.draw()
+                    console.log(this.player.hand)
+                })
+            }, 2000)
+        })
+
+    }
+    draw() {
+        var id = this.player.hand.at(-1)
+        console.log(id)
+        var card = this.getCardObj(id)
+
+        this.playerHand.drawCard(card)
     }
 
     getCardObj(id) {

@@ -18,6 +18,7 @@ class MatchManager:
         self.channel = consumer.channel
 
 # o dono da sala ou o escolhido caso seja queue, vai mandar o id dele e do adversario
+# caso ele se desconecte tem que ter um jeito da partida continuar rodando
     async def start_match(self, data):
         try:
             print(data)
@@ -59,7 +60,7 @@ class MatchManager:
         match.inital_draw()
         await self.consumer.send_to_group(match.id, 'initial_draw', match.get_match_data())
         match.initial_auto_pass()
-        asyncio.create_task(self.round1(match))
+        asyncio.create_task(self.wait_ready(match))
 
     async def ready(self, data):
         match = self.matches[data['match_id']]
@@ -67,7 +68,9 @@ class MatchManager:
         player.cancel_auto_pass()
 
         player.button_wait()
-        player.set_ready(True)
+
+        if not data['cards']:
+            player.set_ready(True)
 
         if data['cards']:
             await self.swap_cards(player, data['cards'], match)
@@ -79,14 +82,21 @@ class MatchManager:
         player.hand.swap_cards(cards)
         await self.consumer.send_to_client('update_match_data', match.get_match_data())
         await self.consumer.send_to_client('swapped_cards')
+        asyncio.create_task(self.swap_wait_to_ready(player))
 
-    async def round1(self, match):
+    async def swap_wait_to_ready(self, player):
+        await asyncio.sleep(3.5)
+        player.set_ready(True)
+
+    async def wait_ready(self, match):
         while not match.all_players_ready():
             await asyncio.sleep(1)
+        asyncio.create_task(self.round1(match))
 
+    async def round1(self, match):
         print('players prontos')
-
         match.set_turn(1)
+        match.new_round()
         await self.consumer.send_to_group(match.id, 'round_1', match.get_match_data())
         # destruir botoes de swap se tiver
         # recolher cartas pra mao

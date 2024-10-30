@@ -49,16 +49,15 @@ class Player:
     def set_ready(self, value):
         self.ready = value
 
-    async def set_auto_pass(self):
-        task = asyncio.create_task(self.wait_for_move())
+    async def set_auto_ready(self):
+        task = asyncio.create_task(self.wait_for_ready())
         self.auto_pass = task
-        print('criado o auto pass do ', self.nickname)
 
     def cancel_auto_pass(self):
         self.auto_pass.cancel()
         self.auto_pass = None
 
-    async def wait_for_move(self):
+    async def wait_for_ready(self):
         try:
             await asyncio.sleep(15)  # Espera 30 segundos
             print('esperou os 15 segundos')

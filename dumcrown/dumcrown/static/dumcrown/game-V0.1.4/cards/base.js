@@ -103,9 +103,11 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
     swapMode(data = 'swap') {
         if (data === 'undo') {
-            this.disabledCard.destroy();
-            this.scaleX /= 0.95;
-            this.scaleY /= 0.95;
+            if (this.disabledCard) {
+                this.disabledCard.destroy();
+                this.scaleX /= 0.95;
+                this.scaleY /= 0.95;
+            }
             return;
         }
         this.scaleX *= 0.95;
@@ -134,11 +136,11 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.add(this.cardAreaBox)
         this.cardAreaBox.setInteractive();
 
-        let activeTween = null;
+        this.activeTween = null;
 
         this.cardAreaBox.on('pointerdown', (pointer) => {
-            if (activeTween) {
-                activeTween.stop();
+            if (this.activeTween) {
+                this.activeTween.stop();
             }
             this.cardIsDragging = true
             startX = pointer.x;
@@ -146,7 +148,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
             this.cardAreaBox.scale = 30
 
-            activeTween = this.scene.tweens.add({
+            this.activeTween = this.scene.tweens.add({
                 targets: this,
                 y: 517, // Move a carta para cima
                 angle: 0,
@@ -159,13 +161,15 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
 
         this.cardAreaBox.on('pointerup', () => {
-            if (activeTween) {
-                activeTween.stop();
+            if (this.activeTween) {
+                this.activeTween.stop();
             }
             this.cardIsDragging = false
             this.cardAreaBox.scale = 1
 
-            this.scene.tweens.add({
+
+
+            this.activeTween = this.scene.tweens.add({
                 targets: this,
                 x: this.restPosition.x,
                 y: this.restPosition.y,
@@ -175,6 +179,8 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
                 duration: 200,
                 ease: 'Power2',
             });
+            this.scene.events.emit('cardDropped', this)
+
         });
 
         this.cardAreaBox.on('pointermove', (pointer) => {
@@ -184,7 +190,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
                 const deltaX = pointer.x - startX;
                 const deltaY = pointer.y - startY;
                 if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
-                    activeTween.stop()
+                    this.activeTween.stop()
                     this.angle = 0
                     this.scale = 0.32
                     this.depth = 50
@@ -198,6 +204,8 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             }
         });
     }
+
+
     closedHandMode() {
         if (!this.handModeActive) {
             return;
@@ -213,8 +221,10 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         }
     }
 
-    reSize() {
-
+    stopTween() {
+        if (this.activeTween) {
+            this.activeTween.stop();
+        }
     }
 }
 

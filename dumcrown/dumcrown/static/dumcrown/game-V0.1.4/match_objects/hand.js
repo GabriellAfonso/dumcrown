@@ -2,6 +2,7 @@
 import { simpleTweens } from '../animations/scripts/functions.js';
 import { player } from '../client/client.js';
 import { centerX, centerY } from '../config/gameConfig.js';
+import { sleep } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
@@ -10,15 +11,21 @@ import { add_text } from '../functions/texts.js';
 //talvez deixar essa classe só pra criar o visual?
 // só instanciar card quando ela for comprada
 export class MatchHand {
-    constructor(scene, cards) {
+    constructor(scene, cards = '') {
         this.scene = scene
-        this.hand = cards // lista de cartas na mao
+        this.hand = []
+        if (cards) {
+            this.hand = cards
+        }
         this.state = 0
         this.areaVisiblity = 0
         this.init()
     }
     init() {
         this.createClosedHandBox()
+    }
+    addCard(card) {
+        this.hand.push(card)
     }
     createClosedHandBox() {
         this.closedHandBox = this.scene.add.rectangle(1294, 688, 400, 220, 0xffffff, 0)
@@ -44,13 +51,14 @@ export class MatchHand {
             1: [[1310, 695, 0, 300]],
             2: [[1270, 695, -5, 300], [1340, 695, 5, 300]],
             3: [[1230, 700, -4, 300], [1300, 695, -1, 300], [1370, 700, 4, 300]],
-            4: [[1165, 722, -15, 300], [1230, 705, -6, 300], [1295, 700, -4, 300], [1360, 695, 0, 300]],
+            4: [[1165, 722, -15, 300], [1230, 707, -9, 300], [1295, 698, -4, 300], [1360, 695, 0, 300]],
             5: [[1160, 722, -15, 300], [1210, 712, -10, 300], [1265, 705, -6, 300], [1330, 700, -4, 300], [1390, 698, 0, 300]],
             6: [[1200, 722, -15, 300], [1230, 712, -10, 300], [1265, 705, -6, 300], [1310, 700, -4, 300], [1350, 698, -1, 300], [1410, 696, 0, 300]],
             7: [[1185, 719, -15, 300], [1215, 712, -10, 300], [1250, 706, -6, 300], [1290, 702, -4, 300], [1335, 698, -2, 300], [1380, 696, -1, 300], [1420, 696, 0, 300]],
         };
 
         const config = configs[this.hand.length];
+        console.log(this.hand)
 
         if (config) {
             config.forEach((cfg, i) => {
@@ -147,7 +155,66 @@ export class MatchHand {
             ]
         };
     }
+    drawCard(cardObj) {
+        // console.log(card)
+        this.addCard(cardObj)
 
+        const verseCard = this.scene.add.image(346 - 10, 669 - 7, 'verse_card');
+        verseCard.setScale(0.2)
+
+        this.scene.tweens.add({
+            targets: verseCard,
+            x: '-=150',
+            y: '-=20',
+            angle: 0,
+            scale: 0.8,
+            depth: 90,
+            duration: 200,
+            ease: 'Power2',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: verseCard,
+                    x: centerX,
+                    y: centerY + 100,
+                    duration: 200,
+                    onComplete: () => {
+                        var card = cardObj
+
+                        card.setPosition(centerX, centerY + 100);
+                        card.scaleX = 0;
+                        card.scaleY = 0.8;
+                        card.depth = 5
+                        card.setVisible(true)
+
+                        this.scene.tweens.add({
+                            targets: verseCard,
+                            scaleX: 0,
+                            duration: 100,
+                            ease: 'Linear',
+                            onComplete: () => {
+                                verseCard.destroy();
+                            }
+                        });
+
+                        this.scene.tweens.add({
+                            targets: card,
+                            scaleX: 0.8,
+                            delay: 100,
+                            duration: 100,
+                            ease: 'Linear',
+                            onComplete: () => {
+                                sleep(this.scene, 300, () => {
+                                    this.closedHandAnimation()
+                                })
+                            }
+                        });
+                    }
+                })
+            }
+        })
+
+
+    }
     getCardCount() {
         return this.hand.length;
     }

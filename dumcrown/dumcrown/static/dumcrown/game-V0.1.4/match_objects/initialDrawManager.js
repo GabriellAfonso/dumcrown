@@ -56,4 +56,11 @@ export class InitialDrawManager {
 
     }
 
+    finish(cards) {
+        for (var card of cards) {
+            card.swapMode('undo')
+        }
+        removeSwapButtons()
+    }
+
 }
