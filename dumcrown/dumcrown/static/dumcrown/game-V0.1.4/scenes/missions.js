@@ -40,7 +40,7 @@ export class MissionsScene extends Phaser.Scene {
 
             const pointer = this.input.activePointer;
             const bounds = this.battleField.getBounds();
-
+            //TODO: verificar tambem o state da carta, se tiver onHand ou onBanch serao atitudes diferentes
             if (pointer.x >= bounds.x && pointer.x <= bounds.x + bounds.width &&
                 pointer.y >= bounds.y && pointer.y <= bounds.y + bounds.height) {
                 console.log('O mouse está sobre o retângulo!');

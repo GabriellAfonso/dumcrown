@@ -98,10 +98,6 @@ class MatchManager:
         match.set_turn(1)
         match.new_round()
         await self.consumer.send_to_group(match.id, 'round_1', match.get_match_data())
-        # destruir botoes de swap se tiver
-        # recolher cartas pra mao
-        # escurecer de leve a tela e mostrar Rond1
-        #
 
     async def player_ready(self, user, data):
         try:

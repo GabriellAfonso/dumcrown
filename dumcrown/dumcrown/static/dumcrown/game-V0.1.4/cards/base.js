@@ -11,6 +11,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.handModeActive = false
         this.sample = false;
         this.id = id;
+        this.state = 'onDeck'
         this.constEnergyFontSize = 50
         // Configuração básica da carta
         this.cardImage = scene.add.image(0, 0, config.imageKey || 'default_image');
@@ -116,6 +117,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.add(this.disabledCard);
     }
     openHandMode() {
+        this.state = 'onHand'
         let startX = null
         let startY = null
         this.cardIsDragging = false
@@ -192,7 +194,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
                 if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
                     this.activeTween.stop()
                     this.angle = 0
-                    this.scale = 0.32
+                    this.scale = 0.28 // 0.32
                     this.depth = 50
                     this.x = pointer.x
                     this.y = pointer.y
@@ -204,7 +206,10 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             }
         });
     }
+    onBanchMode() {
+        this.state = 'onBanch'
 
+    }
 
     closedHandMode() {
         if (!this.handModeActive) {

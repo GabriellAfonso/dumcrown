@@ -236,7 +236,7 @@ export class MatchManager {
             simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 0, () => {
                 sleep(this.scene, 1500, () => {
                     this.draw()
-                    console.log(this.player.hand)
+                    this.button.update()
                 })
             }, 2000)
         })
