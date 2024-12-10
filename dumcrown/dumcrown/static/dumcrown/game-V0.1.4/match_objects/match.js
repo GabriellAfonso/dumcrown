@@ -10,7 +10,7 @@ import { matchData as match } from '../client/match.js';
 import { clearCardsToSwap } from './swapButton.js';
 import { MatchHand } from './hand.js';
 import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
-import { sleep } from '../functions/functions.js';
+import { sendSocket, sleep } from '../functions/functions.js';
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
 //vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
@@ -85,6 +85,9 @@ export class MatchManager {
         //enemy
         this.enemyBoard = this.scene.add.image(centerX, centerY - 2, this.enemy.board);
         this.enemyBoard.setScale(1, -1);
+
+        this.boardCollider = this.scene.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0.3);
+        this.boardCollider.setInteractive();
     }
 
     createIcons() {
@@ -249,7 +252,43 @@ export class MatchManager {
 
         this.playerHand.drawCard(card)
     }
+    cardDropped(cardObj) {
+        const pointer = this.scene.input.activePointer;
+        const bounds = this.boardCollider.getBounds();
 
+
+
+        //isOver boardCollider
+        if (!this.isOver(pointer, bounds)) {
+            console.log('O mouse não está sobre o retângulo.');
+            return
+        }
+
+        console.log('O mouse está sobre o retângulo!');
+        if (cardObj.state == 'onHand') {
+            var data = {
+                match_id: this.id,
+                card_id: cardObj.getID(),
+            }
+            sendSocket('play_card', data)
+            //verificar no servidor se a pessoa pode fazer essa Açao
+            cardObj.onbenchMode()
+            // retirar carta da mao
+            // openHandAnimation pra ajustar a posiçao das que ainda estao na mao
+            cardObj.setPosition(centerX, centerY)
+        }
+
+
+
+
+
+    }
+
+    isOver(pointer, bounds) {
+        var is = pointer.x >= bounds.x && pointer.x <= bounds.x + bounds.width &&
+            pointer.y >= bounds.y && pointer.y <= bounds.y + bounds.height
+        return is
+    }
     getCardObj(id) {
         var card = this.playerCards[id]
         return card

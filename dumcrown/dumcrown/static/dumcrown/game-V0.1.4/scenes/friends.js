@@ -4,6 +4,7 @@ import { switchScenes, logoutAjax, sendSocket } from '../functions/functions.js'
 
 
 import { Botao } from '../functions/functions.js';
+import { add_text } from '../functions/texts.js';
 
 export class FriendsScene extends Phaser.Scene {
     constructor() {
@@ -19,7 +20,9 @@ export class FriendsScene extends Phaser.Scene {
             switchScenes('HomeScene', 'FriendsScene')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
-
+        this.textA = add_text(this, centerX - 100, centerY + 100, 'Resize', '20px', 0.5)
+        this.textB = add_text(this, centerX + 100, centerY + 100, 'Resize', '200px', 0.5)
+        this.textB.setScale(0.1)
     }
 
     update() {

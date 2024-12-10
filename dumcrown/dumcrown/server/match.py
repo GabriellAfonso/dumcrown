@@ -30,8 +30,8 @@ class MatchManager:
             p1 = random.choice(players)
             p2 = player_y if p1 == player_x else player_x
 
-            player1 = Player(p1)
-            player2 = Player(p2)
+            player1 = Player(p1, 1)
+            player2 = Player(p2, 2)
 
             match = Match(player1, player2, match_id)
 
@@ -98,6 +98,21 @@ class MatchManager:
         match.set_turn(1)
         match.new_round()
         await self.consumer.send_to_group(match.id, 'round_1', match.get_match_data())
+
+    async def play_card(self, data):
+        match = self.matches[data['match_id']]
+        player = match.who_i_am(self.user)
+        card = data['card_id']
+        # fazer todas essas verificaçoes dentro de match e retornar a mensagem de error
+        try:
+            match.add_to_bench(player, card)
+            # se passar fazer a animaçao pros dois jogadores
+        except Exception as msg:
+            error_message = str(msg)
+            # enviar mensagem de error pro client
+
+    async def is_your_turn(self, player):
+        pass
 
     async def player_ready(self, user, data):
         try:

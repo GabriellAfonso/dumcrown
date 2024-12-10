@@ -22,3 +22,6 @@ class PlayerHand:
             new_card = self.deck.get_deck()[0]
             self.hand.insert(index, new_card)
             self.deck.pop_card()
+
+    def pop_card(self, card):
+        self.hand.remove(card)

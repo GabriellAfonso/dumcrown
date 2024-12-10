@@ -55,6 +55,10 @@ class PlayerDeck:
         print('-'*30)
         return deck
 
+    def get_card_obj(self, card_id):
+        card = self.deck_obj[card_id]
+        return card
+
     def pop_card(self):
         self._deck.pop(0)
 

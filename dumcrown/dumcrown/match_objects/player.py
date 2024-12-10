@@ -5,8 +5,9 @@ import asyncio
 
 class Player:
 
-    def __init__(self, data):
+    def __init__(self, data, im):
         self.user_id = data['id']
+        self.im = im
         self.nickname = data['nickname']
         self.icon = data['icon']
         self.border = data['border']

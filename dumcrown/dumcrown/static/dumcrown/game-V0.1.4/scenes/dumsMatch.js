@@ -25,6 +25,7 @@ export class DumMatch extends Phaser.Scene {
 
     }
     addEvents() {
+        //server events
         this.events.on('initialDraw', () => {
             this.match.initialDrawn()
         });
@@ -36,6 +37,10 @@ export class DumMatch extends Phaser.Scene {
         });
         this.events.on('round1', () => {
             this.match.firstRound()
+        });
+        //client events
+        this.events.on('cardDropped', (cardObj) => {
+            this.match.cardDropped(cardObj)
         });
     }
     startAnimation() {

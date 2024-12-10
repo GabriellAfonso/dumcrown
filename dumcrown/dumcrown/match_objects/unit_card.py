@@ -10,14 +10,17 @@ class UnitCard:
         self.energy = card['energy']
         self.attack = card['attack']
         self.defense = card['defense']
+        self.state = 'onDeck'
 
     def get_data(self):
         return {
             'id': self.id,
+            'type': self.type,
             'image': self.image,
             'name': self.name,
             'description': self.description,
             'energy': self.energy,
             'attack': self.attack,
             'defense': self.defense,
+            'state': self.state,
         }

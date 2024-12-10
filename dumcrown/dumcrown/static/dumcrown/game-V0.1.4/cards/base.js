@@ -2,6 +2,7 @@ import { GAME, centerX, centerY } from "../config/gameConfig.js";
 import { add_text } from "../functions/texts.js";
 import { cardsDATA } from "../client/client.js";
 import { Button } from "../functions/buttons.js";
+import { sendSocket } from "../functions/functions.js";
 export class BaseCardObject extends Phaser.GameObjects.Container {
     constructor(scene, id, data = {}, config = {}) {
         super(scene);
@@ -13,6 +14,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.id = id;
         this.state = 'onDeck'
         this.constEnergyFontSize = 50
+
         // Configuração básica da carta
         this.cardImage = scene.add.image(0, 0, config.imageKey || 'default_image');
         this.cardImage.setScale(config.imageScale || 1);
@@ -40,11 +42,13 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         // if (data) {
         //     this.createCard(id, data);
         // }
+        this.smooth = false;
     }
     set textScale(value) {
         this.energy.setScale(1 / value)
         var nfsEnergy = this.constEnergyFontSize * value
         var energyFontSize = nfsEnergy + 'px'
+        console.log(energyFontSize)
         this.energy.setFontSize(energyFontSize);
     }
 
@@ -134,13 +138,13 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         }
 
         this.handModeActive = true
-        this.cardAreaBox = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0);
-        this.add(this.cardAreaBox)
-        this.cardAreaBox.setInteractive();
+        this.collider = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0.3);
+        this.add(this.collider)
+        this.collider.setInteractive();
 
         this.activeTween = null;
 
-        this.cardAreaBox.on('pointerdown', (pointer) => {
+        this.collider.on('pointerdown', (pointer) => {
             if (this.activeTween) {
                 this.activeTween.stop();
             }
@@ -148,7 +152,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             startX = pointer.x;
             startY = pointer.y;
 
-            this.cardAreaBox.scale = 30
+            this.collider.scale = 30
 
             this.activeTween = this.scene.tweens.add({
                 targets: this,
@@ -162,30 +166,33 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         });
 
 
-        this.cardAreaBox.on('pointerup', () => {
+        this.collider.on('pointerup', () => {
             if (this.activeTween) {
                 this.activeTween.stop();
             }
             this.cardIsDragging = false
-            this.cardAreaBox.scale = 1
+            this.collider.scale = 1
 
-
-
-            this.activeTween = this.scene.tweens.add({
-                targets: this,
-                x: this.restPosition.x,
-                y: this.restPosition.y,
-                angle: this.restPosition.angle,
-                depth: this.restPosition.depth,
-                scale: 0.5,
-                duration: 200,
-                ease: 'Power2',
-            });
             this.scene.events.emit('cardDropped', this)
+            console.log(this.state)
+            if (this.state == 'onHand') {
+                this.activeTween = this.scene.tweens.add({
+                    targets: this,
+                    x: this.restPosition.x,
+                    y: this.restPosition.y,
+                    angle: this.restPosition.angle,
+                    depth: this.restPosition.depth,
+                    scale: 0.5,
+                    duration: 200,
+                    ease: 'Power2',
+                });
+            }
+
+
 
         });
 
-        this.cardAreaBox.on('pointermove', (pointer) => {
+        this.collider.on('pointermove', (pointer) => {
 
 
             if (this.cardIsDragging) {
@@ -206,8 +213,9 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             }
         });
     }
-    onBanchMode() {
-        this.state = 'onBanch'
+    onBenchMode() {
+        this.state = 'onBench'
+        this.destroyCollider()
 
     }
 
@@ -219,10 +227,14 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         // Define `handModeActive` como falso, indicando que o modo fechado está ativo agora
         this.handModeActive = false;
 
-        if (this.cardAreaBox) {
-            this.cardAreaBox.removeInteractive();
-            this.cardAreaBox.destroy();  // Remove o objeto da cena
-            this.cardAreaBox = null;
+        this.destroyCollider()
+
+    }
+    destroyCollider() {
+        if (this.collider) {
+            this.collider.removeInteractive();
+            this.collider.destroy();  // Remove o objeto da cena
+            this.collider = null;
         }
     }
 

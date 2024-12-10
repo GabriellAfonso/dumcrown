@@ -28,7 +28,7 @@ export class MatchHand {
         this.hand.push(card)
     }
     createClosedHandBox() {
-        this.closedHandBox = this.scene.add.rectangle(1294, 688, 400, 220, 0xffffff, 0)
+        this.closedHandBox = this.scene.add.rectangle(1294, 688, 500, 240, 0xffffff, 0)
         this.closedHandBox.depth = 10
         this.closedHandBox.setInteractive({ cursor: 'pointer' })
         this.closedHandBox.on('pointerup', () => {
