@@ -90,6 +90,8 @@ export class MatchManager {
 
         this.boardCollider = this.scene.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0.3);
         this.boardCollider.setInteractive();
+
+        this.benchColliders = []
     }
 
     createIcons() {
@@ -119,6 +121,7 @@ export class MatchManager {
         this.enemyDeck.setScale(0.7, -0.7)
         this.enemyFirsDeckCard = this.scene.add.image(346 + 10, 100 + 7, 'verse_card');
         this.enemyFirsDeckCard.setScale(0.4, -0.4)
+        this.enemyFirsDeckCard.setDepth(1)
     }
 
     createHp() {
@@ -160,6 +163,12 @@ export class MatchManager {
         this.playerCards = createPlayerCards(this.scene, this.player.deck)
         //enemy
         this.enemyCards = createPlayerCards(this.scene, this.enemy.deck)
+
+        Object.keys(this.enemyCards).forEach((key) => {
+            const card = this.enemyCards[key];
+            card.setPosition(340, 100);
+            card.scale = 0.32
+        });
     }
 
     initialDrawn() {
@@ -287,22 +296,28 @@ export class MatchManager {
             // cardObj.setPosition(centerX, centerY)
         }
 
-
-
-
-
     }
-    animateCardToBench(data) {
 
+
+    //TODO:
+    //Botao indisponivel antes do initial draw terminar
+    //botao de passar a vez (passar o mouse em cima muda de "sua VEZ" pra "passar")
+    //nao permitir colocar cartas magicas no banco
+    //passar a vez automaticamente quando jogar a carta
+    //gastar energia ao usar carta
+    //se os dois passar a vez muda de round
+    //resolver o depht do bench interferindo na mao
+
+    cardToBench(data) {
         if (data.who == this.player.im) {
             // this.updateBenchObj()
             this.addCardToBench(data.who, data.card_id)
-            this.benchAnimation(this.scene, data.who)
+            this.benchPlayerAnimation()
             return
         }
 
         this.addCardToBench(data.who, data.card_id)
-        this.benchAnimation(this.scene, data.who)
+        this.benchEnemyAnimation()
     }
     addCardToBench(who, cardID) {
         if (who == this.player.im) {
@@ -310,78 +325,72 @@ export class MatchManager {
             this.playerHand.removeCard(card)
             this.playerBench.push(card)
             card.onBenchMode()
+            this.playerHand.action()
             return
         }
         var card = this.getEnemyCardObj(cardID)
         this.enemyBench.push(card)
     }
-    // updateBenchObj() {
-    //     //player
-    //     this.playerBench = []
-    //     this.player.bench.forEach((cardID) => {
-    //         var card = this.getPlayerCardObj(cardID)
-    //         this.playerBench.push(card)
 
-    //     })
-    //     //enemy
-    //     this.enemyBench = []
-    //     this.enemy.bench.forEach((cardID) => {
-    //         var card = this.getEnemyCardObj(cardID)
-    //         this.enemyBench.push(card)
-    //     })
-    // }
 
-    benchAnimation(scene, who) {
-        // Destrói cartas existentes no campo
-        for (let i = 1; i <= 5; i++) {
-            if (scene[`fieldCard${i}`]) {
-                scene[`fieldCard${i}`].destroy();
-            }
-        }
-        if (who == this.player.im) {
-            var Ypos = 668
-            var bench = this.playerBench
-        } else {
-            var Ypos = 100
-            var bench = this.enemyBench
-        }
-        // Determina a quantidade de cartas no campo
+    benchPlayerAnimation() {
+        this.benchColliders.forEach((collider) => {
+            collider.destroy()
+        })
+        this.benchColliders = []
+
         const numCards = this.player.bench.length;
+        const spacing = 115;
+        const offsetX = (numCards - 1) * spacing / 2;
 
-        // Calcula o espaçamento entre as cartas com base no número
-        const spacing = 115; // Distância entre as cartas
-        const offsetX = (numCards - 1) * spacing / 2; // Deslocamento para centralizar
-
-        //vai adicionar o bench em objetos
-        // this.player.bench.forEach((card, index) => { })
-        // this.playerBench = ''
-
-        // Cria a animação para cada carta
-        bench.forEach((card, index) => {
+        this.playerBench.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
-            card.setVisible(true)
-            scene.tweens.add({
+            this.scene.tweens.add({
                 targets: card,
                 scale: 0.28,
                 depth: 0,
+                angle: 0,
                 x: posX,
-                y: Ypos,
+                y: 668,
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
-                    // Cria um campo para cada carta
-                    const fieldCard = scene.add.rectangle(posX, Ypos, 328, 483, 0x000080);
-                    fieldCard.alpha = 0.2;
-                    fieldCard.angle = 0;
-                    fieldCard.setDepth(card.depth + 1);
-                    fieldCard.setScale(0.28);
-                    fieldCard.setInteractive();
+                    const benchCardCollider = this.scene.add.rectangle(posX, 668, 328, 483, 0x000080);
+                    benchCardCollider.alpha = 0.2;
+                    benchCardCollider.angle = 0;
+                    benchCardCollider.setDepth(card.depth + 1);
+                    benchCardCollider.setScale(0.28);
+                    benchCardCollider.setInteractive();
 
                     // adiciona as funcionalidades da carta no bench
                     // scene.fieldCardAnimation(card, fieldCard);
 
                     // Armazena a referência da carta no campo
-                    scene[`fieldCard${index + 1}`] = fieldCard;
+                    this.benchColliders.push(benchCardCollider)
+                },
+            });
+        });
+    }
+    benchEnemyAnimation() {
+        const numCards = this.enemy.bench.length;
+        const spacing = 115;
+        const offsetX = (numCards - 1) * spacing / 2;
+
+
+        this.enemyBench.forEach((card, index) => {
+            const posX = centerX - offsetX + index * spacing;
+            card.setVisible(true)
+            this.scene.tweens.add({
+                targets: card,
+                scale: 0.28,
+                depth: 0,
+                angle: 0,
+                x: posX,
+                y: 100,
+                duration: 100,
+                ease: 'Linear',
+                onComplete: () => {
+
                 },
             });
         });

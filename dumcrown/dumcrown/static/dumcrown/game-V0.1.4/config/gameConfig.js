@@ -23,11 +23,17 @@ export var config = {
         linear: true,
     },
 
-    antialiasGL: true,
-    antialias: true,
+    // antialiasGL: true,
+    // antialias: true,
     autoFocus: true,
     autoPause: false,
-    resolution: window.devicePixelRatio,
+    // activeWhenHidden: true,
+    // resolution: window.devicePixelRatio,
+    fps: {
+        min: 10,
+        target: 60,
+        forceSetTimeOut: true, // Forçar os frames mesmo fora do foco
+    },
 
 };
 export const GAME = new Phaser.Game(config);

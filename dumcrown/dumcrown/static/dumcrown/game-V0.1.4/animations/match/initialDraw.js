@@ -15,6 +15,7 @@ export function showCard(scene, cardObject, finalX,) {
         simpleTweens(scene, verseCard, finalX, centerY, 0.54, 90, 0, 300, () => {
             var card = cardObject;
             card.setPosition(finalX, centerY);
+            card.angle = 0
             card.scaleX = 0;
             card.scaleY = 0.54;
             card.depth = 5
@@ -121,6 +122,7 @@ export function removeCard(scene, cardObject) {
 }
 
 export function removeSwapButtons() {
+    console.log('removendo botoes de swap')
     clearCardsToSwap()
     if (swapButons) {
         swapButons.forEach(button => {

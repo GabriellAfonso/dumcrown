@@ -41,20 +41,24 @@ export class MatchHand {
         this.closedHandBox.depth = 10
 
         this.closedHandBox.on('pointerup', () => {
-            if (this.state == 0) {
-                this.openHandAnimation()
-                this.state = 1
-                this.closedHandBox.setScale(10)
-                this.closedHandBox.depth = 0
-                return
-            }
-            this.closedHandAnimation()
-            this.closedHandBox.setScale(1)
-            this.closedHandBox.depth = 10
-            this.state = 0
-
+            this.action()
         });
     }
+
+    action() {
+        if (this.state == 0) {
+            this.openHandAnimation()
+            this.state = 1
+            this.closedHandBox.setScale(10)
+            this.closedHandBox.depth = 0
+            return
+        }
+        this.closedHandAnimation()
+        this.closedHandBox.setScale(1)
+        this.closedHandBox.depth = 10
+        this.state = 0
+    }
+
     closedHandAnimation() {
         const configs = {
             1: [[1310, 695, 0, 300]],
