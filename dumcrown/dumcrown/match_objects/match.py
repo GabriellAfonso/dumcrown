@@ -1,6 +1,6 @@
 from datetime import datetime
 import asyncio
-from exceptions import BenchFullException, OpponentTurnException, InsufficientEnergyException
+from .exceptions import BenchFullException, OpponentTurnException, InsufficientEnergyException
 # vai receber os dados de player 1 e player2 e vai gerenciar a partida inteira
 
 
@@ -19,7 +19,7 @@ class Match:
         self.turn = 0  # Indica de quem é a vez (pode ser 1 ou 2).
         self.offensive_turn = 0  # Indica de quem é o turno ofensivo do round
         self.timestamp = datetime.now()
-        self.bench = []
+
         self.history = []
         self.start_match()
 
@@ -33,7 +33,7 @@ class Match:
         self.player2.deck.shuffle()
 
     def who_i_am(self, player_id):
-        print('player id', self.player1.get_id())
+        # print('player id', self.player1.get_id())
         if self.player1.get_id() == player_id:
             return self.player1
 
@@ -60,7 +60,7 @@ class Match:
 
             'turn': self.turn,
             'offensive_turn': self.offensive_turn,
-            'bench': self.bench,
+
         }
         return match
 
@@ -105,16 +105,16 @@ class Match:
             raise InsufficientEnergyException("Energia insuficiente")
         return True
 
-    def is_bench_full(self):
-        if len(self.bench) < 5:
-            raise BenchFullException("O banco esta cheio")
-        return True
+    def is_bench_full(self, player):
+        if len(player.bench) < 5:
+            return
+        raise BenchFullException("O banco esta cheio")
 
-    def add_to_bench(self, player, card_id):
+    def player_play_card(self, player, card_id):
         self.is_my_turn(player)
         self.has_enough_energy(player, card_id)
-        self.is_bench_full()
+        self.is_bench_full(player)
 
-        self.bench.append(card_id)
+        player.add_to_bench(card_id)
 
     # def to_bench_validators(self):

@@ -82,9 +82,11 @@ export class MatchManager {
     createBoard() {
         //player
         this.playerBoard = this.scene.add.image(centerX, centerY, this.player.board);
+        this.playerBench = []
         //enemy
         this.enemyBoard = this.scene.add.image(centerX, centerY - 2, this.enemy.board);
         this.enemyBoard.setScale(1, -1);
+        this.enemyBench = []
 
         this.boardCollider = this.scene.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0.3);
         this.boardCollider.setInteractive();
@@ -183,7 +185,7 @@ export class MatchManager {
         var newCardsObj = []
 
         for (let id of old) {
-            var card = this.getCardObj(id)
+            var card = this.getPlayerCardObj(id)
             oldCardsObj.push(card)
         }
 
@@ -200,9 +202,10 @@ export class MatchManager {
         console.log('first round')
 
         for (const id of this.player.hand.slice(0, -1)) {
-            const card = this.getCardObj(id);
+            const card = this.getPlayerCardObj(id);
             this.playerHand.addCard(card);
         } // pega todos menos o ultimo
+
         this.initialDrawManager.finish(this.playerHand.hand)
         this.playerHand.closedHandAnimation()
         sleep(this.scene, 400, () => {
@@ -216,6 +219,9 @@ export class MatchManager {
     }
 
     round(number) {
+        this.playerHand.off()
+
+
         var blackground = this.scene.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
         blackground.alpha = 0
         simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
@@ -248,7 +254,7 @@ export class MatchManager {
     draw() {
         var id = this.player.hand.at(-1)
         console.log(id)
-        var card = this.getCardObj(id)
+        var card = this.getPlayerCardObj(id)
 
         this.playerHand.drawCard(card)
     }
@@ -272,10 +278,13 @@ export class MatchManager {
             }
             sendSocket('play_card', data)
             //verificar no servidor se a pessoa pode fazer essa Açao
-            cardObj.onbenchMode()
+
+
+            //esse resto o servidor que vai chamar em outra funçao
+            // cardObj.onBenchMode()
             // retirar carta da mao
             // openHandAnimation pra ajustar a posiçao das que ainda estao na mao
-            cardObj.setPosition(centerX, centerY)
+            // cardObj.setPosition(centerX, centerY)
         }
 
 
@@ -283,14 +292,111 @@ export class MatchManager {
 
 
     }
+    animateCardToBench(data) {
 
+        if (data.who == this.player.im) {
+            // this.updateBenchObj()
+            this.addCardToBench(data.who, data.card_id)
+            this.benchAnimation(this.scene, data.who)
+            return
+        }
+
+        this.addCardToBench(data.who, data.card_id)
+        this.benchAnimation(this.scene, data.who)
+    }
+    addCardToBench(who, cardID) {
+        if (who == this.player.im) {
+            var card = this.getPlayerCardObj(cardID)
+            this.playerHand.removeCard(card)
+            this.playerBench.push(card)
+            card.onBenchMode()
+            return
+        }
+        var card = this.getEnemyCardObj(cardID)
+        this.enemyBench.push(card)
+    }
+    // updateBenchObj() {
+    //     //player
+    //     this.playerBench = []
+    //     this.player.bench.forEach((cardID) => {
+    //         var card = this.getPlayerCardObj(cardID)
+    //         this.playerBench.push(card)
+
+    //     })
+    //     //enemy
+    //     this.enemyBench = []
+    //     this.enemy.bench.forEach((cardID) => {
+    //         var card = this.getEnemyCardObj(cardID)
+    //         this.enemyBench.push(card)
+    //     })
+    // }
+
+    benchAnimation(scene, who) {
+        // Destrói cartas existentes no campo
+        for (let i = 1; i <= 5; i++) {
+            if (scene[`fieldCard${i}`]) {
+                scene[`fieldCard${i}`].destroy();
+            }
+        }
+        if (who == this.player.im) {
+            var Ypos = 668
+            var bench = this.playerBench
+        } else {
+            var Ypos = 100
+            var bench = this.enemyBench
+        }
+        // Determina a quantidade de cartas no campo
+        const numCards = this.player.bench.length;
+
+        // Calcula o espaçamento entre as cartas com base no número
+        const spacing = 115; // Distância entre as cartas
+        const offsetX = (numCards - 1) * spacing / 2; // Deslocamento para centralizar
+
+        //vai adicionar o bench em objetos
+        // this.player.bench.forEach((card, index) => { })
+        // this.playerBench = ''
+
+        // Cria a animação para cada carta
+        bench.forEach((card, index) => {
+            const posX = centerX - offsetX + index * spacing;
+            card.setVisible(true)
+            scene.tweens.add({
+                targets: card,
+                scale: 0.28,
+                depth: 0,
+                x: posX,
+                y: Ypos,
+                duration: 100,
+                ease: 'Linear',
+                onComplete: () => {
+                    // Cria um campo para cada carta
+                    const fieldCard = scene.add.rectangle(posX, Ypos, 328, 483, 0x000080);
+                    fieldCard.alpha = 0.2;
+                    fieldCard.angle = 0;
+                    fieldCard.setDepth(card.depth + 1);
+                    fieldCard.setScale(0.28);
+                    fieldCard.setInteractive();
+
+                    // adiciona as funcionalidades da carta no bench
+                    // scene.fieldCardAnimation(card, fieldCard);
+
+                    // Armazena a referência da carta no campo
+                    scene[`fieldCard${index + 1}`] = fieldCard;
+                },
+            });
+        });
+    }
     isOver(pointer, bounds) {
         var is = pointer.x >= bounds.x && pointer.x <= bounds.x + bounds.width &&
             pointer.y >= bounds.y && pointer.y <= bounds.y + bounds.height
         return is
     }
-    getCardObj(id) {
+    getPlayerCardObj(id) {
         var card = this.playerCards[id]
+        return card
+    }
+    getEnemyCardObj(id) {
+        var card = this.enemyCards[id]
         return card
     }
 
@@ -298,6 +404,37 @@ export class MatchManager {
         this.button.update()
     }
 
+    invalidMoveMsg(msg) {
+        console.log(msg)
+        var message = this.scene.add.text(centerX, 140, msg,
+            {
+                fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
+                fontStyle: 'bold', fill: '#fff'
+            })
+
+        message.setShadow(2, 2, '#000', 2, false, true);
+        message.alpha = 0;
+        message.setOrigin(0.5, 0.5)
+
+
+
+        this.invalidMoveAnimationText = this.scene.tweens.add({
+            targets: message,
+            depth: 90,
+            alpha: 1,
+            duration: 200,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: message,
+                    delay: 1000,
+                    alpha: 0,
+                    duration: 500,
+                    ease: 'Linear',
+                })
+            },
+        })
+    }
 
     updateRound() {
 

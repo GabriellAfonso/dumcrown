@@ -4,7 +4,11 @@ import {
 } from "./client.js";
 import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } from "./room.js";
 import {
-    startMatch, initialDraw, swappedCards, updateMatchData, round1, hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
+    startMatch, initialDraw, swappedCards, updateMatchData, round1, invalidMove,
+    animateCardToBench,
+
+
+    hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
     adversaryAttack, adversaryDefese, resolveConflit, autoResolve, roundUpdate,
 } from "./match.js";
 
@@ -39,8 +43,13 @@ export const clientReciver = {
     update_match_data: updateMatchData,
     round_1: round1,
 
+    //match animations
+    animate_card_to_bench: animateCardToBench,
 
+    //açoes invalidas
+    invalid_move: invalidMove,
 
+    //antigas
     match_update: matchUpdate,
     player_pass: playerPass,
     energy_update: energyUpdate,
@@ -51,6 +60,8 @@ export const clientReciver = {
     auto_resolve: autoResolve,
     hp_update: hpUpdate,
     round_update: roundUpdate,
+
+
 
 
 

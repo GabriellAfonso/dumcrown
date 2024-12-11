@@ -12,9 +12,9 @@ class Player:
         self.icon = data['icon']
         self.border = data['border']
         self.board = data['board']
-
+        self.bench = []
         self.hp = 100
-        self.energy = 0
+        self.energy = 10
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
         self.ready = False
@@ -69,9 +69,16 @@ class Player:
             print('wait cancelado')
             pass
 
+    def add_to_bench(self, card_id):
+        self.bench.append(card_id)
+
+        self.hand.pop_card(card_id)
+        print(f'carta do {self.im} id: {card_id} adicionada ao bench')
+
     def get_player_data(self):
         player = {
             'id': self.user_id,
+            'im': self.im,
             'nickname': self.nickname,
             'icon': self.icon,
             'border': self.border,
@@ -84,5 +91,7 @@ class Player:
             'hand': self.hand.get_hand(),
             'button_state': self.button_state,
             'button_text': self.button_text,
+
+            'bench': self.bench,
         }
         return player

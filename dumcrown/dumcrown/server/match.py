@@ -105,11 +105,18 @@ class MatchManager:
         card = data['card_id']
         # fazer todas essas verificaçoes dentro de match e retornar a mensagem de error
         try:
-            match.add_to_bench(player, card)
+            match.player_play_card(player, card)
+            inf = {
+                'who': player.im,
+                'card_id': card,
+                'data': match.get_match_data(),
+            }
+            await self.consumer.send_to_group(match.id, 'animate_card_to_bench', inf)
+
             # se passar fazer a animaçao pros dois jogadores
         except Exception as msg:
-            error_message = str(msg)
-            # enviar mensagem de error pro client
+            message = str(msg)
+            await self.consumer.send_to_client('invalid_move', message)
 
     async def is_your_turn(self, player):
         pass

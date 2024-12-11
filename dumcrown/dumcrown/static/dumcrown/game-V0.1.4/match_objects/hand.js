@@ -11,7 +11,7 @@ import { add_text } from '../functions/texts.js';
 //talvez deixar essa classe só pra criar o visual?
 // só instanciar card quando ela for comprada
 export class MatchHand {
-    constructor(scene, cards = '') {
+    constructor(scene, cards = []) {
         this.scene = scene
         this.hand = []
         if (cards) {
@@ -27,10 +27,19 @@ export class MatchHand {
     addCard(card) {
         this.hand.push(card)
     }
+    removeCard(card) {
+        const indice = this.hand.indexOf(card);
+        if (indice !== -1) {
+            this.hand.splice(indice, 1);
+
+        } else {
+            console.log("Elemento não encontrado na lista");
+        }
+    }
     createClosedHandBox() {
         this.closedHandBox = this.scene.add.rectangle(1294, 688, 500, 240, 0xffffff, 0)
         this.closedHandBox.depth = 10
-        this.closedHandBox.setInteractive({ cursor: 'pointer' })
+
         this.closedHandBox.on('pointerup', () => {
             if (this.state == 0) {
                 this.openHandAnimation()
@@ -205,6 +214,7 @@ export class MatchHand {
                             onComplete: () => {
                                 sleep(this.scene, 300, () => {
                                     this.closedHandAnimation()
+                                    this.on()
                                 })
                             }
                         });
@@ -217,5 +227,12 @@ export class MatchHand {
     }
     getCardCount() {
         return this.hand.length;
+    }
+
+    off() {
+        this.closedHandBox.disableInteractive()
+    }
+    on() {
+        this.closedHandBox.setInteractive({ cursor: 'pointer' })
     }
 }

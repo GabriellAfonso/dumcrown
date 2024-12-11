@@ -216,6 +216,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
     onBenchMode() {
         this.state = 'onBench'
         this.destroyCollider()
+        this.stopTween()
 
     }
 

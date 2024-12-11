@@ -157,6 +157,14 @@ export function round1(data) {
     matchData = data
     emitToMatch('round1')
 }
+export function invalidMove(data) {
+    emitToMatch('invalidMove', data)
+}
+
+export function animateCardToBench(data) {
+    updateMatchData(data.data)
+    emitToMatch('animateCardToBench', data)
+}
 export function example(data) {
 
 }
@@ -164,11 +172,16 @@ export function example(data) {
 function getMatchScene() {
     return GAME.scene.getScene('DumMatch')
 }
-function emitToMatch(event) {
+function emitToMatch(event, data = '') {
     var match = getMatchScene()
-    match.events.emit(event)
+    match.events.emit(event, data)
 }
 
+
+
+
+
+//antigas
 export function matchUpdate(data) {
     const message = data.match_update;
 
