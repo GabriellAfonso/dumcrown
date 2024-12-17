@@ -24,7 +24,7 @@ export var config = {
     },
 
     // antialiasGL: true,
-    // antialias: true,
+    antialias: true,
     autoFocus: true,
     autoPause: false,
     // activeWhenHidden: true,

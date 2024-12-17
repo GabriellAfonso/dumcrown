@@ -30,10 +30,10 @@ class MatchManager:
             p1 = random.choice(players)
             p2 = player_y if p1 == player_x else player_x
 
-            player1 = Player(p1, 1)
-            player2 = Player(p2, 2)
+            player1 = Player(p1, 1, self)
+            player2 = Player(p2, 2, self)
 
-            match = Match(player1, player2, match_id)
+            match = Match(player1, player2, match_id, self)
 
             self.matches[match_id] = match
             await self.consumer.send_to_group(match_id, 'start_match', self.matches[match_id].get_match_data())
@@ -118,254 +118,19 @@ class MatchManager:
             message = str(msg)
             await self.consumer.send_to_client('invalid_move', message)
 
-    async def is_your_turn(self, player):
-        pass
-
-    async def player_ready(self, user, data):
-        try:
-            match_id = data['ready']
-
-            # provisorio
-            player = await get_player(user)
-
-            await save_player(player)
-
-            player1_channel = self.matches[match_id]['player1']['channel']
-            player2_channel = self.matches[match_id]['player2']['channel']
-
-            if player1_channel == self.consumer.channel_name:
-                self.matches[match_id]['player1']['ready'] = True
-
-                await self.consumer.channel_layer.group_send(match_id,
-                                                             {'type': 'send_message',
-                                                              'match_update': self.matches[match_id],
-                                                              })
-
-            if player2_channel == self.consumer.channel_name:
-                self.matches[match_id]['player2']['ready'] = True
-
-                await self.consumer.channel_layer.group_send(match_id,
-                                                             {'type': 'send_message',
-                                                              'match_update': self.matches[match_id],
-                                                              })
-
-        except Exception as e:
-            logging.error(f'Error in player_ready: {e}', exc_info=True)
-
-    async def player_pass(self, user, data):
-        try:
-            match_id = data['pass']
-
-            player1_channel = self.matches[match_id]['player1']['channel']
-            player2_channel = self.matches[match_id]['player2']['channel']
-
-            if self.matches[match_id]['phase'] < 5:
-                self.matches[match_id]['phase'] += 1
-
-            if player1_channel == self.consumer.channel_name:
-                self.matches[match_id]['turn'] = 'player2'
-
-            if player2_channel == self.consumer.channel_name:
-                self.matches[match_id]['turn'] = 'player1'
-
-            await self.consumer.channel_layer.group_send(match_id,
-                                                         {'type': 'send_message',
-                                                          'player_pass': self.matches[match_id],
-                                                          })
-
-        except Exception as e:
-            logging.error(f'Error in player_pass: {e}', exc_info=True)
-
-    async def round_update(self, user, data):
-        try:
-            match_id = data['round_update']
-
-            self.matches[match_id]['round'] += 1
-            self.matches[match_id]['phase'] = 1
-
-            who_attacking = self.matches[match_id]['attacking']
-
-            if who_attacking == 'player1':
-                self.matches[match_id]['attacking'] = 'player2'
-                self.matches[match_id]['turn'] = 'player2'
-
-            elif who_attacking == 'player2':
-                self.matches[match_id]['attacking'] = 'player1'
-                self.matches[match_id]['turn'] = 'player1'
-
-            await self.consumer.channel_layer.group_send(match_id,
-                                                         {'type': 'send_message',
-                                                          'round_update': self.matches[match_id],
-                                                          })
-
-        except Exception as e:
-            logging.error(f'Error in round_update: {e}', exc_info=True)
-
-    async def energy_update(self, user, data):
-        try:
-            match_id, energy = data['energy_update']
-
-            player1_channel = self.matches[match_id]['player1']['channel']
-            player2_channel = self.matches[match_id]['player2']['channel']
-
-            if player1_channel == self.consumer.channel_name:
-                self.matches[match_id]['player1']['energy'] += int(energy)
-
-                if self.matches[match_id]['player1']['energy'] > 10:
-                    self.matches[match_id]['player1']['energy'] = 10
-
-                await self.consumer.channel_layer.group_send(match_id,
-                                                             {'type': 'send_message',
-                                                              'energy_update': self.matches[match_id],
-                                                              })
-
-            if player2_channel == self.consumer.channel_name:
-                self.matches[match_id]['player2']['energy'] += int(energy)
-
-                if self.matches[match_id]['player2']['energy'] > 10:
-                    self.matches[match_id]['player2']['energy'] = 10
-
-                await self.consumer.channel_layer.group_send(match_id,
-                                                             {'type': 'send_message',
-                                                              'energy_update': self.matches[match_id],
-                                                              })
-
-        except Exception as e:
-            logging.error(f'Error in energy_update: {e}', exc_info=True)
-
-    async def adversary_field(self, user, data):
-        try:
-            match_id, card = data['adversary_field']
-
-            player1_channel = self.matches[match_id]['player1']['channel']
-            player2_channel = self.matches[match_id]['player2']['channel']
-
-            if player1_channel == self.consumer.channel_name:
-                await self.consumer.channel_layer.send(player2_channel,
-                                                       {'type': 'send_message',
-                                                        'adversary_field': card,
-                                                        })
-
-            if player2_channel == self.consumer.channel_name:
-                await self.consumer.channel_layer.send(player1_channel,
-                                                       {'type': 'send_message',
-                                                        'adversary_field': card,
-                                                        })
-
-        except Exception as e:
-            logging.error(f'Error in adversary_field: {e}', exc_info=True)
-
-    async def adversary_attack(self, user, data):
-        try:
-            match_id, attack_card = data['adversary_attack']
-
-            player1_channel = self.matches[match_id]['player1']['channel']
-            player2_channel = self.matches[match_id]['player2']['channel']
-
-            if player1_channel == self.consumer.channel_name:
-                await self.consumer.channel_layer.send(player2_channel,
-                                                       {'type': 'send_message',
-                                                        'adversary_attack': attack_card,
-                                                        })
-
-            if player2_channel == self.consumer.channel_name:
-                await self.consumer.channel_layer.send(player1_channel,
-                                                       {'type': 'send_message',
-                                                        'adversary_attack': attack_card,
-                                                        })
-
-        except Exception as e:
-            logging.error(f'Error in adversary_attack: {e}', exc_info=True)
-
-    async def adversary_defese(self, user, data):
-        try:
-            match_id, defese_card = data['adversary_defese']
-
-            player1_channel = self.matches[match_id]['player1']['channel']
-            player2_channel = self.matches[match_id]['player2']['channel']
-
-            if player1_channel == self.consumer.channel_name:
-                await self.consumer.channel_layer.send(player2_channel,
-                                                       {'type': 'send_message',
-                                                        'adversary_defese': defese_card,
-                                                        })
-
-            if player2_channel == self.consumer.channel_name:
-                await self.consumer.channel_layer.send(player1_channel,
-                                                       {'type': 'send_message',
-                                                        'adversary_defese': defese_card,
-                                                        })
-
-        except Exception as e:
-            logging.error(f'Error in adversary_defese: {e}', exc_info=True)
-
-    async def resolve(self, user, data):
-        try:
-            match_id, resolveDict = data['resolve']
-            result = {}
-
-            who_attacking = self.matches[match_id]['attacking']
-            if who_attacking == 'player1':
-                who_defense = 'player2'
-            elif who_attacking == 'player2':
-                who_defense = 'player1'
-
-            player_attack = resolveDict[who_attacking]
-            player_defense = resolveDict[who_defense]
-
-            for position, card_attack in player_attack.items():
-                if position in player_defense:
-                    # Se a posição existir em player_defense, realiza a operação
-                    player_defense[position]['DEF'] -= card_attack['ATK']
-
-            result[who_attacking] = player_attack
-            result[who_defense] = player_defense
-
-            await self.consumer.channel_layer.group_send(match_id,
-                                                         {'type': 'send_message',
-                                                          'resolve': result,
-                                                          })
-
-        except Exception as e:
-            logging.error(f'Error in resolve: {e}', exc_info=True)
-
-    async def damage_Result(self, user, data):
-        try:
-            match_id, damage = data['damage_Result']
-
-            who_attacking = self.matches[match_id]['attacking']
-
-            if who_attacking == 'player1':
-                self.matches[match_id]['player2']['hp'] += int(damage)
-                if self.matches[match_id]['player2']['hp'] < 1:
-                    self.matches[match_id]['player2']['hp'] = 0
-
-            elif who_attacking == 'player2':
-                self.matches[match_id]['player1']['hp'] += int(damage)
-                if self.matches[match_id]['player1']['hp'] < 1:
-                    self.matches[match_id]['player1']['hp'] = 0
-
-            await self.consumer.channel_layer.group_send(match_id,
-                                                         {'type': 'send_message',
-                                                          'hp_update': self.matches[match_id],
-                                                          })
-
-        except Exception as e:
-            logging.error(f'Error in damage_Result: {e}', exc_info=True)
-
-    async def match_update(self, user, data):
-        try:
-            match = data['match_update']
-
-            self.matches[match['id']] = match
-
-            await self.consumer.channel_layer.group_send(match['id'], {
-                'type': 'send_message',
-                'match_update': self.matches[match['id']],
-            })
-
-        except Exception as e:
-            logging.error(f'Error in match_update: {e}', exc_info=True)
+    async def player_pass(self, match_id):
+        match = self.matches[match_id]
+        player = match.who_i_am(self.user)
+        match.player_pass(player)
+        await self.consumer.send_to_group(match.id, 'update_match_data', match.get_match_data())
+
+    async def update_to_players(self, match_id):
+        match = self.matches[match_id]
+        await self.consumer.send_to_group(match.id, 'update_match_data', match.get_match_data())
+
+    async def message_to_player(self, channel, msg):
+        # TODO apos acabar a partida, deletar ela e todos os sistemas asyncronos vinculados
+        await self.consumer.send_to_channel(channel, 'match_message', msg)
 
     # async def game_winner(self, user, data):
     #     if user.is_authenticated:

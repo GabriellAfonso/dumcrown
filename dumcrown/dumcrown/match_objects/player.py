@@ -5,15 +5,17 @@ import asyncio
 
 class Player:
 
-    def __init__(self, data, im):
+    def __init__(self, data, im, manager):
         self.user_id = data['id']
         self.im = im
+        self.manager = manager
+        self.channel = data['channel']
         self.nickname = data['nickname']
         self.icon = data['icon']
         self.border = data['border']
         self.board = data['board']
         self.bench = []
-        self.hp = 100
+        self.hp = 30
         self.energy = 10
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
@@ -54,6 +56,10 @@ class Player:
         task = asyncio.create_task(self.wait_for_ready())
         self.auto_pass = task
 
+    async def set_auto_pass(self, match):
+        task = asyncio.create_task(self.auto_pass_timer(match))
+        self.auto_pass = task
+
     def cancel_auto_pass(self):
         self.auto_pass.cancel()
         self.auto_pass = None
@@ -69,11 +75,29 @@ class Player:
             print('wait cancelado')
             pass
 
+    async def auto_pass_timer(self, match):
+        try:
+            await asyncio.sleep(40)  # Espera 30 segundos
+            asyncio.create_task(self.message('Seu Tempo Esta Acabando'))
+
+            await asyncio.sleep(10)
+            asyncio.create_task(self.message('Tempo limite Esgotado'))
+
+            match.player_pass(self)
+
+        except asyncio.CancelledError:
+            print('Auto passar cancelado')
+            pass
+
     def add_to_bench(self, card_id):
         self.bench.append(card_id)
 
         self.hand.pop_card(card_id)
         print(f'carta do {self.im} id: {card_id} adicionada ao bench')
+
+    async def message(self, msg):
+        await self.manager.message_to_player(
+            self.channel, msg)
 
     def get_player_data(self):
         player = {

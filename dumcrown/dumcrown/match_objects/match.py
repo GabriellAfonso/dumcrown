@@ -10,8 +10,9 @@ from .exceptions import BenchFullException, OpponentTurnException, InsufficientE
 # ou a partida vai se gerenciar ou vou fazer um matchManager
 class Match:
 
-    def __init__(self, player1, player2, match_id):
+    def __init__(self, player1, player2, match_id, manager):
         self.id = match_id
+        self.manager = manager
         self.round = 0
         self.player1 = player1
         self.player2 = player2
@@ -81,9 +82,11 @@ class Match:
     def set_turn(self, turn):
         self.turn = turn
         if turn == 1:
+            asyncio.create_task(self.player1.set_auto_pass(self))
             self.player1.change_button(1, 'SUA VEZ')
             self.player2.change_button(0, 'TURNO DO OPONENTE')
         elif turn == 2:
+            asyncio.create_task(self.player2.set_auto_pass(self))
             self.player2.change_button(1, 'SUA VEZ')
             self.player1.change_button(0, 'TURNO DO OPONENTE')
 
@@ -92,6 +95,14 @@ class Match:
             self.set_turn(2)
         else:
             self.set_turn(1)
+
+    def player_pass(self, player):
+        if self.is_my_turn(player):
+            self.toggle_turn()
+            player.cancel_auto_pass()
+            asyncio.create_task(self.manager.update_to_players(self.id))
+
+            print(f'O player {player.im}, passou a vez')
 
     def is_my_turn(self, player):
         if (player.im == self.turn):
@@ -116,5 +127,8 @@ class Match:
         self.is_bench_full(player)
 
         player.add_to_bench(card_id)
+
+        # tem que ter uma diferença entre passou a vez e fez uma açao
+        self.player_pass(player)
 
     # def to_bench_validators(self):

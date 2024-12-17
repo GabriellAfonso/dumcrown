@@ -20,9 +20,16 @@ export class FriendsScene extends Phaser.Scene {
             switchScenes('HomeScene', 'FriendsScene')
         }, 0xffff00, soundfx.closeSound);
         x_close.setScale(0.5)
-        this.textA = add_text(this, centerX - 100, centerY + 100, 'Resize', '20px', 0.5)
-        this.textB = add_text(this, centerX + 100, centerY + 100, 'Resize', '200px', 0.5)
-        this.textB.setScale(0.1)
+        // this.textA = add_text(this, centerX - 100, centerY + 100, 'Resize', '20px', 0.5)
+        // this.textB = add_text(this, centerX + 100, centerY + 100, 'Resize', '200px', 0.5)
+        // this.textB.setScale(0.1)
+        // const cardL = this.add.image(centerX - 200, centerY, 'cdc_card');
+        // const cardH = this.add.image(centerX + 200, centerY, 'qualit2');
+
+        // cardH.texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+        // // cardH.setDisplaySize(328, 483)
+        // cardL.setScale(0.28)
+        // // cardH.setScale(0.05)
     }
 
     update() {

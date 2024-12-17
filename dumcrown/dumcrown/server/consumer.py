@@ -3,6 +3,7 @@ import json
 import asyncio
 from django.utils import timezone
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.layers import get_channel_layer
 
 from .room import GameRoom
 from .functions import player_connected, player_disconnected, player_is_online
@@ -92,6 +93,18 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             'data': data,
         }
         await self.channel_layer.group_send(group, message)
+
+    async def send_to_channel(self, channel_name, code, data=''):
+        """
+        Envia uma mensagem diretamente para um canal específico.
+        """
+        channel_layer = get_channel_layer()
+        message = {
+            'type': 'receive_from_consumer',  # O handler dentro do consumidor que será chamado
+            'code': code,
+            'data': data,
+        }
+        await channel_layer.send(channel_name, message)
 
     async def check_player_already_online(self):
         already_online = await player_is_online(self.user)

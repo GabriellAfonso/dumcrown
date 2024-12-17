@@ -165,6 +165,9 @@ export function animateCardToBench(data) {
     updateMatchData(data.data)
     emitToMatch('animateCardToBench', data)
 }
+export function matchMessage(data) {
+    emitToMatch('message', data)
+}
 export function example(data) {
 
 }

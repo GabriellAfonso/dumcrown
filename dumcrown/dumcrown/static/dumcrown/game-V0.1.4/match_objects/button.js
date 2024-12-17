@@ -41,6 +41,8 @@ export class MatchButton {
     }
 
     update() {
+
+        //TODO fazer um barulho toda vez que ficar disponivel pra clicar
         this.button.setTexture(this.buttonTexture[this.buttonState])
         this.buttonText.text = this.text
         if (this.buttonState) {
@@ -51,10 +53,10 @@ export class MatchButton {
     }
     createButton() {
         console.log('criando o botao')
-        console.log(this.buttonTexture[this.buttonState])
+        console.log(this.buttonTexture[0])
 
-        this.button = this.scene.add.image(1396, centerY, this.buttonTexture[this.buttonState]);
-        this.buttonText = add_text(this.scene, 1396, centerY, this.text, '25px', 0.5)
+        this.button = this.scene.add.image(1396, centerY, this.buttonTexture[0]);
+        this.buttonText = add_text(this.scene, 1396, centerY, '', '25px', 0.5)
         this.buttonText.setAlign('center');
         this.buttonText.setWordWrapWidth(180, true);
         this.buttonText.setStyle({ fontStyle: 'bold' });
@@ -64,6 +66,8 @@ export class MatchButton {
         this.button.on('pointerup', () => {
             this.button.disableInteractive()
             console.log(this.text)
+
+            //TODO usar this.text em uma tabela hash pra executar algo em especifico O(1)
             if (this.text == 'PRONTO') {
                 console.log('mandando pro servidor', cardsToSwap)
                 var data = {
@@ -71,9 +75,27 @@ export class MatchButton {
                     cards: cardsToSwap,
                 }
                 sendSocket('ready', data)
+            }
+
+            else if (this.text == 'SUA VEZ') {
+                console.log('passou a vez')
+                sendSocket('player_pass', match.id)
 
             }
-            //com base no texto do botao definir oq ele vai fazer
+
+        });
+
+
+        this.button.on('pointerover', () => {
+            if (this.text == 'SUA VEZ') {
+                this.buttonText.text = 'PASSAR'
+                //TODO fazer som qunado passar o mouse e ficar mais claro tipo selecionado
+            }
+        });
+        this.button.on('pointerout', () => {
+            if (this.text == 'SUA VEZ') {
+                this.buttonText.text = this.text
+            }
         });
     }
 }

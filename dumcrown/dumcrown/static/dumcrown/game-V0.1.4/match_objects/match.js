@@ -172,7 +172,7 @@ export class MatchManager {
     }
 
     initialDrawn() {
-        this.button.update()
+
 
         var cardsObj = []
         for (let card of this.player.hand) {
@@ -181,6 +181,9 @@ export class MatchManager {
         }
         this.initialDrawManager = new InitialDrawManager(this.scene)
         this.initialDrawManager.drawCards(cardsObj)
+        sleep(this.scene, 2500, () => {
+            this.button.update()
+        })
     }
 
     swapCards(oldCards) {
@@ -300,8 +303,8 @@ export class MatchManager {
 
 
     //TODO:
-    //Botao indisponivel antes do initial draw terminar
-    //botao de passar a vez (passar o mouse em cima muda de "sua VEZ" pra "passar")
+    //Botao indisponivel antes do initial draw terminar ---------X
+    //botao de passar a vez (passar o mouse em cima muda de "sua VEZ" pra "passar") ---------X
     //nao permitir colocar cartas magicas no banco
     //passar a vez automaticamente quando jogar a carta
     //gastar energia ao usar carta
@@ -444,6 +447,40 @@ export class MatchManager {
             },
         })
     }
+
+    msg(msg) {
+        console.log(msg)
+        var message = this.scene.add.text(centerX, 140, msg,
+            {
+                fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
+                fontStyle: 'bold', fill: '#fff'
+            })
+
+        message.setShadow(2, 2, '#000', 2, false, true);
+        message.alpha = 0;
+        message.setOrigin(0.5, 0.5)
+
+
+
+        this.messageAnimationText = this.scene.tweens.add({
+            targets: message,
+            depth: 90,
+            alpha: 1,
+            duration: 200,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: message,
+                    delay: 1000,
+                    alpha: 0,
+                    duration: 500,
+                    ease: 'Linear',
+                })
+            },
+        })
+    }
+
+
 
     updateRound() {
 
