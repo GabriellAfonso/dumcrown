@@ -305,11 +305,12 @@ export class MatchManager {
     //TODO:
     //Botao indisponivel antes do initial draw terminar ---------X
     //botao de passar a vez (passar o mouse em cima muda de "sua VEZ" pra "passar") ---------X
+    //passar a vez automaticamente quando jogar a carta ---------X
+    //resolver o depht do bench interferindo na mao ---------X
     //nao permitir colocar cartas magicas no banco
-    //passar a vez automaticamente quando jogar a carta
     //gastar energia ao usar carta
     //se os dois passar a vez muda de round
-    //resolver o depht do bench interferindo na mao
+    //trocar card layout no bench
 
     cardToBench(data) {
         if (data.who == this.player.im) {

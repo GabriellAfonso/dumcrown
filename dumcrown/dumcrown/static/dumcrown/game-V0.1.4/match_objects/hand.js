@@ -107,7 +107,7 @@ export class MatchHand {
             const positions = this.openPositions[length];
 
             // Inicie a profundidade com 1, para a primeira carta
-            let depthValue = 1;
+            let depthValue = 2;
 
             // Use um loop for para animar cada carta
             for (let i = 0; i < length; i++) {
