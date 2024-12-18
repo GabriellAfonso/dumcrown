@@ -95,7 +95,6 @@ class MatchManager:
 
     async def round1(self, match):
         print('players prontos')
-        match.set_turn(1)
         match.new_round()
         await self.consumer.send_to_group(match.id, 'round_1', match.get_match_data())
 
@@ -127,6 +126,10 @@ class MatchManager:
     async def update_to_players(self, match_id):
         match = self.matches[match_id]
         await self.consumer.send_to_group(match.id, 'update_match_data', match.get_match_data())
+
+    async def new_round(self, match_id):
+        match = self.matches[match_id]
+        await self.consumer.send_to_group(match.id, 'new_round', match.get_match_data())
 
     async def message_to_player(self, channel, msg):
         # TODO apos acabar a partida, deletar ela e todos os sistemas asyncronos vinculados

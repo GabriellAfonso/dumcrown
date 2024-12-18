@@ -244,6 +244,8 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             this.activeTween.stop();
         }
     }
+
+
 }
 
 export class CardObject extends BaseCardObject {
@@ -282,6 +284,18 @@ export class CardObject extends BaseCardObject {
             defense: this.defense.text
         });
         return clone;
+    }
+
+    setSmallLayout() {
+        this.cardLayout.setTexture('minicardlayout')
+        this.energy.alpha = 0
+        this.name.alpha = 0
+        this.description.alpha = 0
+        this.attack.setFontSize(60)
+        this.attack.setPosition(-95, 200)
+        this.defense.setFontSize(60)
+        this.defense.setPosition(95, 200)
+
     }
 }
 

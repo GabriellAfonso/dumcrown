@@ -11,6 +11,7 @@ import { clearCardsToSwap } from './swapButton.js';
 import { MatchHand } from './hand.js';
 import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
 import { sendSocket, sleep } from '../functions/functions.js';
+import { crashSwords } from '../animations/scripts/attackingSwords.js';
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
 //vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
@@ -26,7 +27,7 @@ export class MatchManager {
         // this.player2 = match.player2;
         this.button = new MatchButton(scene)
         this.turn = match.turn; // Indica de quem é a vez (pode ser 1 ou 2)
-        this.offensiveTurn = match.offensive_turn; // Indica de quem é o turno ofensivo do round
+        // this.offensiveTurn = match.offensive_turn; // Indica de quem é o turno ofensivo do round
         this.history = [];
         this.energyNumbers = []
         // this.player = this.get_player();
@@ -225,17 +226,21 @@ export class MatchManager {
         })
 
 
+    }
 
-
-        //update button
+    newRound() {
+        console.log('chamou new round')
+        this.playerHand.closedHandAnimation()
+        this.round(this.match.round)
     }
 
     round(number) {
         this.playerHand.off()
-
+        this.button.waiting()
 
         var blackground = this.scene.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
         blackground.alpha = 0
+        blackground.setInteractive()
         simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
             sleep(this.scene, 2000, () => {
                 simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
@@ -255,13 +260,30 @@ export class MatchManager {
         this.roundText.setShadow(2, 2, '#000', 2, false, true);
         simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 1, () => {
             simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 0, () => {
-                sleep(this.scene, 1500, () => {
-                    this.draw()
+                if (this.player.hand.length <= 7) {
+                    sleep(this.scene, 1500, () => {
+                        this.draw()
+                        this.button.update()
+                        this.updateOfensiveIcon()
+                    })
+                } else {
+                    this.playerHand.on()
                     this.button.update()
-                })
+                    this.updateOfensiveIcon()
+                }
+
+
             }, 2000)
         })
 
+    }
+
+    updateOfensiveIcon() {
+        if (this.match.offensive_player == this.player.im) {
+            crashSwords(this.scene, 300, 100, 0.25)
+            return
+        }
+        crashSwords(this.scene, 100, -100, 0.25)
     }
     draw() {
         var id = this.player.hand.at(-1)
@@ -307,10 +329,11 @@ export class MatchManager {
     //botao de passar a vez (passar o mouse em cima muda de "sua VEZ" pra "passar") ---------X
     //passar a vez automaticamente quando jogar a carta ---------X
     //resolver o depht do bench interferindo na mao ---------X
-    //nao permitir colocar cartas magicas no banco
-    //gastar energia ao usar carta
-    //se os dois passar a vez muda de round
-    //trocar card layout no bench
+    //gastar energia ao usar carta ---------X
+    //nao permitir colocar cartas magicas no banco ---------X
+    //se os dois passar a vez muda de round ---------X
+    //trocar card layout no bench ---------X
+    //indicaçao visual de quem esta no modo ofensivo ---------X
 
     cardToBench(data) {
         if (data.who == this.player.im) {
@@ -329,10 +352,12 @@ export class MatchManager {
             this.playerHand.removeCard(card)
             this.playerBench.push(card)
             card.onBenchMode()
+            card.setSmallLayout()
             this.playerHand.action()
             return
         }
         var card = this.getEnemyCardObj(cardID)
+        card.setSmallLayout()
         this.enemyBench.push(card)
     }
 
@@ -415,8 +440,13 @@ export class MatchManager {
 
     updateData() {
         this.button.update()
+        this.updateEnergy()
     }
 
+    updateEnergy() {
+        this.playerEnergyValue.setTexture('default_energy_' + this.player.energy)
+        this.enemyEnergyValue.setTexture('default_energy_' + this.enemy.energy)
+    }
     invalidMoveMsg(msg) {
         console.log(msg)
         var message = this.scene.add.text(centerX, 140, msg,

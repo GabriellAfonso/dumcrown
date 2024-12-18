@@ -51,6 +51,11 @@ export class MatchButton {
         }
         this.button.disableInteractive()
     }
+    waiting() {
+        this.button.setTexture(this.buttonTexture[0])
+        this.buttonText.text = 'AGUARDE'
+        this.button.disableInteractive()
+    }
     createButton() {
         console.log('criando o botao')
         console.log(this.buttonTexture[0])

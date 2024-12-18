@@ -165,7 +165,8 @@ export class HomeScene extends Phaser.Scene {
 
         carta.setPosition(centerX, centerY)
         // carta.setScale(0.5)
-        carta.scale = 0.5
+        carta.scale = 1
+        carta.setSmallLayout()
         const gameConfig = this.game.config;
 
         console.log('Configurações do Jogo:', gameConfig);

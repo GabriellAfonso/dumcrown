@@ -1,6 +1,6 @@
 from datetime import datetime
 import asyncio
-from .exceptions import BenchFullException, OpponentTurnException, InsufficientEnergyException
+from .exceptions import BenchFullException, OpponentTurnException, InsufficientEnergyException, InvalidCardTypeForBenchException
 # vai receber os dados de player 1 e player2 e vai gerenciar a partida inteira
 
 
@@ -18,7 +18,7 @@ class Match:
         self.player2 = player2
 
         self.turn = 0  # Indica de quem é a vez (pode ser 1 ou 2).
-        self.offensive_turn = 0  # Indica de quem é o turno ofensivo do round
+        self.offensive_player = 0  # Indica de quem é o turno ofensivo do round
         self.timestamp = datetime.now()
 
         self.history = []
@@ -60,7 +60,7 @@ class Match:
             'player2': self.player2.get_player_data(),
 
             'turn': self.turn,
-            'offensive_turn': self.offensive_turn,
+            'offensive_player': self.offensive_player,
 
         }
         return match
@@ -78,6 +78,9 @@ class Match:
         self.round += 1
         self.player1.hand.draw_card()
         self.player2.hand.draw_card()
+        self.toggle_ofensive_player()
+        if self.round > 1:
+            asyncio.create_task(self.manager.new_round(self.id))
 
     def set_turn(self, turn):
         self.turn = turn
@@ -96,13 +99,43 @@ class Match:
         else:
             self.set_turn(1)
 
+    def toggle_ofensive_player(self):
+        if self.offensive_player == 1:
+            print('vez do player 2')
+            self.set_ofensive_player(2)
+            self.set_turn(2)
+        else:
+            print('vez do player 1')
+            self.set_ofensive_player(1)
+            self.set_turn(1)
+
+    def set_ofensive_player(self, player):
+        self.offensive_player = player
+
     def player_pass(self, player):
         if self.is_my_turn(player):
-            self.toggle_turn()
             player.cancel_auto_pass()
-            asyncio.create_task(self.manager.update_to_players(self.id))
+            player.set_passed(True)
+
+            self.check_both_passed()
 
             print(f'O player {player.im}, passou a vez')
+
+    def finish_turn(self, player):
+        player.cancel_auto_pass()
+        player.set_passed(False)
+        self.toggle_turn()
+        asyncio.create_task(self.manager.update_to_players(self.id))
+
+    def check_both_passed(self):
+        if self.player1.passed == self.player2.passed:
+            self.player1.set_passed(False)
+            self.player2.set_passed(False)
+            self.new_round()
+            return
+
+        self.toggle_turn()
+        asyncio.create_task(self.manager.update_to_players(self.id))
 
     def is_my_turn(self, player):
         if (player.im == self.turn):
@@ -110,25 +143,31 @@ class Match:
 
         raise OpponentTurnException("Turno do oponente, aguarde sua vez")
 
-    def has_enough_energy(self, player, card_id):
+    def useEnergy(self, player, card_id):
         card = player.deck.get_card_obj(card_id)
         if card.energy > player.energy:
             raise InsufficientEnergyException("Energia insuficiente")
-        return True
+
+        player.remove_energy(card.energy)
 
     def is_bench_full(self, player):
         if len(player.bench) < 5:
             return
         raise BenchFullException("O banco esta cheio")
 
+    def check_card_type(self, card_id):
+        if card_id[0] == 's':
+            raise InvalidCardTypeForBenchException('Ação Inválida')
+
     def player_play_card(self, player, card_id):
         self.is_my_turn(player)
-        self.has_enough_energy(player, card_id)
         self.is_bench_full(player)
+        self.check_card_type(card_id)
+        self.useEnergy(player, card_id)
 
         player.add_to_bench(card_id)
 
         # tem que ter uma diferença entre passou a vez e fez uma açao
-        self.player_pass(player)
+        self.finish_turn(player)
 
     # def to_bench_validators(self):

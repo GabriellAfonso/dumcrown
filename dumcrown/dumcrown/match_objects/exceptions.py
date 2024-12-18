@@ -16,3 +16,8 @@ class InsufficientEnergyException(GameException):
 class BenchFullException(GameException):
     """Exceção levantada quando o banco de cartas está cheio."""
     pass
+
+
+class InvalidCardTypeForBenchException(GameException):
+    """Exceção levantada quando uma carta mágica é colocada no banco, o que não é permitido."""
+    pass

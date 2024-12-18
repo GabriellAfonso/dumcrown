@@ -20,6 +20,7 @@ class Player:
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
         self.ready = False
+        self.passed = False
         self.button_state = 0
         self.button_text = ''
         self.auto_pass = None
@@ -33,8 +34,11 @@ class Player:
     def add_energy(self, points):
         self.energy += points
 
-    def remove_energy(self, points):
+    def remove_energy(self, points: int):
         self.energy -= points
+
+    def set_passed(self, value: bool):
+        self.passed = value
 
     def change_button(self, state, text):
         self.button_state = state
@@ -77,7 +81,7 @@ class Player:
 
     async def auto_pass_timer(self, match):
         try:
-            await asyncio.sleep(40)  # Espera 30 segundos
+            await asyncio.sleep(40)
             asyncio.create_task(self.message('Seu Tempo Esta Acabando'))
 
             await asyncio.sleep(10)

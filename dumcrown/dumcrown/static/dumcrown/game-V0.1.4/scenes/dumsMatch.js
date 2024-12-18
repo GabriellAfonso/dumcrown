@@ -38,6 +38,10 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('round1', () => {
             this.match.firstRound()
         });
+        this.events.on('newRound', () => {
+            this.match.newRound()
+        });
+
         this.events.on('invalidMove', (msg) => {
             this.match.invalidMoveMsg(msg)
         });

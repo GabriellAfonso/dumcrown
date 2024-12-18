@@ -10,11 +10,11 @@ export function crashSwords(scene, initialY, finalY, scale) {
     }
 
 
-    scene.sword01 = scene.add.image(-150, centerY + initialY, 'sword01');
+    scene.sword01 = scene.add.image(100, centerY + initialY, 'sword01');
     scene.sword01.setScale(0.25)
     scene.sword01.alpha = 0
 
-    scene.sword02 = scene.add.image(150, centerY + initialY, 'sword02');
+    scene.sword02 = scene.add.image(300, centerY + initialY, 'sword02');
     scene.sword02.setScale(0.25)
     scene.sword02.alpha = 0
 
@@ -22,8 +22,8 @@ export function crashSwords(scene, initialY, finalY, scale) {
 
 
 
-    simpleTweens(scene, scene.sword01, 50, centerY + finalY, scale, 10, 0, 500)
-    simpleTweens(scene, scene.sword02, 50, centerY + finalY, scale, 10, 0, 500)
+    simpleTweens(scene, scene.sword01, 220, centerY + finalY, scale, 10, 0, 600)
+    simpleTweens(scene, scene.sword02, 220, centerY + finalY, scale, 10, 0, 600)
 
 
 }

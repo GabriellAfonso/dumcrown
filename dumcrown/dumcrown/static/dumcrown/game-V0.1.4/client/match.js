@@ -157,6 +157,11 @@ export function round1(data) {
     matchData = data
     emitToMatch('round1')
 }
+export function newRound(data) {
+    matchData = data
+    emitToMatch('newRound', data)
+}
+
 export function invalidMove(data) {
     emitToMatch('invalidMove', data)
 }

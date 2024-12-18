@@ -5,9 +5,10 @@ class PlayerHand:
         pass
 
     def draw_card(self):
-        card = self.deck.get_deck()[0]
-        self.hand.append(card)
-        self.deck.pop_card()
+        if len(self.hand) <= 7:
+            card = self.deck.get_deck()[0]
+            self.hand.append(card)
+            self.deck.pop_card()
 
     def get_hand(self):
 
