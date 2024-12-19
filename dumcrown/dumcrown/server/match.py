@@ -120,8 +120,12 @@ class MatchManager:
     async def player_pass(self, match_id):
         match = self.matches[match_id]
         player = match.who_i_am(self.user)
-        match.player_pass(player)
-        await self.consumer.send_to_group(match.id, 'update_match_data', match.get_match_data())
+        try:
+            match.player_pass(player)
+            await self.consumer.send_to_group(match.id, 'update_match_data', match.get_match_data())
+        except Exception as msg:
+            message = str(msg)
+            await self.consumer.send_to_client('invalid_move', message)
 
     async def update_to_players(self, match_id):
         match = self.matches[match_id]
@@ -134,6 +138,25 @@ class MatchManager:
     async def message_to_player(self, channel, msg):
         # TODO apos acabar a partida, deletar ela e todos os sistemas asyncronos vinculados
         await self.consumer.send_to_channel(channel, 'match_message', msg)
+
+    async def offensive_card(self, data):
+        match = self.matches[data['match_id']]
+        player = match.who_i_am(self.user)
+        card = data['card_id']
+
+        try:
+            match.player_offensive_card(player, card)
+            inf = {
+                'who': player.im,
+                'card_id': card,
+                'data': match.get_match_data(),
+            }
+            await self.consumer.send_to_group(match.id, 'animate_card_to_attack', inf)
+
+            # se passar fazer a animaçao pros dois jogadores
+        except Exception as msg:
+            message = str(msg)
+            await self.consumer.send_to_client('invalid_move', message)
 
     # async def game_winner(self, user, data):
     #     if user.is_authenticated:

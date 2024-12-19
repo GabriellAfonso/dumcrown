@@ -28,4 +28,5 @@ code_handlers = {
     'ready': {'object': match_manager, 'method': 'ready'},
     'play_card': {'object': match_manager, 'method': 'play_card'},
     'player_pass': {'object': match_manager, 'method': 'player_pass'},
+    'offensive_card': {'object': match_manager, 'method': 'offensive_card'},
 }

@@ -87,6 +87,9 @@ export class MatchButton {
                 sendSocket('player_pass', match.id)
 
             }
+            else if (this.text == 'ATACAR') {
+                sendSocket('attack', match.id)
+            }
 
         });
 

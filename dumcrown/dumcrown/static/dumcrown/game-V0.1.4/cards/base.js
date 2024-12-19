@@ -218,6 +218,105 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.destroyCollider()
         this.stopTween()
 
+        console.log('ta no on bench')
+
+        let startX = null
+        let startY = null
+        this.cardIsDragging = false
+
+        this.restPosition = {
+            x: this.x,
+            y: this.y,
+            angle: this.angle,
+            depth: this.depth,
+        }
+
+        // if (this.handModeActive) {
+        //     return
+        // }
+
+        // this.handModeActive = true
+        this.collider = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0.3);
+        this.add(this.collider)
+        this.collider.setInteractive();
+
+        this.activeTween = null;
+
+        this.collider.on('pointerdown', (pointer) => {
+            if (this.activeTween) {
+                this.activeTween.stop();
+            }
+            this.cardIsDragging = true
+            startX = pointer.x;
+            startY = pointer.y;
+
+            this.collider.scale = 30
+
+            this.activeTween = this.scene.tweens.add({
+                targets: this,
+                y: 517, // Move a carta para cima
+                angle: 0,
+                depth: 10,
+                scale: 0.65,
+                duration: 400,
+                ease: 'Power2',
+            });
+        });
+
+
+        this.collider.on('pointerup', () => {
+            if (this.activeTween) {
+                this.activeTween.stop();
+            }
+            this.cardIsDragging = false
+            this.collider.scale = 1
+
+            this.scene.events.emit('cardDropped', this)
+            console.log(this.state)
+            if (this.state == 'onBench') {
+                this.activeTween = this.scene.tweens.add({
+                    targets: this,
+                    x: this.restPosition.x,
+                    y: this.restPosition.y,
+                    angle: this.restPosition.angle,
+                    depth: this.restPosition.depth,
+                    scale: 0.28,
+                    duration: 200,
+                    ease: 'Power2',
+                });
+            }
+
+
+
+        });
+
+        this.collider.on('pointermove', (pointer) => {
+
+
+            if (this.cardIsDragging) {
+                const deltaX = pointer.x - startX;
+                const deltaY = pointer.y - startY;
+                if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
+                    this.activeTween.stop()
+                    this.angle = 0
+                    this.scale = 0.28 // 0.32
+                    this.depth = 50
+                    this.x = pointer.x
+                    this.y = pointer.y
+
+
+                }
+
+
+            }
+        });
+
+    }
+
+    onAttackMode() {
+        this.state = 'onAttack'
+        this.destroyCollider()
+        this.stopTween()
     }
 
     closedHandMode() {

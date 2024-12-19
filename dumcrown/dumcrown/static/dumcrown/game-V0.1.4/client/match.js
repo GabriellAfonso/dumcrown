@@ -170,6 +170,10 @@ export function animateCardToBench(data) {
     updateMatchData(data.data)
     emitToMatch('animateCardToBench', data)
 }
+export function animateCardToAttack(data) {
+    updateMatchData(data.data)
+    emitToMatch('animateCardToAttack', data)
+}
 export function matchMessage(data) {
     emitToMatch('message', data)
 }

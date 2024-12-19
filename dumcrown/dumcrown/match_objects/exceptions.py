@@ -8,6 +8,11 @@ class OpponentTurnException(GameException):
     pass
 
 
+class OpponentOffensiveTurnException(GameException):
+    """Exceção levantada quando o jogador tenta atacar sem ser o player ofensivo do round."""
+    pass
+
+
 class InsufficientEnergyException(GameException):
     """Exceção levantada quando o jogador não tem energia suficiente."""
     pass
@@ -18,6 +23,16 @@ class BenchFullException(GameException):
     pass
 
 
+class AttackZoneFullException(GameException):
+    """Exceção levantada quando a zona de ataque esta cheia."""
+    pass
+
+
 class InvalidCardTypeForBenchException(GameException):
     """Exceção levantada quando uma carta mágica é colocada no banco, o que não é permitido."""
+    pass
+
+
+class InvalidPlayCardInCombatException(GameException):
+    """Exceção levantada quando o jogador tenta adicionar uma carta ao banco enquanto ataca ou defende."""
     pass

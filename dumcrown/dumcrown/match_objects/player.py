@@ -15,6 +15,8 @@ class Player:
         self.border = data['border']
         self.board = data['board']
         self.bench = []
+        self.attack_zone = []
+        self.defense_zone = {}
         self.hp = 30
         self.energy = 10
         self.deck = PlayerDeck(data['deck'])
@@ -32,7 +34,10 @@ class Player:
         self.hp -= points
 
     def add_energy(self, points):
-        self.energy += points
+        if (self.energy + points) < 10:
+            self.energy += points
+            return
+        self.energy = 10
 
     def remove_energy(self, points: int):
         self.energy -= points
@@ -81,11 +86,15 @@ class Player:
 
     async def auto_pass_timer(self, match):
         try:
-            await asyncio.sleep(40)
+            await asyncio.sleep(80)
             asyncio.create_task(self.message('Seu Tempo Esta Acabando'))
 
-            await asyncio.sleep(10)
+            await asyncio.sleep(30)
             asyncio.create_task(self.message('Tempo limite Esgotado'))
+
+            if match.combat_mode:
+                match.player_clash(self)
+                return
 
             match.player_pass(self)
 
@@ -95,9 +104,11 @@ class Player:
 
     def add_to_bench(self, card_id):
         self.bench.append(card_id)
-
         self.hand.pop_card(card_id)
-        print(f'carta do {self.im} id: {card_id} adicionada ao bench')
+
+    def add_to_attack_zone(self, card_id):
+        self.attack_zone.append(card_id)
+        self.bench.remove(card_id)
 
     async def message(self, msg):
         await self.manager.message_to_player(
@@ -121,5 +132,7 @@ class Player:
             'button_text': self.button_text,
 
             'bench': self.bench,
+            'attack_zone': self.attack_zone,
+            'defense_zone': self.defense_zone,
         }
         return player

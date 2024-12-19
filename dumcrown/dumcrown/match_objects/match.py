@@ -1,6 +1,9 @@
 from datetime import datetime
 import asyncio
-from .exceptions import BenchFullException, OpponentTurnException, InsufficientEnergyException, InvalidCardTypeForBenchException
+from .exceptions import (BenchFullException, OpponentTurnException,
+                         InsufficientEnergyException, InvalidCardTypeForBenchException,
+                         OpponentOffensiveTurnException, AttackZoneFullException,
+                         InvalidPlayCardInCombatException)
 # vai receber os dados de player 1 e player2 e vai gerenciar a partida inteira
 
 
@@ -20,7 +23,7 @@ class Match:
         self.turn = 0  # Indica de quem é a vez (pode ser 1 ou 2).
         self.offensive_player = 0  # Indica de quem é o turno ofensivo do round
         self.timestamp = datetime.now()
-
+        self.combat_mode = False
         self.history = []
         self.start_match()
 
@@ -39,6 +42,12 @@ class Match:
             return self.player1
 
         return self.player2
+
+    def get_enemy(self, player):
+        if player.im == self.player1.im:
+            return self.player2
+
+        return self.player1
 
     def inital_draw(self):
         self.player1.change_button(1, 'PRONTO')
@@ -61,6 +70,7 @@ class Match:
 
             'turn': self.turn,
             'offensive_player': self.offensive_player,
+            'combat_mode ': self.combat_mode,
 
         }
         return match
@@ -78,9 +88,18 @@ class Match:
         self.round += 1
         self.player1.hand.draw_card()
         self.player2.hand.draw_card()
+
+        # self.player1.energy = 1
+        # self.player2.energy = 1
+
         self.toggle_ofensive_player()
         if self.round > 1:
+            self.refill_energy()
             asyncio.create_task(self.manager.new_round(self.id))
+
+    def refill_energy(self):
+        self.player1.add_energy(self.round)
+        self.player2.add_energy(self.round)
 
     def set_turn(self, turn):
         self.turn = turn
@@ -113,13 +132,28 @@ class Match:
         self.offensive_player = player
 
     def player_pass(self, player):
-        if self.is_my_turn(player):
-            player.cancel_auto_pass()
-            player.set_passed(True)
+        self.is_my_turn(player)
+        player.cancel_auto_pass()
+        player.set_passed(True)
+        if self.combat_mode:
+            pass
 
-            self.check_both_passed()
+        self.check_both_passed()
 
-            print(f'O player {player.im}, passou a vez')
+        print(f'O player {player.im}, passou a vez')
+
+    def player_clash(self, player):
+        self.is_my_turn(player)
+        player.cancel_auto_pass()
+        if player.im != self.offensive_player:
+            # aqui defende e resolve
+            return
+        # if atacando, mesma coisa de um pass normal
+        # if defendendo chama o clash_resolve
+        self.toggle_turn()
+        enemy = self.get_enemy(player)
+        enemy.change_button(1, 'Defender')
+        asyncio.create_task(self.manager.update_to_players(self.id))
 
     def finish_turn(self, player):
         player.cancel_auto_pass()
@@ -159,15 +193,36 @@ class Match:
         if card_id[0] == 's':
             raise InvalidCardTypeForBenchException('Ação Inválida')
 
+    def is_combat_mode(self):
+        if self.combat_mode:
+            raise InvalidPlayCardInCombatException('Ação Inválida em Combate')
+
     def player_play_card(self, player, card_id):
         self.is_my_turn(player)
+        self.is_combat_mode()
         self.is_bench_full(player)
         self.check_card_type(card_id)
         self.useEnergy(player, card_id)
 
         player.add_to_bench(card_id)
 
-        # tem que ter uma diferença entre passou a vez e fez uma açao
         self.finish_turn(player)
 
-    # def to_bench_validators(self):
+    def is_player_offensive(self, player):
+        if self.offensive_player != player.im:
+            raise OpponentOffensiveTurnException('Ação Inválida')
+
+    def is_attack_zone_full(self, player):
+        if len(player.attack_zone) >= 5:
+            raise AttackZoneFullException('Zona de ataque cheia')
+
+    def active_combat_mode(self, player):
+        self.combat_mode = True
+        player.change_button(1, 'ATACAR')
+
+    def player_offensive_card(self, player, card_id):
+        self.is_my_turn(player)
+        self.is_player_offensive(player)
+        self.is_attack_zone_full(player)
+        player.add_to_attack_zone(card_id)
+        self.active_combat_mode(player)

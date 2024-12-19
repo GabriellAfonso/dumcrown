@@ -234,6 +234,17 @@ export function showCoordinates(scene) {
     });
 }
 
+export function removeFromList(list, target) {
+    const indice = list.indexOf(target);
+    if (indice !== -1) {
+        list.splice(indice, 1);
+
+    } else {
+        console.log("Elemento não encontrado na lista");
+    }
+    return list
+}
+
 export function logoutAjax() {
     $.ajax({
         type: 'GET',

@@ -10,7 +10,7 @@ import { matchData as match } from '../client/match.js';
 import { clearCardsToSwap } from './swapButton.js';
 import { MatchHand } from './hand.js';
 import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
-import { sendSocket, sleep } from '../functions/functions.js';
+import { removeFromList, sendSocket, sleep } from '../functions/functions.js';
 import { crashSwords } from '../animations/scripts/attackingSwords.js';
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
@@ -84,15 +84,19 @@ export class MatchManager {
         //player
         this.playerBoard = this.scene.add.image(centerX, centerY, this.player.board);
         this.playerBench = []
+        this.playerAttackZone = []
+        this.playerDefenseZone = {}
         //enemy
         this.enemyBoard = this.scene.add.image(centerX, centerY - 2, this.enemy.board);
         this.enemyBoard.setScale(1, -1);
         this.enemyBench = []
 
-        this.boardCollider = this.scene.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0.3);
+        this.enemyAttackZone = []
+        this.enemyDefenseZone = {}
+
+        this.boardCollider = this.scene.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0);
         this.boardCollider.setInteractive();
 
-        this.benchColliders = []
     }
 
     createIcons() {
@@ -112,15 +116,15 @@ export class MatchManager {
 
     createDecks() {
         //player
-        this.playerDeck = this.scene.add.image(346, 669, 'cards_deck');
+        this.playerDeck = this.scene.add.image(326, 669, 'cards_deck');
         this.playerDeck.setScale(0.7)
-        this.playerFirsDeckCard = this.scene.add.image(346 - 10, 669 - 7, 'verse_card');
+        this.playerFirsDeckCard = this.scene.add.image(326 - 10, 669 - 7, 'verse_card');
         this.playerFirsDeckCard.setScale(0.4)
         this.playerFirsDeckCard.setDepth(1)
         //enemy
-        this.enemyDeck = this.scene.add.image(346, 100, 'cards_deck');
+        this.enemyDeck = this.scene.add.image(326, 100, 'cards_deck');
         this.enemyDeck.setScale(0.7, -0.7)
-        this.enemyFirsDeckCard = this.scene.add.image(346 + 10, 100 + 7, 'verse_card');
+        this.enemyFirsDeckCard = this.scene.add.image(326 + 10, 100 + 7, 'verse_card');
         this.enemyFirsDeckCard.setScale(0.4, -0.4)
         this.enemyFirsDeckCard.setDepth(1)
     }
@@ -311,15 +315,15 @@ export class MatchManager {
                 card_id: cardObj.getID(),
             }
             sendSocket('play_card', data)
-            //verificar no servidor se a pessoa pode fazer essa Açao
-
-
-            //esse resto o servidor que vai chamar em outra funçao
-            // cardObj.onBenchMode()
-            // retirar carta da mao
-            // openHandAnimation pra ajustar a posiçao das que ainda estao na mao
-            // cardObj.setPosition(centerX, centerY)
         }
+        if (cardObj.state == 'onBench') {
+            var data = {
+                match_id: this.id,
+                card_id: cardObj.getID(),
+            }
+            sendSocket('offensive_card', data)
+        }
+
 
     }
 
@@ -334,6 +338,7 @@ export class MatchManager {
     //se os dois passar a vez muda de round ---------X
     //trocar card layout no bench ---------X
     //indicaçao visual de quem esta no modo ofensivo ---------X
+    //
 
     cardToBench(data) {
         if (data.who == this.player.im) {
@@ -351,8 +356,6 @@ export class MatchManager {
             var card = this.getPlayerCardObj(cardID)
             this.playerHand.removeCard(card)
             this.playerBench.push(card)
-            card.onBenchMode()
-            card.setSmallLayout()
             this.playerHand.action()
             return
         }
@@ -363,10 +366,6 @@ export class MatchManager {
 
 
     benchPlayerAnimation() {
-        this.benchColliders.forEach((collider) => {
-            collider.destroy()
-        })
-        this.benchColliders = []
 
         const numCards = this.player.bench.length;
         const spacing = 115;
@@ -374,6 +373,7 @@ export class MatchManager {
 
         this.playerBench.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
+
             this.scene.tweens.add({
                 targets: card,
                 scale: 0.28,
@@ -384,18 +384,8 @@ export class MatchManager {
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
-                    const benchCardCollider = this.scene.add.rectangle(posX, 668, 328, 483, 0x000080);
-                    benchCardCollider.alpha = 0.2;
-                    benchCardCollider.angle = 0;
-                    benchCardCollider.setDepth(card.depth + 1);
-                    benchCardCollider.setScale(0.28);
-                    benchCardCollider.setInteractive();
-
-                    // adiciona as funcionalidades da carta no bench
-                    // scene.fieldCardAnimation(card, fieldCard);
-
-                    // Armazena a referência da carta no campo
-                    this.benchColliders.push(benchCardCollider)
+                    card.onBenchMode()
+                    card.setSmallLayout()
                 },
             });
         });
@@ -424,6 +414,85 @@ export class MatchManager {
             });
         });
     }
+
+
+    cardToAttack(data) {
+        //remover do bench
+        //adicionar ao playerAttackZone
+        if (data.who == this.player.im) {
+            this.addCardToAttack(data.who, data.card_id)
+            this.attackPlayerAnimation()
+            //faz animaçao player
+            return
+        }
+
+        this.addCardToAttack(data.who, data.card_id)
+        this.attackEnemyAnimation()
+    }
+    addCardToAttack(who, cardID) {
+        if (who == this.player.im) {
+            var card = this.getPlayerCardObj(cardID)
+            this.playerBench = removeFromList(this.playerBench, card)
+            this.playerAttackZone.push(card)
+            return
+        }
+        var card = this.getEnemyCardObj(cardID)
+        this.enemyBench = removeFromList(this.enemyBench, card)
+        this.enemyAttackZone.push(card)
+        // card.setSmallLayout()
+    }
+
+    attackPlayerAnimation() {
+
+        const numCards = this.player.attack_zone.length;
+        const spacing = 140;
+        const offsetX = (numCards - 1) * spacing / 2;
+
+        this.playerAttackZone.forEach((card, index) => {
+            const posX = centerX - offsetX + index * spacing;
+
+            this.scene.tweens.add({
+                targets: card,
+                scale: 0.38,
+                depth: 0,
+                angle: 0,
+                x: posX,
+                y: 490,
+                duration: 100,
+                ease: 'Linear',
+                onComplete: () => {
+                    card.onAttackMode()
+                    // card.setSmallLayout()
+                },
+            });
+        });
+    }
+    attackEnemyAnimation() {
+
+        const numCards = this.enemy.attack_zone.length;
+        const spacing = 140;
+        const offsetX = (numCards - 1) * spacing / 2;
+
+        this.enemyAttackZone.forEach((card, index) => {
+            const posX = centerX - offsetX + index * spacing;
+
+            this.scene.tweens.add({
+                targets: card,
+                scale: 0.38,
+                depth: 0,
+                angle: 0,
+                x: posX,
+                y: 280,
+                duration: 100,
+                ease: 'Linear',
+                onComplete: () => {
+                    // card.onAttackMode()
+                    // card.setSmallLayout()
+                },
+            });
+        });
+    }
+
     isOver(pointer, bounds) {
         var is = pointer.x >= bounds.x && pointer.x <= bounds.x + bounds.width &&
             pointer.y >= bounds.y && pointer.y <= bounds.y + bounds.height
@@ -441,6 +510,9 @@ export class MatchManager {
     updateData() {
         this.button.update()
         this.updateEnergy()
+        if (this.match.combat_mode && this.player.im != this.match.offensive_player && this.match.turn == this.player.im) {
+
+        }
     }
 
     updateEnergy() {

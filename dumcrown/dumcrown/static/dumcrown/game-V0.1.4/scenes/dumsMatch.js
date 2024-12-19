@@ -52,6 +52,9 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('animateCardToBench', (data) => {
             this.match.cardToBench(data)
         });
+        this.events.on('animateCardToAttack', (data) => {
+            this.match.cardToAttack(data)
+        });
 
 
 
