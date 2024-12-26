@@ -135,9 +135,9 @@ class MatchManager:
         match = self.matches[match_id]
         await self.consumer.send_to_group(match.id, 'new_round', match.get_match_data())
 
-    async def message_to_player(self, channel, msg):
+    async def message_to_player(self, channel, code, data=''):
         # TODO apos acabar a partida, deletar ela e todos os sistemas asyncronos vinculados
-        await self.consumer.send_to_channel(channel, 'match_message', msg)
+        await self.consumer.send_to_channel(channel, code, data)
 
     async def offensive_card(self, data):
         match = self.matches[data['match_id']]
@@ -157,6 +157,11 @@ class MatchManager:
         except Exception as msg:
             message = str(msg)
             await self.consumer.send_to_client('invalid_move', message)
+
+    async def player_attack(self, match_id):
+        match = self.matches[match_id]
+        player = match.who_i_am(self.user)
+        match.player_clash(player)
 
     # async def game_winner(self, user, data):
     #     if user.is_authenticated:

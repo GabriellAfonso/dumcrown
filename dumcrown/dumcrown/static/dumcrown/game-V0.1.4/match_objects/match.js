@@ -327,6 +327,24 @@ export class MatchManager {
 
     }
 
+    defenseMode() {
+        this.createDefenseHitbox()
+        console.log('ativou modo defesa')
+    }
+
+    createDefenseHitbox() {
+        const numCards = this.enemy.attack_zone.length;
+        const spacing = 140;
+        const offsetX = (numCards - 1) * spacing / 2;
+
+        console.log(numCards)
+        this.enemyAttackZone.forEach((card, index) => {
+            const posX = centerX - offsetX + index * spacing;
+            console.log('criou o hit')
+            var hitbox = this.scene.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.5);
+
+        });
+    }
 
     //TODO:
     //Botao indisponivel antes do initial draw terminar ---------X

@@ -112,7 +112,7 @@ class Player:
 
     async def message(self, msg):
         await self.manager.message_to_player(
-            self.channel, msg)
+            self.channel, 'match_message', msg)
 
     def get_player_data(self):
         player = {

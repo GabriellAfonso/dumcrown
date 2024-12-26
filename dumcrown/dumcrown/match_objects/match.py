@@ -148,12 +148,14 @@ class Match:
         if player.im != self.offensive_player:
             # aqui defende e resolve
             return
-        # if atacando, mesma coisa de um pass normal
-        # if defendendo chama o clash_resolve
+
         self.toggle_turn()
         enemy = self.get_enemy(player)
         enemy.change_button(1, 'Defender')
         asyncio.create_task(self.manager.update_to_players(self.id))
+        asyncio.create_task(self.manager.message_to_player(
+            enemy.channel, 'defense_mode'))
+        # mandar pro inimigo ativar o modo de defesa no client
 
     def finish_turn(self, player):
         player.cancel_auto_pass()

@@ -177,6 +177,11 @@ export function animateCardToAttack(data) {
 export function matchMessage(data) {
     emitToMatch('message', data)
 }
+export function defenseMode(data) {
+    console.log('recebeu defesa do servidor')
+
+    emitToMatch('defenseMode', data)
+}
 export function example(data) {
 
 }
