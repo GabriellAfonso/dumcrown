@@ -12,6 +12,15 @@ class UnitCard:
         self.defense = card['defense']
         self.state = 'onDeck'
 
+    def set_defense(self, value):
+        self.defense = value
+
+    def add_defense(self, value):
+        self.defense += value
+
+    def remove_defense(self, value):
+        self.defense -= value
+
     def get_data(self):
         return {
             'id': self.id,

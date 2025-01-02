@@ -88,7 +88,10 @@ export class MatchButton {
 
             }
             else if (this.text == 'ATACAR') {
-                sendSocket('player_attack', match.id)
+                sendSocket('player_clash', match.id)
+            }
+            else if (this.text == 'DEFENDER') {
+                sendSocket('player_clash', match.id)
             }
 
         });

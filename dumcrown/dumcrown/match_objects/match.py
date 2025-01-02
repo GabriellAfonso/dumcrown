@@ -70,7 +70,7 @@ class Match:
 
             'turn': self.turn,
             'offensive_player': self.offensive_player,
-            'combat_mode ': self.combat_mode,
+            'combat_mode': self.combat_mode,
 
         }
         return match
@@ -136,6 +136,7 @@ class Match:
         player.cancel_auto_pass()
         player.set_passed(True)
         if self.combat_mode:
+            # ???
             pass
 
         self.check_both_passed()
@@ -146,7 +147,7 @@ class Match:
         self.is_my_turn(player)
         player.cancel_auto_pass()
         if player.im != self.offensive_player:
-            # aqui defende e resolve
+            self.clash_resolve(player)
             return
 
         self.toggle_turn()
@@ -228,3 +229,38 @@ class Match:
         self.is_attack_zone_full(player)
         player.add_to_attack_zone(card_id)
         self.active_combat_mode(player)
+
+    def player_defensive_card(self, player, card_id, pos):
+        self.is_my_turn(player)
+        player.add_to_defense_zone(card_id, pos)
+
+    def clash_resolve(self, player):
+        attacker = self.get_enemy(player)
+        defender = player
+
+        for i in range(len(attacker.attack_zone)):
+            atk_card = self.get_card(attacker, attacker.attack_zone[i])
+            def_card = self.get_card(defender,  defender.attack_zone.get(i))
+
+            self.duel(atk_card, def_card)
+            ...
+
+    def get_card(self, player, card_id):
+        if card_id:
+            return player.deck.get_card_obj(card_id)
+        return None
+
+    def duel(self, atk_card, def_card):
+        diff = def_card['defense'] - atk_card['attack']
+
+        # diminui defesa da carta
+        def_card.remove_defense(atk_card.attack)
+
+        # verifica se a carta morreu
+        if def_card.defense < 1:
+            def_card.set_defense(0)
+
+            # acertar na vida o que passou
+
+    def update_card_data(self):
+        pass

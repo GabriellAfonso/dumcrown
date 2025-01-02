@@ -318,6 +318,11 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.destroyCollider()
         this.stopTween()
     }
+    onDefenseMode() {
+        this.state = 'onDefense'
+        this.destroyCollider()
+        this.stopTween()
+    }
 
     closedHandMode() {
         if (!this.handModeActive) {

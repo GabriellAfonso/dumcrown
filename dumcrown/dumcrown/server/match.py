@@ -158,7 +158,28 @@ class MatchManager:
             message = str(msg)
             await self.consumer.send_to_client('invalid_move', message)
 
-    async def player_attack(self, match_id):
+    async def defensive_card(self, data):
+        match = self.matches[data['match_id']]
+        player = match.who_i_am(self.user)
+        card = data['card_id']
+        pos = str(data['position'])
+        print('chamou o defensive card')
+
+        try:
+            match.player_defensive_card(player, card, pos)
+            inf = {
+                'who': player.im,
+                'card_id': card,
+                'data': match.get_match_data(),
+                'pos': pos,
+            }
+            await self.consumer.send_to_group(match.id, 'animate_card_to_defense', inf)
+
+        except Exception as msg:
+            message = str(msg)
+            await self.consumer.send_to_client('invalid_move', message)
+
+    async def player_clash(self, match_id):
         match = self.matches[match_id]
         player = match.who_i_am(self.user)
         match.player_clash(player)

@@ -30,6 +30,7 @@ export class MatchManager {
         // this.offensiveTurn = match.offensive_turn; // Indica de quem é o turno ofensivo do round
         this.history = [];
         this.energyNumbers = []
+        this.defensiveCardsPosition = {}
         // this.player = this.get_player();
         // this.enemy = this.get_enemy();
         this.start()
@@ -300,8 +301,12 @@ export class MatchManager {
         const pointer = this.scene.input.activePointer;
         const bounds = this.boardCollider.getBounds();
 
-
-
+        console.log(this.match)
+        console.log(this.defensiveHitbox)
+        if (this.match.combat_mode && this.defensiveHitbox) {
+            this.defensiveDropped(cardObj)
+            return
+        }
         //isOver boardCollider
         if (!this.isOver(pointer, bounds)) {
             console.log('O mouse não está sobre o retângulo.');
@@ -327,21 +332,42 @@ export class MatchManager {
 
     }
 
+    defensiveDropped(cardObj) {
+        const pointer = this.scene.input.activePointer;
+        const card = cardObj.getID()
+        this.defensiveHitbox.forEach((hitbox, index) => {
+            var bounds = hitbox.getBounds();
+            if (this.isOver(pointer, bounds)) {
+
+                var data = {
+                    match_id: this.id,
+                    card_id: card,
+                    position: index,
+                }
+                console.log('a carta ' + card + ' foi colocada no ' + index)
+                sendSocket('defensive_card', data)
+            }
+
+        })
+
+    }
+
     defenseMode() {
         this.createDefenseHitbox()
         console.log('ativou modo defesa')
     }
 
     createDefenseHitbox() {
+        this.defensiveHitbox = []
         const numCards = this.enemy.attack_zone.length;
         const spacing = 140;
         const offsetX = (numCards - 1) * spacing / 2;
 
-        console.log(numCards)
         this.enemyAttackZone.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
-            console.log('criou o hit')
-            var hitbox = this.scene.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.5);
+
+            var hitbox = this.scene.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.1);
+            this.defensiveHitbox.push(hitbox)
 
         });
     }
@@ -356,7 +382,7 @@ export class MatchManager {
     //se os dois passar a vez muda de round ---------X
     //trocar card layout no bench ---------X
     //indicaçao visual de quem esta no modo ofensivo ---------X
-    //
+    //ao apertar pronto sumir ou desativar botao de swap
 
     cardToBench(data) {
         if (data.who == this.player.im) {
@@ -440,7 +466,6 @@ export class MatchManager {
         if (data.who == this.player.im) {
             this.addCardToAttack(data.who, data.card_id)
             this.attackPlayerAnimation()
-            //faz animaçao player
             return
         }
 
@@ -460,6 +485,29 @@ export class MatchManager {
         // card.setSmallLayout()
     }
 
+    cardToDefense(data) {
+        console.log('entro no defense')
+        if (data.who == this.player.im) {
+            this.addCardToDefense(data.who, data.card_id, data.pos)
+            this.defensePlayerAnimation(data.card_id, data.pos)
+            return
+        }
+
+        this.addCardToDefense(data.who, data.card_id)
+        this.defenseEnemyAnimation(data.card_id, data.pos)
+    }
+    addCardToDefense(who, cardID, pos) {
+        if (who == this.player.im) {
+            var card = this.getPlayerCardObj(cardID)
+            this.playerBench = removeFromList(this.playerBench, card)
+            this.playerDefenseZone[pos] = card
+            return
+        }
+        var card = this.getEnemyCardObj(cardID)
+        this.enemyBench = removeFromList(this.enemyBench, card)
+        this.enemyDefenseZone[pos] = card
+        // card.setSmallLayout()
+    }
     attackPlayerAnimation() {
 
         const numCards = this.player.attack_zone.length;
@@ -480,7 +528,7 @@ export class MatchManager {
                 ease: 'Linear',
                 onComplete: () => {
                     card.onAttackMode()
-                    // card.setSmallLayout()
+                    this.benchPlayerAnimation()
                 },
             });
         });
@@ -504,13 +552,58 @@ export class MatchManager {
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
-                    // card.onAttackMode()
-                    // card.setSmallLayout()
+                    this.benchEnemyAnimation()
                 },
             });
         });
     }
 
+
+    defensePlayerAnimation(cardId, position) {
+        const cardObj = this.getPlayerCardObj(cardId)
+        const pos = this.defensiveHitbox[position]
+        // 0 - x: 470
+        // 1 - x: 610
+        // 2 - x: 750
+        // 3 - x: 890
+        // 4 - x: 1030
+
+        this.scene.tweens.add({
+            targets: cardObj,
+            scale: 0.38,
+            depth: 0,
+            angle: 0,
+            x: pos.x,
+            y: pos.y,
+            duration: 100,
+            ease: 'Linear',
+            onComplete: () => {
+                cardObj.onDefenseMode()
+                this.benchPlayerAnimation()
+            },
+        });
+
+    }
+    defenseEnemyAnimation(cardId, position) {
+        const cardObj = this.getEnemyCardObj(cardId)
+        const pos = this.playerAttackZone[position].x
+
+
+        this.scene.tweens.add({
+            targets: cardObj,
+            scale: 0.38,
+            depth: 0,
+            angle: 0,
+            x: pos,
+            y: 280,
+            duration: 100,
+            ease: 'Linear',
+            onComplete: () => {
+                this.benchEnemyAnimation()
+            },
+        });
+
+    }
     isOver(pointer, bounds) {
         var is = pointer.x >= bounds.x && pointer.x <= bounds.x + bounds.width &&
             pointer.y >= bounds.y && pointer.y <= bounds.y + bounds.height

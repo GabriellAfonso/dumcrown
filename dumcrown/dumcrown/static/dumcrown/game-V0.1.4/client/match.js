@@ -174,11 +174,16 @@ export function animateCardToAttack(data) {
     updateMatchData(data.data)
     emitToMatch('animateCardToAttack', data)
 }
+export function animateCardToDefense(data) {
+    console.log('chamou o animete defense')
+    updateMatchData(data.data)
+    emitToMatch('animateCardToDefense', data)
+}
 export function matchMessage(data) {
     emitToMatch('message', data)
 }
 export function defenseMode(data) {
-    console.log('recebeu defesa do servidor')
+    // console.log('recebeu defesa do servidor')
 
     emitToMatch('defenseMode', data)
 }

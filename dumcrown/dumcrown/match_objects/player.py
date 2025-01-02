@@ -110,6 +110,14 @@ class Player:
         self.attack_zone.append(card_id)
         self.bench.remove(card_id)
 
+    def add_to_defense_zone(self, card_id, pos):
+        if pos in self.defense_zone:
+            print('ja tem uma carta nessa posiçao')
+            return
+        self.defense_zone[pos] = card_id
+        print(self.defense_zone)
+        self.bench.remove(card_id)
+
     async def message(self, msg):
         await self.manager.message_to_player(
             self.channel, 'match_message', msg)
