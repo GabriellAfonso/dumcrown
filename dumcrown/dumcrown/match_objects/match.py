@@ -242,8 +242,16 @@ class Match:
             atk_card = self.get_card(attacker, attacker.attack_zone[i])
             def_card = self.get_card(defender,  defender.attack_zone.get(i))
 
-            self.duel(atk_card, def_card)
-            ...
+            if not def_card:
+                # bate direto na vida
+                # só retorna animaçao da movimentaçao da carta e o dano batendo na vida
+                ...
+
+            diff = self.duel(atk_card, def_card)
+
+            if diff < 0:
+                # bate na vida do defensor
+                ...
 
     def get_card(self, player, card_id):
         if card_id:
@@ -251,6 +259,9 @@ class Match:
         return None
 
     def duel(self, atk_card, def_card):
+        if not def_card:
+            return -atk_card['attack']
+
         diff = def_card['defense'] - atk_card['attack']
 
         # diminui defesa da carta
@@ -260,7 +271,7 @@ class Match:
         if def_card.defense < 1:
             def_card.set_defense(0)
 
-            # acertar na vida o que passou
+        return diff
 
     def update_card_data(self):
         pass

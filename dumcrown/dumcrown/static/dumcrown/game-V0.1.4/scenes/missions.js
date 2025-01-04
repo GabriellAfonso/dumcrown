@@ -29,8 +29,12 @@ export class MissionsScene extends Phaser.Scene {
         // const background2 = this.add.image(centerX, centerY, 'arena01');
         // background2.alpha = 0.4
         // background2.setScale(0.5)
-        this.battleField = this.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0.3);
+        this.battleField = this.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0);
         this.battleField.setInteractive()
+
+        this.showdaxuxa = this.add.rectangle(1393, centerY, 40, 40, 0xff0000, 1);
+        this.showdaxuxa.setInteractive()
+
 
 
         // this.battlefield.on('pointerup', () => {
@@ -70,11 +74,8 @@ export class MissionsScene extends Phaser.Scene {
         this.cards['s1'].setVisible(true)
         this.cards['s1'].setPosition(centerX, centerY)
         this.hand = [
-            this.cards['2'],
-            this.cards['s7'],
             this.cards['s1'],
             this.cards['s2'],
-
         ]
 
         for (var card of this.hand) {
@@ -85,35 +86,68 @@ export class MissionsScene extends Phaser.Scene {
         this.mao.closedHandAnimation()
         // this.initial_draw()
         showCoordinates(this)
-        var blackground = this.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
-        blackground.alpha = 0
-        simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
-            sleep(this, 2000, () => {
-                simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
-                    blackground.destroy()
-                }, 0)
-            })
 
-        }, 0.7)
+        // var blackground = this.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
+        // blackground.alpha = 0
+        // simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
+        //     sleep(this, 2000, () => {
+        //         simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
+        //             blackground.destroy()
+        //         }, 0)
+        //     })
 
-        this.roundText = this.add.text(centerX, centerY, 'RODADA ' + 1,
-            {
-                fontSize: '100px', fontFamily: 'Lexend Deca, sans-serif',
-                fontStyle: 'bold', fill: '#ffd700'
-            })
-        this.roundText.setOrigin(0.5, 0.5)
-        this.roundText.alpha = 0;
-        this.roundText.setShadow(2, 2, '#000', 2, false, true);
-        simpleTextTweens(this, this.roundText, centerX, centerY, 90, 0, 500, 1, () => {
-            simpleTextTweens(this, this.roundText, centerX, centerY, 90, 0, 500, 0, () => {
-                sleep(this, 1500, () => {
-                    //Comprar carta
+        // }, 0.7)
+
+        // this.roundText = this.add.text(centerX, centerY, 'RODADA ' + 1,
+        //     {
+        //         fontSize: '100px', fontFamily: 'Lexend Deca, sans-serif',
+        //         fontStyle: 'bold', fill: '#ffd700'
+        //     })
+        // this.roundText.setOrigin(0.5, 0.5)
+        // this.roundText.alpha = 0;
+        // this.roundText.setShadow(2, 2, '#000', 2, false, true);
+        // simpleTextTweens(this, this.roundText, centerX, centerY, 90, 0, 500, 1, () => {
+        //     simpleTextTweens(this, this.roundText, centerX, centerY, 90, 0, 500, 0, () => {
+        //         sleep(this, 1500, () => {
+        //             //Comprar carta
+        //         })
+        //     }, 2000)
+        // })
+
+        const card1 = this.cards['2']
+        card1.setVisible(true)
+        card1.setPosition(centerX, 490)
+        card1.setScale(0.38)
+
+
+
+        const card2 = this.cards['s7']
+        card2.setVisible(true)
+        card2.setPosition(centerX, 280)
+        card2.setScale(0.38)
+
+
+        this.showdaxuxa.on('pointerup', () => {
+            // simpleTweens(this, card1, centerX, 560, 0.38, 1, 0, 200, () => {
+            //     simpleTweens(this, card1, centerX, 460, 0.38, 1, 0, 100, () => {
+            //         simpleTweens(this, card1, centerX, 490, 0.38, 1, 0, 300, () => {
+            //             // carta adversaria recebe dano
+            //         })
+            //     })
+            // })
+
+            simpleTweens(this, card2, centerX, 210, 0.38, 1, 0, 200, () => {
+                simpleTweens(this, card2, centerX, 310, 0.38, 1, 0, 100, () => {
+                    simpleTweens(this, card2, centerX, 280, 0.38, 1, 0, 300, () => {
+                        // carta adversaria recebe dano
+                    })
                 })
-            }, 2000)
+            })
         })
-
-
     }
+
+
+
     initial_draw() {
         var list = []
         for (let card of this.hand) {
