@@ -17,6 +17,7 @@ class Player:
         self.bench = []
         self.attack_zone = []
         self.defense_zone = {}
+        self.graveyard = []
         self.hp = 30
         self.energy = 10
         self.deck = PlayerDeck(data['deck'])
@@ -38,6 +39,9 @@ class Player:
             self.energy += points
             return
         self.energy = 10
+
+    def add_graveyard(self, card):
+        self.graveyard.append(card)
 
     def remove_energy(self, points: int):
         self.energy -= points

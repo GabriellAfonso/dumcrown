@@ -628,6 +628,10 @@ export class MatchManager {
                 enemyCard.playDamageAnimation(-playerCard.attack.text)
                 simpleTweens(this.scene, playerCard, playerCard.x, 490, 0.38, 1, 0, 300, () => {
                     this.updateCardData(enemyCard, this.enemy)
+                    if (diff <= 0) {
+                        this.damageTakenAnimation(diff, this.enemy)
+                        enemyCard.death()
+                    }
                 })
             })
         })
@@ -645,11 +649,52 @@ export class MatchManager {
                 playerCard.playDamageAnimation(-enemyCard.attack.text)
                 simpleTweens(this.scene, enemyCard, enemyCard.x, 280, 0.38, 1, 0, 300, () => {
                     this.updateCardData(playerCard, this.player)
+                    if (diff <= 0) {
+                        this.damageTakenAnimation(diff, this.player)
+                        playerCard.death()
+                    }
                 })
             })
         })
 
 
+    }
+
+
+    damageTakenAnimation(value, owner) {
+
+        if (this.damageText) {
+            this.damageText.destroy()
+        }
+
+        var height = centerY + 100
+        if (owner.im != this.player.im) {
+            height = centerY - 100
+        }
+
+        this.damageText = this.scene.add.text(200, height, value ? value : '',
+            { fontSize: '40px', fill: '#FF0000', fontStyle: 'bold', fontFamily: 'sans-serif', });
+        this.damageText.setOrigin(0.5, 0.5);
+        this.damageText.setAlpha(0)
+
+        this.scene.tweens.add({
+            targets: this.damageText,
+            alpha: 1,
+            duration: 100,
+            ease: 'linear',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: this.damageText,
+                    delay: 500,
+                    alpha: 0,
+                    duration: 200,
+                    ease: 'linear',
+                    onComplete: () => {
+                        this.updateHp()
+                    }
+                });
+            }
+        });
     }
 
     updateCardData(card, owner) {
@@ -670,8 +715,14 @@ export class MatchManager {
         var card = this.enemyCards[id]
         return card
     }
-
+    updateHp() {
+        this.playerHp.text = this.player.hp
+        this.enemyHp.text = this.enemy.hp
+    }
     updateData() {
+        console.log(this.player.energy)
+        console.log(this.enemy.energy)
+
         this.button.update()
         this.updateEnergy()
         if (this.match.combat_mode && this.player.im != this.match.offensive_player && this.match.turn == this.player.im) {

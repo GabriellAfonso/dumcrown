@@ -403,6 +403,18 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
 
     }
+    death() {
+        this.scene.tweens.add({
+            targets: this,
+            alpha: 0,
+            delay: 200,
+            duration: 300,
+            ease: 'Linear',
+            onComplete: () => {
+                this.destroy()
+            },
+        });
+    }
 
 
 }

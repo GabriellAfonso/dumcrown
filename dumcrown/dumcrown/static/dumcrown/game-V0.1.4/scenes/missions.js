@@ -7,6 +7,7 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { switchScenes, logoutAjax, showCoordinates, sleep } from '../functions/functions.js';
 
 import { Botao } from '../functions/functions.js';
+import { add_text } from '../functions/texts.js';
 import { MatchHand } from '../match_objects/hand.js';
 import { InitialDrawManager } from '../match_objects/initialDrawManager.js';
 import { MatchManager } from '../match_objects/match.js';
@@ -86,7 +87,7 @@ export class MissionsScene extends Phaser.Scene {
         this.mao.closedHandAnimation()
         // this.initial_draw()
         showCoordinates(this)
-
+        this.createHp()
         // var blackground = this.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
         // blackground.alpha = 0
         // simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
@@ -132,6 +133,8 @@ export class MissionsScene extends Phaser.Scene {
                 simpleTweens(this, card1, centerX, 460, 0.38, 1, 0, 100, () => {
                     card2.playDamageAnimation(-2)
                     simpleTweens(this, card1, centerX, 490, 0.38, 1, 0, 300, () => {
+                        this.playerDamageTaken(-2)
+                        card2.death()
                     })
                 })
             })
@@ -164,6 +167,46 @@ export class MissionsScene extends Phaser.Scene {
 
     }
 
+
+    playerDamageTaken(value) {
+        var damage = this.add.text(200, centerY + 100, value,
+            { fontSize: '40px', fill: '#FF0000', fontStyle: 'bold', fontFamily: 'sans-serif', });
+        damage.setOrigin(0.5, 0.5);
+        damage.setAlpha(0)
+
+        this.tweens.add({
+            targets: damage,
+            alpha: 1,
+            duration: 100,
+            ease: 'linear',
+            onComplete: () => {
+                this.tweens.add({
+                    targets: damage,
+                    delay: 500,
+                    alpha: 0,
+                    duration: 200,
+                    ease: 'linear',
+                    onComplete: () => {
+
+                    }
+                });
+            }
+        });
+    }
+    createHp() {
+        //player
+        this.playerHpBar = this.add.image(110, centerY + 100, 'hpbar');
+        this.playerHpBar.setScale(0.35)
+        this.playerHpIcon = this.add.image(80, centerY + 100, 'yourcrown');
+        this.playerHpIcon.setScale(0.35)
+        this.playerHp = add_text(this, 140, centerY + 100, 30, '30px', 0.5)
+        //enemy
+        this.enemyHpBar = this.add.image(110, centerY - 100, 'hpbar');
+        this.enemyHpBar.setScale(0.35)
+        this.enemyHpIcon = this.add.image(80, centerY - 100, 'enemycrown');
+        this.enemyHpIcon.setScale(0.35)
+        this.enemyHp = add_text(this, 140, centerY - 100, 30, '30px', 0.5)
+    }
     update() {
         // Lógica de atualização do jogo (executada continuamente durante o jogo).
     }

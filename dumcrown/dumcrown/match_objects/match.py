@@ -148,7 +148,8 @@ class Match:
         player.cancel_auto_pass()
         if player.im != self.offensive_player:
             print('chamou o resolve clash')
-            self.clash_resolve(player)
+            asyncio.create_task(self.clash_resolve(player))
+
             return
 
         self.toggle_turn()
@@ -157,7 +158,6 @@ class Match:
         asyncio.create_task(self.manager.update_to_players(self.id))
         asyncio.create_task(self.manager.message_to_player(
             enemy.channel, 'defense_mode'))
-        # mandar pro inimigo ativar o modo de defesa no client
 
     def finish_turn(self, player):
         player.cancel_auto_pass()
@@ -235,7 +235,7 @@ class Match:
         self.is_my_turn(player)
         player.add_to_defense_zone(card_id, pos)
 
-    def clash_resolve(self, player):
+    async def clash_resolve(self, player):
         attacker = self.get_enemy(player)
         defender = player
 
@@ -251,6 +251,11 @@ class Match:
 
             diff = self.duel(atk_card, def_card)
 
+            # bate diretamente na vida
+            if diff < 0:
+                defender.remove_hp(abs(diff))
+                defender.add_graveyard(def_card.id)
+
             data = {
                 'line': i,
                 'diff': diff,
@@ -258,12 +263,8 @@ class Match:
             }
             print('mandou pro client')
 
-            asyncio.create_task(self.manager.send_to_players(
-                self.id, 'clash_line', data))
-
-            if diff < 0:
-                # bate na vida do defensor
-                ...
+            await self.manager.send_to_players(self.id, 'clash_line', data)
+            await asyncio.sleep(1)
 
     def get_card(self, player, card_id):
         if card_id:
@@ -282,7 +283,6 @@ class Match:
         # verifica se a carta morreu
         if def_card.defense < 1:
             def_card.set_defense(0)
-            # fazer ela morrer e ir pro cemiterio
 
         return diff
 

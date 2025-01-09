@@ -89,6 +89,7 @@ export class Loading extends Phaser.Scene {
         this.load.image('default_board_button_active', PATH + '/images/boards/default/button/board_button_active.png');
         this.load.image('default_board_energy_holder', PATH + '/images/boards/default/energy/energy_placeholder.png');
         this.load.image('default_energy_0', PATH + '/images/boards/default/energy/0.png');
+        this.load.image('default_energy_1', PATH + '/images/boards/default/energy/1.png');
         this.load.image('default_energy_2', PATH + '/images/boards/default/energy/2.png');
         this.load.image('default_energy_3', PATH + '/images/boards/default/energy/3.png');
         this.load.image('default_energy_4', PATH + '/images/boards/default/energy/4.png');
