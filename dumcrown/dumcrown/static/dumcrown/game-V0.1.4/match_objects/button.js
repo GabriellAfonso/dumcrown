@@ -91,6 +91,7 @@ export class MatchButton {
                 sendSocket('player_clash', match.id)
             }
             else if (this.text == 'DEFENDER') {
+                console.log('mandou player clash pro servidor')
                 sendSocket('player_clash', match.id)
             }
 

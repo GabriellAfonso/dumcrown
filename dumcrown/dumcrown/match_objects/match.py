@@ -147,12 +147,13 @@ class Match:
         self.is_my_turn(player)
         player.cancel_auto_pass()
         if player.im != self.offensive_player:
+            print('chamou o resolve clash')
             self.clash_resolve(player)
             return
 
         self.toggle_turn()
         enemy = self.get_enemy(player)
-        enemy.change_button(1, 'Defender')
+        enemy.change_button(1, 'DEFENDER')
         asyncio.create_task(self.manager.update_to_players(self.id))
         asyncio.create_task(self.manager.message_to_player(
             enemy.channel, 'defense_mode'))
@@ -240,7 +241,8 @@ class Match:
 
         for i in range(len(attacker.attack_zone)):
             atk_card = self.get_card(attacker, attacker.attack_zone[i])
-            def_card = self.get_card(defender,  defender.attack_zone.get(i))
+            def_card = self.get_card(
+                defender, defender.defense_zone.get(str(i)))
 
             if not def_card:
                 # bate direto na vida
@@ -248,6 +250,16 @@ class Match:
                 ...
 
             diff = self.duel(atk_card, def_card)
+
+            data = {
+                'line': i,
+                'diff': diff,
+                'match': self.get_match_data(),
+            }
+            print('mandou pro client')
+
+            asyncio.create_task(self.manager.send_to_players(
+                self.id, 'clash_line', data))
 
             if diff < 0:
                 # bate na vida do defensor
@@ -260,9 +272,9 @@ class Match:
 
     def duel(self, atk_card, def_card):
         if not def_card:
-            return -atk_card['attack']
+            return -atk_card.attack
 
-        diff = def_card['defense'] - atk_card['attack']
+        diff = def_card.defense - atk_card.attack
 
         # diminui defesa da carta
         def_card.remove_defense(atk_card.attack)
@@ -270,6 +282,7 @@ class Match:
         # verifica se a carta morreu
         if def_card.defense < 1:
             def_card.set_defense(0)
+            # fazer ela morrer e ir pro cemiterio
 
         return diff
 

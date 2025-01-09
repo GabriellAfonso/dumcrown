@@ -187,6 +187,11 @@ export function defenseMode(data) {
 
     emitToMatch('defenseMode', data)
 }
+export function clashLine(data) {
+    console.log('recebeu clashLine')
+    updateMatchData(data.match)
+    emitToMatch('clashLine', data)
+}
 export function example(data) {
 
 }

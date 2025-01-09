@@ -349,6 +349,61 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         }
     }
 
+    playDamageAnimation(value) {
+        console.log('playou a animaçao')
+        // Cria uma imagem para usar como máscara
+        // Obtém a posição global do cardLayout dentro do container
+        const worldX = this.cardLayout.getWorldTransformMatrix().tx;
+        const worldY = this.cardLayout.getWorldTransformMatrix().ty;
+
+        // Cria uma imagem para usar como máscara, ajustando posição e escala
+        const maskImage = this.scene.add.image(worldX, worldY, 'card_mask')
+            .setOrigin(this.cardLayout.originX, this.cardLayout.originY) // Alinha com o layout da carta
+            .setScale(this.cardLayout.scaleX * this.scaleX, this.cardLayout.scaleY * this.scaleY); // Ajusta escala relativa ao container
+
+        // Cria a máscara baseada na imagem
+        const mask = maskImage.createBitmapMask();
+
+        // Cria o retângulo branco que será mascarado
+        this.whiteDamage = this.scene.add.rectangle(worldX, worldY, this.cardLayout.displayWidth, this.cardLayout.displayHeight, 0xffffff)
+            .setOrigin(0.5, 0.5)
+            .setAlpha(0)
+        // .setDepth(99); // Começa invisível
+
+        // Aplica a máscara ao retângulo
+        this.whiteDamage.setMask(mask);
+
+        // Remove a imagem da máscara da cena (não precisa ser visível)
+        maskImage.setVisible(false);
+
+        this.damageTaken = this.scene.add.text(worldX, worldY, value,
+            { fontSize: '70px', fill: '#FF0000', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
+        this.damageTaken.setOrigin(0.5, 0.5);
+        // this.damageTaken.setDepth(100)
+        this.damageTaken.setAlpha(1)
+
+
+        this.activeTween = this.scene.tweens.add({
+            targets: [this.whiteDamage, this.damageTaken],
+            alpha: { from: 0, to: 1 },
+            duration: 200,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: [this.whiteDamage, this.damageTaken],
+                    alpha: 0,
+                    duration: 400,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        this.whiteDamage.destroy()
+                    },
+                });
+            },
+        });
+
+
+    }
+
 
 }
 
@@ -375,6 +430,11 @@ export class CardObject extends BaseCardObject {
         super.createCard(id, data);
         this.attack.text = data.attack;
         this.defense.text = data.defense;
+    }
+
+    update(data) {
+        this.attack.text = data.attack
+        this.defense.text = data.defense
     }
 
     clone() {

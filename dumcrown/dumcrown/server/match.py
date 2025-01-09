@@ -131,6 +131,11 @@ class MatchManager:
         match = self.matches[match_id]
         await self.consumer.send_to_group(match.id, 'update_match_data', match.get_match_data())
 
+    async def send_to_players(self, match_id, code, data):
+        print('send to payers')
+        match = self.matches[match_id]
+        await self.consumer.send_to_group(match.id, code, data)
+
     async def new_round(self, match_id):
         match = self.matches[match_id]
         await self.consumer.send_to_group(match.id, 'new_round', match.get_match_data())
@@ -180,6 +185,7 @@ class MatchManager:
             await self.consumer.send_to_client('invalid_move', message)
 
     async def player_clash(self, match_id):
+        print('player clash')
         match = self.matches[match_id]
         player = match.who_i_am(self.user)
         match.player_clash(player)

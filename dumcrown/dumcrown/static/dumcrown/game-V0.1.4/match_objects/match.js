@@ -493,7 +493,7 @@ export class MatchManager {
             return
         }
 
-        this.addCardToDefense(data.who, data.card_id)
+        this.addCardToDefense(data.who, data.card_id, data.pos)
         this.defenseEnemyAnimation(data.card_id, data.pos)
     }
     addCardToDefense(who, cardID, pos) {
@@ -506,6 +506,8 @@ export class MatchManager {
         var card = this.getEnemyCardObj(cardID)
         this.enemyBench = removeFromList(this.enemyBench, card)
         this.enemyDefenseZone[pos] = card
+        console.log(pos)
+        console.log(this.enemyDefenseZone)
         // card.setSmallLayout()
     }
     attackPlayerAnimation() {
@@ -604,6 +606,57 @@ export class MatchManager {
         });
 
     }
+
+    clashLine(data) {
+        console.log('entrou no clashline')
+        if (this.player.im == this.match.offensive_player) {
+            this.playerAnimationAtk(data.line, data.diff)
+            return
+        }
+        this.enemyAnimationAtk(data.line, data.diff)
+    }
+    playerAnimationAtk(line, diff) {
+        console.log('entrou no aniamtion atk')
+        const playerCard = this.playerAttackZone[line]
+        console.log(this.enemyDefenseZone)
+        const enemyCard = this.enemyDefenseZone[line]
+
+
+
+        simpleTweens(this.scene, playerCard, playerCard.x, 560, 0.38, 1, 0, 200, () => {
+            simpleTweens(this.scene, playerCard, playerCard.x, 460, 0.38, 1, 0, 100, () => {
+                enemyCard.playDamageAnimation(-playerCard.attack.text)
+                simpleTweens(this.scene, playerCard, playerCard.x, 490, 0.38, 1, 0, 300, () => {
+                    this.updateCardData(enemyCard, this.enemy)
+                })
+            })
+        })
+
+    }
+    enemyAnimationAtk(line, diff) {
+        // console.log('entrou no aniamtion atk')
+        const enemyCard = this.enemyAttackZone[line]
+        const playerCard = this.playerDefenseZone[line]
+
+
+
+        simpleTweens(this.scene, enemyCard, enemyCard.x, 210, 0.38, 1, 0, 200, () => {
+            simpleTweens(this.scene, enemyCard, enemyCard.x, 310, 0.38, 1, 0, 100, () => {
+                playerCard.playDamageAnimation(-enemyCard.attack.text)
+                simpleTweens(this.scene, enemyCard, enemyCard.x, 280, 0.38, 1, 0, 300, () => {
+                    this.updateCardData(playerCard, this.player)
+                })
+            })
+        })
+
+
+    }
+
+    updateCardData(card, owner) {
+        var data = owner.deck_obj[card.id]
+        card.update(data)
+    }
+
     isOver(pointer, bounds) {
         var is = pointer.x >= bounds.x && pointer.x <= bounds.x + bounds.width &&
             pointer.y >= bounds.y && pointer.y <= bounds.y + bounds.height

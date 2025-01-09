@@ -121,28 +121,29 @@ export class MissionsScene extends Phaser.Scene {
 
 
 
-        const card2 = this.cards['s7']
+        const card2 = this.cards['9']
         card2.setVisible(true)
         card2.setPosition(centerX, 280)
         card2.setScale(0.38)
 
 
         this.showdaxuxa.on('pointerup', () => {
-            // simpleTweens(this, card1, centerX, 560, 0.38, 1, 0, 200, () => {
-            //     simpleTweens(this, card1, centerX, 460, 0.38, 1, 0, 100, () => {
-            //         simpleTweens(this, card1, centerX, 490, 0.38, 1, 0, 300, () => {
-            //             // carta adversaria recebe dano
-            //         })
-            //     })
-            // })
-
-            simpleTweens(this, card2, centerX, 210, 0.38, 1, 0, 200, () => {
-                simpleTweens(this, card2, centerX, 310, 0.38, 1, 0, 100, () => {
-                    simpleTweens(this, card2, centerX, 280, 0.38, 1, 0, 300, () => {
-                        // carta adversaria recebe dano
+            simpleTweens(this, card1, centerX, 560, 0.38, 1, 0, 200, () => {
+                simpleTweens(this, card1, centerX, 460, 0.38, 1, 0, 100, () => {
+                    card2.playDamageAnimation(-2)
+                    simpleTweens(this, card1, centerX, 490, 0.38, 1, 0, 300, () => {
                     })
                 })
             })
+
+            // simpleTweens(this, card2, centerX, 210, 0.38, 1, 0, 200, () => {
+            //     simpleTweens(this, card2, centerX, 310, 0.38, 1, 0, 100, () => {
+            //         card1.playDamageAnimation()
+            //         simpleTweens(this, card2, centerX, 280, 0.38, 1, 0, 300, () => {
+
+            //         })
+            //     })
+            // })
         })
     }
 

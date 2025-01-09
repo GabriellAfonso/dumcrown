@@ -44,6 +44,9 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('defenseMode', () => {
             this.match.defenseMode()
         });
+        this.events.on('clashLine', (data) => {
+            this.match.clashLine(data)
+        });
 
         this.events.on('invalidMove', (msg) => {
             this.match.invalidMoveMsg(msg)
