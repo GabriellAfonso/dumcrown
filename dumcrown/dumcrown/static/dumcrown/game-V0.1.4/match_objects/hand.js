@@ -58,7 +58,12 @@ export class MatchHand {
         this.closedHandBox.depth = 10
         this.state = 0
     }
-
+    closeHand() {
+        this.closedHandAnimation()
+        this.closedHandBox.setScale(1)
+        this.closedHandBox.depth = 10
+        this.state = 0
+    }
     closedHandAnimation() {
         const configs = {
             1: [[1310, 695, 0, 300]],

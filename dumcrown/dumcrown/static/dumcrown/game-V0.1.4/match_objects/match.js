@@ -101,6 +101,7 @@ export class MatchManager {
         this.playerBench = []
         this.playerAttackZone = []
         this.playerDefenseZone = {}
+        this.defensiveHitbox = []
         //enemy
         this.enemyBoard = this.scene.add.image(centerX, centerY - 2, this.enemy.board);
         this.enemyBoard.setScale(1, -1);
@@ -314,10 +315,10 @@ export class MatchManager {
     cardDropped(cardObj) {
         const pointer = this.scene.input.activePointer;
         const bounds = this.boardCollider.getBounds();
-
-        console.log(this.match)
-        console.log(this.defensiveHitbox)
-        if (this.match.combat_mode && this.defensiveHitbox) {
+        console.log('Entrou no dropped')
+        if (this.match.combat_mode && this.defensiveHitbox.length > 0) {
+            console.log(this.defensiveHitbox)
+            console.log('Modo defensivo??')
             this.defensiveDropped(cardObj)
             return
         }
@@ -329,21 +330,25 @@ export class MatchManager {
 
         console.log('O mouse está sobre o retângulo!');
         if (cardObj.state == 'onHand') {
+            console.log('enviando errado?')
             var data = {
                 match_id: this.id,
                 card_id: cardObj.getID(),
             }
             sendSocket('play_card', data)
+            return
         }
         if (cardObj.state == 'onBench') {
+            console.log('dropeed enviando pro server')
             var data = {
                 match_id: this.id,
                 card_id: cardObj.getID(),
             }
             sendSocket('offensive_card', data)
+            return
         }
 
-
+        console.log('dropeed fez bosta nenhuma')
     }
 
     defensiveDropped(cardObj) {
@@ -386,6 +391,13 @@ export class MatchManager {
         });
     }
 
+    destroyDefenseHitbox() {
+        this.defensiveHitbox.forEach((hitbox) => {
+            hitbox.destroy()
+        })
+        this.defensiveHitbox = []
+    }
+
     //TODO:
     //Botao indisponivel antes do initial draw terminar ---------X
     //botao de passar a vez (passar o mouse em cima muda de "sua VEZ" pra "passar") ---------X
@@ -396,9 +408,10 @@ export class MatchManager {
     //se os dois passar a vez muda de round ---------X
     //trocar card layout no bench ---------X
     //indicaçao visual de quem esta no modo ofensivo ---------X
-    //ao apertar pronto sumir ou desativar botao de swap
+    //ao apertar pronto sumir ou desativar botao de swap 
 
     cardToBench(data) {
+        console.log('chamou o card to bench, ' + data)
         if (data.who == this.player.im) {
             // this.updateBenchObj()
             this.addCardToBench(data.who, data.card_id)
@@ -414,7 +427,7 @@ export class MatchManager {
             var card = this.getPlayerCardObj(cardID)
             this.playerHand.removeCard(card)
             this.playerBench.push(card)
-            this.playerHand.action()
+            this.playerHand.closeHand()
             return
         }
         var card = this.getEnemyCardObj(cardID)
@@ -621,76 +634,11 @@ export class MatchManager {
 
     }
 
-    // clashLine(data) {
-    //     console.log('entrou no clashline')
-    //     if (this.player.im == this.match.offensive_player) {
-    //         this.playerAnimationAtk(data.line, data.diff)
-    //         return
-    //     }
-    //     this.enemyAnimationAtk(data.line, data.diff)
-    // }
 
-
-
-
-
-
-    // playerAnimationAtk(line, diff) {
-    //     console.log('entrou no aniamtion atk')
-    //     const playerCard = this.playerAttackZone[line]
-    //     console.log(this.enemyDefenseZone)
-    //     const enemyCard = this.enemyDefenseZone[line]
-
-
-
-    //     simpleTweens(this.scene, playerCard, playerCard.x, 560, 0.38, 1, 0, 200, () => {
-    //         simpleTweens(this.scene, playerCard, playerCard.x, 460, 0.38, 1, 0, 100, () => {
-    //             if (enemyCard) {
-    //                 enemyCard.playDamageAnimation(-playerCard.attack.text)
-    //             }
-    //             simpleTweens(this.scene, playerCard, playerCard.x, 490, 0.38, 1, 0, 300, () => {
-    //                 this.updateCardData(enemyCard, this.enemy)
-    //                 if (diff <= 0) {
-    //                     this.damageTakenAnimation(diff, this.enemy)
-    //                     if (enemyCard) {
-    //                         enemyCard.death()
-    //                     }
-    //                 }
-    //             })
-    //         })
-    //     })
-
-    // }
-    // enemyAnimationAtk(line, diff) {
-    //     // console.log('entrou no aniamtion atk')
-    //     const enemyCard = this.enemyAttackZone[line]
-    //     const playerCard = this.playerDefenseZone[line]
-
-
-
-    //     simpleTweens(this.scene, enemyCard, enemyCard.x, 210, 0.38, 1, 0, 200, () => {
-    //         simpleTweens(this.scene, enemyCard, enemyCard.x, 310, 0.38, 1, 0, 100, () => {
-    //             if (playerCard) {
-    //                 playerCard.playDamageAnimation(-enemyCard.attack.text)
-    //             }
-    //             simpleTweens(this.scene, enemyCard, enemyCard.x, 280, 0.38, 1, 0, 300, () => {
-    //                 this.updateCardData(playerCard, this.player)
-    //                 if (diff <= 0) {
-    //                     this.damageTakenAnimation(diff, this.player)
-    //                     if (playerCard) {
-    //                         playerCard.death()
-    //                     }
-
-    //                 }
-    //             })
-    //         })
-    //     })
-
-
-    // }
 
     clashLine(data) {
         console.log('Entrou no clashLine');
+        this.destroyDefenseHitbox()
         const isPlayerOffensive = this.player.im === this.match.offensive_player;
         this.executeAnimationAtk(
             data.line,
@@ -721,6 +669,7 @@ export class MatchManager {
             if (defenderCard) {
                 defenderCard.playDamageAnimation(-attackerCard.attack.text);
             }
+            //TODO quando nao tiver carta, fazer um pisca vermelho na arena do inimigo ou algo assim
 
             // Retorno após o ataque
             await this.animateCard(attackerCard, attackerCard.x, returnY, 300);
@@ -728,8 +677,6 @@ export class MatchManager {
             if (defenderCard) {
                 this.updateCardData(defenderCard, targetPlayer);
             }
-
-            // Atualiza os dados do defensor e processa o dano
 
 
             if (diff <= 0) {

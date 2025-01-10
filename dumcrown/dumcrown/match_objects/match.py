@@ -221,6 +221,9 @@ class Match:
             raise AttackZoneFullException('Zona de ataque cheia')
 
     def active_combat_mode(self, player):
+        if self.combat_mode:
+            return
+
         self.combat_mode = True
         player.change_button(1, 'ATACAR')
 
@@ -248,8 +251,9 @@ class Match:
 
             if diff < 0:
                 defender.remove_hp(abs(diff))
-                if def_card:
-                    defender.add_graveyard(def_card.id)
+
+            if def_card.is_dead():
+                defender.add_graveyard(def_card.id, str(i))
 
             data = {
                 'line': i,
@@ -260,6 +264,34 @@ class Match:
 
             await self.manager.send_to_players(self.id, 'clash_line', data)
             await asyncio.sleep(1)
+
+        await asyncio.sleep(1)
+        self.combat_mode = False
+        await self.return_cards_to_bench(attacker, defender)
+        self.new_round()
+        # devolver as cartas vivas ao banco dos seus donos
+
+    async def return_cards_to_bench(self, attacker, defender):
+        for card in attacker.attack_zone:
+            attacker.bench.append(card)
+            inf = {
+                'who': attacker.im,
+                'card_id': card,
+                'data': self.get_match_data(),
+            }
+            await self.manager.send_to_players(self.id, 'animate_card_to_bench', inf)
+
+        for card in defender.defense_zone.values():
+            defender.bench.append(card)
+            inf = {
+                'who': defender.im,
+                'card_id': card,
+                'data': self.get_match_data(),
+            }
+            await self.manager.send_to_players(self.id, 'animate_card_to_bench', inf)
+
+        attacker.attack_zone.clear()
+        defender.defense_zone.clear()
 
     def get_card(self, player, card_id):
         if card_id:

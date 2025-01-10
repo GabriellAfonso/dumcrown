@@ -40,7 +40,9 @@ class Player:
             return
         self.energy = 10
 
-    def add_graveyard(self, card):
+    def add_graveyard(self, card, key):
+        print(f'a carta {card} de chave {key}, foi pro cemiterio')
+        self.defense_zone.pop(key)
         self.graveyard.append(card)
 
     def remove_energy(self, points: int):
@@ -146,5 +148,7 @@ class Player:
             'bench': self.bench,
             'attack_zone': self.attack_zone,
             'defense_zone': self.defense_zone,
+            'graveyard':  self.graveyard,
+
         }
         return player

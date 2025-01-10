@@ -21,6 +21,12 @@ class UnitCard:
     def remove_defense(self, value):
         self.defense -= value
 
+    def is_dead(self):
+        if self.defense <= 0:
+            return True
+
+        return False
+
     def get_data(self):
         return {
             'id': self.id,
