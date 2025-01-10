@@ -63,6 +63,20 @@ export class MatchManager {
         return match.player1;
     }
 
+    get_offensive_player() {
+        if (this.match.offensive_player == this.player.im) {
+            return this.player
+        }
+        return this.enemy
+    }
+
+    get_defensive_player() {
+        if (this.match.offensive_player != this.player.im) {
+            return this.player
+        }
+        return this.enemy
+    }
+
     start() {
         this.create_scene()
         //fazer animaçao de zoom da cena inteira ao começar
@@ -607,59 +621,135 @@ export class MatchManager {
 
     }
 
+    // clashLine(data) {
+    //     console.log('entrou no clashline')
+    //     if (this.player.im == this.match.offensive_player) {
+    //         this.playerAnimationAtk(data.line, data.diff)
+    //         return
+    //     }
+    //     this.enemyAnimationAtk(data.line, data.diff)
+    // }
+
+
+
+
+
+
+    // playerAnimationAtk(line, diff) {
+    //     console.log('entrou no aniamtion atk')
+    //     const playerCard = this.playerAttackZone[line]
+    //     console.log(this.enemyDefenseZone)
+    //     const enemyCard = this.enemyDefenseZone[line]
+
+
+
+    //     simpleTweens(this.scene, playerCard, playerCard.x, 560, 0.38, 1, 0, 200, () => {
+    //         simpleTweens(this.scene, playerCard, playerCard.x, 460, 0.38, 1, 0, 100, () => {
+    //             if (enemyCard) {
+    //                 enemyCard.playDamageAnimation(-playerCard.attack.text)
+    //             }
+    //             simpleTweens(this.scene, playerCard, playerCard.x, 490, 0.38, 1, 0, 300, () => {
+    //                 this.updateCardData(enemyCard, this.enemy)
+    //                 if (diff <= 0) {
+    //                     this.damageTakenAnimation(diff, this.enemy)
+    //                     if (enemyCard) {
+    //                         enemyCard.death()
+    //                     }
+    //                 }
+    //             })
+    //         })
+    //     })
+
+    // }
+    // enemyAnimationAtk(line, diff) {
+    //     // console.log('entrou no aniamtion atk')
+    //     const enemyCard = this.enemyAttackZone[line]
+    //     const playerCard = this.playerDefenseZone[line]
+
+
+
+    //     simpleTweens(this.scene, enemyCard, enemyCard.x, 210, 0.38, 1, 0, 200, () => {
+    //         simpleTweens(this.scene, enemyCard, enemyCard.x, 310, 0.38, 1, 0, 100, () => {
+    //             if (playerCard) {
+    //                 playerCard.playDamageAnimation(-enemyCard.attack.text)
+    //             }
+    //             simpleTweens(this.scene, enemyCard, enemyCard.x, 280, 0.38, 1, 0, 300, () => {
+    //                 this.updateCardData(playerCard, this.player)
+    //                 if (diff <= 0) {
+    //                     this.damageTakenAnimation(diff, this.player)
+    //                     if (playerCard) {
+    //                         playerCard.death()
+    //                     }
+
+    //                 }
+    //             })
+    //         })
+    //     })
+
+
+    // }
+
     clashLine(data) {
-        console.log('entrou no clashline')
-        if (this.player.im == this.match.offensive_player) {
-            this.playerAnimationAtk(data.line, data.diff)
-            return
+        console.log('Entrou no clashLine');
+        const isPlayerOffensive = this.player.im === this.match.offensive_player;
+        this.executeAnimationAtk(
+            data.line,
+            data.diff,
+            isPlayerOffensive ? this.playerAttackZone : this.enemyAttackZone,
+            isPlayerOffensive ? this.enemyDefenseZone : this.playerDefenseZone,
+            isPlayerOffensive ? this.enemy : this.player,
+            isPlayerOffensive ? 560 : 210, // Coordenada Y para o atacante
+            isPlayerOffensive ? 460 : 310, // Coordenada Y do ataque
+            isPlayerOffensive ? 490 : 280  // Coordenada Y para o retorno
+        );
+    }
+
+    async executeAnimationAtk(line, diff, attackZone, defenseZone, targetPlayer, attackY, clashY, returnY) {
+        console.log('Entrou na animação de ataque');
+
+        const attackerCard = attackZone[line];
+        const defenderCard = defenseZone[line];
+
+        try {
+            // Movimento inicial do ataque
+            await this.animateCard(attackerCard, attackerCard.x, attackY, 200);
+
+            // Movimento para atacar
+            await this.animateCard(attackerCard, attackerCard.x, clashY, 100);
+
+            // Animação de dano no defensor (se existir)
+            if (defenderCard) {
+                defenderCard.playDamageAnimation(-attackerCard.attack.text);
+            }
+
+            // Retorno após o ataque
+            await this.animateCard(attackerCard, attackerCard.x, returnY, 300);
+
+            if (defenderCard) {
+                this.updateCardData(defenderCard, targetPlayer);
+            }
+
+            // Atualiza os dados do defensor e processa o dano
+
+
+            if (diff <= 0) {
+                this.damageTakenAnimation(diff, targetPlayer);
+
+                if (defenderCard) {
+                    defenderCard.death();
+                }
+            }
+        } catch (error) {
+            console.error('Erro durante a animação de ataque:', error);
         }
-        this.enemyAnimationAtk(data.line, data.diff)
-    }
-    playerAnimationAtk(line, diff) {
-        console.log('entrou no aniamtion atk')
-        const playerCard = this.playerAttackZone[line]
-        console.log(this.enemyDefenseZone)
-        const enemyCard = this.enemyDefenseZone[line]
-
-
-
-        simpleTweens(this.scene, playerCard, playerCard.x, 560, 0.38, 1, 0, 200, () => {
-            simpleTweens(this.scene, playerCard, playerCard.x, 460, 0.38, 1, 0, 100, () => {
-                enemyCard.playDamageAnimation(-playerCard.attack.text)
-                simpleTweens(this.scene, playerCard, playerCard.x, 490, 0.38, 1, 0, 300, () => {
-                    this.updateCardData(enemyCard, this.enemy)
-                    if (diff <= 0) {
-                        this.damageTakenAnimation(diff, this.enemy)
-                        enemyCard.death()
-                    }
-                })
-            })
-        })
-
-    }
-    enemyAnimationAtk(line, diff) {
-        // console.log('entrou no aniamtion atk')
-        const enemyCard = this.enemyAttackZone[line]
-        const playerCard = this.playerDefenseZone[line]
-
-
-
-        simpleTweens(this.scene, enemyCard, enemyCard.x, 210, 0.38, 1, 0, 200, () => {
-            simpleTweens(this.scene, enemyCard, enemyCard.x, 310, 0.38, 1, 0, 100, () => {
-                playerCard.playDamageAnimation(-enemyCard.attack.text)
-                simpleTweens(this.scene, enemyCard, enemyCard.x, 280, 0.38, 1, 0, 300, () => {
-                    this.updateCardData(playerCard, this.player)
-                    if (diff <= 0) {
-                        this.damageTakenAnimation(diff, this.player)
-                        playerCard.death()
-                    }
-                })
-            })
-        })
-
-
     }
 
+
+    animateCard(card, x, y, duration) {
+        return new Promise((resolve) => {
+            simpleTweens(this.scene, card, x, y, 0.38, 1, 0, duration, resolve);
+        });
+    }
 
     damageTakenAnimation(value, owner) {
 

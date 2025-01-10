@@ -244,24 +244,19 @@ class Match:
             def_card = self.get_card(
                 defender, defender.defense_zone.get(str(i)))
 
-            if not def_card:
-                # bate direto na vida
-                # só retorna animaçao da movimentaçao da carta e o dano batendo na vida
-                ...
-
             diff = self.duel(atk_card, def_card)
 
-            # bate diretamente na vida
             if diff < 0:
                 defender.remove_hp(abs(diff))
-                defender.add_graveyard(def_card.id)
+                if def_card:
+                    defender.add_graveyard(def_card.id)
 
             data = {
                 'line': i,
                 'diff': diff,
                 'match': self.get_match_data(),
             }
-            print('mandou pro client')
+            # print('mandou pro client ', data)
 
             await self.manager.send_to_players(self.id, 'clash_line', data)
             await asyncio.sleep(1)
