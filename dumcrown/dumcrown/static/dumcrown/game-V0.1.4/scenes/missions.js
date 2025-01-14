@@ -148,6 +148,7 @@ export class MissionsScene extends Phaser.Scene {
             //     })
             // })
         })
+        this.cameras.main.setPostPipeline(Phaser.Renderer.WebGL.Pipelines.BlurFilter);
     }
 
 

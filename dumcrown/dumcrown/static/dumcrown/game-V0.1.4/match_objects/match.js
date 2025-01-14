@@ -12,6 +12,7 @@ import { MatchHand } from './hand.js';
 import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
 import { removeFromList, sendSocket, sleep } from '../functions/functions.js';
 import { crashSwords } from '../animations/scripts/attackingSwords.js';
+import { gameLoss, gameWin } from '../animations/scripts/gameover.js';
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
 //vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
@@ -329,7 +330,7 @@ export class MatchManager {
         }
 
         console.log('O mouse está sobre o retângulo!');
-        if (cardObj.state == 'onHand') {
+        if (!this.match.combat_mode && cardObj.state == 'onHand') {
             console.log('enviando errado?')
             var data = {
                 match_id: this.id,
@@ -354,6 +355,12 @@ export class MatchManager {
     defensiveDropped(cardObj) {
         const pointer = this.scene.input.activePointer;
         const card = cardObj.getID()
+        console.log('entrou no defensve drop')
+        console.log(!cardObj.state == 'onBench')
+        if (cardObj.state !== 'onBench') {
+            console.log('entrou false')
+            return
+        }
         this.defensiveHitbox.forEach((hitbox, index) => {
             var bounds = hitbox.getBounds();
             if (this.isOver(pointer, bounds)) {
@@ -836,7 +843,14 @@ export class MatchManager {
     }
 
 
-
+    winnerFinish(crystals, points, exp) {
+        gameWin(this.scene, crystals, points)
+        sendSocket('add_experience', exp)
+    }
+    defeatedFinish(crystals, points, exp) {
+        gameLoss(this.scene, crystals, points)
+        sendSocket('add_experience', exp)
+    }
     updateRound() {
 
     }

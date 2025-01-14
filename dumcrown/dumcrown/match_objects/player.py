@@ -18,7 +18,7 @@ class Player:
         self.attack_zone = []
         self.defense_zone = {}
         self.graveyard = []
-        self.hp = 30
+        self.hp = 3
         self.energy = 10
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
@@ -33,6 +33,8 @@ class Player:
 
     def remove_hp(self, points):
         self.hp -= points
+        if self.hp < 0:
+            self.hp = 0
 
     def add_energy(self, points):
         if (self.energy + points) < 10:

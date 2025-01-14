@@ -1,21 +1,14 @@
-from match import Match
-from player import Player
-import os
-import json
+winner = 0
+loser = 50
+
+winner_gain = max(1, round(loser*0.28)+10)
+loser_loss = max(1, round(loser*0.28))
 
 
-def get_player(nome_arquivo):
-    with open(nome_arquivo, 'r') as arquivo:
-        return json.load(arquivo)
-
-
-player1_data = get_player('player1.json')
-player2_data = get_player('player2.json')
-
-player1 = Player(player1_data)
-player2 = Player(player2_data)
-
-partida = Match(player1, player2, 4256)
-
-# partida.player1.hand.get_deck()
-print(player1.deck.get_deck())
+winner += winner_gain
+loser -= loser_loss
+print(f'winner: {winner_gain}')
+print(f'loser: {loser_loss}')
+print('-'*20)
+print(f'winner: {winner}')
+print(f'loser: {loser}')

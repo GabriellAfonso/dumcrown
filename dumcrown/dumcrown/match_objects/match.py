@@ -17,9 +17,12 @@ class Match:
         self.id = match_id
         self.manager = manager
         self.round = 0
+        self.winner = None
+        self.defeated = None
         self.player1 = player1
         self.player2 = player2
-
+        self.gameover = False
+        # TODO fazer um verificador que o jogo acabou se acabou nao executa o toggle turn
         self.turn = 0  # Indica de quem é a vez (pode ser 1 ou 2).
         self.offensive_player = 0  # Indica de quem é o turno ofensivo do round
         self.timestamp = datetime.now()
@@ -71,6 +74,7 @@ class Match:
             'turn': self.turn,
             'offensive_player': self.offensive_player,
             'combat_mode': self.combat_mode,
+            'gameover': self.gameover,
 
         }
         return match
@@ -252,8 +256,9 @@ class Match:
             if diff < 0:
                 defender.remove_hp(abs(diff))
 
-            if def_card.is_dead():
-                defender.add_graveyard(def_card.id, str(i))
+            if def_card:
+                if def_card.is_dead():
+                    defender.add_graveyard(def_card.id, str(i))
 
             data = {
                 'line': i,
@@ -264,6 +269,11 @@ class Match:
 
             await self.manager.send_to_players(self.id, 'clash_line', data)
             await asyncio.sleep(1)
+
+        if defender.hp < 1:
+            self.gameover = True
+            asyncio.create_task(self.finish_match(attacker, defender))
+            return
 
         await asyncio.sleep(1)
         self.combat_mode = False
@@ -314,4 +324,20 @@ class Match:
         return diff
 
     def update_card_data(self):
+        pass
+
+    async def finish_match(self, winner, defeated):
+        self.winner = winner
+        self.defeated = defeated
+        gain_points, loss_points = await self.manager.points_calculate(winner, defeated)
+        await self.manager.winner_gain(winner, gain_points)
+        await self.manager.defeated_gain(defeated, loss_points)
+
+        ...
+
+    def winner_gain(self, winner):
+        pass
+
+    def crown_points_calculate(self, player, enemy):
+
         pass

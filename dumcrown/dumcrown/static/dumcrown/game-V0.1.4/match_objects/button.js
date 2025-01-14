@@ -1,4 +1,5 @@
 
+import { disableSwapButtons, removeSwapButtons } from '../animations/match/initialDraw.js';
 import { player } from '../client/client.js';
 import { matchData as match } from '../client/match.js';
 import { centerX, centerY } from '../config/gameConfig.js';
@@ -80,6 +81,7 @@ export class MatchButton {
                     cards: cardsToSwap,
                 }
                 sendSocket('ready', data)
+                disableSwapButtons()
             }
 
             else if (this.text == 'SUA VEZ') {

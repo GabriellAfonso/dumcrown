@@ -131,3 +131,13 @@ export function removeSwapButtons() {
     }
 
 }
+
+export function disableSwapButtons() {
+    console.log('desabilitando botoes de swap')
+    if (swapButons) {
+        swapButons.forEach(button => {
+            button.setVisible(false)
+            // button.disableInteractive()
+        })
+    }
+}

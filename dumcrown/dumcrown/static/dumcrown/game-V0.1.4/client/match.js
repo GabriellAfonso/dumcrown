@@ -194,6 +194,12 @@ export function clashLine(data) {
     updateMatchData(data.match)
     emitToMatch('clashLine', data)
 }
+export function victoryMatch(data) {
+    emitToMatch('victoryMatch', data)
+}
+export function defeatMatch(data) {
+    emitToMatch('defeatMatch', data)
+}
 export function example(data) {
 
 }

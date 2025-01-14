@@ -2,7 +2,7 @@ import { centerX, centerY } from "../../config/gameConfig.js";
 import { Botao, switchScenes } from "../../functions/functions.js";
 
 
-export function gameWin(scene) {
+export function gameWin(scene, crystal, points) {
     const victory_screen = scene.add.image(centerX, centerY, 'victory_background')
     victory_screen.alpha = 0
     victory_screen.scale = 2
@@ -36,7 +36,7 @@ export function gameWin(scene) {
                     crownPoints.alpha = 0
 
                     const continue_button = new Botao(scene, centerX, 650, 'exit_button', () => {
-                        switchScenes('HomeScene', 'DumArena');
+                        switchScenes('HomeScene', 'DumMatch');
                         const soundfx = scene.scene.get('Loading');
                         soundfx.arena_music.stop()
                         soundfx.music.play()
@@ -50,7 +50,7 @@ export function gameWin(scene) {
 
 
 
-                    scene.crystals_text = scene.add.text(centerX - 80, centerY + 80, '+50',
+                    scene.crystals_text = scene.add.text(centerX - 80, centerY + 80, '+' + crystal,
                         {
                             fontSize: '25px', fontFamily: 'Lexend Deca, sans-serif',
                             fontStyle: 'bold', fill: '#fff'
@@ -60,7 +60,7 @@ export function gameWin(scene) {
                     scene.crystals_text.alpha = 0;
                     scene.crystals_text.setOrigin(0.5, 0.5)
 
-                    scene.crownP_text = scene.add.text(centerX + 125, centerY + 80, '+1',
+                    scene.crownP_text = scene.add.text(centerX + 125, centerY + 80, '+' + points,
                         {
                             fontSize: '25px', fontFamily: 'Lexend Deca, sans-serif',
                             fontStyle: 'bold', fill: '#fff'
@@ -97,7 +97,7 @@ export function gameWin(scene) {
 
 
 
-export function gameLoss(scene) {
+export function gameLoss(scene, crystal, points) {
     const loss_screen = scene.add.image(centerX, centerY, 'loss_background')
     loss_screen.alpha = 0
     loss_screen.scale = 2
@@ -132,7 +132,7 @@ export function gameLoss(scene) {
 
                     const continue_button = new Botao(scene, centerX, 650, 'exit_button', () => {
 
-                        switchScenes('HomeScene', 'DumArena');
+                        switchScenes('HomeScene', 'DumMatch');
                         const soundfx = scene.scene.get('Loading');
                         soundfx.arena_music.stop()
                         soundfx.music.play()
@@ -146,7 +146,7 @@ export function gameLoss(scene) {
 
 
 
-                    scene.crystals_text = scene.add.text(centerX - 80, centerY + 80, '+15',
+                    scene.crystals_text = scene.add.text(centerX - 80, centerY + 80, '+' + crystal,
                         {
                             fontSize: '25px', fontFamily: 'Lexend Deca, sans-serif',
                             fontStyle: 'bold', fill: '#fff'
@@ -156,7 +156,7 @@ export function gameLoss(scene) {
                     scene.crystals_text.alpha = 0;
                     scene.crystals_text.setOrigin(0.5, 0.5)
 
-                    scene.crownP_text = scene.add.text(centerX + 125, centerY + 80, '-1',
+                    scene.crownP_text = scene.add.text(centerX + 125, centerY + 80, points,
                         {
                             fontSize: '25px', fontFamily: 'Lexend Deca, sans-serif',
                             fontStyle: 'bold', fill: '#ff0000'

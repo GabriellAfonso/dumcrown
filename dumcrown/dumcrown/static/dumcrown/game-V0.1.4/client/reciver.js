@@ -5,7 +5,7 @@ import {
 import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } from "./room.js";
 import {
     startMatch, initialDraw, swappedCards, updateMatchData, round1, newRound, matchMessage, invalidMove,
-    animateCardToBench, animateCardToAttack, animateCardToDefense, defenseMode, clashLine,
+    animateCardToBench, animateCardToAttack, animateCardToDefense, defenseMode, clashLine, victoryMatch, defeatMatch,
 
 
     hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
@@ -55,6 +55,9 @@ export const clientReciver = {
 
     //açoes invalidas
     invalid_move: invalidMove,
+
+    victory_match: victoryMatch,
+    defeat_match: defeatMatch,
 
     //antigas
     match_update: matchUpdate,

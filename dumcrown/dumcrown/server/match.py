@@ -190,34 +190,96 @@ class MatchManager:
         player = match.who_i_am(self.user)
         match.player_clash(player)
 
-    # async def game_winner(self, user, data):
-    #     if user.is_authenticated:
-    #         try:
-    #             player = await get_player(user)
-    #             match_id, defeat_player = data['gameWinner']
+    async def winner_gain(self, winner, pts):
 
-    #             created_at = self.matches[match_id]['created_at']
-    #             created_formated = datetime.fromisoformat(created_at)
-    #             duration = timezone.now() - created_formated
-    #             duration_in_seconds = int(duration.total_seconds())
+        player = await get_player(winner.user_id)
+        channel = player.connection.channel
+        player.stats.matches += 1
+        player.stats.victories += 1
+        player.crystals += 50 * min(35, player.level)
 
-    #             current_app.send_task(
-    #                 'dumcrown.tasks.save_match',
-    #                 args=[match_id,
-    #                       player.nickname,
-    #                       defeat_player,
-    #                       created_formated,
-    #                       duration_in_seconds,
-    #                       ])
+        await save_player(player)
 
-    #             player.matches += 1
-    #             player.victories += 1
-    #             player.crystals += 50
-    #             player.crown_points += 1
-    #             await save_player(player)
+        data = {
+            'exp': 85,
+            'crystals': 50 * min(35, player.level),
+            'points': pts,
+        }
+        print(data)
+        await self.consumer.send_to_channel(channel, 'victory_match', data)
 
-    #         except Exception as e:
-    #             logging.error(f'Error in game_winner {e}', exc_info=True)
+    async def defeated_gain(self, defeated, pts):
+
+        player = await get_player(defeated.user_id)
+        channel = player.connection.channel
+        player.stats.matches += 1
+        player.stats.defeats += 1
+        player.crystals += 32 * min(35, player.level)
+        await save_player(player)
+        data = {
+            'exp': 42,
+            'crystals': 32 * min(35, player.level),
+            'points': -pts,
+        }
+        print(data)
+        await self.consumer.send_to_channel(channel, 'defeat_match', data)
+
+    async def points_calculate(self, winner, defeated):
+        win_player = await get_player(winner.user_id)
+        def_player = await get_player(defeated.user_id)
+
+        win_pts = win_player.crown_points
+        def_pts = def_player.crown_points
+
+        if def_pts == 0:
+            points = 10 - round(win_pts*0.2)
+            gain_points = max(1, points)
+            loss_points = 0
+
+            win_player.crown_points += gain_points
+            def_player.crown_points -= loss_points
+            await save_player(win_player)
+            await save_player(def_player)
+            return gain_points, loss_points
+
+        gain_points = max(1, round(def_pts*0.28)+10)
+        loss_points = max(1, round(def_pts*0.28))
+
+        win_player.crown_points += gain_points
+        def_player.crown_points -= loss_points
+        await save_player(win_player)
+        await save_player(def_player)
+
+        return gain_points, loss_points
+
+        # async def game_winner(self, user, data):
+        #     if user.is_authenticated:
+        #         try:
+        #             player = await get_player(user)
+        #             match_id, defeat_player = data['gameWinner']
+
+        #             created_at = self.matches[match_id]['created_at']
+        #             created_formated = datetime.fromisoformat(created_at)
+        #             duration = timezone.now() - created_formated
+        #             duration_in_seconds = int(duration.total_seconds())
+
+        #             current_app.send_task(
+        #                 'dumcrown.tasks.save_match',
+        #                 args=[match_id,
+        #                       player.nickname,
+        #                       defeat_player,
+        #                       created_formated,
+        #                       duration_in_seconds,
+        #                       ])
+
+        #             player.matches += 1
+        #             player.victories += 1
+        #             player.crystals += 50
+        #             player.crown_points += 1
+        #             await save_player(player)
+
+        #         except Exception as e:
+        #             logging.error(f'Error in game_winner {e}', exc_info=True)
 
     async def game_loser(self, user, data):
         if user.is_authenticated:

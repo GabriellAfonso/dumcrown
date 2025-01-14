@@ -65,6 +65,13 @@ export class DumMatch extends Phaser.Scene {
             this.match.cardToDefense(data)
         });
 
+        this.events.on('victoryMatch', (data) => {
+            this.match.winnerFinish(data.crystals, data.points, data.exp)
+        });
+        this.events.on('defeatMatch', (data) => {
+            this.match.defeatedFinish(data.crystals, data.points, data.exp)
+        });
+
 
 
         //client events
