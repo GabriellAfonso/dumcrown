@@ -6,6 +6,7 @@ import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } f
 import {
     startMatch, initialDraw, swappedCards, updateMatchData, round1, newRound, matchMessage, invalidMove,
     animateCardToBench, animateCardToAttack, animateCardToDefense, defenseMode, clashLine, victoryMatch, defeatMatch,
+    returnCardToBench,
 
 
     hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
@@ -52,6 +53,7 @@ export const clientReciver = {
     animate_card_to_bench: animateCardToBench,
     animate_card_to_attack: animateCardToAttack,
     animate_card_to_defense: animateCardToDefense,
+    return_card_to_bench: returnCardToBench,
 
     //açoes invalidas
     invalid_move: invalidMove,

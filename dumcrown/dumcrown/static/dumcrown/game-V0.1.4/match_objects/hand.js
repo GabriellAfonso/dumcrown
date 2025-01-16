@@ -28,6 +28,8 @@ export class MatchHand {
         this.hand.push(card)
     }
     removeCard(card) {
+        console.log(this.hand)
+        console.log(card)
         const indice = this.hand.indexOf(card);
         if (indice !== -1) {
             this.hand.splice(indice, 1);

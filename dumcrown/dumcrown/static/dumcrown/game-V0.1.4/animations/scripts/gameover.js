@@ -1,4 +1,4 @@
-import { centerX, centerY } from "../../config/gameConfig.js";
+import { centerX, centerY, GAME } from "../../config/gameConfig.js";
 import { Botao, switchScenes } from "../../functions/functions.js";
 
 
@@ -41,6 +41,7 @@ export function gameWin(scene, crystal, points) {
                         soundfx.arena_music.stop()
                         soundfx.music.play()
                         soundfx.music.setLoop(true);
+
                     }, 0xffff00,);
                     continue_button.alpha = 0
 
@@ -137,6 +138,9 @@ export function gameLoss(scene, crystal, points) {
                         soundfx.arena_music.stop()
                         soundfx.music.play()
                         soundfx.music.setLoop(true);
+                        // var match = getScene
+                        // GAME.scene.getScene('DumMatch')
+
                     }, 0xffff00,);
                     continue_button.alpha = 0
 

@@ -23,17 +23,8 @@ export class MatchManager {
     constructor(scene) {
         this.scene = scene
         this.id = match.id;
-        // this.round = match.round;
-        // this.player1 = match.player1;
-        // this.player2 = match.player2;
         this.button = new MatchButton(scene)
-        this.turn = match.turn; // Indica de quem é a vez (pode ser 1 ou 2)
-        // this.offensiveTurn = match.offensive_turn; // Indica de quem é o turno ofensivo do round
         this.history = [];
-        this.energyNumbers = []
-        this.defensiveCardsPosition = {}
-        // this.player = this.get_player();
-        // this.enemy = this.get_enemy();
         this.start()
     }
 
@@ -258,6 +249,7 @@ export class MatchManager {
     round(number) {
         this.playerHand.off()
         this.button.waiting()
+        this.clearCombatZone()
 
         var blackground = this.scene.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
         blackground.alpha = 0
@@ -293,7 +285,7 @@ export class MatchManager {
                     this.updateOfensiveIcon()
                 }
 
-
+                this.updateEnergy()
             }, 2000)
         })
 
@@ -415,7 +407,10 @@ export class MatchManager {
     //se os dois passar a vez muda de round ---------X
     //trocar card layout no bench ---------X
     //indicaçao visual de quem esta no modo ofensivo ---------X
-    //ao apertar pronto sumir ou desativar botao de swap 
+    //ao apertar pronto sumir ou desativar botao de swap ---------X
+    //cartas magicas
+    //evoluçoes do Dark Age
+    //
 
     cardToBench(data) {
         console.log('chamou o card to bench, ' + data)
@@ -438,11 +433,32 @@ export class MatchManager {
             return
         }
         var card = this.getEnemyCardObj(cardID)
-        card.setSmallLayout()
+        // card.setSmallLayout()
         this.enemyBench.push(card)
     }
 
+    returnCardToBench(who, cardID) {
+        console.log('chamou return card to bench')
+        if (who == this.player.im) {
+            var card = this.getPlayerCardObj(cardID)
 
+            this.playerBench.push(card)
+            this.benchPlayerAnimation()
+            return
+        }
+        var card = this.getEnemyCardObj(cardID)
+        this.enemyBench.push(card)
+        this.benchEnemyAnimation()
+    }
+
+    clearCombatZone() {
+        this.playerAttackZone = []
+        this.playerDefenseZone = {}
+
+        this.enemyAttackZone = []
+        this.enemyDefenseZone = {}
+
+    }
     benchPlayerAnimation() {
 
         const numCards = this.player.bench.length;
@@ -487,7 +503,7 @@ export class MatchManager {
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
-
+                    card.setSmallLayout()
                 },
             });
         });

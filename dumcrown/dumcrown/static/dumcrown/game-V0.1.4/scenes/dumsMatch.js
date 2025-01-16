@@ -1,4 +1,5 @@
 import { matchData } from "../client/match.js";
+import { clearRoom } from "../client/room.js";
 import { sendSocket, showCoordinates, sleep } from "../functions/functions.js";
 import { MatchManager } from "../match_objects/match.js";
 import { cardsToSwap } from "../match_objects/swapButton.js";
@@ -6,19 +7,27 @@ import { cardsToSwap } from "../match_objects/swapButton.js";
 export class DumMatch extends Phaser.Scene {
     constructor() {
         super({ key: 'DumMatch' });
+        this.eventsAdded = false;
     }
 
 
     create() {
+        clearRoom()
+        // this.events.removeAllListeners()
         sendSocket('get_cards') // atualiza as cartas antes da partida começar
         this.startAnimation()
         this.match = new MatchManager(this, matchData)
-        this.addEvents()
+
+
+        if (!this.eventsAdded) {
+            console.log('entrou na primeira')
+            this.addEvents();
+            this.eventsAdded = true; // Marca que os eventos foram adicionados
+        }
         // showCoordinates(this)
         // fase das 4 cartas iniciais
 
     }
-
 
 
     update() {
@@ -58,6 +67,9 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('animateCardToBench', (data) => {
             this.match.cardToBench(data)
         });
+        this.events.on('returnCardToBench', (data) => {
+            this.match.returnCardToBench(data.who, data.card_id)
+        });
         this.events.on('animateCardToAttack', (data) => {
             this.match.cardToAttack(data)
         });
@@ -67,9 +79,11 @@ export class DumMatch extends Phaser.Scene {
 
         this.events.on('victoryMatch', (data) => {
             this.match.winnerFinish(data.crystals, data.points, data.exp)
+            this.finishMatch()
         });
         this.events.on('defeatMatch', (data) => {
             this.match.defeatedFinish(data.crystals, data.points, data.exp)
+            this.finishMatch()
         });
 
 
@@ -79,6 +93,7 @@ export class DumMatch extends Phaser.Scene {
             this.match.cardDropped(cardObj)
         });
     }
+
     startAnimation() {
         const camera = this.cameras.main;
         camera.setZoom(2);
@@ -96,6 +111,11 @@ export class DumMatch extends Phaser.Scene {
             duration: 3000,
             ease: 'Power2',
         });
+    }
+
+    finishMatch() {
+
+
     }
 
 }

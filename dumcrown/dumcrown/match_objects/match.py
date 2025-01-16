@@ -289,7 +289,7 @@ class Match:
                 'card_id': card,
                 'data': self.get_match_data(),
             }
-            await self.manager.send_to_players(self.id, 'animate_card_to_bench', inf)
+            await self.manager.send_to_players(self.id, 'return_card_to_bench', inf)
 
         for card in defender.defense_zone.values():
             defender.bench.append(card)
@@ -298,7 +298,7 @@ class Match:
                 'card_id': card,
                 'data': self.get_match_data(),
             }
-            await self.manager.send_to_players(self.id, 'animate_card_to_bench', inf)
+            await self.manager.send_to_players(self.id, 'return_card_to_bench', inf)
 
         attacker.attack_zone.clear()
         defender.defense_zone.clear()

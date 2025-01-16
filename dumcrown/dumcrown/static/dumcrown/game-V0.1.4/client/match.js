@@ -167,10 +167,15 @@ export function invalidMove(data) {
 }
 
 export function animateCardToBench(data) {
-
     updateMatchData(data.data)
     emitToMatch('animateCardToBench', data)
 }
+
+export function returnCardToBench(data) {
+    updateMatchData(data.data)
+    emitToMatch('returnCardToBench', data)
+}
+
 export function animateCardToAttack(data) {
     console.log(data)
     updateMatchData(data.data)
