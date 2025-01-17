@@ -205,8 +205,8 @@ units_data = {
         "image": "rhioros_ghost_card",
         "name": "RHIOROS GHOST",
         "description": "",
-        "energy": 2,
-        "attack": 8,
-        "defense": 6,
+        "energy": 1,
+        "attack": 1,
+        "defense": 1,
     }
 }

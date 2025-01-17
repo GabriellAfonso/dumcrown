@@ -2,7 +2,6 @@
 import { createPlayerCards } from '../cards/functions.js';
 import { player } from '../client/client.js';
 import { centerX, centerY } from '../config/gameConfig.js';
-
 import { add_text } from '../functions/texts.js';
 import { MatchButton } from './button.js';
 import { InitialDrawManager } from './initialDrawManager.js';
@@ -13,19 +12,16 @@ import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.
 import { removeFromList, sendSocket, sleep } from '../functions/functions.js';
 import { crashSwords } from '../animations/scripts/attackingSwords.js';
 import { gameLoss, gameWin } from '../animations/scripts/gameover.js';
-
-// essa classe vai apenas receber dados e gerenciar a parte visual
-//vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
-
-//talvez deixar essa classe só pra criar o visual?
-// só instanciar card quando ela for comprada
+import Logger from '../objects/logger.js';
+const log = new Logger()
+log.enableGroup('all')
 export class MatchManager {
     constructor(scene) {
         this.scene = scene
-        this.id = match.id;
         this.button = new MatchButton(scene)
         this.history = [];
         this.start()
+
     }
 
     // Getter
@@ -71,8 +67,7 @@ export class MatchManager {
 
     start() {
         this.create_scene()
-        //fazer animaçao de zoom da cena inteira ao começar
-        //talvez fazer um alpha tbm e embaçar sla
+        log.info('Criação', 'iniciando a partda')
 
     }
     create_scene() {
@@ -89,12 +84,14 @@ export class MatchManager {
 
     createBoard() {
         //player
+        log.info('Criação', 'Criando player board com key: ' + this.player.board)
         this.playerBoard = this.scene.add.image(centerX, centerY, this.player.board);
         this.playerBench = []
         this.playerAttackZone = []
         this.playerDefenseZone = {}
         this.defensiveHitbox = []
         //enemy
+        log.info('Criação', 'Criando enemy board com key: ' + this.enemy.board)
         this.enemyBoard = this.scene.add.image(centerX, centerY - 2, this.enemy.board);
         this.enemyBoard.setScale(1, -1);
         this.enemyBench = []
@@ -102,27 +99,33 @@ export class MatchManager {
         this.enemyAttackZone = []
         this.enemyDefenseZone = {}
 
+        log.info('Criação', 'Criando colisor central do tabuleiro')
         this.boardCollider = this.scene.add.rectangle(centerX, centerY, 900, 400, 0xff0000, 0);
         this.boardCollider.setInteractive();
+
 
     }
 
     createIcons() {
+        log.info('Criação', 'Criando informaçoes visuais dos jogadores')
         //player
         this.playerNickname = add_text(this.scene, 110, centerY + 200, this.player.nickname, '30px', 0.5)
         this.playerIcon = this.scene.add.image(110, 678, this.player.icon);
         this.playerIcon.setScale(0.4)
         this.playerBorder = this.scene.add.image(110, 678, this.player.border);
         this.playerBorder.setScale(0.4)
+
         //enemy
         this.enemyNickname = add_text(this.scene, 110, centerY - 200, this.enemy.nickname, '30px', 0.5)
         this.enemyIcon = this.scene.add.image(110, 90, this.enemy.icon);
         this.enemyIcon.setScale(0.4)
         this.enemyBorder = this.scene.add.image(110, 90, this.enemy.border);
         this.enemyBorder.setScale(0.4)
+
     }
 
     createDecks() {
+        log.info('Criação', 'Criando o visual do deck sobre o tabuleiro')
         //player
         this.playerDeck = this.scene.add.image(326, 669, 'cards_deck');
         this.playerDeck.setScale(0.7)
@@ -138,6 +141,7 @@ export class MatchManager {
     }
 
     createHp() {
+        log.info('Criação', 'Criando barra de vida dos jogadores')
         //player
         this.playerHpBar = this.scene.add.image(110, centerY + 100, 'hpbar');
         this.playerHpBar.setScale(0.35)
@@ -153,6 +157,7 @@ export class MatchManager {
     }
 
     createEnergy() {
+        log.info('Criação', 'Criando barra de energia dos jogadores')
         //player
         this.playerEnergyHolder = this.scene.add.image(1396, centerY + 175, 'default_board_energy_holder');
         this.playerEnergyValue = this.scene.add.image(1396, centerY + 175, 'default_energy_' + this.player.energy);
@@ -162,21 +167,17 @@ export class MatchManager {
     }
 
     createPlayerHand() {
-
-        // var handObj = []
-        // for (var id of this.player.hand) {
-        //     var card = this.getCardObj(id)
-        //     handObj.push(card)
-        // }
         this.playerHand = new MatchHand(this.scene)
     }
 
     instantiateCards() {
+        log.info('Criação', 'Instanciando o objeto de cada carta dos jogadores')
         //player
         this.playerCards = createPlayerCards(this.scene, this.player.deck)
         //enemy
         this.enemyCards = createPlayerCards(this.scene, this.enemy.deck)
 
+        //isso é pra as cartas do inimigo sair de tras do deck inimigo
         Object.keys(this.enemyCards).forEach((key) => {
             const card = this.enemyCards[key];
             card.setPosition(340, 100);
@@ -185,11 +186,12 @@ export class MatchManager {
     }
 
     initialDrawn() {
-
-
+        log.info('action', 'Chamando initialDraw')
         var cardsObj = []
         for (let card of this.player.hand) {
+            log.detail('initialDraw', 'pegando id ' + card + ' da mao do jogador')
             var c = this.playerCards[card]
+            log.detail('initialDraw', 'transformando em objeto ', c)
             cardsObj.push(c)
         }
         this.initialDrawManager = new InitialDrawManager(this.scene)
@@ -325,7 +327,7 @@ export class MatchManager {
         if (!this.match.combat_mode && cardObj.state == 'onHand') {
             console.log('enviando errado?')
             var data = {
-                match_id: this.id,
+                match_id: this.match.id,
                 card_id: cardObj.getID(),
             }
             sendSocket('play_card', data)
@@ -334,7 +336,7 @@ export class MatchManager {
         if (cardObj.state == 'onBench') {
             console.log('dropeed enviando pro server')
             var data = {
-                match_id: this.id,
+                match_id: this.match.id,
                 card_id: cardObj.getID(),
             }
             sendSocket('offensive_card', data)
@@ -358,7 +360,7 @@ export class MatchManager {
             if (this.isOver(pointer, bounds)) {
 
                 var data = {
-                    match_id: this.id,
+                    match_id: this.match.id,
                     card_id: card,
                     position: index,
                 }
@@ -410,7 +412,7 @@ export class MatchManager {
     //ao apertar pronto sumir ou desativar botao de swap ---------X
     //cartas magicas
     //evoluçoes do Dark Age
-    //
+    // criar visual no loading do que ta sendo carregado(em grupos de preferencia ex: carregando cartas)
 
     cardToBench(data) {
         console.log('chamou o card to bench, ' + data)

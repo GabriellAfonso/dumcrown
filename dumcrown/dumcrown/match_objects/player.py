@@ -18,7 +18,7 @@ class Player:
         self.attack_zone = []
         self.defense_zone = {}
         self.graveyard = []
-        self.hp = 3
+        self.hp = 30
         self.energy = 10
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)

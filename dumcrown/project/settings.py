@@ -189,7 +189,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-# CSRF_TRUSTED_ORIGINS = ['https://dumcrown.com.br']
+CSRF_TRUSTED_ORIGINS = ['https://6f8d-170-78-102-62.ngrok-free.app']
 TEMPLATE_DEBUG = True
 
 if not DEBUG:
