@@ -8,10 +8,10 @@ import { textAnimation } from '../animations/scripts/textAnimations.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
-import { compressedDeck, createAllCards, instantiateCards, instantiateDecks } from '../cards/functions.js';
+import { compressedDeck, instantiateCards, instantiateDecks } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { cardsDATA, player } from '../client/client.js';
-// import { instantiateDecks } from '../objects/deck_layout.js';
+
 import { compressedCardObject } from '../cards/base.js';
 
 
@@ -61,7 +61,7 @@ export class DecksScene extends Phaser.Scene {
         this.cardsButton.setTexture('decks_select_button_active')
         this.decksButton.setTexture('decks_select_button')
         this.mainContainer = new WrapperContainer(this, 954, centerY, 670, true)
-        // this.cards = createAllCards(this, true)
+        // this.cards (this, true)
         this.cards = instantiateCards(this, player.cards)
         for (let id in this.cards) {
             this.mainContainer.addItem(this.cards[id]);

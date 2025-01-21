@@ -135,9 +135,9 @@ class ClientData:
 
             player.settings.volume_music = float(music)
             player.settings.soundsfx_volume = float(soundsfx)
-
+            print('mudou o volume')
             # nao funciona, vai ter um botao pra salvar player.settings
-            await save_player(player)
+            await save_player(player.settings)
 
         except Exception as e:
             logging.error(f'Error in sound_update: {e}', exc_info=True)

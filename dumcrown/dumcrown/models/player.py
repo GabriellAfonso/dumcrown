@@ -27,15 +27,15 @@ class Player(models.Model):
     last_login = models.DateTimeField(null=True)
 
     def save(self, *args, **kwargs):
-        if self.crown_points < 10:
+        if self.crown_points < 100:
             self.tier = 'bronze'
-        elif self.crown_points < 20:
+        elif self.crown_points < 200:
             self.tier = 'silver'
-        elif self.crown_points < 30:
+        elif self.crown_points < 300:
             self.tier = 'gold'
-        elif self.crown_points < 50:
+        elif self.crown_points < 500:
             self.tier = 'diamond'
-        elif self.crown_points >= 50:
+        elif self.crown_points >= 500:
             self.tier = 'master'
 
         super().save(*args, **kwargs)

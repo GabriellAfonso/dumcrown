@@ -6,6 +6,10 @@ import { centerX, centerY } from '../config/gameConfig.js';
 import { sendSocket } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 import { cardsToSwap } from './swapButton.js';
+import Logger from '../objects/logger.js';
+
+const log = new Logger()
+log.enableGroup('all')
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
 //vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
@@ -42,6 +46,7 @@ export class MatchButton {
     }
 
     update() {
+        log.info('matchButton', 'Atualizando matchButton')
 
         //TODO fazer um barulho toda vez que ficar disponivel pra clicar
         this.button.setTexture(this.buttonTexture[this.buttonState])
@@ -53,13 +58,13 @@ export class MatchButton {
         this.button.disableInteractive()
     }
     waiting() {
+        log.info('matchButton', 'Ativando modo aguarde')
         this.button.setTexture(this.buttonTexture[0])
         this.buttonText.text = 'AGUARDE'
         this.button.disableInteractive()
     }
     createButton() {
-        console.log('criando o botao')
-        console.log(this.buttonTexture[0])
+        log.info('matchButton', 'Criando MatchButton')
 
         this.button = this.scene.add.image(1396, centerY, this.buttonTexture[0]);
         this.buttonText = add_text(this.scene, 1396, centerY, '', '25px', 0.5)
@@ -69,6 +74,8 @@ export class MatchButton {
         this.setEvents()
     }
     setEvents() {
+        log.info('matchButton', 'Setando eventos')
+
         this.button.on('pointerup', () => {
             this.button.disableInteractive()
             console.log(this.text)

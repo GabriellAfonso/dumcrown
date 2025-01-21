@@ -10,10 +10,9 @@ import { Button, close_button } from '../functions/buttons.js';
 import { add_text } from '../functions/texts.js'
 
 import { sendSocket } from '../functions/functions.js';
-import { SomeonesShield } from '../cards/spells.js';
 import { instantiateCards } from '../cards/functions.js';
 import { DeckLayout } from '../objects/deck_layout.js';
-import { CardObject, compressedCardObject } from '../cards/base.js';
+import { unitCardObject, compressedCardObject } from '../cards/base.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';
 
 class Ping {
@@ -160,23 +159,14 @@ export class HomeScene extends Phaser.Scene {
             "attack": 8,
             "defense": 6,
         }
-        var carta = new CardObject(this, '1', data)
+        var carta = new unitCardObject(this, '1', data)
         carta.setVisible(true)
 
         carta.setPosition(centerX, centerY)
         // carta.setScale(0.5)
         carta.scale = 1
         carta.setSmallLayout()
-        const gameConfig = this.game.config;
 
-        console.log('Configurações do Jogo:', gameConfig);
-
-        // Acessando configurações específicas
-        console.log('Tipo:', gameConfig.type);
-        console.log('Resolução:', gameConfig.resolution);
-
-        // Acessando configurações de escala
-        console.log('Escala:', gameConfig.scale);
 
         const border_perfil = this.add.image(115, 105, player.border)
         border_perfil.setScale(0.5)

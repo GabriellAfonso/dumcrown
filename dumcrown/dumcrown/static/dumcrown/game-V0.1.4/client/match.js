@@ -150,7 +150,7 @@ export function swappedCards() {
 
 export function updateMatchData(data) {
     matchData = data
-    console.log(matchData)
+    // console.log(matchData)
     emitToMatch('updateData')
 }
 export function round1(data) {

@@ -199,6 +199,7 @@ class MatchManager:
         player.crystals += 50 * min(35, player.level)
 
         await save_player(player)
+        await save_player(player.stats)
 
         data = {
             'exp': 85,
@@ -216,6 +217,7 @@ class MatchManager:
         player.stats.defeats += 1
         player.crystals += 32 * min(35, player.level)
         await save_player(player)
+        await save_player(player.stats)
         data = {
             'exp': 42,
             'crystals': 32 * min(35, player.level),

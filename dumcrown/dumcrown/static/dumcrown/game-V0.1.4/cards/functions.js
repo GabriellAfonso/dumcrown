@@ -1,26 +1,7 @@
-import { unitsClasses } from "./units.js";
-import { spellsClasses } from "./spells.js";
-import { CardObject, SpellCardObject, compressedCardObject } from "./base.js";
+import { unitCardObject, SpellCardObject, compressedCardObject } from "./base.js";
 import { cardsDATA } from "../client/client.js";
 import { DeckLayout } from "../objects/deck_layout.js";
 
-const allCards = unitsClasses.concat(spellsClasses)
-
-export function createAllCards(scene, showCase = false) {
-
-    var cards = {};
-
-    allCards.forEach(CardClass => {
-        var card = new CardClass(scene);
-        var id = card.getID()
-        if (showCase) {
-            card.showCase()
-        }
-        cards[id] = card
-    });
-
-    return cards;
-}
 
 export function instantiateCards(scene, data) {
     const cards = {};
@@ -39,7 +20,7 @@ function createCardInstance(scene, cardID, cardData) {
     if (isSpellCard(cardID)) {
         return new SpellCardObject(scene, cardID, cardData);
     } else {
-        return new CardObject(scene, cardID, cardData);
+        return new unitCardObject(scene, cardID, cardData);
     }
 }
 

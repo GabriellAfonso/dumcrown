@@ -3,9 +3,12 @@ import { centerX, centerY } from "../../config/gameConfig.js";
 import { sleep } from "../../functions/functions.js";
 import { cardsToSwap, clearCardsToSwap, SwapButton } from "../../match_objects/swapButton.js";
 import { simpleTweens } from "../scripts/functions.js";
+import Logger from "../../objects/logger.js";
+const log = new Logger()
+log.enableGroup('all')
 
 export function showCard(scene, cardObject, finalX,) {
-
+    log.info('initialDrawn', 'Comprou a carta ' + cardObject.getID())
     const verseCard = scene.add.image(336, 662, 'verse_card');
     verseCard.setScale(0.4)
 
@@ -83,6 +86,7 @@ export function showSwap(scene, cardObject, finalX) {
     simpleTweens(scene, swapButon, finalX, centerY + 160, 0.35, 1, 0, 1100, null, 1)
 }
 export function removeCard(scene, cardObject) {
+    log.info('initialDrawn', 'subistituiu a carta ' + cardObject.getID())
     var scale = cardObject.scale
     const verseCard = scene.add.image(cardObject.x, cardObject.y, 'verse_card');
     verseCard.setScale(scale)
@@ -122,7 +126,7 @@ export function removeCard(scene, cardObject) {
 }
 
 export function removeSwapButtons() {
-    console.log('removendo botoes de swap')
+    log.info('initialDrawn', 'removendo SwapButtons')
     clearCardsToSwap()
     if (swapButons) {
         swapButons.forEach(button => {
@@ -133,7 +137,7 @@ export function removeSwapButtons() {
 }
 
 export function disableSwapButtons() {
-    console.log('desabilitando botoes de swap')
+    log.info('initialDrawn', 'desabilitando botoes de swap')
     if (swapButons) {
         swapButons.forEach(button => {
             button.setVisible(false)

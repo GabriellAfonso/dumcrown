@@ -19,7 +19,6 @@ export class IconPage extends Phaser.Scene {
 
     create() {
         const soundfx = this.scene.get('Loading');
-        showCoordinates(this)
         this.background = this.add.graphics();
         this.background.fillStyle(0x222222, 0.85);
         this.background.fillRect(0, 0, 1500, 800);

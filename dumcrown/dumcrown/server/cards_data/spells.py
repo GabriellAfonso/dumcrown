@@ -20,7 +20,7 @@ spells_data = {
         "type": "spell",
         "image": "sacrificial_fire",
         "name": "SACRIFICIAL FIRE",
-        "description": "Consome 5 pontos da sua própria vida e acrescenta 3 pontos de dano a todas as suas cartas em campo",
+        "description": "Consome 8 pontos da sua própria vida e acrescenta 3 pontos de dano a todas as suas cartas em campo",
         "energy": 8,
     },
     's7': {
@@ -28,7 +28,7 @@ spells_data = {
         "type": "spell",
         "image": "life_potion",
         "name": "LIFE POTION",
-        "description": "Restaura 2 pontos da sua vida",
+        "description": "Restaura 5 pontos da sua vida",
         "energy": 4,
     },
     's8': {
@@ -36,7 +36,7 @@ spells_data = {
         "type": "spell",
         "image": "summoned_ax",
         "name": "SUMMONED AX",
-        "description": "Inflige 2 pontos de dano à unidade inimiga atingida",
+        "description": "Inflige 3 pontos de dano à unidade inimiga atingida",
         "energy": 5,
     },
 

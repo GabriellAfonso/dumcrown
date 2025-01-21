@@ -8,7 +8,7 @@ import { textAnimation } from '../animations/scripts/textAnimations.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
-import { compressCard, compressedDeck, createAllCards, instantiateCards } from '../cards/functions.js';
+import { compressCard, compressedDeck, instantiateCards } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { cardsDATA, player } from '../client/client.js';
 // import { instantiateDecks } from '../objects/deck_layout.js';

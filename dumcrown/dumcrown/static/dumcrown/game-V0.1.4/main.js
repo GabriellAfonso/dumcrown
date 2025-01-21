@@ -44,7 +44,7 @@ function connectWebSocket() {
     };
 
     socket.onerror = (error) => {
-        alert(`Erro na conexão WebSocket: ${error.message || 'Erro desconhecido'}`);
+        // alert(`Erro na conexão WebSocket: ${error.message || 'Erro desconhecido'}`);
         // console.error('Erro na conexão WebSocket:', error);
         // Evite que os erros de reconexão sejam exibidos no console
         if (error.code !== 'ECONNREFUSED') {

@@ -48,7 +48,6 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.energy.setScale(1 / value)
         var nfsEnergy = this.constEnergyFontSize * value
         var energyFontSize = nfsEnergy + 'px'
-        console.log(energyFontSize)
         this.energy.setFontSize(energyFontSize);
     }
 
@@ -419,7 +418,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
 }
 
-export class CardObject extends BaseCardObject {
+export class unitCardObject extends BaseCardObject {
     constructor(scene, id, data = {}) {
         super(scene, id, data, { imageKey: 'darkage1_card', layoutKey: 'cardlayout-neutro' });
 
@@ -450,7 +449,7 @@ export class CardObject extends BaseCardObject {
     }
 
     clone() {
-        let clone = new CardObject(this.scene);
+        let clone = new unitCardObject(this.scene);
         clone.createCard(this.id, {
             image: this.cardImage.texture.key,
             name: this.name.text,

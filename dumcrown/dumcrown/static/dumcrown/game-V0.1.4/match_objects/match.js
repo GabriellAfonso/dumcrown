@@ -202,6 +202,7 @@ export class MatchManager {
     }
 
     swapCards(oldCards) {
+        log.info('initialDrawn', 'trocando cartas ' + oldCards)
         if (!oldCards) {
             return
         }
@@ -226,12 +227,12 @@ export class MatchManager {
 
     }
     firstRound() {
-        console.log('first round')
+        log.info('action', 'Chamou o Primeiro Round')
 
         for (const id of this.player.hand.slice(0, -1)) {
             const card = this.getPlayerCardObj(id);
             this.playerHand.addCard(card);
-        } // pega todos menos o ultimo
+        }
 
         this.initialDrawManager.finish(this.playerHand.hand)
         this.playerHand.closedHandAnimation()
@@ -243,12 +244,13 @@ export class MatchManager {
     }
 
     newRound() {
-        console.log('chamou new round')
+        log.info('action', 'Chamou o new Round')
         this.playerHand.closedHandAnimation()
         this.round(this.match.round)
     }
 
     round(number) {
+        log.info('action', 'animação de round')
         this.playerHand.off()
         this.button.waiting()
         this.clearCombatZone()
@@ -294,6 +296,7 @@ export class MatchManager {
     }
 
     updateOfensiveIcon() {
+        log.info('update', 'atualizando icone de ofensividade')
         if (this.match.offensive_player == this.player.im) {
             crashSwords(this.scene, 300, 100, 0.25)
             return
@@ -301,6 +304,7 @@ export class MatchManager {
         crashSwords(this.scene, 100, -100, 0.25)
     }
     draw() {
+        log.info('action', 'Comprando carta')
         var id = this.player.hand.at(-1)
         console.log(id)
         var card = this.getPlayerCardObj(id)
@@ -308,24 +312,25 @@ export class MatchManager {
         this.playerHand.drawCard(card)
     }
     cardDropped(cardObj) {
+        log.info('action', 'carta dropada')
+
         const pointer = this.scene.input.activePointer;
         const bounds = this.boardCollider.getBounds();
-        console.log('Entrou no dropped')
+
         if (this.match.combat_mode && this.defensiveHitbox.length > 0) {
-            console.log(this.defensiveHitbox)
-            console.log('Modo defensivo??')
+            log.info('cardDropped', 'Carta dropada para defesa')
             this.defensiveDropped(cardObj)
             return
         }
         //isOver boardCollider
         if (!this.isOver(pointer, bounds)) {
-            console.log('O mouse não está sobre o retângulo.');
             return
         }
 
-        console.log('O mouse está sobre o retângulo!');
+
         if (!this.match.combat_mode && cardObj.state == 'onHand') {
-            console.log('enviando errado?')
+            log.info('cardDropped', 'Carta dropada para o banco')
+
             var data = {
                 match_id: this.match.id,
                 card_id: cardObj.getID(),
@@ -334,7 +339,7 @@ export class MatchManager {
             return
         }
         if (cardObj.state == 'onBench') {
-            console.log('dropeed enviando pro server')
+            log.info('cardDropped', 'Carta dropada para o ataque')
             var data = {
                 match_id: this.match.id,
                 card_id: cardObj.getID(),
@@ -343,10 +348,11 @@ export class MatchManager {
             return
         }
 
-        console.log('dropeed fez bosta nenhuma')
+        log.info('action', 'Carta dropada no nada')
     }
 
     defensiveDropped(cardObj) {
+        log.info('defensiveDropped', 'posicionando carta')
         const pointer = this.scene.input.activePointer;
         const card = cardObj.getID()
         console.log('entrou no defensve drop')
@@ -364,7 +370,7 @@ export class MatchManager {
                     card_id: card,
                     position: index,
                 }
-                console.log('a carta ' + card + ' foi colocada no ' + index)
+                log.detail('defensiveDropped', 'a carta ' + card + ' foi colocada na posição ' + index)
                 sendSocket('defensive_card', data)
             }
 
@@ -373,11 +379,12 @@ export class MatchManager {
     }
 
     defenseMode() {
+        log.info('action', 'Chamou o defenseMode')
         this.createDefenseHitbox()
-        console.log('ativou modo defesa')
     }
 
     createDefenseHitbox() {
+        log.info('action', 'Criando hitbox de defesa')
         this.defensiveHitbox = []
         const numCards = this.enemy.attack_zone.length;
         const spacing = 140;
@@ -393,6 +400,7 @@ export class MatchManager {
     }
 
     destroyDefenseHitbox() {
+        log.info('action', 'Destruindo hitbox de defesa')
         this.defensiveHitbox.forEach((hitbox) => {
             hitbox.destroy()
         })
@@ -415,7 +423,7 @@ export class MatchManager {
     // criar visual no loading do que ta sendo carregado(em grupos de preferencia ex: carregando cartas)
 
     cardToBench(data) {
-        console.log('chamou o card to bench, ' + data)
+        log.info('action', 'chamou cardToBench')
         if (data.who == this.player.im) {
             // this.updateBenchObj()
             this.addCardToBench(data.who, data.card_id)
@@ -427,20 +435,22 @@ export class MatchManager {
         this.benchEnemyAnimation()
     }
     addCardToBench(who, cardID) {
+
         if (who == this.player.im) {
+            log.info('action', 'adicionando carta ao banco do jogador')
             var card = this.getPlayerCardObj(cardID)
             this.playerHand.removeCard(card)
             this.playerBench.push(card)
             this.playerHand.closeHand()
             return
         }
+        log.info('action', 'adicionando carta ao banco do inimigo')
         var card = this.getEnemyCardObj(cardID)
-        // card.setSmallLayout()
         this.enemyBench.push(card)
     }
 
     returnCardToBench(who, cardID) {
-        console.log('chamou return card to bench')
+        log.info('action', 'voltando carta ' + cardID + ' do combate pro banco')
         if (who == this.player.im) {
             var card = this.getPlayerCardObj(cardID)
 
@@ -454,6 +464,7 @@ export class MatchManager {
     }
 
     clearCombatZone() {
+        log.info('action', 'Limpando dados da zona de combate')
         this.playerAttackZone = []
         this.playerDefenseZone = {}
 
@@ -513,8 +524,7 @@ export class MatchManager {
 
 
     cardToAttack(data) {
-        //remover do bench
-        //adicionar ao playerAttackZone
+        log.info('action', 'chamou cardToAttack')
         if (data.who == this.player.im) {
             this.addCardToAttack(data.who, data.card_id)
             this.attackPlayerAnimation()
@@ -526,19 +536,20 @@ export class MatchManager {
     }
     addCardToAttack(who, cardID) {
         if (who == this.player.im) {
+            log.info('action', 'adicionando carta do jogador ao ataque')
             var card = this.getPlayerCardObj(cardID)
             this.playerBench = removeFromList(this.playerBench, card)
             this.playerAttackZone.push(card)
             return
         }
+        log.info('action', 'adicionando carta do inimigo ao ataque')
         var card = this.getEnemyCardObj(cardID)
         this.enemyBench = removeFromList(this.enemyBench, card)
         this.enemyAttackZone.push(card)
-        // card.setSmallLayout()
     }
 
     cardToDefense(data) {
-        console.log('entro no defense')
+        log.info('action', 'chamou cardToDefense')
         if (data.who == this.player.im) {
             this.addCardToDefense(data.who, data.card_id, data.pos)
             this.defensePlayerAnimation(data.card_id, data.pos)
@@ -550,17 +561,16 @@ export class MatchManager {
     }
     addCardToDefense(who, cardID, pos) {
         if (who == this.player.im) {
+            log.info('action', 'adicionando carta do jogador á defesa')
             var card = this.getPlayerCardObj(cardID)
             this.playerBench = removeFromList(this.playerBench, card)
             this.playerDefenseZone[pos] = card
             return
         }
+        log.info('action', 'adicionando carta do inimigo á defesa')
         var card = this.getEnemyCardObj(cardID)
         this.enemyBench = removeFromList(this.enemyBench, card)
         this.enemyDefenseZone[pos] = card
-        console.log(pos)
-        console.log(this.enemyDefenseZone)
-        // card.setSmallLayout()
     }
     attackPlayerAnimation() {
 
@@ -662,7 +672,7 @@ export class MatchManager {
 
 
     clashLine(data) {
-        console.log('Entrou no clashLine');
+        log.info('action', 'chamou o clashLine')
         this.destroyDefenseHitbox()
         const isPlayerOffensive = this.player.im === this.match.offensive_player;
         this.executeAnimationAtk(
@@ -678,7 +688,7 @@ export class MatchManager {
     }
 
     async executeAnimationAtk(line, diff, attackZone, defenseZone, targetPlayer, attackY, clashY, returnY) {
-        console.log('Entrou na animação de ataque');
+        log.info('action', 'chamou o executeAnimationAtk')
 
         const attackerCard = attackZone[line];
         const defenderCard = defenseZone[line];
@@ -724,7 +734,7 @@ export class MatchManager {
     }
 
     damageTakenAnimation(value, owner) {
-
+        log.info('action', 'chamou o damageTakenAnimation')
         if (this.damageText) {
             this.damageText.destroy()
         }
@@ -760,6 +770,7 @@ export class MatchManager {
     }
 
     updateCardData(card, owner) {
+        log.info('update', 'atualizando status da carta ' + card.id)
         var data = owner.deck_obj[card.id]
         card.update(data)
     }
@@ -770,34 +781,32 @@ export class MatchManager {
         return is
     }
     getPlayerCardObj(id) {
+        log.info('action', 'pegou objeto da carta do player de id ' + id)
         var card = this.playerCards[id]
         return card
     }
     getEnemyCardObj(id) {
+        log.info('action', 'pegou objeto da carta do inimigo de id ' + id)
         var card = this.enemyCards[id]
         return card
     }
     updateHp() {
+        log.info('update', 'atualizou valores de hp dos jogadores')
         this.playerHp.text = this.player.hp
         this.enemyHp.text = this.enemy.hp
     }
     updateData() {
-        console.log(this.player.energy)
-        console.log(this.enemy.energy)
-
+        log.info('update', 'updateData')
         this.button.update()
         this.updateEnergy()
-        if (this.match.combat_mode && this.player.im != this.match.offensive_player && this.match.turn == this.player.im) {
-
-        }
     }
 
     updateEnergy() {
+        log.info('update', 'atualizou valores de energia dos jogadores')
         this.playerEnergyValue.setTexture('default_energy_' + this.player.energy)
         this.enemyEnergyValue.setTexture('default_energy_' + this.enemy.energy)
     }
     invalidMoveMsg(msg) {
-        console.log(msg)
         var message = this.scene.add.text(centerX, 140, msg,
             {
                 fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
@@ -829,7 +838,6 @@ export class MatchManager {
     }
 
     msg(msg) {
-        console.log(msg)
         var message = this.scene.add.text(centerX, 140, msg,
             {
                 fontSize: '30px', fontFamily: 'Lexend Deca, sans-serif',
@@ -862,10 +870,12 @@ export class MatchManager {
 
 
     winnerFinish(crystals, points, exp) {
+        log.info('action', 'chamou o winnerFinish')
         gameWin(this.scene, crystals, points)
         sendSocket('add_experience', exp)
     }
     defeatedFinish(crystals, points, exp) {
+        log.info('action', 'chamou o defeatedFinish')
         gameLoss(this.scene, crystals, points)
         sendSocket('add_experience', exp)
     }

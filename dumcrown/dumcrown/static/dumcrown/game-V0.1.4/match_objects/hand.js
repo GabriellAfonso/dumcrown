@@ -4,6 +4,9 @@ import { player } from '../client/client.js';
 import { centerX, centerY } from '../config/gameConfig.js';
 import { sleep } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
+import Logger from '../objects/logger.js';
+const log = new Logger()
+log.enableGroup('all')
 
 // essa classe vai apenas receber dados e gerenciar a parte visual
 //vai ser criado uma instancia pra cada player entao tenho que configurar a visao de cada um
@@ -25,11 +28,12 @@ export class MatchHand {
         this.createClosedHandBox()
     }
     addCard(card) {
+        log.info('matchHand', 'adicionando carta ', card.id, ' á mão do jogador')
         this.hand.push(card)
     }
     removeCard(card) {
-        console.log(this.hand)
-        console.log(card)
+        log.info('matchHand', 'removendo carta ', card.id, ' da mão do jogador')
+
         const indice = this.hand.indexOf(card);
         if (indice !== -1) {
             this.hand.splice(indice, 1);
@@ -67,6 +71,8 @@ export class MatchHand {
         this.state = 0
     }
     closedHandAnimation() {
+        log.info('matchHand', 'animação da PlayerHand fechada')
+
         const configs = {
             1: [[1310, 695, 0, 300]],
             2: [[1270, 695, -5, 300], [1340, 695, 5, 300]],
@@ -78,7 +84,6 @@ export class MatchHand {
         };
 
         const config = configs[this.hand.length];
-        console.log(this.hand)
 
         if (config) {
             config.forEach((cfg, i) => {
@@ -104,6 +109,8 @@ export class MatchHand {
 
 
     openHandAnimation() {
+        log.info('matchHand', 'animação da PlayerHand Aberta')
+
         const length = this.hand.length;
 
         // Certifique-se de que as posições abertas estão criadas
@@ -176,7 +183,8 @@ export class MatchHand {
         };
     }
     drawCard(cardObj) {
-        // console.log(card)
+        log.info('matchHand', 'animação / compra de carta')
+
         this.addCard(cardObj)
 
         const verseCard = this.scene.add.image(346 - 10, 669 - 7, 'verse_card');
@@ -241,9 +249,11 @@ export class MatchHand {
     }
 
     off() {
+        log.info('matchHand', 'desabilitando PlayerHand')
         this.closedHandBox.disableInteractive()
     }
     on() {
+        log.info('matchHand', 'habilitando PlayerHand')
         this.closedHandBox.setInteractive({ cursor: 'pointer' })
     }
 }

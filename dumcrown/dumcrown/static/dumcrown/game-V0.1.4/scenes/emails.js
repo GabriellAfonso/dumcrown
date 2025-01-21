@@ -8,7 +8,6 @@ import { textAnimation } from '../animations/scripts/textAnimations.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
-import { createAllCards } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { player } from '../client/client.js';
 
