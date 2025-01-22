@@ -36,3 +36,18 @@ class InvalidCardTypeForBenchException(GameException):
 class InvalidPlayCardInCombatException(GameException):
     """Exceção levantada quando o jogador tenta adicionar uma carta ao banco enquanto ataca ou defende."""
     pass
+
+
+class InvalidPlaySpellInCombatException(GameException):
+    """Exceção levantada quando o jogador tenta jogar uma spell invalida durante o combate"""
+    pass
+
+
+class NoTargetForSpellException(GameException):
+    """A spell lançada não possui um alvo válido."""
+    pass
+
+
+class InvalidTargetForSpellException(GameException):
+    """Alvo invalido"""
+    pass

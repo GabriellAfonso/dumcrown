@@ -53,6 +53,15 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('defenseMode', () => {
             this.match.defenseMode()
         });
+        this.events.on('spellS1', (data) => {
+            this.match.spellS1Animation(data.player, data.spell_id, data.target)
+        });
+        this.events.on('spell_s7', (data) => {
+            this.match.spellS7Animation(data.player, data.spell_id)
+        });
+        this.events.on('spell_s8', (data) => {
+            this.match.spellS8Animation(data.player, data.spell_id, data.target)
+        });
         this.events.on('clashLine', (data) => {
             this.match.clashLine(data)
         });
@@ -91,6 +100,15 @@ export class DumMatch extends Phaser.Scene {
         //client events
         this.events.on('cardDropped', (cardObj) => {
             this.match.cardDropped(cardObj)
+        });
+        this.events.on('removeFromAll', (cardObj) => {
+            this.match.removeCardFromAll(cardObj)
+        });
+        this.events.on('hideHand', (cardObj) => {
+            this.match.hideHand(cardObj)
+        });
+        this.events.on('showHand', (cardObj) => {
+            this.match.showHand(cardObj)
         });
     }
 

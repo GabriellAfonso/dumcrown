@@ -67,11 +67,14 @@ export class MatchButton {
         log.info('matchButton', 'Criando MatchButton')
 
         this.button = this.scene.add.image(1396, centerY, this.buttonTexture[0]);
+        this.button.depth = 90
         this.buttonText = add_text(this.scene, 1396, centerY, '', '25px', 0.5)
         this.buttonText.setAlign('center');
         this.buttonText.setWordWrapWidth(180, true);
         this.buttonText.setStyle({ fontStyle: 'bold' });
+        this.buttonText.depth = 91
         this.setEvents()
+
     }
     setEvents() {
         log.info('matchButton', 'Setando eventos')

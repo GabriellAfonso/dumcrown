@@ -117,6 +117,21 @@ class MatchManager:
             message = str(msg)
             await self.consumer.send_to_client('invalid_move', message)
 
+    async def play_spell(self, data):
+        print('chamou play spell')
+        match = self.matches[data['match_id']]
+        player = match.who_i_am(self.user)
+        spell = data['spell']
+        target = data['target']
+        # fazer todas essas verificaçoes dentro de match e retornar a mensagem de error
+        try:
+            match.player_play_spell(player, spell, target)
+
+            # se passar fazer a animaçao pros dois jogadores
+        except Exception as msg:
+            message = str(msg)
+            await self.consumer.send_to_client('invalid_move', message)
+
     async def player_pass(self, match_id):
         match = self.matches[match_id]
         player = match.who_i_am(self.user)

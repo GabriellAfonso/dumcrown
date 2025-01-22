@@ -16,11 +16,11 @@ export function instantiateCards(scene, data) {
     return cards;
 }
 
-function createCardInstance(scene, cardID, cardData) {
+function createCardInstance(scene, cardID, cardData, owner = 0) {
     if (isSpellCard(cardID)) {
-        return new SpellCardObject(scene, cardID, cardData);
+        return new SpellCardObject(scene, cardID, cardData, owner);
     } else {
-        return new unitCardObject(scene, cardID, cardData);
+        return new unitCardObject(scene, cardID, cardData, owner);
     }
 }
 
@@ -60,13 +60,13 @@ export function compressCard(scene, cardID) {
     return object
 }
 
-export function createPlayerCards(scene, data) {
+export function createPlayerCards(scene, data, owner = 0) {
     const cards = {};
 
     data.forEach(cardID => {
         const id = idCleaner(cardID)
         const cardData = cardsDATA[id];
-        const cardInstance = createCardInstance(scene, cardID, cardData);
+        const cardInstance = createCardInstance(scene, cardID, cardData, owner);
         cards[cardID] = cardInstance;
     });
 

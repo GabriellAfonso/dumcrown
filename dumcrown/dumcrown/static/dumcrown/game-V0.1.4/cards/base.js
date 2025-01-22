@@ -137,7 +137,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         }
 
         this.handModeActive = true
-        this.collider = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0.3);
+        this.collider = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0);
         this.add(this.collider)
         this.collider.setInteractive();
 
@@ -173,6 +173,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             this.collider.scale = 1
 
             this.scene.events.emit('cardDropped', this)
+            this.scene.events.emit('showHand', this)
             console.log(this.state)
             if (this.state == 'onHand') {
                 this.activeTween = this.scene.tweens.add({
@@ -195,9 +196,11 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
 
             if (this.cardIsDragging) {
+
                 const deltaX = pointer.x - startX;
                 const deltaY = pointer.y - startY;
                 if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
+                    this.scene.events.emit('hideHand', this)
                     this.activeTween.stop()
                     this.angle = 0
                     this.scale = 0.28 // 0.32
@@ -235,7 +238,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         // }
 
         // this.handModeActive = true
-        this.collider = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0.3);
+        this.collider = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0x000080, 0);
         this.add(this.collider)
         this.collider.setInteractive();
 
@@ -403,6 +406,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
     }
     death() {
+
         this.scene.tweens.add({
             targets: this,
             alpha: 0,
@@ -410,18 +414,20 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             duration: 300,
             ease: 'Linear',
             onComplete: () => {
+                this.scene.events.emit('removeFromAll', this)
                 this.destroy()
             },
         });
     }
 
 
+
 }
 
 export class unitCardObject extends BaseCardObject {
-    constructor(scene, id, data = {}) {
+    constructor(scene, id, data = {}, owner) {
         super(scene, id, data, { imageKey: 'darkage1_card', layoutKey: 'cardlayout-neutro' });
-
+        this.owner = owner
         // Elementos específicos do CardObject
         this.attack = scene.add.text(-117, 212, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
@@ -437,6 +443,10 @@ export class unitCardObject extends BaseCardObject {
         }
     }
 
+    isSpell() {
+        return false
+    }
+
     createCard(id, data) {
         super.createCard(id, data);
         this.attack.text = data.attack;
@@ -446,6 +456,9 @@ export class unitCardObject extends BaseCardObject {
     update(data) {
         this.attack.text = data.attack
         this.defense.text = data.defense
+        if (this.defense.text < 1) {
+            this.death()
+        }
     }
 
     clone() {
@@ -475,9 +488,9 @@ export class unitCardObject extends BaseCardObject {
 }
 
 export class SpellCardObject extends BaseCardObject {
-    constructor(scene, id, data = {}) {
+    constructor(scene, id, data = {}, owner) {
         super(scene, id, data, { imageKey: 'empty', layoutKey: 'spellcardlayout', imageScale: 0.3 });
-
+        this.owner = owner
         this.cardImage.y = -80
         // SpellCardObject não tem ataque/defesa, apenas a configuração básica
         if (data) {
@@ -494,6 +507,9 @@ export class SpellCardObject extends BaseCardObject {
             energy: this.energy.text
         });
         return clone;
+    }
+    isSpell() {
+        return true
     }
 }
 

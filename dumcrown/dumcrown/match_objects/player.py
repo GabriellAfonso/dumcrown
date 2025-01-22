@@ -47,6 +47,15 @@ class Player:
         self.defense_zone.pop(key)
         self.graveyard.append(card)
 
+    def kill_card(self, card, zone):
+        if zone == 'bench':
+            self.bench.remove(card)
+        elif zone == 'attack':
+            self.attack_zone.remove(card)
+        elif zone == 'defense':
+            self.defense_zone.remove(card)
+        self.graveyard.append(card)
+
     def remove_energy(self, points: int):
         self.energy -= points
 
@@ -113,6 +122,10 @@ class Player:
     def add_to_bench(self, card_id):
         self.bench.append(card_id)
         self.hand.pop_card(card_id)
+
+    def play_spell(self, spell_id):
+        self.hand.pop_card(spell_id)
+        self.graveyard.append(spell_id)
 
     def add_to_attack_zone(self, card_id):
         self.attack_zone.append(card_id)

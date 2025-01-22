@@ -173,9 +173,9 @@ export class MatchManager {
     instantiateCards() {
         log.info('Criação', 'Instanciando o objeto de cada carta dos jogadores')
         //player
-        this.playerCards = createPlayerCards(this.scene, this.player.deck)
+        this.playerCards = createPlayerCards(this.scene, this.player.deck, this.player.im)
         //enemy
-        this.enemyCards = createPlayerCards(this.scene, this.enemy.deck)
+        this.enemyCards = createPlayerCards(this.scene, this.enemy.deck, this.enemy.im)
 
         //isso é pra as cartas do inimigo sair de tras do deck inimigo
         Object.keys(this.enemyCards).forEach((key) => {
@@ -256,6 +256,7 @@ export class MatchManager {
         this.clearCombatZone()
 
         var blackground = this.scene.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
+        blackground.depth = 99
         blackground.alpha = 0
         blackground.setInteractive()
         simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
@@ -273,6 +274,7 @@ export class MatchManager {
                 fontStyle: 'bold', fill: '#ffd700'
             })
         this.roundText.setOrigin(0.5, 0.5)
+        this.roundText.depth = 100
         this.roundText.alpha = 0;
         this.roundText.setShadow(2, 2, '#000', 2, false, true);
         simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 1, () => {
@@ -311,21 +313,69 @@ export class MatchManager {
 
         this.playerHand.drawCard(card)
     }
+    getTargetSpell(spell, pointer) {
+        // Defina as zonas com seus nomes
+        const zones = [
+            { cards: this.playerBench, zoneName: 'bench' },
+            { cards: this.playerAttackZone, zoneName: 'attack' },
+            { cards: Object.values(this.playerDefenseZone), zoneName: 'defense' },
+            { cards: this.enemyBench, zoneName: 'bench' },
+            { cards: this.enemyAttackZone, zoneName: 'attack' },
+            { cards: Object.values(this.enemyDefenseZone), zoneName: 'defense' },
+        ];
+
+        // Itere sobre as zonas e verifique os alvos
+        for (const zone of zones) {
+            for (const card of zone.cards) {
+                const bounds = card.getBounds();
+                if (this.isOver(pointer, bounds)) {
+                    const data = {
+                        match_id: this.match.id,
+                        spell: spell.getID(),
+                        target: {
+                            id: card.getID(),
+                            owner: card.owner, // Identifica o dono
+                            zone: zone.zoneName, // Nome da zona
+                        },
+                    };
+                    sendSocket('play_spell', data);
+                    return; // Sai do loop assim que encontrar um alvo
+                }
+            }
+        }
+
+        log.info('action', 'Spell card jogada sem alvo específico');
+        const data = {
+            match_id: this.match.id,
+            spell: spell.getID(),
+            target: null,
+        };
+        sendSocket('play_spell', data);
+    }
     cardDropped(cardObj) {
         log.info('action', 'carta dropada')
 
         const pointer = this.scene.input.activePointer;
         const bounds = this.boardCollider.getBounds();
 
+        //isOver boardCollider
+
+        if (cardObj.isSpell()) {
+            this.getTargetSpell(cardObj, pointer)
+            return
+            //manda pro servidor e ele que se lasque pra gerenciar
+        }
+
+        if (!this.isOver(pointer, bounds)) {
+            return
+        }
+
         if (this.match.combat_mode && this.defensiveHitbox.length > 0) {
             log.info('cardDropped', 'Carta dropada para defesa')
             this.defensiveDropped(cardObj)
             return
         }
-        //isOver boardCollider
-        if (!this.isOver(pointer, bounds)) {
-            return
-        }
+
 
 
         if (!this.match.combat_mode && cardObj.state == 'onHand') {
@@ -717,9 +767,9 @@ export class MatchManager {
             if (diff <= 0) {
                 this.damageTakenAnimation(diff, targetPlayer);
 
-                if (defenderCard) {
-                    defenderCard.death();
-                }
+                // if (defenderCard) {
+                //     defenderCard.death();
+                // }
             }
         } catch (error) {
             console.error('Erro durante a animação de ataque:', error);
@@ -770,7 +820,7 @@ export class MatchManager {
     }
 
     updateCardData(card, owner) {
-        log.info('update', 'atualizando status da carta ' + card.id)
+        log.info('update', 'atualizando status da carta ', card.id)
         var data = owner.deck_obj[card.id]
         card.update(data)
     }
@@ -882,11 +932,159 @@ export class MatchManager {
     updateRound() {
 
     }
+    spellS1Animation(player, spellID, target) {
+        var owner
+        var target_card
+        var spell
+        if (player.im === this.player.im) {
+            owner = this.player
+            spell = this.getPlayerCardObj(spellID)
+            target_card = this.getPlayerCardObj(target.id);
+            this.playerHand.removeCard(spell)
+            this.playerHand.closeHand()
 
-    colectInitialDraw() {
+        } else {
+            owner = this.enemy
+            spell = this.getEnemyCardObj(spellID)
+            spell.setVisible(true)
+            target_card = this.getEnemyCardObj(target.id);
+        }
+        //TODO melhorar animaçao e adicionar um brilho na carta que recebeu o buff
+        this.scene.tweens.add({
+            targets: spell,
+            scale: 0.60,
+            depth: 10,
+            angle: 0,
+            x: centerX,
+            y: centerY,
+            duration: 300,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: spell,
+                    delay: 400,
+                    scale: 0.10,
+                    depth: 10,
+                    alpha: 1,
+                    x: target_card.x,
+                    y: target_card.y,
+                    duration: 200,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        spell.death()
+                        this.updateEnergy()
+                        this.updateCardData(target_card, owner)
+                    },
+                });
+            },
+        });
 
     }
+    spellS7Animation(player, spellID) {
+        let spell;
+        if (player.im === this.player.im) {
+            spell = this.getPlayerCardObj(spellID);
+            this.playerHand.removeCard(spell)
+            this.playerHand.closeHand()
 
+        } else {
+            spell = this.getEnemyCardObj(spellID);
+            spell.setVisible(true)
+        }
+        //TODO animaçao brilho verde de cura
+        this.scene.tweens.add({
+            targets: spell,
+            scale: 0.60,
+            depth: 0,
+            angle: 0,
+            x: centerX,
+            y: centerY,
+            duration: 300,
+            ease: 'Linear',
+            onComplete: () => {
+                this.updateHp()
+                this.updateEnergy()
+                sleep(this.scene, 800, () => {
+                    spell.death()
+                })
+            },
+        });
+    }
+    spellS8Animation(player, spellID, target) {
+        console.log('chamou o spellS8Animation')
+        var owner
+        var enemy
+        var target_card
+        var spell
+        if (player.im === this.player.im) {
+            owner = this.player
+            enemy = this.enemy
+            spell = this.getPlayerCardObj(spellID)
+            target_card = this.getEnemyCardObj(target.id);
+            this.playerHand.removeCard(spell)
+            this.playerHand.closeHand()
+
+        } else {
+            owner = this.enemy
+            enemy = this.player
+            spell = this.getEnemyCardObj(spellID)
+            spell.setVisible(true)
+            target_card = this.getPlayerCardObj(target.id);
+        }
+
+        this.scene.tweens.add({
+            targets: spell,
+            scale: 0.60,
+            depth: 10,
+            angle: 0,
+            x: centerX,
+            y: centerY,
+            duration: 300,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: spell,
+                    delay: 400,
+                    scale: 0.10,
+                    depth: 10,
+                    alpha: 1,
+                    x: target_card.x,
+                    y: target_card.y,
+                    duration: 200,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        spell.death()
+                        this.updateEnergy()
+                        this.updateCardData(target_card, enemy)
+                        this.benchPlayerAnimation()
+                        this.benchEnemyAnimation()
+                    },
+                });
+            },
+        });
+    }
+    hideHand(mainCard) {
+        this.playerHand.hand.forEach((card) => {
+            card.alpha = 0
+        })
+        mainCard.alpha = 1
+    }
+    showHand(mainCard) {
+        this.playerHand.hand.forEach((card) => {
+            card.alpha = 1
+        })
+    }
+    removeCardFromAll(card) {
+        removeFromList(this.playerBench, card)
+        removeFromList(this.enemyBench, card)
+
+        removeFromList(this.playerAttackZone, card)
+        removeFromList(this.enemyAttackZone, card)
+
+        //nao sei como fazer e a spell S8 nao pode ser tacada em cartas defense msm
+        // removeFromList(Object.values(this.playerDefenseZone), card)
+        // removeFromList(Object.values(this.enemyDefenseZone), card)
+    }
     deleteMatch() {
         clearCardsToSwap()
     }

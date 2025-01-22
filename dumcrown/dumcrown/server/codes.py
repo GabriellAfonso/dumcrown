@@ -27,6 +27,7 @@ code_handlers = {
     'start_match': {'object': match_manager, 'method': 'start_match'},
     'ready': {'object': match_manager, 'method': 'ready'},
     'play_card': {'object': match_manager, 'method': 'play_card'},
+    'play_spell': {'object': match_manager, 'method': 'play_spell'},
     'player_pass': {'object': match_manager, 'method': 'player_pass'},
     'offensive_card': {'object': match_manager, 'method': 'offensive_card'},
     'player_clash': {'object': match_manager, 'method': 'player_clash'},

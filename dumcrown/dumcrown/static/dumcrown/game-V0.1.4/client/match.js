@@ -148,6 +148,19 @@ export function swappedCards() {
 
 }
 
+export function spellS1(data) {
+    matchData = data.match
+    emitToMatch('spellS1', data)
+}
+
+export function spellS7(data) {
+    matchData = data.match
+    emitToMatch('spell_s7', data)
+}
+export function spellS8(data) {
+    matchData = data.match
+    emitToMatch('spell_s8', data)
+}
 export function updateMatchData(data) {
     matchData = data
     // console.log(matchData)

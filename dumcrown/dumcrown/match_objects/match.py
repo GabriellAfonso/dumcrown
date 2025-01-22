@@ -1,9 +1,11 @@
 from datetime import datetime
 import asyncio
+import re
 from .exceptions import (BenchFullException, OpponentTurnException,
                          InsufficientEnergyException, InvalidCardTypeForBenchException,
                          OpponentOffensiveTurnException, AttackZoneFullException,
-                         InvalidPlayCardInCombatException)
+                         InvalidPlayCardInCombatException, NoTargetForSpellException,
+                         InvalidTargetForSpellException, InvalidPlaySpellInCombatException)
 # vai receber os dados de player 1 e player2 e vai gerenciar a partida inteira
 
 
@@ -22,12 +24,16 @@ class Match:
         self.player1 = player1
         self.player2 = player2
         self.gameover = False
-        # TODO fazer um verificador que o jogo acabou se acabou nao executa o toggle turn
-        self.turn = 0  # Indica de quem é a vez (pode ser 1 ou 2).
-        self.offensive_player = 0  # Indica de quem é o turno ofensivo do round
+        self.turn = 0
+        self.offensive_player = 0
         self.timestamp = datetime.now()
         self.combat_mode = False
         self.history = []
+        self.spell_effects = {
+            's1': self.spell_s1,
+            's7': self.spell_s7,
+            's8': self.spell_s8,
+        }
         self.start_match()
 
     def start_match(self):
@@ -247,6 +253,7 @@ class Match:
         defender = player
 
         for i in range(len(attacker.attack_zone)):
+            print('ataque zone: ', attacker.attack_zone)
             atk_card = self.get_card(attacker, attacker.attack_zone[i])
             def_card = self.get_card(
                 defender, defender.defense_zone.get(str(i)))
@@ -308,6 +315,9 @@ class Match:
             return player.deck.get_card_obj(card_id)
         return None
 
+    def id_cleaner(self, id):
+        return re.sub(r'\([A-Z]\)', '', id)
+
     def duel(self, atk_card, def_card):
         if not def_card:
             return -atk_card.attack
@@ -335,9 +345,82 @@ class Match:
 
         ...
 
-    def winner_gain(self, winner):
-        pass
+    def player_play_spell(self, player, spell_id, target):
+        self.is_my_turn(player)
 
-    def crown_points_calculate(self, player, enemy):
+        print('recebeu a spell')
+        print(spell_id)
+        id = self.id_cleaner(spell_id)
+        spell = self.spell_effects.get(id)
+        if spell:
+            spell(player, spell_id, target)
+            player.play_spell(spell_id)
 
-        pass
+    def spell_s1(self, player, spell_id, target):
+        if not target:
+            raise NoTargetForSpellException(
+                'Esta spell precisa de uma carta alvo')
+
+        if target['owner'] != player.im:
+            raise InvalidTargetForSpellException(
+                'Só funciona em cartas aliadas')
+
+        self.useEnergy(player, spell_id)
+
+        target_card = self.get_card(player, target['id'])
+        target_card.add_defense(2)
+
+        data = {
+            'match': self.get_match_data(),
+            'player': player.get_player_data(),
+            'spell_id': spell_id,
+            'target': target,
+        }
+        asyncio.create_task(self.manager.send_to_players(
+            self.id, 'spell_s1', data))
+
+    def spell_s7(self, player, spell_id, target=None):
+        self.useEnergy(player, spell_id)
+        print('executou spell s7')
+        player.add_hp(5)
+        data = {
+            'match': self.get_match_data(),
+            'player': player.get_player_data(),
+            'spell_id': spell_id,
+            'target': target,
+        }
+
+        asyncio.create_task(self.manager.send_to_players(
+            self.id, 'spell_s7', data))
+
+    def spell_s8(self, player, spell_id, target):
+        if not target:
+            raise NoTargetForSpellException(
+                'Esta spell precisa de uma carta alvo')
+
+        if target['owner'] == player.im:
+            raise InvalidTargetForSpellException(
+                'Só funciona em cartas adversárias')
+        if self.combat_mode:
+            raise InvalidPlaySpellInCombatException(
+                'Carta invalida em combate')
+
+        self.useEnergy(player, spell_id)
+
+        enemy = self.get_enemy(player)
+
+        target_card = self.get_card(enemy, target['id'])
+        target_card.remove_defense(3)
+
+        if target_card.defense < 1:
+            target_card.set_defense(0)
+            enemy.kill_card(target['id'], target['zone'])
+
+        data = {
+            'match': self.get_match_data(),
+            'player': player.get_player_data(),
+            'spell_id': spell_id,
+            'target': target,
+        }
+        asyncio.create_task(self.manager.send_to_players(
+            self.id, 'spell_s8', data))
