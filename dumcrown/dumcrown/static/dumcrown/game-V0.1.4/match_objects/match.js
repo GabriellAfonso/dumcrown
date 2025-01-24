@@ -1,5 +1,5 @@
 
-import { createPlayerCards } from '../cards/functions.js';
+import { createPlayerCards, idCleaner } from '../cards/functions.js';
 import { player } from '../client/client.js';
 import { centerX, centerY } from '../config/gameConfig.js';
 import { add_text } from '../functions/texts.js';
@@ -361,6 +361,16 @@ export class MatchManager {
         //isOver boardCollider
 
         if (cardObj.isSpell()) {
+            console.log(cardObj.id)
+            var id = idCleaner(cardObj.id)
+            if (id == 's7' || id == 's5') {
+                //gambiarra
+                console.log('entrou')
+                if (!this.isOver(pointer, bounds)) {
+                    console.log('ta fora')
+                    return
+                }
+            }
             this.getTargetSpell(cardObj, pointer)
             return
             //manda pro servidor e ele que se lasque pra gerenciar
@@ -979,6 +989,96 @@ export class MatchManager {
             },
         });
 
+    }
+    spellS2Animation(player, spellID, target) {
+        var owner
+        var target_card
+        var spell
+        if (player.im === this.player.im) {
+            owner = this.player
+            spell = this.getPlayerCardObj(spellID)
+            target_card = this.getPlayerCardObj(target.id);
+            this.playerHand.removeCard(spell)
+            this.playerHand.closeHand()
+
+        } else {
+            owner = this.enemy
+            spell = this.getEnemyCardObj(spellID)
+            spell.setVisible(true)
+            target_card = this.getEnemyCardObj(target.id);
+        }
+        //TODO melhorar animaçao e adicionar um brilho na carta que recebeu o buff
+        this.scene.tweens.add({
+            targets: spell,
+            scale: 0.60,
+            depth: 10,
+            angle: 0,
+            x: centerX,
+            y: centerY,
+            duration: 300,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: spell,
+                    delay: 400,
+                    scale: 0.10,
+                    depth: 10,
+                    alpha: 1,
+                    x: target_card.x,
+                    y: target_card.y,
+                    duration: 200,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        spell.death()
+                        this.updateEnergy()
+                        this.updateCardData(target_card, owner)
+                    },
+                });
+            },
+        });
+
+    }
+    spellS5Animation(player, spellID, updatedCards) {
+        let spell;
+        if (player.im === this.player.im) {
+            spell = this.getPlayerCardObj(spellID);
+            this.playerHand.removeCard(spell)
+            this.playerHand.closeHand()
+
+        } else {
+            spell = this.getEnemyCardObj(spellID);
+            spell.setVisible(true)
+        }
+        //TODO animaçao 
+        this.scene.tweens.add({
+            targets: spell,
+            scale: 0.60,
+            depth: 10,
+            angle: 0,
+            x: centerX,
+            y: centerY,
+            duration: 300,
+            ease: 'Linear',
+            onComplete: () => {
+                this.updateHp()
+                this.updateEnergy()
+                sleep(this.scene, 800, () => {
+                    spell.death()
+                    if (player.im === this.player.im) {
+                        updatedCards.forEach((id) => {
+                            var card = this.getPlayerCardObj(id)
+                            this.updateCardData(card, this.player)
+                        })
+
+                    } else {
+                        updatedCards.forEach((id) => {
+                            var card = this.getEnemyCardObj(id)
+                            this.updateCardData(card, this.enemy)
+                        })
+                    }
+                })
+            },
+        });
     }
     spellS7Animation(player, spellID) {
         let spell;

@@ -11,12 +11,22 @@ class UnitCard:
         self.attack = card['attack']
         self.defense = card['defense']
         self.state = 'onDeck'
+        self.vulnerable = True
 
     def set_defense(self, value):
         self.defense = value
 
+    def set_vulnerable(self, value: bool):
+        self.vulnerable = value
+
+    def is_vulnerable(self):
+        return self.vulnerable
+
     def add_defense(self, value):
         self.defense += value
+
+    def add_attack(self, value):
+        self.attack += value
 
     def remove_defense(self, value):
         self.defense -= value
@@ -38,4 +48,5 @@ class UnitCard:
             'attack': self.attack,
             'defense': self.defense,
             'state': self.state,
+            'vulnerable': self.vulnerable,
         }

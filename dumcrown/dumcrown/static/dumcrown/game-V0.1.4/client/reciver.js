@@ -7,7 +7,7 @@ import {
     startMatch, initialDraw, swappedCards, updateMatchData, round1, newRound, matchMessage, invalidMove,
     animateCardToBench, animateCardToAttack, animateCardToDefense, defenseMode, clashLine, victoryMatch, defeatMatch,
 
-    spellS1, spellS7, spellS8,
+    spellS1, spellS2, spellS5, spellS7, spellS8,
     returnCardToBench,
 
 
@@ -52,6 +52,8 @@ export const clientReciver = {
     match_message: matchMessage,
 
     spell_s1: spellS1,
+    spell_s2: spellS2,
+    spell_s5: spellS5,
     spell_s7: spellS7,
     spell_s8: spellS8,
     //match animations

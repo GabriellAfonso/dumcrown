@@ -150,7 +150,15 @@ export function swappedCards() {
 
 export function spellS1(data) {
     matchData = data.match
-    emitToMatch('spellS1', data)
+    emitToMatch('spell_s1', data)
+}
+export function spellS2(data) {
+    matchData = data.match
+    emitToMatch('spell_s2', data)
+}
+export function spellS5(data) {
+    matchData = data.match
+    emitToMatch('spell_s5', data)
 }
 
 export function spellS7(data) {

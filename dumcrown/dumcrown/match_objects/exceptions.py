@@ -51,3 +51,13 @@ class NoTargetForSpellException(GameException):
 class InvalidTargetForSpellException(GameException):
     """Alvo invalido"""
     pass
+
+
+class SuicideSpellException(GameException):
+    """Exceção levantada quando o jogador reduzira sua vida a 0 com a spell"""
+    pass
+
+
+class InvalidPlaySpellOutCombatException(GameException):
+    """Exceção levantada quando o jogador tenta usar certas spell fora do modo de combate."""
+    pass

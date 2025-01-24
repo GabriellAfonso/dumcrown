@@ -5,7 +5,8 @@ from .exceptions import (BenchFullException, OpponentTurnException,
                          InsufficientEnergyException, InvalidCardTypeForBenchException,
                          OpponentOffensiveTurnException, AttackZoneFullException,
                          InvalidPlayCardInCombatException, NoTargetForSpellException,
-                         InvalidTargetForSpellException, InvalidPlaySpellInCombatException)
+                         InvalidTargetForSpellException, InvalidPlaySpellInCombatException,
+                         SuicideSpellException, InvalidPlaySpellOutCombatException)
 # vai receber os dados de player 1 e player2 e vai gerenciar a partida inteira
 
 
@@ -31,6 +32,8 @@ class Match:
         self.history = []
         self.spell_effects = {
             's1': self.spell_s1,
+            's2': self.spell_s2,
+            's5': self.spell_s5,
             's7': self.spell_s7,
             's8': self.spell_s8,
         }
@@ -224,7 +227,8 @@ class Match:
 
     def is_player_offensive(self, player):
         if self.offensive_player != player.im:
-            raise OpponentOffensiveTurnException('Ação Inválida')
+            raise OpponentOffensiveTurnException(
+                'Ação Valida apenas para o player atacante')
 
     def is_attack_zone_full(self, player):
         if len(player.attack_zone) >= 5:
@@ -324,6 +328,10 @@ class Match:
 
         diff = def_card.defense - atk_card.attack
 
+        # se for invuneravel diff = 0
+        if not def_card.is_vulnerable():
+            def_card.set_vulnerable(True)
+            return 0
         # diminui defesa da carta
         def_card.remove_defense(atk_card.attack)
 
@@ -378,6 +386,56 @@ class Match:
         }
         asyncio.create_task(self.manager.send_to_players(
             self.id, 'spell_s1', data))
+
+    def spell_s2(self, player, spell_id, target):
+        if not target:
+            raise NoTargetForSpellException(
+                'Esta spell precisa de uma carta alvo')
+        if target['owner'] != player.im:
+            raise InvalidTargetForSpellException(
+                'Só funciona em cartas aliadas')
+
+        self.useEnergy(player, spell_id)
+        target_card = self.get_card(player, target['id'])
+        target_card.set_vulnerable(False)
+
+        data = {
+            'match': self.get_match_data(),
+            'player': player.get_player_data(),
+            'spell_id': spell_id,
+            'target': target,
+        }
+        asyncio.create_task(self.manager.send_to_players(
+            self.id, 'spell_s2', data))
+
+    def spell_s5(self, player, spell_id, target):
+        if player.hp <= 8:
+            raise SuicideSpellException('Suicidio evitado com sucesso!')
+
+        if not self.combat_mode:
+            raise InvalidPlaySpellOutCombatException(
+                'ação valida apenas em combate')
+
+        self.is_player_offensive(player)
+        self.useEnergy(player, spell_id)
+
+        player.remove_hp(8)
+
+        updated_cards = []
+
+        for card_id in player.attack_zone:
+            card_obj = self.get_card(player, card_id)
+            card_obj.add_attack(3)
+            updated_cards.append(card_id)
+
+        data = {
+            'match': self.get_match_data(),
+            'player': player.get_player_data(),
+            'spell_id': spell_id,
+            'updated_cards': updated_cards,
+        }
+        asyncio.create_task(self.manager.send_to_players(
+            self.id, 'spell_s5', data))
 
     def spell_s7(self, player, spell_id, target=None):
         self.useEnergy(player, spell_id)

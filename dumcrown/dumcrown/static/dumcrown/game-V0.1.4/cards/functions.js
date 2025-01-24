@@ -72,7 +72,7 @@ export function createPlayerCards(scene, data, owner = 0) {
 
     return cards;
 }
-function idCleaner(cardID) {
+export function idCleaner(cardID) {
     return cardID.replace(/\([A-Z]\)/g, '');
 }
 

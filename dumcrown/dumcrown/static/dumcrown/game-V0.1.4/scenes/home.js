@@ -46,9 +46,11 @@ class Ping {
 
     update() {
         this.updatePing = setInterval(() => {
-            this.ping.setTexture(this.latencyCheck())
-            this.ms.setText(latency_ms)
-        }, 1000)
+            if (this.ping) {
+                this.ping.setTexture(this.latencyCheck());
+                this.ms.setText(latency_ms);
+            }
+        }, 1000);
     }
 }
 class ExpBar {

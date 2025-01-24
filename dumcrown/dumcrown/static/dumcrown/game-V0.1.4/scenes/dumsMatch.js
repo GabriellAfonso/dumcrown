@@ -53,8 +53,14 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('defenseMode', () => {
             this.match.defenseMode()
         });
-        this.events.on('spellS1', (data) => {
+        this.events.on('spell_s1', (data) => {
             this.match.spellS1Animation(data.player, data.spell_id, data.target)
+        });
+        this.events.on('spell_s2', (data) => {
+            this.match.spellS2Animation(data.player, data.spell_id, data.target)
+        });
+        this.events.on('spell_s5', (data) => {
+            this.match.spellS5Animation(data.player, data.spell_id, data.updated_cards)
         });
         this.events.on('spell_s7', (data) => {
             this.match.spellS7Animation(data.player, data.spell_id)

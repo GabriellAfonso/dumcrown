@@ -15,6 +15,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.state = 'onDeck'
         this.constEnergyFontSize = 50
 
+
         // Configuração básica da carta
         this.cardImage = scene.add.image(0, 0, config.imageKey || 'default_image');
         this.cardImage.setScale(config.imageScale || 1);
@@ -428,6 +429,7 @@ export class unitCardObject extends BaseCardObject {
     constructor(scene, id, data = {}, owner) {
         super(scene, id, data, { imageKey: 'darkage1_card', layoutKey: 'cardlayout-neutro' });
         this.owner = owner
+        this.vulnerable = true
         // Elementos específicos do CardObject
         this.attack = scene.add.text(-117, 212, '',
             { fontSize: '30px', fill: '#ffffff', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
@@ -458,6 +460,21 @@ export class unitCardObject extends BaseCardObject {
         this.defense.text = data.defense
         if (this.defense.text < 1) {
             this.death()
+        }
+        this.vulnerable = data.vulnerable
+        if (!this.vulnerable) {
+            this.addBarrier()
+        } else {
+            this.destroyBarrier()
+        }
+    }
+    addBarrier() {
+        this.barrier = new Phaser.GameObjects.Rectangle(this.scene, 0, 0, 328, 483, 0xadff2f, 0.3);
+        this.add(this.barrier)
+    }
+    destroyBarrier() {
+        if (this.barrier) {
+            this.barrier.destroy()
         }
     }
 
