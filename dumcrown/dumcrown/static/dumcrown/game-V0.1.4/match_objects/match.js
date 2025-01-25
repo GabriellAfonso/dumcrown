@@ -92,7 +92,7 @@ export class MatchManager {
         this.defensiveHitbox = []
         //enemy
         log.info('Criação', 'Criando enemy board com key: ' + this.enemy.board)
-        this.enemyBoard = this.scene.add.image(centerX, centerY - 2, this.enemy.board);
+        this.enemyBoard = this.scene.add.image(centerX, centerY, this.enemy.board);
         this.enemyBoard.setScale(1, -1);
         this.enemyBench = []
 
