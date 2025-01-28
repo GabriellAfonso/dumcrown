@@ -61,3 +61,8 @@ class SuicideSpellException(GameException):
 class InvalidPlaySpellOutCombatException(GameException):
     """Exceção levantada quando o jogador tenta usar certas spell fora do modo de combate."""
     pass
+
+
+class DefensivePositionTakenException(GameException):
+    """Exceção levantada quando o jogador tenta colocar uma carta defensiva onde já existe outra."""
+    pass

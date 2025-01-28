@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 import asyncio
 import re
 from .exceptions import (BenchFullException, OpponentTurnException,
@@ -30,6 +31,7 @@ class Match:
         self.timestamp = datetime.now()
         self.combat_mode = False
         self.history = []
+        self.logger = self.setup_logger()
         self.spell_effects = {
             's1': self.spell_s1,
             's2': self.spell_s2,
@@ -39,17 +41,25 @@ class Match:
         }
         self.start_match()
 
+    def setup_logger(self):
+        logger = logging.getLogger(f"match_{self.id}")
+        logger.setLevel(logging.DEBUG)
+        return logger
+
+    def log(self, message):
+        self.logger.info(message)
+        self.history.append(message)
+
     def start_match(self):
-        print('Começou')
+        self.log('Chamou Start Match')
         self.shuffle_decks()
-        # self.inital_draw()
 
     def shuffle_decks(self):
+        self.log('Chamou shuffle_decks')
         self.player1.deck.shuffle()
         self.player2.deck.shuffle()
 
     def who_i_am(self, player_id):
-        # print('player id', self.player1.get_id())
         if self.player1.get_id() == player_id:
             return self.player1
 
@@ -62,6 +72,7 @@ class Match:
         return self.player1
 
     def inital_draw(self):
+        self.log('Chamou inital_draw')
         self.player1.change_button(1, 'PRONTO')
         self.player2.change_button(1, 'PRONTO')
         for i in range(0, 4):
@@ -69,7 +80,6 @@ class Match:
             self.player2.hand.draw_card()
 
     def initial_auto_pass(self):
-        print('iniciou auto pass')
         asyncio.create_task(self.player1.set_auto_ready())
         asyncio.create_task(self.player2.set_auto_ready())
 
@@ -88,17 +98,15 @@ class Match:
         }
         return match
 
-    def record_action(self, action):
-        self.history.append(action)
-
     def all_players_ready(self):
+        self.log('Ambos jogadores estao prontos')
         p1 = self.player1.get_ready()
         p2 = self.player2.get_ready()
         return p1 and p2
 
     def new_round(self):
-        # TODO quando mudar o round mudar quem tem o turno ofensivo
         self.round += 1
+        self.log(f'Chamando novo round {self.round}')
         self.player1.hand.draw_card()
         self.player2.hand.draw_card()
 
@@ -106,11 +114,12 @@ class Match:
         # self.player2.energy = 1
 
         self.toggle_ofensive_player()
+        self.refill_energy()
         if self.round > 1:
-            self.refill_energy()
             asyncio.create_task(self.manager.new_round(self.id))
 
     def refill_energy(self):
+        self.log('Energia dos jogadores recarregada')
         self.player1.add_energy(self.round)
         self.player2.add_energy(self.round)
 
@@ -126,18 +135,18 @@ class Match:
             self.player1.change_button(0, 'TURNO DO OPONENTE')
 
     def toggle_turn(self):
+        self.log('Alternando turno dos jogadores')
         if self.turn == 1:
             self.set_turn(2)
         else:
             self.set_turn(1)
 
     def toggle_ofensive_player(self):
+        self.log('Alternando player Ofensivo')
         if self.offensive_player == 1:
-            print('vez do player 2')
             self.set_ofensive_player(2)
             self.set_turn(2)
         else:
-            print('vez do player 1')
             self.set_ofensive_player(1)
             self.set_turn(1)
 
@@ -148,23 +157,18 @@ class Match:
         self.is_my_turn(player)
         player.cancel_auto_pass()
         player.set_passed(True)
-        if self.combat_mode:
-            # ???
-            pass
-
+        self.log(f'O player {player.nickname} Passou a vez')
         self.check_both_passed()
-
-        print(f'O player {player.im}, passou a vez')
 
     def player_clash(self, player):
         self.is_my_turn(player)
         player.cancel_auto_pass()
         if player.im != self.offensive_player:
-            print('chamou o resolve clash')
+            self.log(f'O player {player.nickname} chamou clash_resolve')
             asyncio.create_task(self.clash_resolve(player))
 
             return
-
+        self.log(f'O player {player.nickname} chamou player_clash')
         self.toggle_turn()
         enemy = self.get_enemy(player)
         enemy.change_button(1, 'DEFENDER')
@@ -180,6 +184,7 @@ class Match:
 
     def check_both_passed(self):
         if self.player1.passed == self.player2.passed:
+            self.log('Ambos jogadores passaram a vez')
             self.player1.set_passed(False)
             self.player2.set_passed(False)
             self.new_round()
@@ -215,6 +220,7 @@ class Match:
             raise InvalidPlayCardInCombatException('Ação Inválida em Combate')
 
     def player_play_card(self, player, card_id):
+
         self.is_my_turn(player)
         self.is_combat_mode()
         self.is_bench_full(player)
@@ -222,7 +228,8 @@ class Match:
         self.useEnergy(player, card_id)
 
         player.add_to_bench(card_id)
-
+        self.log(
+            f'O player {player.nickname} colocou em campo a carta {card_id}')
         self.finish_turn(player)
 
     def is_player_offensive(self, player):
@@ -247,17 +254,20 @@ class Match:
         self.is_attack_zone_full(player)
         player.add_to_attack_zone(card_id)
         self.active_combat_mode(player)
+        self.log(
+            f'O player {player.nickname} colocou a carta {card_id} em modo de ataque')
 
     def player_defensive_card(self, player, card_id, pos):
         self.is_my_turn(player)
         player.add_to_defense_zone(card_id, pos)
+        self.log(
+            f'O player {player.nickname} colocou a carta {card_id} em modo de defesa na posição {pos}')
 
     async def clash_resolve(self, player):
         attacker = self.get_enemy(player)
         defender = player
 
         for i in range(len(attacker.attack_zone)):
-            print('ataque zone: ', attacker.attack_zone)
             atk_card = self.get_card(attacker, attacker.attack_zone[i])
             def_card = self.get_card(
                 defender, defender.defense_zone.get(str(i)))
@@ -265,10 +275,14 @@ class Match:
             diff = self.duel(atk_card, def_card)
 
             if diff < 0:
+                self.log(
+                    f'O player {defender.nickname} perdeu {diff} HP')
                 defender.remove_hp(abs(diff))
 
             if def_card:
                 if def_card.is_dead():
+                    self.log(
+                        f'A carta {def_card.id} foi adicionada ao cemiterio')
                     defender.add_graveyard(def_card.id, str(i))
 
             data = {
@@ -276,12 +290,13 @@ class Match:
                 'diff': diff,
                 'match': self.get_match_data(),
             }
-            # print('mandou pro client ', data)
 
             await self.manager.send_to_players(self.id, 'clash_line', data)
             await asyncio.sleep(1)
 
         if defender.hp < 1:
+            self.log(
+                f'O player {defender.nickname} foi eliminado')
             self.gameover = True
             asyncio.create_task(self.finish_match(attacker, defender))
             return
@@ -293,6 +308,7 @@ class Match:
         # devolver as cartas vivas ao banco dos seus donos
 
     async def return_cards_to_bench(self, attacker, defender):
+        self.log('Retornando cartas ao banco')
         for card in attacker.attack_zone:
             attacker.bench.append(card)
             inf = {
@@ -330,21 +346,24 @@ class Match:
 
         # se for invuneravel diff = 0
         if not def_card.is_vulnerable():
+            self.log(f'A carta {def_card.id} está invulnerável')
             def_card.set_vulnerable(True)
+            self.log(f'A carta {def_card.id} foi mudada pra vulneravel')
             return 0
         # diminui defesa da carta
         def_card.remove_defense(atk_card.attack)
+        self.log(f'A carta {def_card.id} perdeu -{atk_card.attack} de defesa')
 
-        # verifica se a carta morreu
         if def_card.defense < 1:
+            self.log(f'A carta {def_card.id} foi eliminada')
             def_card.set_defense(0)
 
         return diff
 
-    def update_card_data(self):
-        pass
-
     async def finish_match(self, winner, defeated):
+        self.log('chamou finish_match')
+        self.log(f'O vencedor é {winner.nickname}')
+        self.log(f'O perdedor é {defeated.nickname}')
         self.winner = winner
         self.defeated = defeated
         gain_points, loss_points = await self.manager.points_calculate(winner, defeated)
@@ -355,9 +374,6 @@ class Match:
 
     def player_play_spell(self, player, spell_id, target):
         self.is_my_turn(player)
-
-        print('recebeu a spell')
-        print(spell_id)
         id = self.id_cleaner(spell_id)
         spell = self.spell_effects.get(id)
         if spell:
@@ -374,6 +390,8 @@ class Match:
                 'Só funciona em cartas aliadas')
 
         self.useEnergy(player, spell_id)
+        self.log(
+            f'O player {player.nickname} jogo a Spell S1 na carta {target["id"]}')
 
         target_card = self.get_card(player, target['id'])
         target_card.add_defense(2)
@@ -396,6 +414,8 @@ class Match:
                 'Só funciona em cartas aliadas')
 
         self.useEnergy(player, spell_id)
+        self.log(
+            f'O player {player.nickname} jogo a Spell S2 na carta {target["id"]}')
         target_card = self.get_card(player, target['id'])
         target_card.set_vulnerable(False)
 
@@ -418,6 +438,7 @@ class Match:
 
         self.is_player_offensive(player)
         self.useEnergy(player, spell_id)
+        self.log(f'O player {player.nickname} jogo a Spell S5')
 
         player.remove_hp(8)
 
@@ -439,7 +460,7 @@ class Match:
 
     def spell_s7(self, player, spell_id, target=None):
         self.useEnergy(player, spell_id)
-        print('executou spell s7')
+        self.log(f'O player {player.nickname} jogo a Spell S7')
         player.add_hp(5)
         data = {
             'match': self.get_match_data(),
@@ -464,14 +485,23 @@ class Match:
                 'Carta invalida em combate')
 
         self.useEnergy(player, spell_id)
+        self.log(
+            f'O player {player.nickname} jogo a Spell S8 na carta {target["id"]}')
 
         enemy = self.get_enemy(player)
 
         target_card = self.get_card(enemy, target['id'])
-        target_card.remove_defense(3)
+
+        if target_card.is_vulnerable():
+            self.log(f'A carta {target_card.id} perdeu 3 de vida')
+            target_card.remove_defense(3)
+        else:
+            target_card.set_vulnerable(True)
+            self.log(f'A carta {target_card.id} foi mudada pra vulneravel')
 
         if target_card.defense < 1:
             target_card.set_defense(0)
+            self.log(f'A carta {target_card.id} foi eliminada')
             enemy.kill_card(target['id'], target['zone'])
 
         data = {

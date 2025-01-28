@@ -1,6 +1,7 @@
 from .hand import PlayerHand
 from .deck import PlayerDeck
 import asyncio
+from .exceptions import DefensivePositionTakenException
 
 
 class Player:
@@ -43,7 +44,6 @@ class Player:
         self.energy = 10
 
     def add_graveyard(self, card, key):
-        print(f'a carta {card} de chave {key}, foi pro cemiterio')
         self.defense_zone.pop(key)
         self.graveyard.append(card)
 
@@ -92,13 +92,10 @@ class Player:
 
     async def wait_for_ready(self):
         try:
-            await asyncio.sleep(15)  # Espera 30 segundos
-            print('esperou os 15 segundos')
+            await asyncio.sleep(30)  # Espera 30 segundos
             if not self.get_ready():
-                print('player nao tava ready')
                 self.set_ready(True)
         except asyncio.CancelledError:
-            print('wait cancelado')
             pass
 
     async def auto_pass_timer(self, match):
@@ -116,7 +113,6 @@ class Player:
             match.player_pass(self)
 
         except asyncio.CancelledError:
-            print('Auto passar cancelado')
             pass
 
     def add_to_bench(self, card_id):
@@ -132,9 +128,10 @@ class Player:
         self.bench.remove(card_id)
 
     def add_to_defense_zone(self, card_id, pos):
+        print(self.defense_zone)
         if pos in self.defense_zone:
-            print('ja tem uma carta nessa posiçao')
-            return
+            raise DefensivePositionTakenException(
+                'Está Posição já contém uma carta')
         self.defense_zone[pos] = card_id
         print(self.defense_zone)
         self.bench.remove(card_id)

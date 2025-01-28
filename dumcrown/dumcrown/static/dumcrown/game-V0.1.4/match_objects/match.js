@@ -535,12 +535,16 @@ export class MatchManager {
     benchPlayerAnimation() {
 
         const numCards = this.player.bench.length;
+        console.log(numCards)
+        console.log(this.player.bench)
+        console.log(this.playerBench)
         const spacing = 115;
         const offsetX = (numCards - 1) * spacing / 2;
 
         this.playerBench.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
-
+            console.log(card, index)
+            console.log(posX)
             this.scene.tweens.add({
                 targets: card,
                 scale: 0.28,
@@ -559,12 +563,19 @@ export class MatchManager {
     }
     benchEnemyAnimation() {
         const numCards = this.enemy.bench.length;
+        console.log(numCards)
+        console.log(this.enemy.bench)
+
+        console.log(this.enemyBench)
+
         const spacing = 115;
         const offsetX = (numCards - 1) * spacing / 2;
 
 
         this.enemyBench.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
+            console.log(card, index)
+            console.log(posX)
             card.setVisible(true)
             this.scene.tweens.add({
                 targets: card,
@@ -1156,8 +1167,6 @@ export class MatchManager {
                         spell.death()
                         this.updateEnergy()
                         this.updateCardData(target_card, enemy)
-                        this.benchPlayerAnimation()
-                        this.benchEnemyAnimation()
                     },
                 });
             },
@@ -1175,15 +1184,46 @@ export class MatchManager {
         })
     }
     removeCardFromAll(card) {
-        removeFromList(this.playerBench, card)
-        removeFromList(this.enemyBench, card)
+        this.removeFromBench(card, card.owner)
 
-        removeFromList(this.playerAttackZone, card)
-        removeFromList(this.enemyAttackZone, card)
+        // removeFromList(this.playerAttackZone, card)
+        // removeFromList(this.enemyAttackZone, card)
 
         //nao sei como fazer e a spell S8 nao pode ser tacada em cartas defense msm
         // removeFromList(Object.values(this.playerDefenseZone), card)
         // removeFromList(Object.values(this.enemyDefenseZone), card)
+    }
+    removeFromBench(card, owner) {
+        console.log('removeFromBench')
+        console.log(this.player.im == owner)
+        if (this.player.im == owner) {
+            const index = this.playerBench.findIndex(item => item.id === card.id);
+
+            if (index !== -1) {
+                this.playerBench.splice(index, 1);
+                sleep(this.scene, 100, () => {
+                    this.benchPlayerAnimation()
+                })
+            } else {
+                console.log("Elemento não encontrado na lista");
+            }
+            return
+
+        }
+        console.log('foi pro inimigo')
+        // Corrigido para acessar 'this.enemyBench' diretamente
+        const index = this.enemyBench.findIndex(item => item.id === card.id);
+
+        if (index !== -1) {
+            this.enemyBench.splice(index, 1);
+            sleep(this.scene, 100, () => {
+                this.benchEnemyAnimation()
+            })
+        } else {
+            console.log("Elemento não encontrado na lista");
+        }
+
+        return;
     }
     deleteMatch() {
         clearCardsToSwap()

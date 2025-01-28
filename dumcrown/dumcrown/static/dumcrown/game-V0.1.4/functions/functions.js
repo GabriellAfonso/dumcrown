@@ -236,6 +236,7 @@ export function showCoordinates(scene) {
 
 export function removeFromList(list, target) {
     const indice = list.indexOf(target);
+    console.log('o indice é', indice)
     if (indice !== -1) {
         list.splice(indice, 1);
 
