@@ -1,5 +1,6 @@
 import { centerX, centerY, GAME } from "../../config/gameConfig.js";
-import { Botao, switchScenes } from "../../functions/functions.js";
+import { Button } from "../../functions/buttons.js";
+import { switchScenes } from "../../functions/functions.js";
 
 
 export function gameWin(scene, crystal, points) {
@@ -35,14 +36,14 @@ export function gameWin(scene, crystal, points) {
                     crystals.alpha = 0
                     crownPoints.alpha = 0
 
-                    const continue_button = new Botao(scene, centerX, 650, 'exit_button', () => {
+                    const continue_button = new Button(scene, centerX, 650, 'exit_button', () => {
                         switchScenes('HomeScene', 'DumMatch');
                         const soundfx = scene.scene.get('Loading');
                         soundfx.arena_music.stop()
                         soundfx.music.play()
                         soundfx.music.setLoop(true);
 
-                    }, 0xffff00,);
+                    }, { color: 0xffff00, });
                     continue_button.alpha = 0
 
                     crystals.scale = 0.8
@@ -131,7 +132,7 @@ export function gameLoss(scene, crystal, points) {
                     crystals.alpha = 0
                     crownPoints.alpha = 0
 
-                    const continue_button = new Botao(scene, centerX, 650, 'exit_button', () => {
+                    const continue_button = new Button(scene, centerX, 650, 'exit_button', () => {
 
                         switchScenes('HomeScene', 'DumMatch');
                         const soundfx = scene.scene.get('Loading');
@@ -141,7 +142,7 @@ export function gameLoss(scene, crystal, points) {
                         // var match = getScene
                         // GAME.scene.getScene('DumMatch')
 
-                    }, 0xffff00,);
+                    }, { color: 0xffff00, });
                     continue_button.alpha = 0
 
                     crystals.scale = 0.8

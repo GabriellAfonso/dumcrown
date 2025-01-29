@@ -1,9 +1,6 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax } from '../functions/functions.js';
-
-
-import { Botao } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 
 export class ReconnectingScreen extends Phaser.Scene {

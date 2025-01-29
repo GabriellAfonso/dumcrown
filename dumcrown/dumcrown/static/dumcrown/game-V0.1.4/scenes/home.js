@@ -5,7 +5,6 @@ import { player, experienceUpdated, setExperienceUpdated, players_online, latenc
 
 import { toggleFullscreen, switchScenes } from '../functions/functions.js';
 import { sfx } from '../soundfx/sounds.js';
-import { Botao } from '../functions/functions.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { add_text } from '../functions/texts.js'
 
@@ -45,12 +44,16 @@ class Ping {
     }
 
     update() {
-        this.updatePing = setInterval(() => {
-            if (this.ping) {
-                this.ping.setTexture(this.latencyCheck());
-                this.ms.setText(latency_ms);
+        this.pingUpdate = this.scene.time.addEvent({
+            delay: 1000,
+            loop: true,
+            callback: () => {
+                if (this.ping) {
+                    this.ping.setTexture(this.latencyCheck());
+                    this.ms.setText(latency_ms);
+                }
             }
-        }, 1000);
+        });
     }
 }
 class ExpBar {
@@ -133,7 +136,6 @@ export class HomeScene extends Phaser.Scene {
     create() {
         sendSocket('get_player_data')
         this.completeNoActiveDeckMsg = true
-        const soundfx = this.scene.get('Loading');
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
         const background = this.add.image(centerX, centerY, 'homescreen');
@@ -147,10 +149,10 @@ export class HomeScene extends Phaser.Scene {
         this.name = add_text(this, 218, 35, player.nickname, '28px')
         this.level = add_text(this, 223, 106, 'Lv: ' + player.level, '25px')
 
-        const perfil = new Botao(this, 115, 105, player.icon, () => {
+        const perfil = new Button(this, 115, 105, player.icon, () => {
             switchScenes('PerfilScene', 'HomeScene');
 
-        }, 0xffffff, soundfx.clickSound);
+        }, { color: 0xcccccc, });
 
         perfil.setScale(0.5);
         var data = {
@@ -161,14 +163,6 @@ export class HomeScene extends Phaser.Scene {
             "attack": 8,
             "defense": 6,
         }
-        var carta = new unitCardObject(this, '1', data)
-        carta.setVisible(true)
-
-        carta.setPosition(centerX, centerY)
-        // carta.setScale(0.5)
-        carta.scale = 1
-        carta.setSmallLayout()
-
 
         const border_perfil = this.add.image(115, 105, player.border)
         border_perfil.setScale(0.5)
@@ -232,7 +226,6 @@ export class HomeScene extends Phaser.Scene {
     }
 
     noActiveDeckMsg() {
-        console.log('chamou', this.completeNoActiveDeckMsg)
         if (this.completeNoActiveDeckMsg) {
             this.completeNoActiveDeckMsg = false
 
@@ -253,13 +246,7 @@ export class HomeScene extends Phaser.Scene {
 
     addEvents() {
         this.events.on('stop', () => {
-            if (this.PingSignal) {
-                if (this.PingSignal.updatePing) {
-                    clearInterval(this.PingSignal.updatePing);
-                }
 
-                this.PingSignal = null;
-            }
         });
     }
 }

@@ -3,15 +3,16 @@ import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.
 import { createPlayerCards, instantiateCards } from '../cards/functions.js';
 import { player } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
+import { Button } from '../functions/buttons.js';
 
 import { switchScenes, logoutAjax, showCoordinates, sleep } from '../functions/functions.js';
 
-import { Botao } from '../functions/functions.js';
+
 import { add_text } from '../functions/texts.js';
 import { MatchHand } from '../match_objects/hand.js';
 import { InitialDrawManager } from '../match_objects/initialDrawManager.js';
 import { MatchManager } from '../match_objects/match.js';
-import { data } from './data.js';
+import { sfx } from '../soundfx/sounds.js';
 
 export class MissionsScene extends Phaser.Scene {
     constructor() {
@@ -60,9 +61,9 @@ export class MissionsScene extends Phaser.Scene {
 
 
 
-        const x_close = new Botao(this, 1440, 40, 'x_close', () => {
+        const x_close = new Button(this, 1440, 40, 'x_close', () => {
             switchScenes('HomeScene', 'MissionsScene')
-        }, 0xffff00, soundfx.closeSound);
+        }, { color: 0xffff00, clickSound: sfx.closeSound });
         x_close.setScale(0.5)
 
         // console.log(player.decks[0].cards)

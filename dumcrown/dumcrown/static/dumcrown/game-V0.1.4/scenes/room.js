@@ -9,8 +9,6 @@ import { cardsShow, Card } from '../functions/cards.js';
 import { sendSocket } from '../functions/functions.js';
 
 import { sfx } from '../soundfx/sounds.js';
-
-import { Botao } from '../functions/functions.js';
 import { Button, close_button } from '../functions/buttons.js';
 
 
@@ -93,7 +91,7 @@ export class RoomScreen extends Phaser.Scene {
         }
 
         if (!this.start && player.nickname === room.player_x.nickname && room.player_y.nickname) {
-            this.start = new Botao(this, centerX, 600, 'start_button', () => {
+            this.start = new Button(this, centerX, 600, 'start_button', () => {
                 var data = {
                     id: room.id,
                     player_x: room.player_x.id,
@@ -102,7 +100,7 @@ export class RoomScreen extends Phaser.Scene {
                 sendSocket('start_match', data)
                 this.start.disableInteractive()
                 console.log('cliquei no start')
-            }, 0xffff00,);
+            });
             this.start.setScale(0.5)
             this.start.setTint(0xdddddd)
         }

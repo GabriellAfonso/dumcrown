@@ -1,10 +1,12 @@
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
+import { Button } from '../functions/buttons.js';
 
 import { switchScenes, logoutAjax, sendSocket } from '../functions/functions.js';
 
 
-import { Botao } from '../functions/functions.js';
+
 import { add_text } from '../functions/texts.js';
+import { sfx } from '../soundfx/sounds.js';
 
 export class FriendsScene extends Phaser.Scene {
     constructor() {
@@ -16,9 +18,9 @@ export class FriendsScene extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'friends_background');
         const building = this.add.image(centerX, centerY, 'building');
-        const x_close = new Botao(this, 1440, 40, 'x_close', () => {
+        const x_close = new Button(this, 1440, 40, 'x_close', () => {
             switchScenes('HomeScene', 'FriendsScene')
-        }, 0xffff00, soundfx.closeSound);
+        }, { color: 0xffff00, clickSound: sfx.closeSound });
         x_close.setScale(0.5)
         // this.textA = add_text(this, centerX - 100, centerY + 100, 'Resize', '20px', 0.5)
         // this.textB = add_text(this, centerX + 100, centerY + 100, 'Resize', '200px', 0.5)

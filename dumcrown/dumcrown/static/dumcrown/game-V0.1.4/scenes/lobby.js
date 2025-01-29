@@ -8,8 +8,6 @@ import { switchScenes, logoutAjax, sleep, showCoordinates } from '../functions/f
 import { cardsShow, Card } from '../functions/cards.js';
 import { sendSocket } from '../functions/functions.js';
 
-
-import { Botao } from '../functions/functions.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';
 import { Button, close_button } from '../functions/buttons.js';
 import { add_text } from '../functions/texts.js';
@@ -47,7 +45,7 @@ export class GameLobby extends Phaser.Scene {
 
             this.inputRoom.node.blur();
         });
-        this.joinButton = new Botao(this, 1220, 52, 'enter_room', () => {
+        this.joinButton = new Button(this, 1220, 52, 'enter_room', () => {
             if (this.inputRoom.node.value) {
                 sendSocket('join_room', this.inputRoom.node.value.trim())
             }

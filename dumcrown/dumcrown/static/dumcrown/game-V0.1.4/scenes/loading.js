@@ -2,7 +2,8 @@ import { player } from '../client/client.js';
 
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { PATH } from '../config/gameConfig.js';
-import { Botao, sendSocket } from '../functions/functions.js';
+import { Button } from '../functions/buttons.js';
+import { sendSocket } from '../functions/functions.js';
 import { toggleFullscreen } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 import { loadSFX } from '../soundfx/sounds.js';
@@ -295,13 +296,13 @@ export class Loading extends Phaser.Scene {
 
         this.scale.fullscreenTarget = document.getElementById('game-display');
 
-        const fullscreen_button = new Botao(this, 1465, 35, 'fullscreen', () => {
+        const fullscreen_button = new Button(this, 1465, 35, 'fullscreen', () => {
             toggleFullscreen();
 
-        }, 0xffffff);
+        }, { color: 0xffffff });
         fullscreen_button.setScale(0.40);
 
-        const entrar = new Botao(this, centerX, 650, 'entrar_button', () => {
+        const entrar = new Button(this, centerX, 650, 'entrar_button', () => {
             fullscreen_button.destroy();
             entrar.destroy();
             if (player.nickname.length === 0) {
@@ -310,7 +311,7 @@ export class Loading extends Phaser.Scene {
                 sendSocket('is_player_in_match')
                 GAME.scene.start('HomeScene');
             }
-        }, 0xffff00);
+        });
         entrar.setScale(0.6)
 
     }

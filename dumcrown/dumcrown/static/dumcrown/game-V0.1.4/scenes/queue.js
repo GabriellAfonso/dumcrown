@@ -9,7 +9,7 @@ import { cardsShow, Card } from '../functions/cards.js';
 import { sendSocket } from '../functions/functions.js';
 import { simpleTweens } from '../animations/scripts/functions.js';
 
-import { Botao } from '../functions/functions.js';
+import { Button } from '../functions/buttons.js';
 
 export class QueueTimer extends Phaser.Scene {
     constructor() {
@@ -38,13 +38,13 @@ export class QueueTimer extends Phaser.Scene {
             duration: 400,
             ease: 'Power2',
             onComplete: () => {
-                const x_close = new Botao(this, 855, 45, 'x_close', () => {
+                const x_close = new Button(this, 855, 45, 'x_close', () => {
                     this.game.scene.stop('QueueTimer')
                     this.game.scene.stop('GameLobby')
                     this.game.scene.run('GameLobby')
                     sendSocket('quit_queue')
                     clearTimeout(this.timerTimeout);
-                }, 0xffffff, soundfx.closeSound);
+                });
                 x_close.setScale(0.3)
                 x_close.alpha = 0.4
             }

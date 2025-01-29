@@ -9,10 +9,6 @@ import {
 
     spellS1, spellS2, spellS5, spellS7, spellS8,
     returnCardToBench,
-
-
-    hpUpdate, matchUpdate, playerPass, energyUpdate, adversaryField,
-    adversaryAttack, adversaryDefese, resolveConflit, autoResolve, roundUpdate,
 } from "./match.js";
 
 function msg(data) {
@@ -68,23 +64,5 @@ export const clientReciver = {
 
     victory_match: victoryMatch,
     defeat_match: defeatMatch,
-
-    //antigas
-    match_update: matchUpdate,
-    player_pass: playerPass,
-    energy_update: energyUpdate,
-    adversary_field: adversaryField,
-    adversary_attack: adversaryAttack,
-    adversary_defese: adversaryDefese,
-    resolve: resolveConflit,
-    auto_resolve: autoResolve,
-    hp_update: hpUpdate,
-    round_update: roundUpdate,
-
-
-
-
-
-
 
 };

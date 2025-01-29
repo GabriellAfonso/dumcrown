@@ -1,4 +1,3 @@
-import { cardOnField } from "../../client/match.js";
 import { centerX, centerY } from "../../config/gameConfig.js";
 import { sleep } from "../../functions/functions.js";
 import { cardsToSwap, clearCardsToSwap, SwapButton } from "../../match_objects/swapButton.js";

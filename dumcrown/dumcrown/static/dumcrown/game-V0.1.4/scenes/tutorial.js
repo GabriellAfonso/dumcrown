@@ -1,7 +1,7 @@
 
 import { player, nicknameDenied, setNicknameDenied, nickServerMsg } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
-import { Botao, sleep } from '../functions/functions.js';
+import { sleep } from '../functions/functions.js';
 import { sendSocket } from '../functions/functions.js';
 
 

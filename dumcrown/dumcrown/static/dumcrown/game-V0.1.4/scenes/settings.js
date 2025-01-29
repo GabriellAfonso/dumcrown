@@ -4,12 +4,11 @@ import { player, setmusicVolume, setSondsVolume } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax, toggleFullscreen } from '../functions/functions.js';
-
-
-import { Botao } from '../functions/functions.js';
 import { sendSocket } from '../functions/functions.js';
 import { areYouInGame, setAreYouInGame } from '../client/client.js';
 import { room } from '../client/room.js';
+import { sfx } from '../soundfx/sounds.js';
+import { Button } from '../functions/buttons.js';
 
 export class ConfigScreen extends Phaser.Scene {
     constructor() {
@@ -24,50 +23,60 @@ export class ConfigScreen extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'config_background');
         background.setInteractive({ cursor: 'default' })
-        const x_close = new Botao(this, 1440, 40, 'x_close', () => {
+        const x_close = new Button(this, 1440, 40, 'x_close', () => {
             if (this.previousScene == 'HomeScene') {
                 switchScenes('HomeScene', 'ConfigScreen')
                 return
             }
             GAME.scene.stop('ConfigScreen')
 
-        }, 0xffff00, soundfx.closeSound);
+        }, { color: 0xffff00, clickSound: sfx.closeSound });
         x_close.setScale(0.4)
 
         this.aba_select = this.add.image(191, 65, 'aba_select');
 
-        this.logout = new Botao(this, 600, 700, 'logout', () => {
-            logoutAjax();
-        }, 0xffffff, soundfx.clickSound);
+        if (this.previousScene == 'DumMatch') {
+            this.giveup = new Button(this, 600, 700, 'giveup', () => {
+                sendSocket('give_up')
+                this.game.scene.stop('ConfigScreen')
+            });
+            this.giveup.setScale(0.8)
+
+        } else {
+            this.logout = new Button(this, 600, 700, 'logout', () => {
+                logoutAjax();
+            });
+        }
+
 
 
 
         var soundContainer = this.add.container(0, 0);
         soundContainer.visible = false;
 
-        const geral = new Botao(this, 192.5, 65, 'geral', () => {
+        const geral = new Button(this, 192.5, 65, 'geral', () => {
             soundContainer.visible = false;
             this.aba_select.destroy();
             this.aba_select = this.add.image(191, 65, 'aba_select');
-        }, 0xffffff, soundfx.uiselect);
+        }, { color: 0xffffff, clickSound: sfx.uiselect });
 
-        const audio = new Botao(this, 192.5, 205, 'audio', () => {
+        const audio = new Button(this, 192.5, 205, 'audio', () => {
             soundContainer.visible = true;
             this.aba_select.destroy();
             this.aba_select = this.add.image(191, 205, 'aba_select');
-        }, 0xffffff, soundfx.uiselect);
+        }, { color: 0xffffff, clickSound: sfx.uiselect });
 
-        const conta = new Botao(this, 192.5, 345, 'conta', () => {
+        const conta = new Button(this, 192.5, 345, 'conta', () => {
             soundContainer.visible = false;
             this.aba_select.destroy();
             this.aba_select = this.add.image(191, 345, 'aba_select');
-        }, 0xffffff, soundfx.uiselect);
+        }, { color: 0xffffff, clickSound: sfx.uiselect });
 
-        const sobre = new Botao(this, 192.5, 495, 'sobre', () => {
+        const sobre = new Button(this, 192.5, 495, 'sobre', () => {
             soundContainer.visible = false;
             this.aba_select.destroy();
             this.aba_select = this.add.image(191, 495, 'aba_select');
-        }, 0xffffff, soundfx.uiselect);
+        }, { color: 0xffffff, clickSound: sfx.uiselect });
 
         //music Volume bar
         this.musicVolumeBar = document.createElement("input");
@@ -138,14 +147,7 @@ export class ConfigScreen extends Phaser.Scene {
     update() {
         if (areYouInGame && !this.giveup) {
             this.logout.destroy()
-            this.giveup = new Botao(this, 600, 700, 'giveup', () => {
-                // mandar desistir pro server
-                setAreYouInGame(false)
-                sendSocket('give_up', room.id)
-                this.game.scene.stop('ConfigScreen')
-                this.giveup = null
-            }, 0xffffff);
-            this.giveup.setScale(0.8)
+
         }
     }
 }

@@ -2,9 +2,7 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax, sendSocket } from '../functions/functions.js';
 import { playersRanking, rankingUpdate } from '../client/client.js';
-
-import { sleep } from '../functions/functions.js';
-import { Botao } from '../functions/functions.js';
+import { Button } from '../functions/buttons.js';
 
 export class RankingScreen extends Phaser.Scene {
     constructor() {
@@ -15,9 +13,9 @@ export class RankingScreen extends Phaser.Scene {
         const soundfx = this.scene.get('Loading');
 
         const background = this.add.image(centerX, centerY, 'ranking_background');
-        const x_close = new Botao(this, 1440, 40, 'x_close', () => {
+        const x_close = new Button(this, 1440, 40, 'x_close', () => {
             switchScenes('HomeScene', 'RankingScreen')
-        }, 0xffff00, soundfx.closeSound);
+        });
         x_close.setScale(0.5)
 
 
