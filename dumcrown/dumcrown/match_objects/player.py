@@ -19,8 +19,8 @@ class Player:
         self.attack_zone = []
         self.defense_zone = {}
         self.graveyard = []
-        self.hp = 3
-        self.energy = 10
+        self.hp = 30
+        self.energy = 0
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
         self.ready = False
@@ -87,7 +87,8 @@ class Player:
         self.auto_pass = task
 
     def cancel_auto_pass(self):
-        self.auto_pass.cancel()
+        if self.auto_pass:
+            self.auto_pass.cancel()
         self.auto_pass = None
 
     async def wait_for_ready(self):

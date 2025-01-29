@@ -18,11 +18,13 @@ class MatchManager:
         self.channel = consumer.channel
 
     async def is_player_in_match(self):
-        print(self.matches)
         for match_id, match in self.matches.items():
             if self.user in [match.player1.user_id, match.player2.user_id]:
-                return await self.consumer.send_to_client('is_player_in_match', True)
-        return await self.consumer.send_to_client('is_player_in_match', False)
+                await self.consumer.send_to_client('is_player_in_match', match_id)
+                return match_id
+
+        await self.consumer.send_to_client('is_player_in_match', False)
+        return None
 
     async def start_match(self, data):
         try:
@@ -160,7 +162,6 @@ class MatchManager:
         await self.consumer.send_to_group(match.id, 'new_round', match.get_match_data())
 
     async def message_to_player(self, channel, code, data=''):
-        # TODO apos acabar a partida, deletar ela e todos os sistemas asyncronos vinculados
         await self.consumer.send_to_channel(channel, code, data)
 
     async def offensive_card(self, data):
@@ -221,7 +222,7 @@ class MatchManager:
         await save_player(player.stats)
 
         data = {
-            'exp': 85,
+            'exp': 85 + (player.level*14),
             'crystals': 50 * min(35, player.level),
             'points': pts,
         }
@@ -238,7 +239,7 @@ class MatchManager:
         await save_player(player)
         await save_player(player.stats)
         data = {
-            'exp': 42,
+            'exp': 42 + (player.level*6),
             'crystals': 32 * min(35, player.level),
             'points': -pts,
         }
@@ -273,76 +274,17 @@ class MatchManager:
 
         return gain_points, loss_points
 
-        # async def game_winner(self, user, data):
-        #     if user.is_authenticated:
-        #         try:
-        #             player = await get_player(user)
-        #             match_id, defeat_player = data['gameWinner']
+    async def give_up(self):
+        match_id = await self.is_player_in_match()
+        print(match_id)
+        if not match_id:
+            return
 
-        #             created_at = self.matches[match_id]['created_at']
-        #             created_formated = datetime.fromisoformat(created_at)
-        #             duration = timezone.now() - created_formated
-        #             duration_in_seconds = int(duration.total_seconds())
+        match = self.matches[match_id]
+        player = match.who_i_am(self.user)
+        enemy = match.get_enemy(player)
+        await match.finish_match(enemy, player)
 
-        #             current_app.send_task(
-        #                 'dumcrown.tasks.save_match',
-        #                 args=[match_id,
-        #                       player.nickname,
-        #                       defeat_player,
-        #                       created_formated,
-        #                       duration_in_seconds,
-        #                       ])
-
-        #             player.matches += 1
-        #             player.victories += 1
-        #             player.crystals += 50
-        #             player.crown_points += 1
-        #             await save_player(player)
-
-        #         except Exception as e:
-        #             logging.error(f'Error in game_winner {e}', exc_info=True)
-
-    async def game_loser(self, user, data):
-        if user.is_authenticated:
-            try:
-                player = await get_player(user)
-                player.matches += 1
-                player.defeats += 1
-                player.crystals += 15
-                if player.crown_points > 0:
-                    player.crown_points -= 1
-
-                await save_player(player)
-
-            except Exception as e:
-                logging.error(f'Error in game_loser: {e}', exc_info=True)
-
-    async def give_up(self, user, data):
-        try:
-            match_id = data['give_up']
-
-            player1_channel = self.matches[match_id]['player1']['channel']
-            player2_channel = self.matches[match_id]['player2']['channel']
-
-            # vida vai pra 0 e da um match update
-            if player1_channel == self.consumer.channel_name:
-                self.matches[match_id]['player1']['hp'] = 0
-
-            if player2_channel == self.consumer.channel_name:
-                self.matches[match_id]['player2']['hp'] = 0
-
-            await self.consumer.channel_layer.group_send(match_id,
-                                                         {'type': 'send_message',
-                                                          'hp_update': self.matches[match_id],
-                                                          })
-
-        except Exception as e:
-            logging.error(f'Error in give_up: {e}', exc_info=True)
-
-    async def delete_match(self, user, data):
-        try:
-            match_id = data['delete_match']
-            del self.matches[match_id]
-
-        except Exception as e:
-            logging.error(f'Error in delete_match: {e}', exc_info=True)
+    async def delete_match(self, match_id):
+        del self.matches[match_id]
+        print(self.matches)

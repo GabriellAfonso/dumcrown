@@ -6,6 +6,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
 
 from .room import GameRoom
+from .match import MatchManager
 from .functions import player_connected, player_disconnected, player_is_online
 from .codes import code_handlers
 
@@ -35,6 +36,7 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             self.user = self.scope["user"].id
             self.channel = self.channel_name
             self.game_room = GameRoom(self)
+            self.match_manager = MatchManager(self)
 
             await self.accept()
             if await self.check_player_already_online():
@@ -52,6 +54,7 @@ class PlayerConsumer(AsyncWebsocketConsumer):
 
             print('desconectando')
             await self.game_room.leave_room()
+            await self.match_manager.give_up()
             await player_disconnected(self.user)
         except Exception as e:
             logging.error(f'Error in disconnect: {e}', exc_info=True)

@@ -363,6 +363,9 @@ class Match:
         self.log('chamou finish_match')
         self.log(f'O vencedor é {winner.nickname}')
         self.log(f'O perdedor é {defeated.nickname}')
+        winner.cancel_auto_pass()
+        defeated.cancel_auto_pass()
+        self.gameover = True
         self.winner = winner
         self.defeated = defeated
         self.endtime = datetime.now()
@@ -370,6 +373,7 @@ class Match:
         await self.manager.winner_gain(winner, gain_points)
         await self.manager.defeated_gain(defeated, loss_points)
         await self.save_match()
+        await self.manager.delete_match(self.id)
 
     @database_sync_to_async
     def save_match(self):
