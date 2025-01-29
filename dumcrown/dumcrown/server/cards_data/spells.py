@@ -5,7 +5,7 @@ spells_data = {
         "image": "someones_shield",
         "name": "SOMEONE'S SHIELD",
         "description": "Aumenta +2 de defesa na unidade aliada atingida",
-        "energy": 3,
+        "energy": 2,
     },
     's2': {
         "id": 's2',

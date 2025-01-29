@@ -85,7 +85,7 @@ units_data = {
         "image": "okada_card",
         "name": "OKADA",
         "description": "",
-        "energy": 8,
+        "energy": 6,
         "attack": 8,
         "defense": 5,
     },
@@ -116,7 +116,7 @@ units_data = {
         "name": "SPRING",
         "description": "",
         "energy": 4,
-        "attack": 8,
+        "attack": 7,
         "defense": 1,
     },
     '13': {
