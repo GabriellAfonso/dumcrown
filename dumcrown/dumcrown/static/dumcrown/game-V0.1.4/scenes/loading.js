@@ -2,7 +2,7 @@ import { player } from '../client/client.js';
 
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { PATH } from '../config/gameConfig.js';
-import { Botao } from '../functions/functions.js';
+import { Botao, sendSocket } from '../functions/functions.js';
 import { toggleFullscreen } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 import { loadSFX } from '../soundfx/sounds.js';
@@ -307,6 +307,7 @@ export class Loading extends Phaser.Scene {
             if (player.nickname.length === 0) {
                 GAME.scene.start('Nickname');
             } else {
+                sendSocket('is_player_in_match')
                 GAME.scene.start('HomeScene');
             }
         }, 0xffff00);

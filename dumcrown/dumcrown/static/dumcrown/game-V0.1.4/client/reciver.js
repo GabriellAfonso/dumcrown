@@ -4,7 +4,7 @@ import {
 } from "./client.js";
 import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } from "./room.js";
 import {
-    startMatch, initialDraw, swappedCards, updateMatchData, round1, newRound, matchMessage, invalidMove,
+    isPlayerInMatch, startMatch, initialDraw, swappedCards, updateMatchData, round1, newRound, matchMessage, invalidMove,
     animateCardToBench, animateCardToAttack, animateCardToDefense, defenseMode, clashLine, victoryMatch, defeatMatch,
 
     spellS1, spellS2, spellS5, spellS7, spellS8,
@@ -28,6 +28,7 @@ export const clientReciver = {
     pong: pingHandler,
     message: msg,
     is_online: onlineChecker,
+    is_player_in_match: isPlayerInMatch,
     ranking: rankingRecive,
     call_start: callStart,
     room_open: roomOpen,

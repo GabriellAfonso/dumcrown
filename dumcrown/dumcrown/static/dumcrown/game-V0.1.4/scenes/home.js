@@ -138,9 +138,9 @@ export class HomeScene extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'homescreen');
 
-        const fullscreen_button = new Botao(this, 1465, 35, 'fullscreen', () => {
+        const fullscreen_button = new Button(this, 1465, 35, 'fullscreen', () => {
             toggleFullscreen();
-        }, 0xffffff);
+        });
         fullscreen_button.setScale(0.40);
 
 
@@ -180,7 +180,9 @@ export class HomeScene extends Phaser.Scene {
         const crystalNumber = add_text(this, 575, 30, player.crystalsCoins, '25px')
 
         const ConfigButton = new Button(this, 1390, 35, 'config_button', () => {
+            this.scene.get('ConfigScreen').setPreviousScene('HomeScene');
             switchScenes('ConfigScreen', 'HomeScene');
+
         });
 
         const StoreButton = new Button(this, 100, 725, 'store_button', () => {
@@ -251,9 +253,13 @@ export class HomeScene extends Phaser.Scene {
 
     addEvents() {
         this.events.on('stop', () => {
-            clearTimeout(this.PingSignal.updatePing);
+            if (this.PingSignal) {
+                if (this.PingSignal.updatePing) {
+                    clearInterval(this.PingSignal.updatePing);
+                }
+
+                this.PingSignal = null;
+            }
         });
     }
-
-
 }

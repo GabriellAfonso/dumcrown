@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 import asyncio
 import re
+from channels.db import database_sync_to_async
 from .exceptions import (BenchFullException, OpponentTurnException,
                          InsufficientEnergyException, InvalidCardTypeForBenchException,
                          OpponentOffensiveTurnException, AttackZoneFullException,
@@ -99,9 +100,10 @@ class Match:
         return match
 
     def all_players_ready(self):
-        self.log('Ambos jogadores estao prontos')
         p1 = self.player1.get_ready()
         p2 = self.player2.get_ready()
+        if p1 and p2:
+            self.log('Ambos jogadores estao prontos')
         return p1 and p2
 
     def new_round(self):
@@ -109,9 +111,6 @@ class Match:
         self.log(f'Chamando novo round {self.round}')
         self.player1.hand.draw_card()
         self.player2.hand.draw_card()
-
-        # self.player1.energy = 1
-        # self.player2.energy = 1
 
         self.toggle_ofensive_player()
         self.refill_energy()
@@ -366,11 +365,31 @@ class Match:
         self.log(f'O perdedor é {defeated.nickname}')
         self.winner = winner
         self.defeated = defeated
+        self.endtime = datetime.now()
         gain_points, loss_points = await self.manager.points_calculate(winner, defeated)
         await self.manager.winner_gain(winner, gain_points)
         await self.manager.defeated_gain(defeated, loss_points)
+        await self.save_match()
 
-        ...
+    @database_sync_to_async
+    def save_match(self):
+        from dumcrown.models.match import Match
+        from dumcrown.models.player import Player
+
+        # Buscar os jogadores de forma assíncrona
+        winner = Player.objects.get(user_id=self.winner.user_id)
+        loser = Player.objects.get(user_id=self.defeated.user_id)
+
+        match = Match(
+            winner=winner,
+            loser=loser,
+            duration=(self.endtime - self.timestamp).total_seconds() / 60,
+            created_at=self.timestamp,
+            history="\n".join(self.history)
+        )
+
+        # Salvar de forma assíncrona
+        match.save()
 
     def player_play_spell(self, player, spell_id, target):
         self.is_my_turn(player)

@@ -1,9 +1,15 @@
 from django.contrib import admin
 from dumcrown.models.player import Player, Connection, LoginHistory, Deck, Stats
+from dumcrown.models.match import Match
 
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
+    ...
+
+
+@admin.register(Match)
+class MatchAdmin(admin.ModelAdmin):
     ...
 
 

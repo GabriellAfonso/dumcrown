@@ -24,6 +24,8 @@ code_handlers = {
     'join_room': {'object': game_room, 'method': 'join_room'},
     'leave_room': {'object': game_room, 'method': 'leave_room'},
 
+    'is_player_in_match': {'object': match_manager, 'method': 'is_player_in_match'},
+
     'start_match': {'object': match_manager, 'method': 'start_match'},
     'ready': {'object': match_manager, 'method': 'ready'},
     'play_card': {'object': match_manager, 'method': 'play_card'},

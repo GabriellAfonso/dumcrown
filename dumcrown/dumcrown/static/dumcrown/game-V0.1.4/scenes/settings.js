@@ -3,7 +3,7 @@ import { player, setmusicVolume, setSondsVolume } from '../client/client.js';
 
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
-import { switchScenes, logoutAjax } from '../functions/functions.js';
+import { switchScenes, logoutAjax, toggleFullscreen } from '../functions/functions.js';
 
 
 import { Botao } from '../functions/functions.js';
@@ -14,18 +14,25 @@ import { room } from '../client/room.js';
 export class ConfigScreen extends Phaser.Scene {
     constructor() {
         super({ key: 'ConfigScreen' });
+        this.previousScene = 'HomeScene'
     }
 
     create() {
 
         const soundfx = this.scene.get('Loading');
+        //TODO armazenar cena que usou pra entrar e voltar pra ela ao sair
 
         const background = this.add.image(centerX, centerY, 'config_background');
+        background.setInteractive({ cursor: 'default' })
         const x_close = new Botao(this, 1440, 40, 'x_close', () => {
-            switchScenes('HomeScene', 'ConfigScreen')
+            if (this.previousScene == 'HomeScene') {
+                switchScenes('HomeScene', 'ConfigScreen')
+                return
+            }
+            GAME.scene.stop('ConfigScreen')
 
         }, 0xffff00, soundfx.closeSound);
-        x_close.setScale(0.5)
+        x_close.setScale(0.4)
 
         this.aba_select = this.add.image(191, 65, 'aba_select');
 
@@ -33,10 +40,7 @@ export class ConfigScreen extends Phaser.Scene {
             logoutAjax();
         }, 0xffffff, soundfx.clickSound);
 
-        // const save = new Botao(this, 1300, 700, 'save_config', () => {
 
-
-        // }, 0xffffff);
 
         var soundContainer = this.add.container(0, 0);
         soundContainer.visible = false;
@@ -127,7 +131,9 @@ export class ConfigScreen extends Phaser.Scene {
         sendSocket('sound_update', { 'musicVolume': player.musicVolume, 'sondsVolume': newVolume });
 
     }
-
+    setPreviousScene(sceneKey) {
+        this.previousScene = sceneKey;
+    }
 
     update() {
         if (areYouInGame && !this.giveup) {

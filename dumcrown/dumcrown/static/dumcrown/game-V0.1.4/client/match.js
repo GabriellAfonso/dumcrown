@@ -229,6 +229,9 @@ export function defeatMatch(data) {
 export function example(data) {
 
 }
+export function isPlayerInMatch(data) {
+    console.log('o player esta em partida? ', data)
+}
 
 function getMatchScene() {
     return GAME.scene.getScene('DumMatch')

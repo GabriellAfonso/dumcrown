@@ -1,6 +1,8 @@
 import { matchData } from "../client/match.js";
 import { clearRoom } from "../client/room.js";
-import { sendSocket, showCoordinates, sleep } from "../functions/functions.js";
+import { centerX, GAME } from "../config/gameConfig.js";
+import { Button } from "../functions/buttons.js";
+import { sendSocket, showCoordinates, sleep, switchScenes, toggleFullscreen } from "../functions/functions.js";
 import { MatchManager } from "../match_objects/match.js";
 import { cardsToSwap } from "../match_objects/swapButton.js";
 
@@ -17,6 +19,19 @@ export class DumMatch extends Phaser.Scene {
         sendSocket('get_cards') // atualiza as cartas antes da partida começar
         this.startAnimation()
         this.match = new MatchManager(this, matchData)
+        const ConfigButton = new Button(this, 25, 35, 'config_button', () => {
+            this.scene.get('ConfigScreen').setPreviousScene('DumMatch');
+            GAME.scene.run('ConfigScreen');
+
+        });
+        ConfigButton.setScale(0.8)
+
+        const fullscreen_button = new Button(this, 1475, 35, 'fullscreen', () => {
+            toggleFullscreen();
+        });
+        fullscreen_button.setScale(0.30);
+        // ConfigButton.depth = 1000
+        // ConfigButton.scale = 10
 
 
         if (!this.eventsAdded) {

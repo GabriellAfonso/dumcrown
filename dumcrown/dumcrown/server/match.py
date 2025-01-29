@@ -17,11 +17,15 @@ class MatchManager:
         self.user = consumer.user
         self.channel = consumer.channel
 
-# o dono da sala ou o escolhido caso seja queue, vai mandar o id dele e do adversario
-# caso ele se desconecte tem que ter um jeito da partida continuar rodando
+    async def is_player_in_match(self):
+        print(self.matches)
+        for match_id, match in self.matches.items():
+            if self.user in [match.player1.user_id, match.player2.user_id]:
+                return await self.consumer.send_to_client('is_player_in_match', True)
+        return await self.consumer.send_to_client('is_player_in_match', False)
+
     async def start_match(self, data):
         try:
-            print(data)
             match_id = data['id']
             player_x = await self.get_player_data(data['player_x'])
             player_y = await self.get_player_data(data['player_y'])
