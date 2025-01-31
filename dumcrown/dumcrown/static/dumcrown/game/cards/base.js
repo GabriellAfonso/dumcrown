@@ -61,6 +61,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.name.text = data.name;
         this.description.text = data.description;
         this.energy.text = data.energy;
+
     }
 
     clone() {

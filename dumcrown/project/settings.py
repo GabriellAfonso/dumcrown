@@ -15,7 +15,7 @@ ALLOWED_HOSTS = [
     if h.strip()
 ]
 
-GAME_VERSION = '0.1.7'
+GAME_VERSION = '0.1.9'
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 # STATICFILES_IGNORE_PATTERNS = [
 #     '*.map',
