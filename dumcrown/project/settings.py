@@ -15,7 +15,13 @@ ALLOWED_HOSTS = [
     if h.strip()
 ]
 
-
+GAME_VERSION = '0.1.7'
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+# STATICFILES_IGNORE_PATTERNS = [
+#     '*.map',
+#     'phaser/**',
+#     'dumcrown/game/phaser/plugins/spine/dist/SpineWebGLPlugin.js',
+# ]
 # Application definition
 INSTALLED_APPS = [
     'channels',
@@ -168,7 +174,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = f'/static/{GAME_VERSION}/'
 STATIC_ROOT = BASE_DIR / 'static/'
 
 

@@ -208,5 +208,16 @@ units_data = {
         "energy": 1,
         "attack": 1,
         "defense": 1,
-    }
+    },
+
+    # '55': {
+    #     "id": '55',
+    #     "type": "unit",
+    #     "image": "darkage2_card",
+    #     "name": "DARK AGE II",
+    #     "description": "",
+    #     "energy": 1,
+    #     "attack": 1,
+    #     "defense": 1,
+    # }
 }

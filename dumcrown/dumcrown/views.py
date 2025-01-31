@@ -18,6 +18,7 @@ import traceback
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from allauth.socialaccount.models import SocialAccount
+from django.conf import settings
 
 
 def index(request):
@@ -44,7 +45,7 @@ def login(request):
             user = form.get_user()
             auth.login(request, user)
 
-            return redirect('dumcrown:jogo')
+            return redirect('dumcrown:game')
 
         else:
             messages.error(request, 'Usuário ou senha inválidos.')
@@ -105,7 +106,7 @@ def register(request):
 
 
 @login_required(login_url='dumcrown:login')
-def jogo(request):
+def game(request):
 
     user = request.user
     player = Player.objects.get(user=user)
@@ -115,6 +116,7 @@ def jogo(request):
     login_history.save()
 
     context = {
+        'GAME_VERSION': settings.GAME_VERSION,
         'nickname': player.nickname,
         'level': player.level,
         'id': player.id,
@@ -123,7 +125,7 @@ def jogo(request):
 
     return render(
         request,
-        'dumcrown/jogo.html',
+        'dumcrown/game.html',
         context,
     )
 
