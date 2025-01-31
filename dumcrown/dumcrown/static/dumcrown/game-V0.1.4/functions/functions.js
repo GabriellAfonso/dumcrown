@@ -32,12 +32,19 @@ export function switchScenes(sceneToStart, sceneToStop = '') {
 
 export function startScene(scene) {
     var sceneIsActive = GAME.scene.isActive(scene)
+    listActiveScenes()
     if (sceneIsActive) {
         return
     }
     GAME.scene.start(scene);
 }
 
+export function listActiveScenes() {
+    const activeScenes = GAME.scene.getScenes(true); // Obtém todas as cenas ativas
+    activeScenes.forEach(scene => {
+        console.log(`Cena ativa: ${scene.scene.key}`, scene);
+    });
+}
 
 export function sleep(scene, delay, callback) {
     scene.time.addEvent({

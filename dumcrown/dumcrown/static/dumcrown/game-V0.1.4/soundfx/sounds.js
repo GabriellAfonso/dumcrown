@@ -17,7 +17,10 @@ export function loadSFX() {
     SFXVolume()
 }
 
-function SFXVolume() {
+export function SFXVolume() {
+    sfx.houverSound.volume = 0.1 * player.soundsVolume;
     sfx.clickSound.volume = 0.1 * player.soundsVolume;
+    sfx.clickSound01.volume = 0.1 * player.soundsVolume;
+    sfx.uiselect.volume = 0.1 * player.soundsVolume;
     sfx.closeSound.volume = 0.1 * player.soundsVolume;
 }

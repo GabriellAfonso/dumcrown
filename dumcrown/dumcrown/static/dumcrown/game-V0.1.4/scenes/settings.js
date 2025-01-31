@@ -7,7 +7,7 @@ import { switchScenes, logoutAjax, toggleFullscreen } from '../functions/functio
 import { sendSocket } from '../functions/functions.js';
 import { areYouInGame, setAreYouInGame } from '../client/client.js';
 import { room } from '../client/room.js';
-import { sfx } from '../soundfx/sounds.js';
+import { sfx, SFXVolume } from '../soundfx/sounds.js';
 import { Button } from '../functions/buttons.js';
 
 export class ConfigScreen extends Phaser.Scene {
@@ -138,6 +138,7 @@ export class ConfigScreen extends Phaser.Scene {
         const newVolume = parseFloat(event.target.value);
         setSondsVolume(newVolume)
         sendSocket('sound_update', { 'musicVolume': player.musicVolume, 'sondsVolume': newVolume });
+        SFXVolume()
 
     }
     setPreviousScene(sceneKey) {

@@ -22,8 +22,9 @@ export class Preloader extends Phaser.Scene {
     }
 
     create() {
+        console.log('startou PREloading')
 
-        this.scene.start('Loading');
+        this.scene.launch('Loading');
 
     }
 }
@@ -34,6 +35,7 @@ export class Loading extends Phaser.Scene {
     }
 
     preload() {
+        console.log('startou o loading')
         const ls = this.add.image(centerX, centerY, 'loading_screen')
         ls.setScale(1);
         ls.alpha = 0.5
@@ -274,11 +276,11 @@ export class Loading extends Phaser.Scene {
         this.progressBox.destroy();
         this.progressBar.destroy();
         loadSFX()
-        this.hoverSound = GAME.sound.add('hover_sound');
-        this.clickSound = GAME.sound.add('click_sound');
-        this.snapclick = GAME.sound.add('click_sound_01')
-        this.closeSound = GAME.sound.add('close_sound');
-        this.uiselect = GAME.sound.add('uiselect_sound');
+        // this.hoverSound = GAME.sound.add('hover_sound');
+        // this.clickSound = GAME.sound.add('click_sound');
+        // this.snapclick = GAME.sound.add('click_sound_01')
+        // this.closeSound = GAME.sound.add('close_sound');
+        // this.uiselect = GAME.sound.add('uiselect_sound');
 
 
         // Carregar a música
@@ -318,12 +320,13 @@ export class Loading extends Phaser.Scene {
 
     update() {
         this.music.volume = 0.05 * player.musicVolume;
+        console.log(this.music.volume)
         this.arena_music.volume = 0.05 * player.musicVolume;
-        this.clickSound.volume = 0.1 * player.soundsVolume;
-        this.closeSound.volume = 0.1 * player.soundsVolume;
-        this.uiselect.volume = 0.4 * player.soundsVolume;
-        this.hoverSound.volume = 1 * player.soundsVolume;
-        this.snapclick.volume = 0.1 * player.soundsVolume;
+        // this.clickSound.volume = 0.1 * player.soundsVolume;
+        // this.closeSound.volume = 0.1 * player.soundsVolume;
+        // this.uiselect.volume = 0.4 * player.soundsVolume;
+        // this.hoverSound.volume = 1 * player.soundsVolume;
+        // this.snapclick.volume = 0.1 * player.soundsVolume;
     }
 }
 
