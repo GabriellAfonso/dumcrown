@@ -262,50 +262,6 @@ class Match:
         self.log(
             f'O player {player.nickname} colocou a carta {card_id} em modo de defesa na posição {pos}')
 
-    async def clash_resolve(self, player):
-        attacker = self.get_enemy(player)
-        defender = player
-
-        for i in range(len(attacker.attack_zone)):
-            atk_card = self.get_card(attacker, attacker.attack_zone[i])
-            def_card = self.get_card(
-                defender, defender.defense_zone.get(str(i)))
-
-            diff = self.duel(atk_card, def_card)
-
-            if diff < 0:
-                self.log(
-                    f'O player {defender.nickname} perdeu {diff} HP')
-                defender.remove_hp(abs(diff))
-
-            if def_card:
-                if def_card.is_dead():
-                    self.log(
-                        f'A carta {def_card.id} foi adicionada ao cemiterio')
-                    defender.add_graveyard(def_card.id, str(i))
-
-            data = {
-                'line': i,
-                'diff': diff,
-                'match': self.get_match_data(),
-            }
-
-            await self.manager.send_to_players(self.id, 'clash_line', data)
-            await asyncio.sleep(1)
-
-        if defender.hp < 1:
-            self.log(
-                f'O player {defender.nickname} foi eliminado')
-            self.gameover = True
-            asyncio.create_task(self.finish_match(attacker, defender))
-            return
-
-        await asyncio.sleep(1)
-        self.combat_mode = False
-        await self.return_cards_to_bench(attacker, defender)
-        self.new_round()
-        # devolver as cartas vivas ao banco dos seus donos
-
     async def return_cards_to_bench(self, attacker, defender):
         self.log('Retornando cartas ao banco')
         for card in attacker.attack_zone:
@@ -337,27 +293,77 @@ class Match:
     def id_cleaner(self, id):
         return re.sub(r'\([A-Z]\)', '', id)
 
-    def duel(self, atk_card, def_card):
-        if not def_card:
-            return -atk_card.attack
+    async def clash_resolve(self, player):
+        attacker = self.get_enemy(player)
+        defender = player
 
-        diff = def_card.defense - atk_card.attack
+        for i in range(len(attacker.attack_zone)):
+            atk_card = self.get_card(attacker, attacker.attack_zone[i])
+            def_card = self.get_card(
+                defender, defender.defense_zone.get(str(i)))
 
-        # se for invuneravel diff = 0
-        if not def_card.is_vulnerable():
-            self.log(f'A carta {def_card.id} está invulnerável')
-            def_card.set_vulnerable(True)
-            self.log(f'A carta {def_card.id} foi mudada pra vulneravel')
+            if not def_card:
+                damage_dealt = -atk_card.attack
+                await self.clash_result(i, damage_dealt)
+                continue
+
+            defensor_taken = self.process_card_damage(
+                def_card, atk_card.attack)
+
+            self.process_card_damage(atk_card, def_card.attack)
+
+            if defensor_taken < 0:
+                self.log(
+                    f'O player {defender.nickname} perdeu {defensor_taken} HP')
+                defender.remove_hp(abs(defensor_taken))
+
+            if def_card.is_dead():
+                self.log(
+                    f'A carta {def_card.id} foi adicionada ao cemiterio')
+                defender.add_graveyard(def_card.id, str(i))
+
+            await self.clash_result(i, defensor_taken)
+
+            await asyncio.sleep(1)
+
+        if self.is_player_dead(defender):
+            self.log(
+                f'O player {defender.nickname} foi eliminado')
+            asyncio.create_task(self.finish_match(attacker, defender))
+            return
+
+        await asyncio.sleep(1)
+        self.combat_mode = False
+        await self.return_cards_to_bench(attacker, defender)
+        self.new_round()
+        # devolver as cartas vivas ao banco dos seus donos
+
+    async def clash_result(self, line, diff):
+        data = {
+            'line': line,
+            'diff': diff,
+            'match': self.get_match_data(),
+        }
+
+        await self.manager.send_to_players(self.id, 'clash_line', data)
+
+    def process_card_damage(self, card, damage):
+
+        if not card.is_vulnerable():
+            self.log(f'A carta {card.id} está invulnerável')
+            card.set_vulnerable(True)
+            self.log(f'A carta {card.id} foi mudada pra vulneravel')
             return 0
-        # diminui defesa da carta
-        def_card.remove_defense(atk_card.attack)
-        self.log(f'A carta {def_card.id} perdeu -{atk_card.attack} de defesa')
 
-        if def_card.defense < 1:
-            self.log(f'A carta {def_card.id} foi eliminada')
-            def_card.set_defense(0)
+        card.remove_defense(damage)
 
-        return diff
+        self.log(f'A carta {card.id} perdeu -{damage} de defesa')
+
+        if card.defense < 1:
+            self.log(f'A carta {card.id} foi eliminada')
+            card.set_defense(0)
+
+        return card.defense - damage
 
     async def finish_match(self, winner, defeated):
         self.log('chamou finish_match')
@@ -394,6 +400,11 @@ class Match:
 
         # Salvar de forma assíncrona
         match.save()
+
+    def is_player_dead(self, player):
+        if player.hp < 1:
+            return True
+        return False
 
     def player_play_spell(self, player, spell_id, target):
         self.is_my_turn(player)

@@ -774,6 +774,7 @@ export class MatchManager {
             // Animação de dano no defensor (se existir)
             if (defenderCard) {
                 defenderCard.playDamageAnimation(-attackerCard.attack.text);
+                attackerCard.playDamageAnimation(-defenderCard.attack.text)
             }
             //TODO quando nao tiver carta, fazer um pisca vermelho na arena do inimigo ou algo assim
 
@@ -782,6 +783,7 @@ export class MatchManager {
 
             if (defenderCard) {
                 this.updateCardData(defenderCard, targetPlayer);
+                // this.updateCardData(attackerCard, targetPlayer);
             }
 
 
