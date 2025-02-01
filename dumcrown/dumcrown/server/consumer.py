@@ -1,6 +1,6 @@
 import logging
 import json
-import asyncio
+import time
 from django.utils import timezone
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
@@ -25,7 +25,8 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             self.user = None
             self.channel = None
             self.connection_denied = False
-
+            # Dicionário para armazenar timestamps das últimas requisições
+            self.last_request_times = {}
         except Exception as e:
             logging.error(f'Error in consumer init: {e}', exc_info=True)
 
@@ -62,25 +63,68 @@ class PlayerConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         try:
             message = json.loads(text_data)
+            code = message["code"]
+            data = message.get("data", "")
 
-            for code, handler in code_handlers.items():
-                if code in message["code"]:
+            # Verifica se a requisição é gerenciada pelo match_manager
+            if code in self.get_match_manager_codes():
+                # Aplica a limitação de taxa apenas para ações do match_manager
+                if not await self.is_request_allowed(code):
+                    logging.warning(
+                        f"Requisição ignorada: código {code} enviado repetidamente.")
+                    return
+
+            # Processa a requisição
+            for handler_code, handler in code_handlers.items():
+                if handler_code in code:
                     func = getattr(
                         handler['object'](self),
                         handler['method']
                     )
-                    if message['data']:
-                        await func(message['data'])
-                    elif not message['data']:
+                    if data:
+                        await func(data)
+                    else:
                         await func()
 
         except Exception as e:
             logging.error(f'Error in receive: {e}', exc_info=True)
 
+    async def is_request_allowed(self, code):
+        """
+        Verifica se a requisição é permitida com base no tempo desde a última requisição.
+        """
+        current_time = time.time()
+        last_request_time = self.last_request_times.get(code, 0)
+
+        # Intervalo mínimo entre requisições (em segundos)
+        MIN_INTERVAL = 0.5  # 500ms
+
+        if current_time - last_request_time < MIN_INTERVAL:
+            return False  # Requisição não permitida
+        else:
+            # Atualiza o timestamp da última requisição
+            self.last_request_times[code] = current_time
+            return True  # Requisição permitida
+
+    def get_match_manager_codes(self):
+        """
+        Retorna a lista de códigos de ação gerenciados pelo match_manager.
+        """
+        return [
+            'is_player_in_match',
+            'give_up',
+            'start_match',
+            'ready',
+            'play_card',
+            'play_spell',
+            'player_pass',
+            'offensive_card',
+            'player_clash',
+            'defensive_card',
+        ]
+
     async def receive_from_consumer(self, event):
         await self.send(text_data=json.dumps(event))
-
-    # receive message from group
 
     async def send_to_client(self, code, data=''):
         message = {

@@ -101,10 +101,10 @@ class Player:
 
     async def auto_pass_timer(self, match):
         try:
-            await asyncio.sleep(80)
+            await asyncio.sleep(30)
             asyncio.create_task(self.message('Seu Tempo Esta Acabando'))
 
-            await asyncio.sleep(30)
+            await asyncio.sleep(15)
             asyncio.create_task(self.message('Tempo limite Esgotado'))
 
             if match.combat_mode:

@@ -15,7 +15,7 @@ ALLOWED_HOSTS = [
     if h.strip()
 ]
 
-GAME_VERSION = '0.1.9'
+GAME_VERSION = '0.1.10'
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 # STATICFILES_IGNORE_PATTERNS = [
 #     '*.map',
@@ -195,7 +195,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-CSRF_TRUSTED_ORIGINS = ['https://1d66-170-78-102-62.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://22b6-170-78-101-13.ngrok-free.app']
 TEMPLATE_DEBUG = True
 
 if not DEBUG:

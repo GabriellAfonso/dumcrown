@@ -303,6 +303,8 @@ export class Loading extends Phaser.Scene {
 
         }, { color: 0xffffff });
         fullscreen_button.setScale(0.40);
+        console.log(player.nickname)
+        console.log(player.nickname.length)
 
         const entrar = new Button(this, centerX, 650, 'entrar_button', () => {
             fullscreen_button.destroy();
