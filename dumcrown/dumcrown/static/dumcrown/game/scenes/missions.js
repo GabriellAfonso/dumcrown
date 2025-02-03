@@ -131,23 +131,23 @@ export class MissionsScene extends Phaser.Scene {
 
         this.showdaxuxa.on('pointerup', () => {
             simpleTweens(this, card1, centerX, 560, 0.38, 1, 0, 200, () => {
-                simpleTweens(this, card1, centerX, 460, 0.38, 1, 0, 100, () => {
+                simpleTweens(this, card1, centerX, 475, 0.38, 1, 0, 100, () => {
                     card2.playDamageAnimation(-2)
                     simpleTweens(this, card1, centerX, 490, 0.38, 1, 0, 300, () => {
                         this.playerDamageTaken(-2)
-                        card2.death()
+                        // card2.death()
                     })
                 })
             })
 
-            // simpleTweens(this, card2, centerX, 210, 0.38, 1, 0, 200, () => {
-            //     simpleTweens(this, card2, centerX, 310, 0.38, 1, 0, 100, () => {
-            //         card1.playDamageAnimation()
-            //         simpleTweens(this, card2, centerX, 280, 0.38, 1, 0, 300, () => {
+            simpleTweens(this, card2, centerX, 210, 0.38, 1, 0, 200, () => {
+                simpleTweens(this, card2, centerX, 295, 0.38, 1, 0, 100, () => {
+                    card1.playDamageAnimation(-3)
+                    simpleTweens(this, card2, centerX, 280, 0.38, 1, 0, 300, () => {
 
-            //         })
-            //     })
-            // })
+                    })
+                })
+            })
         })
         this.cameras.main.setPostPipeline(Phaser.Renderer.WebGL.Pipelines.BlurFilter);
     }

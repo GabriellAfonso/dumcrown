@@ -361,32 +361,35 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         const worldY = this.cardLayout.getWorldTransformMatrix().ty;
 
         // Cria uma imagem para usar como máscara, ajustando posição e escala
-        const maskImage = this.scene.add.image(worldX, worldY, 'card_mask')
+        this.maskImage = this.scene.add.image(worldX, worldY, 'card_mask')
             .setOrigin(this.cardLayout.originX, this.cardLayout.originY) // Alinha com o layout da carta
             .setScale(this.cardLayout.scaleX * this.scaleX, this.cardLayout.scaleY * this.scaleY); // Ajusta escala relativa ao container
 
         // Cria a máscara baseada na imagem
-        const mask = maskImage.createBitmapMask();
+        const mask = this.maskImage.createBitmapMask();
 
         // Cria o retângulo branco que será mascarado
-        this.whiteDamage = this.scene.add.rectangle(worldX, worldY, this.cardLayout.displayWidth, this.cardLayout.displayHeight, 0xffffff)
+        this.whiteDamage = this.scene.add.rectangle(0, 0, this.cardLayout.displayWidth, this.cardLayout.displayHeight, 0xffffff)
             .setOrigin(0.5, 0.5)
             .setAlpha(0)
+            .setDepth(this.depth + 1)
         // .setDepth(99); // Começa invisível
 
         // Aplica a máscara ao retângulo
         this.whiteDamage.setMask(mask);
 
         // Remove a imagem da máscara da cena (não precisa ser visível)
-        maskImage.setVisible(false);
+        this.maskImage.setVisible(false);
 
-        this.damageTaken = this.scene.add.text(worldX, worldY, value,
+        this.damageTaken = this.scene.add.text(0, 0, value,
             { fontSize: '70px', fill: '#FF0000', fontStyle: 'bold', fontFamily: 'sans-serif', stroke: '#000000', strokeThickness: 2 });
         this.damageTaken.setOrigin(0.5, 0.5);
         // this.damageTaken.setDepth(100)
         this.damageTaken.setAlpha(1)
 
+        this.add([this.whiteDamage, this.damageTaken]);
 
+        this.scene.events.on('update', this.updateMaskPosition, this);
         this.activeTween = this.scene.tweens.add({
             targets: [this.whiteDamage, this.damageTaken],
             alpha: { from: 0, to: 1 },
@@ -406,6 +409,14 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         });
 
 
+    }
+    updateMaskPosition() {
+        const worldX = this.cardLayout.getWorldTransformMatrix().tx;
+        const worldY = this.cardLayout.getWorldTransformMatrix().ty;
+        if (this.maskImage) {
+            this.maskImage.x = worldX;
+            this.maskImage.y = worldY;
+        }
     }
     death() {
 

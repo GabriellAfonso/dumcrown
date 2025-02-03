@@ -50,6 +50,13 @@ export class MatchManager {
         }
         return match.player1;
     }
+    get_adversary(player) {
+        if (player.im == this.player.im) {
+            return this.enemy
+        }
+        return this.player
+
+    }
 
     get_offensive_player() {
         if (this.match.offensive_player == this.player.im) {
@@ -743,9 +750,10 @@ export class MatchManager {
 
 
     clashLine(data) {
-        log.info('action', 'chamou o clashLine')
-        this.destroyDefenseHitbox()
+        log.info('action', 'chamou o clashLine');
+        this.destroyDefenseHitbox();
         const isPlayerOffensive = this.player.im === this.match.offensive_player;
+
         this.executeAnimationAtk(
             data.line,
             data.diff,
@@ -754,58 +762,65 @@ export class MatchManager {
             isPlayerOffensive ? this.enemy : this.player,
             isPlayerOffensive ? 560 : 210, // Coordenada Y para o atacante
             isPlayerOffensive ? 460 : 310, // Coordenada Y do ataque
-            isPlayerOffensive ? 490 : 280  // Coordenada Y para o retorno
+            isPlayerOffensive ? 490 : 280, // Coordenada Y para o retorno do atacante
+            isPlayerOffensive ? 210 : 560, // Coordenada Y para o defensor antes da animação
+            isPlayerOffensive ? 310 : 460, // Coordenada Y do defensor no momento do impacto
+            isPlayerOffensive ? 280 : 490  // Coordenada Y para o retorno do defensor
         );
     }
 
-    async executeAnimationAtk(line, diff, attackZone, defenseZone, targetPlayer, attackY, clashY, returnY) {
-        log.info('action', 'chamou o executeAnimationAtk')
+    async executeAnimationAtk(line, diff, attackZone, defenseZone, targetPlayer, attackY, clashY, returnY, defStartY, defClashY, defReturnY) {
+        log.info('action', 'chamou o executeAnimationAtk');
 
         const attackerCard = attackZone[line];
         const defenderCard = defenseZone[line];
 
         try {
             // Movimento inicial do ataque
-            await this.animateCard(attackerCard, attackerCard.x, attackY, 200);
+            await Promise.all([
+                this.animateCard(attackerCard, attackerCard.x, attackY, 200),
+                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defStartY, 200) : Promise.resolve()
+            ]);
 
             // Movimento para atacar
-            await this.animateCard(attackerCard, attackerCard.x, clashY, 100);
+            await Promise.all([
+                this.animateCard(attackerCard, attackerCard.x, clashY, 100),
+                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defClashY, 100) : Promise.resolve()
+            ]);
 
-            // Animação de dano no defensor (se existir)
+            // Animação de dano para ambas as cartas
             if (defenderCard) {
                 defenderCard.playDamageAnimation(-attackerCard.attack.text);
-                attackerCard.playDamageAnimation(-defenderCard.attack.text)
+                attackerCard.playDamageAnimation(-defenderCard.attack.text);
             }
-            //TODO quando nao tiver carta, fazer um pisca vermelho na arena do inimigo ou algo assim
 
             // Retorno após o ataque
-            await this.animateCard(attackerCard, attackerCard.x, returnY, 300);
+            await Promise.all([
+                this.animateCard(attackerCard, attackerCard.x, returnY, 300),
+                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defReturnY, 300) : Promise.resolve()
+            ]);
 
+            // Atualizar os dados da carta defensora se ela existir
             if (defenderCard) {
+                var other = this.get_adversary(targetPlayer)
+                this.updateCardData(attackerCard, other);
                 this.updateCardData(defenderCard, targetPlayer);
-                // this.updateCardData(attackerCard, targetPlayer);
             }
-
 
             if (diff <= 0) {
                 this.damageTakenAnimation(diff, targetPlayer);
-
-                // if (defenderCard) {
-                //     defenderCard.death();
-                // }
             }
         } catch (error) {
             console.error('Erro durante a animação de ataque:', error);
         }
     }
 
-
+    // Função corrigida para animar as cartas
     animateCard(card, x, y, duration) {
         return new Promise((resolve) => {
             simpleTweens(this.scene, card, x, y, 0.38, 1, 0, duration, resolve);
         });
     }
-
     damageTakenAnimation(value, owner) {
         log.info('action', 'chamou o damageTakenAnimation')
         if (this.damageText) {

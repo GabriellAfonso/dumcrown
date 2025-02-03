@@ -317,6 +317,11 @@ class Match:
                     f'O player {defender.nickname} perdeu {defensor_taken} HP')
                 defender.remove_hp(abs(defensor_taken))
 
+            if atk_card.is_dead():
+                self.log(
+                    f'A carta {atk_card.id} foi adicionada ao cemiterio')
+                attacker.add_graveyard(atk_card.id)
+
             if def_card.is_dead():
                 self.log(
                     f'A carta {def_card.id} foi adicionada ao cemiterio')

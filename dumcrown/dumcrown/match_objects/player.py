@@ -20,7 +20,7 @@ class Player:
         self.defense_zone = {}
         self.graveyard = []
         self.hp = 30
-        self.energy = 0
+        self.energy = 10
         self.deck = PlayerDeck(data['deck'])
         self.hand = PlayerHand(self.deck)
         self.ready = False
@@ -43,8 +43,13 @@ class Player:
             return
         self.energy = 10
 
-    def add_graveyard(self, card, key):
-        self.defense_zone.pop(key)
+    def add_graveyard(self, card, key=None):
+        if key:
+            self.defense_zone.pop(key)
+
+        elif card in self.attack_zone:
+            self.attack_zone.remove(card)
+
         self.graveyard.append(card)
 
     def kill_card(self, card, zone):
