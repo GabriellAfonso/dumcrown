@@ -78,6 +78,8 @@ export class Loading extends Phaser.Scene {
         this.load.image('loss_background', PATH + '/images/backgrounds/loss_background.png');
         this.load.image('building', PATH + '/images/backgrounds/building_screen.jpg');
 
+        //store Items
+        this.load.image('cards_item', PATH + '/images/items/cards_item.png');
 
         //popups
         this.load.image('basic_warning', PATH + '/images/popups/warning_box.png');

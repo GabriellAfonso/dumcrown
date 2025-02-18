@@ -121,6 +121,8 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             'offensive_card',
             'player_clash',
             'defensive_card',
+
+            'save_deck',  # Provisorio
         ]
 
     async def receive_from_consumer(self, event):

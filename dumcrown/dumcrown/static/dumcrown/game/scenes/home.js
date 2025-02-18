@@ -184,7 +184,8 @@ export class HomeScene extends Phaser.Scene {
         }, { hoverSound: sfx.houverSound });
 
         const missionsButton = new Button(this, 214, 725, 'missions_button', () => {
-            switchScenes('MissionsScene', 'HomeScene');
+            //disabled
+            // switchScenes('MissionsScene', 'HomeScene');
         }, { hoverSound: sfx.houverSound });
 
         const decksButton = new Button(this, 328, 725, 'decks_button', () => {
@@ -192,11 +193,13 @@ export class HomeScene extends Phaser.Scene {
         }, { hoverSound: sfx.houverSound });
 
         const friendsButton = new Button(this, 442, 725, 'friends_button', () => {
-            switchScenes('FriendsScene', 'HomeScene');
+            //disabled
+            // switchScenes('FriendsScene', 'HomeScene');
         }, { hoverSound: sfx.houverSound });
 
         const emailButton = new Button(this, 556, 725, 'email_button', () => {
-            switchScenes('EmailsScene', 'HomeScene');
+            //disabled
+            // switchScenes('EmailsScene', 'HomeScene');
         }, { hoverSound: sfx.houverSound });
         const rankingButton = new Button(this, 670, 725, 'ranking_button', () => {
             sendSocket('get_ranking')

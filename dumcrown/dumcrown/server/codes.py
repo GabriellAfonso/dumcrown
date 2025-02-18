@@ -20,6 +20,9 @@ code_handlers = {
     'sound_update': {'object': client_data, 'method': 'sound_update'},
     'activate_deck': {'object': client_data, 'method': 'activate_deck'},
 
+    # store
+    'buy_random_card': {'object': client_data, 'method': 'buy_random_card'},
+
     'create_room': {'object': game_room, 'method': 'create_room'},
     'join_room': {'object': game_room, 'method': 'join_room'},
     'leave_room': {'object': game_room, 'method': 'leave_room'},

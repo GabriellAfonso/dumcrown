@@ -1,5 +1,6 @@
 import logging
 import json
+import random
 from .validators import validate_nickname, validate_deck_name
 from .functions import get_player, save_player, save_deck, ranking_list, my_ranking, create_deck, delete_deck, get_deck
 from .cards_data.units import units_data
@@ -143,13 +144,14 @@ class ClientData:
             logging.error(f'Error in sound_update: {e}', exc_info=True)
 
     async def save_deck(self, data):
-        # TODO criar um timer pra essa funçao nao poder ser chamada duas vezes seguidas
-        # ou criar uma forma de nao enviar duas vezes o deck sem id caso trave o cliente ou sei la
-        # TODO nao deixar criar mais que 8 deck fazer um if < 8:
         player = await get_player(self.user)
 
         deck = await get_deck(player, data['id'])
-        print('sao os decks do player', len(player.decks.all()))
+        # nao precisa pq o botao de criar mais deck some
+        # print('sao os decks do player', len(player.decks.all()))
+        # if len(player.decks.all()) >= 8:
+        #     await self.consumer.send_to_client('deck_editor_error', 'Numero maximo de decks atingido!')
+        #     return
 
         if len(data['cards']) != 30:
             await self.consumer.send_to_client('deck_editor_error', 'seu deck deve conter 30 cartas')
@@ -164,11 +166,12 @@ class ClientData:
             deck.name = data['name']
             deck.cards = data['cards']
             await save_deck(deck)
+            await self.get_player_data()
             await self.consumer.send_to_client('deck_editor_success', 'Deck salvo com Sucesso!')
             return
 
         await create_deck(player, data)
-
+        await self.get_player_data()
         await self.consumer.send_to_client('deck_editor_success', 'Deck criado com Sucesso!')
         return
 
@@ -184,9 +187,33 @@ class ClientData:
             await delete_deck(player, deck.id)
 
     async def activate_deck(self, data):
-        # nao ta indo
         player = await get_player(self.user)
         deck = await get_deck(player, data['id'])
-        # talvez pegar a instancia de deck com id e usar a instancia pra substituir
         player.current_deck = deck
         await save_player(player)
+
+    async def buy_random_card(self):
+        player = await get_player(self.user)
+        all_cards = self.get_all_cards()
+        player_cards = player.cards
+        available_cards = list(set(all_cards) - set(player_cards))
+
+        if player.crystals < 1000:
+            await self.consumer.send_to_client('error_message_store', 'Crystais insuficientes')
+            return
+        if not available_cards:
+            await self.consumer.send_to_client('error_message_store', 'Você já possui todas as cartas disponíveis')
+            return
+
+        random_card = random.choice(available_cards)
+        print(random_card)
+        player.crystals -= 1000
+        player.cards.append(random_card)
+        await save_player(player)
+        await self.get_player_data()
+
+    def get_all_cards(self):
+        units_ids = [data["id"] for data in units_data.values()]
+        spells_ids = [data["id"] for data in spells_data.values()]
+        all_cards = units_ids + spells_ids
+        return all_cards

@@ -1,6 +1,6 @@
 import {
     receiveCards, playerData, catchNicknameResponse, rankingRecive, onlineChecker, alreadyOnline, pingHandler,
-    deckEditorError, deckEditorSuccess
+    deckEditorError, deckEditorSuccess, errorMessageStore,
 } from "./client.js";
 import { callStart, roomOpen, roomUpdate, roomClose, clearRoom, roomErrorMsg } from "./room.js";
 import {
@@ -64,5 +64,8 @@ export const clientReciver = {
 
     victory_match: victoryMatch,
     defeat_match: defeatMatch,
+
+    //store
+    error_message_store: errorMessageStore,
 
 };

@@ -148,7 +148,7 @@ export class DeckEditorScene extends Phaser.Scene {
 
             console.log(data)
             sendSocket('save_deck', data)
-            sendSocket('get_player_data');
+            // sendSocket('get_player_data');
             //o switch scene ta no client
         })
         this.saveDeckButton.setScale(0.8)
