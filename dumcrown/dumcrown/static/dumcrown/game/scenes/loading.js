@@ -66,12 +66,12 @@ export class Loading extends Phaser.Scene {
         this.load.image('perfil_background', PATH + '/images/backgrounds/perfil_background.jpg');
         this.load.image('iconpage_background', PATH + '/images/backgrounds/iconpage_background.png');
         this.load.image('config_background', PATH + '/images/backgrounds/config_background.jpg');
-        this.load.image('store_background', PATH + '/images/backgrounds/loja_screen.jpg');
+        this.load.image('store_background', PATH + '/images/backgrounds/store_background.jpg');
         this.load.image('missions_background', PATH + '/images/backgrounds/missoes_screen.jpg');
         this.load.image('decks_background', PATH + '/images/backgrounds/decks_background.png');
         this.load.image('friends_background', PATH + '/images/backgrounds/amigos_background.jpg');
         this.load.image('emails_background', PATH + '/images/backgrounds/emails_screen.jpg');
-        this.load.image('ranking_background', PATH + '/images/backgrounds/ranking_screen.jpg');
+        this.load.image('ranking_background', PATH + '/images/backgrounds/ranking_background.jpg');
         this.load.image('lobby_background', PATH + '/images/backgrounds/lobby_background.png');
         this.load.image('room_screen', PATH + '/images/backgrounds/room_screen.png');
         this.load.image('victory_background', PATH + '/images/backgrounds/victory_background.png');
