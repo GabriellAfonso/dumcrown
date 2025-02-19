@@ -55,6 +55,7 @@ class PlayerConsumer(AsyncWebsocketConsumer):
 
             print('desconectando')
             await self.game_room.leave_room()
+            await self.game_room.quit_from_queue()
             await self.match_manager.give_up()
             await player_disconnected(self.user)
         except Exception as e:

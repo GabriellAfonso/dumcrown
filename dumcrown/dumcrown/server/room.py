@@ -3,87 +3,65 @@ import logging
 import random
 import asyncio
 from .functions import get_player
-
+from .match import MatchManager
 # TODO uma classe pra salas e fila pra gerenciar melhor
 
 
 class GameRoom:
     rooms = {}
     queue = []
+    queue_lock = asyncio.Lock()
 
     def __init__(self, consumer):
         self.consumer = consumer
         self.user = consumer.user
         self.channel = consumer.channel
-        self.queue_lock = asyncio.Lock()
+        self.match_manager = MatchManager(self.consumer)
 
-    async def match_making(self, user, data):
+    async def match_making(self):
         try:
-            player = await get_player(user)
-
-            # Lógica para verificar se há outros jogadores na fila
-
-            playerData = {'channel': self.consumer.channel_name,
-                          'nickname': player.nickname,
-                          'board': player.board,
-                          'icon': player.icon,
-                          'border': player.border,
-                          'level': player.level,
-                          'crown_points': player.crown_points,
-                          }
+            player = {}
+            player['id'] = self.user
+            player['channel'] = self.channel
 
             async with self.queue_lock:
-                if playerData not in self.queue:
-                    self.queue.append(playerData)
+                if player not in self.queue:
+                    self.queue.append(player)
+                    print('to na fila')
 
             if len(self.queue) >= 2:
-                # Pareamento aleatório
-                jogador1 = self.queue.pop(
-                    random.randint(0, len(self.queue) - 1))
-                jogador2 = self.queue.pop(
-                    random.randint(0, len(self.queue) - 1))
+                playerX, playerY = random.sample(self.queue, 2)
+                self.queue.remove(playerX)
+                self.queue.remove(playerY)
 
                 # Criar um canal para o grupo específico
-                while True:
-                    room_id = str(random.randint(1000, 9999))
-                    if room_id not in self.rooms:
-                        break
+                room_id = await self.generate_room_id()
+                await self.consumer.channel_layer.group_add(room_id, playerX['channel'])
+                await self.consumer.channel_layer.group_add(room_id, playerY['channel'])
 
-                await self.consumer.channel_layer.group_add(
-                    room_id,
-                    jogador1['channel'],
-                )
-                await self.consumer.channel_layer.group_add(
-                    room_id,
-                    jogador2['channel'],
-                )
-
-                self.rooms[room_id] = {
-                    'room_id': room_id,
-                    'player1': jogador1,
-                    'player2': jogador2
+                data = {
+                    'id': room_id,
+                    'player_x': playerX['id'],
+                    'player_y': playerY['id'],
                 }
-
-                await self.consumer.channel_layer.group_send(room_id, {
-                    'type': 'send_message',
-                    'room_update': self.rooms[room_id],
-                })
-
-                # mandar um pre start pros dois
-                await self.consumer.send(text_data=json.dumps({'call_start': ''}))
+                print(data)
+                await self.match_manager.start_match(data)
+                print('Fila')
+                print(self.queue)
 
         except Exception as e:
             logging.error(f'Error in match_making: {e}', exc_info=True)
 
-    async def quit_from_queue(self, user, data):
+    async def quit_from_queue(self):
         try:
-            player = await get_player(user)
+            async with self.queue_lock:
+                for player in self.queue:
+                    if player['id'] == self.user:
+                        self.queue.remove(player)
+                        print(f'Jogador {self.user} saiu da fila')
+                        return
 
-            for i, player_data in enumerate(self.queue):
-                if player_data['nickname'] == player.nickname:
-                    self.queue.pop(i)
-
-                    break
+            print(f'Jogador {self.user} não estava na fila')
         except Exception as e:
             logging.error(f'Error in quit_from_queue: {e}', exc_info=True)
 

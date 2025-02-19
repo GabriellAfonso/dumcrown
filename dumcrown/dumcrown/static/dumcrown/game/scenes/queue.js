@@ -42,7 +42,7 @@ export class QueueTimer extends Phaser.Scene {
                     this.game.scene.stop('QueueTimer')
                     this.game.scene.stop('GameLobby')
                     this.game.scene.run('GameLobby')
-                    sendSocket('quit_queue')
+                    sendSocket('quit_from_queue')
                     clearTimeout(this.timerTimeout);
                 });
                 x_close.setScale(0.3)

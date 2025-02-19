@@ -23,6 +23,11 @@ code_handlers = {
     # store
     'buy_random_card': {'object': client_data, 'method': 'buy_random_card'},
 
+    # queue
+    'match_making': {'object': game_room, 'method': 'match_making'},
+    'quit_from_queue': {'object': game_room, 'method': 'quit_from_queue'},
+
+
     'create_room': {'object': game_room, 'method': 'create_room'},
     'join_room': {'object': game_room, 'method': 'join_room'},
     'leave_room': {'object': game_room, 'method': 'leave_room'},
