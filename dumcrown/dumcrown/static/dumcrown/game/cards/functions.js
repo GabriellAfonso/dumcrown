@@ -16,7 +16,7 @@ export function instantiateCards(scene, data) {
     return cards;
 }
 
-function createCardInstance(scene, cardID, cardData, owner = 0) {
+export function createCardInstance(scene, cardID, cardData, owner = 0) {
     if (isSpellCard(cardID)) {
         return new SpellCardObject(scene, cardID, cardData, owner);
     } else {

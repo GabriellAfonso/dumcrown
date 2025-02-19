@@ -68,7 +68,6 @@ export function receiveCards(data) {
 
 }
 export function playerData(data) {
-    console.log(data)
     const message = data;
     player.id = message.id;
     player.icon = message.icon;
@@ -141,8 +140,11 @@ export function deckEditorSuccess(data) {
     deckEditor.events.emit('successDeck', message);
 }
 export function errorMessageStore(data) {
-    console.log(data)
     const message = data
     const storeScene = GAME.scene.getScene('StoreScreen');
     storeScene.events.emit('errorMessageStore', message);
+}
+
+export function cardAcquired(data) {
+    GAME.scene.run('CardAcquired', data);
 }

@@ -6,7 +6,7 @@ import { HomeScene } from './scenes/home.js';
 import { PerfilScene } from './scenes/perfil.js';
 import { IconPage } from './scenes/iconPage.js';
 import { ConfigScreen } from './scenes/settings.js';
-import { StoreScreen } from './scenes/store.js';
+import { CardAcquired, StoreScreen } from './scenes/store.js';
 import { MissionsScene } from './scenes/missions.js';
 import { DecksScene, CardDetailScene, } from './scenes/decks.js';
 import { DeckEditorScene, ConfirmDeleteDeck } from './scenes/deckEditor.js';
@@ -99,6 +99,7 @@ GAME.scene.add('DumMatch', DumMatch);
 GAME.scene.add('ConfigScreen', ConfigScreen);
 GAME.scene.add('Tutorial', Tutorial);
 GAME.scene.add('ConfirmDeleteDeck', ConfirmDeleteDeck);
+GAME.scene.add('CardAcquired', CardAcquired);
 
 
 

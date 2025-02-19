@@ -211,6 +211,7 @@ class ClientData:
         player.cards.append(random_card)
         await save_player(player)
         await self.get_player_data()
+        await self.consumer.send_to_client('card_acquired', str(random_card))
 
     def get_all_cards(self):
         units_ids = [data["id"] for data in units_data.values()]

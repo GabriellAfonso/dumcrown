@@ -1,4 +1,6 @@
 import { simpleTextTweens } from '../animations/scripts/functions.js';
+import { createCardInstance } from '../cards/functions.js';
+import { cardsDATA } from '../client/client.js';
 import { GAME, centerX, centerY } from '../config/gameConfig.js';
 import { Button } from '../functions/buttons.js';
 
@@ -57,5 +59,40 @@ export class StoreScreen extends Phaser.Scene {
 
     update() {
         // Lógica de atualização do jogo (executada continuamente durante o jogo).
+    }
+}
+
+export class CardAcquired extends Phaser.Scene {
+    constructor() {
+        super({ key: 'CardAcquired' });
+    }
+
+    // O método init permite receber os parâmetros passados ao iniciar a cena
+    init(id) {
+        this.cardID = id;
+
+    }
+
+    create() {
+        const cardData = cardsDATA[this.cardID]
+
+        const background = this.add.image(centerX, centerY, 'blackground');
+        background.setInteractive()
+        background.alpha = 0.95
+
+        const cardsAcquiredText = add_text(this, centerX, 60, 'Carta Adquirida', '50px', 0.5)
+        cardsAcquiredText.setOrigin(0.5)
+        cardsAcquiredText.setStyle({ fontStyle: 'bold' })
+
+        const card = createCardInstance(this, this.cardID, cardData)
+
+        card.setPosition(centerX, centerY)
+        card.setScale(1)
+        card.setVisible(true);
+
+        background.on('pointerup', () => {
+            card.destroy()
+            GAME.scene.stop('CardAcquired')
+        });
     }
 }

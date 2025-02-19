@@ -123,7 +123,7 @@ export function example(data) {
 
 }
 export function isPlayerInMatch(data) {
-    console.log('o player esta em partida? ', data)
+    // console.log('o player esta em partida? ', data)
 }
 
 function getMatchScene() {
