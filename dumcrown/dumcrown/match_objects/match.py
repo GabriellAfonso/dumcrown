@@ -354,6 +354,9 @@ class Match:
 
     def process_card_damage(self, card, damage):
 
+        # calcula antes da carta perder a defesa inicial
+        diff = card.defense - damage
+
         if not card.is_vulnerable():
             self.log(f'A carta {card.id} está invulnerável')
             card.set_vulnerable(True)
@@ -368,7 +371,7 @@ class Match:
             self.log(f'A carta {card.id} foi eliminada')
             card.set_defense(0)
 
-        return card.defense - damage
+        return diff
 
     async def finish_match(self, winner, defeated):
         self.log('chamou finish_match')
