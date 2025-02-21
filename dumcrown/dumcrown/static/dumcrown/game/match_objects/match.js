@@ -13,6 +13,7 @@ import { removeFromList, sendSocket, sleep } from '../functions/functions.js';
 import { crashSwords } from '../animations/scripts/attackingSwords.js';
 import { gameLoss, gameWin } from '../animations/scripts/gameover.js';
 import Logger from '../objects/logger.js';
+import { sfx } from '../soundfx/sounds.js';
 const log = new Logger()
 log.enableGroup('all')
 export class MatchManager {
@@ -494,11 +495,13 @@ export class MatchManager {
         if (data.who == this.player.im) {
             // this.updateBenchObj()
             this.addCardToBench(data.who, data.card_id)
+            sfx.cardSound03.play()
             this.benchPlayerAnimation()
             return
         }
 
         this.addCardToBench(data.who, data.card_id)
+        sfx.cardSound03.play()
         this.benchEnemyAnimation()
     }
     addCardToBench(who, cardID) {
@@ -522,6 +525,7 @@ export class MatchManager {
             var card = this.getPlayerCardObj(cardID)
 
             this.playerBench.push(card)
+
             this.benchPlayerAnimation()
             return
         }
@@ -542,16 +546,11 @@ export class MatchManager {
     benchPlayerAnimation() {
 
         const numCards = this.player.bench.length;
-        console.log(numCards)
-        console.log(this.player.bench)
-        console.log(this.playerBench)
         const spacing = 115;
         const offsetX = (numCards - 1) * spacing / 2;
 
         this.playerBench.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
-            console.log(card, index)
-            console.log(posX)
             this.scene.tweens.add({
                 targets: card,
                 scale: 0.28,
@@ -787,12 +786,13 @@ export class MatchManager {
                 this.animateCard(attackerCard, attackerCard.x, clashY, 100),
                 defenderCard ? this.animateCard(defenderCard, defenderCard.x, defClashY, 100) : Promise.resolve()
             ]);
-
+            sfx.cardDamage01.play()
             // Animação de dano para ambas as cartas
             if (defenderCard) {
                 defenderCard.playDamageAnimation(-attackerCard.attack.text);
                 attackerCard.playDamageAnimation(-defenderCard.attack.text);
             }
+
 
             // Retorno após o ataque
             await Promise.all([

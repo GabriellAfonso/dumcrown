@@ -185,7 +185,7 @@ export class HomeScene extends Phaser.Scene {
 
         const missionsButton = new Button(this, 214, 725, 'missions_button', () => {
             //disabled
-            // switchScenes('MissionsScene', 'HomeScene');
+            switchScenes('MissionsScene', 'HomeScene');
         }, { hoverSound: sfx.houverSound });
 
         const decksButton = new Button(this, 328, 725, 'decks_button', () => {
@@ -198,6 +198,7 @@ export class HomeScene extends Phaser.Scene {
         }, { hoverSound: sfx.houverSound });
 
         const emailButton = new Button(this, 556, 725, 'email_button', () => {
+            sfx.cardSound01.play()
             //disabled
             // switchScenes('EmailsScene', 'HomeScene');
         }, { hoverSound: sfx.houverSound });

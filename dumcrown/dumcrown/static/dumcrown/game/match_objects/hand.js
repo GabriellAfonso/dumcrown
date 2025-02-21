@@ -5,6 +5,7 @@ import { centerX, centerY } from '../config/gameConfig.js';
 import { sleep } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 import Logger from '../objects/logger.js';
+import { sfx } from '../soundfx/sounds.js';
 const log = new Logger()
 log.enableGroup('all')
 
@@ -71,6 +72,7 @@ export class MatchHand {
         this.state = 0
     }
     closedHandAnimation() {
+        sfx.cardSound03.play()
         log.info('matchHand', 'animação da PlayerHand fechada')
 
         const configs = {
@@ -109,6 +111,7 @@ export class MatchHand {
 
 
     openHandAnimation() {
+        sfx.cardSound03.play()
         log.info('matchHand', 'animação da PlayerHand Aberta')
 
         const length = this.hand.length;

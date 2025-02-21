@@ -13,6 +13,10 @@ export function loadSFX() {
         clickSound01: GAME.sound.add('click_sound_01'),
         uiselect: GAME.sound.add('uiselect_sound'),
         closeSound: GAME.sound.add('close_sound'),
+        cardSound01: GAME.sound.add('card_sound01'),
+        cardSound02: GAME.sound.add('card_sound02'),
+        cardSound03: GAME.sound.add('card_sound03'),
+        cardDamage01: GAME.sound.add('card_damage01'),
     }
     SFXVolume()
 }
@@ -23,4 +27,8 @@ export function SFXVolume() {
     sfx.clickSound01.volume = 0.1 * player.soundsVolume;
     sfx.uiselect.volume = 0.1 * player.soundsVolume;
     sfx.closeSound.volume = 0.1 * player.soundsVolume;
+    sfx.cardSound01.volume = 0.1 * player.soundsVolume;
+    sfx.cardSound02.volume = 0.1 * player.soundsVolume;
+    sfx.cardSound03.volume = 0.1 * player.soundsVolume;
+    sfx.cardDamage01.volume = 0.1 * player.soundsVolume;
 }

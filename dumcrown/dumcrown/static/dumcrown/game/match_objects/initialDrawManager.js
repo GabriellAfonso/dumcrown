@@ -2,6 +2,7 @@ import { removeCard, removeSwapButtons, showCard, showSwap } from "../animations
 import { centerX, centerY } from "../config/gameConfig.js";
 import { sleep } from "../functions/functions.js";
 import Logger from "../objects/logger.js";
+import { sfx } from "../soundfx/sounds.js";
 const log = new Logger()
 log.enableGroup('all')
 
@@ -13,15 +14,19 @@ export class InitialDrawManager {
 
     drawCards(cards) {
         log.info('initialDrawn', 'animaçao da compra das 4 primeiras cartas no initialDraw')
+        sfx.cardSound02.play()
         showCard(this.scene, cards[0], centerX - 300)
 
         sleep(this.scene, 300, () => {
+            sfx.cardSound02.play()
             showCard(this.scene, cards[1], centerX - 100)
         })
         sleep(this.scene, 600, () => {
+            sfx.cardSound02.play()
             showCard(this.scene, cards[2], centerX + 100)
         })
         sleep(this.scene, 900, () => {
+            sfx.cardSound02.play()
             showCard(this.scene, cards[3], centerX + 300)
         })
 

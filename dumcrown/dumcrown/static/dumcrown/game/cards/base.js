@@ -3,6 +3,7 @@ import { add_text } from "../functions/texts.js";
 import { cardsDATA } from "../client/client.js";
 import { Button } from "../functions/buttons.js";
 import { sendSocket } from "../functions/functions.js";
+import { sfx } from "../soundfx/sounds.js";
 export class BaseCardObject extends Phaser.GameObjects.Container {
     constructor(scene, id, data = {}, config = {}) {
         super(scene);
@@ -390,6 +391,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.add([this.whiteDamage, this.damageTaken]);
 
         this.scene.events.on('update', this.updateMaskPosition, this);
+
         this.activeTween = this.scene.tweens.add({
             targets: [this.whiteDamage, this.damageTaken],
             alpha: { from: 0, to: 1 },

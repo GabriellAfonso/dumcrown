@@ -58,6 +58,10 @@ export class Loading extends Phaser.Scene {
         this.load.audio('arena_music', PATH + '/soundfx/arena_music.mp3')
         this.load.audio('uiselect_sound', PATH + '/soundfx/uiselect.flac')
         this.load.audio('click_sound_01', PATH + '/soundfx/snapclick.wav')
+        this.load.audio('card_sound01', PATH + '/soundfx/card_sound01.mp3')
+        this.load.audio('card_sound02', PATH + '/soundfx/card_sound02.mp3')
+        this.load.audio('card_sound03', PATH + '/soundfx/card_sound03.mp3')
+        this.load.audio('card_damage01', PATH + '/soundfx/card_damage01.wav')
 
         //background
         this.load.image('blackground', PATH + '/images/backgrounds/black_screen.jpg');
