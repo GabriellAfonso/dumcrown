@@ -304,6 +304,7 @@ class Match:
 
             if not def_card:
                 damage_dealt = -atk_card.attack
+                defender.remove_hp(abs(damage_dealt))
                 await self.clash_result(i, damage_dealt)
                 continue
 
