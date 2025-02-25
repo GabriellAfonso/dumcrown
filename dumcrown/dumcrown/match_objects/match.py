@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
 import asyncio
+from .player import Player
 import re
 from channels.db import database_sync_to_async
 from .exceptions import (BenchFullException, OpponentTurnException,
@@ -285,7 +286,7 @@ class Match:
         attacker.attack_zone.clear()
         defender.defense_zone.clear()
 
-    def get_card(self, player, card_id):
+    def get_card(self, player: Player, card_id: str):
         if card_id:
             return player.deck.get_card_obj(card_id)
         return None
@@ -318,19 +319,11 @@ class Match:
                     f'O player {defender.nickname} perdeu {defensor_taken} HP')
                 defender.remove_hp(abs(defensor_taken))
 
-            if atk_card.is_dead():
-                self.log(
-                    f'A carta {atk_card.id} foi adicionada ao cemiterio')
-                attacker.add_graveyard(atk_card.id)
-
-            if def_card.is_dead():
-                self.log(
-                    f'A carta {def_card.id} foi adicionada ao cemiterio')
-                defender.add_graveyard(def_card.id, str(i))
-
             await self.clash_result(i, defensor_taken)
 
             await asyncio.sleep(1)
+
+        self.move_dead_cards_to_graveyard(attacker, defender)
 
         if self.is_player_dead(defender):
             self.log(
@@ -343,6 +336,26 @@ class Match:
         await self.return_cards_to_bench(attacker, defender)
         self.new_round()
         # devolver as cartas vivas ao banco dos seus donos
+
+    def move_dead_cards_to_graveyard(self, attacker, defender):
+        atk_cards = attacker.attack_zone.copy()
+        def_cards = defender.defense_zone.copy()
+
+        for card_id in atk_cards:
+            card = self.get_card(attacker, card_id)
+            print(card.id, card.is_dead())
+            if card.is_dead():
+                self.log(
+                    f'A carta {card.id} foi adicionada ao cemiterio')
+                attacker.add_graveyard(card.id)
+
+        for key, card_id in def_cards.items():
+            card = self.get_card(defender, card_id)
+            print(card.id, card.is_dead())
+            if card.is_dead():
+                self.log(
+                    f'A carta {card.id} foi adicionada ao cemiterio')
+                defender.add_graveyard(card.id, key)
 
     async def clash_result(self, line, diff):
         data = {

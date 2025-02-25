@@ -48,6 +48,7 @@ class Player:
             self.defense_zone.pop(key)
 
         elif card in self.attack_zone:
+            # nao pode remover da lista antes de clashar todas as cartas
             self.attack_zone.remove(card)
 
         self.graveyard.append(card)
