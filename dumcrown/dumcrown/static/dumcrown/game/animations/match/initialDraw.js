@@ -3,6 +3,7 @@ import { sleep } from "../../functions/functions.js";
 import { cardsToSwap, clearCardsToSwap, SwapButton } from "../../match_objects/swapButton.js";
 import { simpleTweens } from "../scripts/functions.js";
 import Logger from "../../objects/logger.js";
+import { sfx } from "../../soundfx/sounds.js";
 const log = new Logger()
 log.enableGroup('all')
 
@@ -14,6 +15,7 @@ export function showCard(scene, cardObject, finalX,) {
 
 
     simpleTweens(scene, verseCard, '-=150', '-=20', 0.4, 90, 0, 300, () => {
+        sfx.flipcardSound01.play()
         simpleTweens(scene, verseCard, finalX, centerY, 0.54, 90, 0, 300, () => {
             var card = cardObject;
             card.setPosition(finalX, centerY);
@@ -90,7 +92,7 @@ export function removeCard(scene, cardObject) {
     const verseCard = scene.add.image(cardObject.x, cardObject.y, 'verse_card');
     verseCard.setScale(scale)
     verseCard.scaleX = 0
-
+    sfx.flipcardSound01.play()
     scene.tweens.add({
         targets: cardObject,
         scaleX: 0,
@@ -104,6 +106,7 @@ export function removeCard(scene, cardObject) {
                 duration: 200,
                 ease: 'Linear',
                 onComplete: () => {
+                    sfx.cardSound02.play({ rate: 0.7 })
                     scene.tweens.add({
                         targets: verseCard,
                         x: 336,

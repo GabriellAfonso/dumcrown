@@ -291,7 +291,9 @@ export class MatchManager {
                     sleep(this.scene, 1500, () => {
                         this.draw()
                         this.button.update()
-                        this.updateOfensiveIcon()
+                        sleep(this.scene, 1300, () => {
+                            this.updateOfensiveIcon()
+                        })
                     })
                 } else {
                     this.playerHand.on()
@@ -495,13 +497,13 @@ export class MatchManager {
         if (data.who == this.player.im) {
             // this.updateBenchObj()
             this.addCardToBench(data.who, data.card_id)
-            sfx.cardSound03.play()
+            sfx.impactWood.play()
             this.benchPlayerAnimation()
             return
         }
 
         this.addCardToBench(data.who, data.card_id)
-        sfx.cardSound03.play()
+        sfx.impactWood.play()
         this.benchEnemyAnimation()
     }
     addCardToBench(who, cardID) {
@@ -604,11 +606,13 @@ export class MatchManager {
         log.info('action', 'chamou cardToAttack')
         if (data.who == this.player.im) {
             this.addCardToAttack(data.who, data.card_id)
+            sfx.impactWood.play()
             this.attackPlayerAnimation()
             return
         }
 
         this.addCardToAttack(data.who, data.card_id)
+        sfx.impactWood.play()
         this.attackEnemyAnimation()
     }
     addCardToAttack(who, cardID) {
@@ -629,11 +633,13 @@ export class MatchManager {
         log.info('action', 'chamou cardToDefense')
         if (data.who == this.player.im) {
             this.addCardToDefense(data.who, data.card_id, data.pos)
+            sfx.impactWood.play()
             this.defensePlayerAnimation(data.card_id, data.pos)
             return
         }
 
         this.addCardToDefense(data.who, data.card_id, data.pos)
+        sfx.impactWood.play()
         this.defenseEnemyAnimation(data.card_id, data.pos)
     }
     addCardToDefense(who, cardID, pos) {
@@ -786,6 +792,7 @@ export class MatchManager {
                 this.animateCard(attackerCard, attackerCard.x, clashY, 100),
                 defenderCard ? this.animateCard(defenderCard, defenderCard.x, defClashY, 100) : Promise.resolve()
             ]);
+            sfx.cardDamage01.play()
             sfx.cardDamage01.play()
             // Animação de dano para ambas as cartas
             if (defenderCard) {

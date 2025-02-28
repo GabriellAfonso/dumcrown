@@ -52,6 +52,8 @@ export class Loading extends Phaser.Scene {
 
         //sounds
         this.load.audio('hover_sound', PATH + '/soundfx/hoverSound.wav')
+        this.load.audio('hover_button', PATH + '/soundfx/hover_button.mp3')
+        this.load.audio('press_button', PATH + '/soundfx/press_button.mp3')
         this.load.audio('close_sound', PATH + '/soundfx/closeSound.mp3')
         this.load.audio('click_sound', PATH + '/soundfx/clickSound.wav')
         this.load.audio('home_sound', PATH + '/soundfx/home_sound.mp3')
@@ -61,7 +63,13 @@ export class Loading extends Phaser.Scene {
         this.load.audio('card_sound01', PATH + '/soundfx/card_sound01.mp3')
         this.load.audio('card_sound02', PATH + '/soundfx/card_sound02.mp3')
         this.load.audio('card_sound03', PATH + '/soundfx/card_sound03.mp3')
+        this.load.audio('flipcard_sound01', PATH + '/soundfx/flipcard.mp3')
         this.load.audio('card_damage01', PATH + '/soundfx/card_damage01.wav')
+        this.load.audio('sword_clashing', PATH + '/soundfx/sword_clashing.mp3')
+        this.load.audio('impact_wood', PATH + '/soundfx/impact_wood.mp3')
+        this.load.audio('draw_sword', PATH + '/soundfx/draw_sword.mp3')
+        this.load.audio('swap_do', PATH + '/soundfx/swap.mp3')
+        this.load.audio('swap_undo', PATH + '/soundfx/swap_undo.mp3')
 
         //background
         this.load.image('blackground', PATH + '/images/backgrounds/black_screen.jpg');

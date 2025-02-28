@@ -7,6 +7,7 @@ import { sendSocket } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 import { cardsToSwap } from './swapButton.js';
 import Logger from '../objects/logger.js';
+import { sfx } from '../soundfx/sounds.js';
 
 const log = new Logger()
 log.enableGroup('all')
@@ -82,6 +83,7 @@ export class MatchButton {
         this.button.on('pointerup', () => {
             this.button.disableInteractive()
             console.log(this.text)
+            sfx.pressButton.play()
 
             //TODO usar this.text em uma tabela hash pra executar algo em especifico O(1)
             if (this.text == 'PRONTO') {
@@ -112,12 +114,14 @@ export class MatchButton {
 
         this.button.on('pointerover', () => {
             if (this.text == 'SUA VEZ') {
+                sfx.hoverButton.play()
                 this.buttonText.text = 'PASSAR'
                 //TODO fazer som qunado passar o mouse e ficar mais claro tipo selecionado
             }
         });
         this.button.on('pointerout', () => {
             if (this.text == 'SUA VEZ') {
+                sfx.hoverButton.play()
                 this.buttonText.text = this.text
             }
         });

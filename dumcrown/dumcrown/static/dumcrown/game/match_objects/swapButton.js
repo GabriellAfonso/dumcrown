@@ -1,3 +1,5 @@
+import { sfx } from "../soundfx/sounds.js";
+
 export let cardsToSwap = {}
 
 export class SwapButton extends Phaser.GameObjects.Image {
@@ -12,12 +14,14 @@ export class SwapButton extends Phaser.GameObjects.Image {
         this.on('pointerup', () => {
             if (this.mode) {
                 cardsToSwap[card.id] = card.id;
+                sfx.swapDo.play()
                 this.setTexture('swap_button_undo')
                 card.swapMode()
                 this.mode = false
                 return
             }
             delete cardsToSwap[card.id];
+            sfx.swapUndo.play()
             this.setTexture('swap_button')
             card.swapMode('undo')
             this.mode = true

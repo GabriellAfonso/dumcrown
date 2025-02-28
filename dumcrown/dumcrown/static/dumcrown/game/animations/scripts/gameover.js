@@ -62,7 +62,7 @@ export function gameWin(scene, crystal, points) {
                     scene.crystals_text.alpha = 0;
                     scene.crystals_text.setOrigin(0.5, 0.5)
 
-                    scene.crownP_text = scene.add.text(centerX + 125, centerY + 80, '+' + points,
+                    scene.crownP_text = scene.add.text(centerX + 135, centerY + 80, '+' + points,
                         {
                             fontSize: '25px', fontFamily: 'Lexend Deca, sans-serif',
                             fontStyle: 'bold', fill: '#fff'

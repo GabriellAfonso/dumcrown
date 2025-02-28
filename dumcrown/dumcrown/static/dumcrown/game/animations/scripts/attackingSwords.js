@@ -1,5 +1,7 @@
 import { simpleTweens } from "./functions.js";
 import { centerX, centerY } from "../../config/gameConfig.js";
+import { sleep } from "../../functions/functions.js";
+import { sfx } from "../../soundfx/sounds.js";
 
 export function crashSwords(scene, initialY, finalY, scale) {
 
@@ -21,7 +23,9 @@ export function crashSwords(scene, initialY, finalY, scale) {
 
 
 
-
+    sleep(scene, 200, () => {
+        sfx.drawSword.play()
+    })
     simpleTweens(scene, scene.sword01, 220, centerY + finalY, scale, 10, 0, 600)
     simpleTweens(scene, scene.sword02, 220, centerY + finalY, scale, 10, 0, 600)
 

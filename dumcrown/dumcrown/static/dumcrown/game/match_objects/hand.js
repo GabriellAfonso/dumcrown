@@ -72,7 +72,7 @@ export class MatchHand {
         this.state = 0
     }
     closedHandAnimation() {
-        sfx.cardSound03.play()
+
         log.info('matchHand', 'animação da PlayerHand fechada')
 
         const configs = {
@@ -192,7 +192,7 @@ export class MatchHand {
 
         const verseCard = this.scene.add.image(346 - 10, 669 - 7, 'verse_card');
         verseCard.setScale(0.2)
-
+        sfx.cardSound02.play()
         this.scene.tweens.add({
             targets: verseCard,
             x: '-=150',
@@ -216,7 +216,7 @@ export class MatchHand {
                         card.scaleY = 0.8;
                         card.depth = 5
                         card.setVisible(true)
-
+                        sfx.flipcardSound01.play()
                         this.scene.tweens.add({
                             targets: verseCard,
                             scaleX: 0,
