@@ -477,33 +477,19 @@ export class MatchManager {
         this.defensiveHitbox = []
     }
 
-    //TODO:
-    //Botao indisponivel antes do initial draw terminar ---------X
-    //botao de passar a vez (passar o mouse em cima muda de "sua VEZ" pra "passar") ---------X
-    //passar a vez automaticamente quando jogar a carta ---------X
-    //resolver o depht do bench interferindo na mao ---------X
-    //gastar energia ao usar carta ---------X
-    //nao permitir colocar cartas magicas no banco ---------X
-    //se os dois passar a vez muda de round ---------X
-    //trocar card layout no bench ---------X
-    //indicaçao visual de quem esta no modo ofensivo ---------X
-    //ao apertar pronto sumir ou desativar botao de swap ---------X
-    //cartas magicas
-    //evoluçoes do Dark Age
-    // criar visual no loading do que ta sendo carregado(em grupos de preferencia ex: carregando cartas)
 
     cardToBench(data) {
         log.info('action', 'chamou cardToBench')
         if (data.who == this.player.im) {
             // this.updateBenchObj()
             this.addCardToBench(data.who, data.card_id)
-            sfx.impactWood.play()
+
             this.benchPlayerAnimation()
             return
         }
 
         this.addCardToBench(data.who, data.card_id)
-        sfx.impactWood.play()
+
         this.benchEnemyAnimation()
     }
     addCardToBench(who, cardID) {
@@ -563,6 +549,7 @@ export class MatchManager {
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
+                    // sfx.impactWood.play()
                     card.onBenchMode()
                     card.setSmallLayout()
                 },
@@ -595,6 +582,7 @@ export class MatchManager {
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
+                    // sfx.impactWood.play()
                     card.setSmallLayout()
                 },
             });
@@ -606,13 +594,13 @@ export class MatchManager {
         log.info('action', 'chamou cardToAttack')
         if (data.who == this.player.im) {
             this.addCardToAttack(data.who, data.card_id)
-            sfx.impactWood.play()
+
             this.attackPlayerAnimation()
             return
         }
 
         this.addCardToAttack(data.who, data.card_id)
-        sfx.impactWood.play()
+
         this.attackEnemyAnimation()
     }
     addCardToAttack(who, cardID) {
@@ -633,13 +621,13 @@ export class MatchManager {
         log.info('action', 'chamou cardToDefense')
         if (data.who == this.player.im) {
             this.addCardToDefense(data.who, data.card_id, data.pos)
-            sfx.impactWood.play()
+
             this.defensePlayerAnimation(data.card_id, data.pos)
             return
         }
 
         this.addCardToDefense(data.who, data.card_id, data.pos)
-        sfx.impactWood.play()
+
         this.defenseEnemyAnimation(data.card_id, data.pos)
     }
     addCardToDefense(who, cardID, pos) {
@@ -663,7 +651,7 @@ export class MatchManager {
 
         this.playerAttackZone.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
-
+            console.log(card)
             this.scene.tweens.add({
                 targets: card,
                 scale: 0.38,
@@ -674,6 +662,8 @@ export class MatchManager {
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
+                    sfx.impactWood.play()
+                    console.log('chamou o audio')
                     card.onAttackMode()
                     this.benchPlayerAnimation()
                 },
@@ -699,6 +689,7 @@ export class MatchManager {
                 duration: 100,
                 ease: 'Linear',
                 onComplete: () => {
+                    sfx.impactWood.play()
                     this.benchEnemyAnimation()
                 },
             });
@@ -725,6 +716,7 @@ export class MatchManager {
             duration: 100,
             ease: 'Linear',
             onComplete: () => {
+                sfx.impactWood.play()
                 cardObj.onDefenseMode()
                 this.benchPlayerAnimation()
             },
@@ -746,6 +738,7 @@ export class MatchManager {
             duration: 100,
             ease: 'Linear',
             onComplete: () => {
+                sfx.impactWood.play()
                 this.benchEnemyAnimation()
             },
         });

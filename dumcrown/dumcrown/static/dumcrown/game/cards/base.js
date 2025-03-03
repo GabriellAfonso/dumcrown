@@ -219,6 +219,9 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         });
     }
     onBenchMode() {
+        if (this.state != 'onBench') {
+            sfx.impactWood.play()
+        }
         this.state = 'onBench'
         this.destroyCollider()
         this.stopTween()
