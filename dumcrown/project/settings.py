@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/jogo'
+LOGIN_REDIRECT_URL = '/game'
 
 
 MIDDLEWARE = [
@@ -175,7 +175,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = f'/static/{GAME_VERSION}/'
-STATIC_ROOT = BASE_DIR / 'static/'
+STATIC_ROOT = BASE_DIR / f'static/{GAME_VERSION}/'
 
 
 MEDIA_URL = '/media/'
@@ -195,7 +195,6 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-CSRF_TRUSTED_ORIGINS = ['https://22b6-170-78-101-13.ngrok-free.app']
 TEMPLATE_DEBUG = True
 
 if not DEBUG:
