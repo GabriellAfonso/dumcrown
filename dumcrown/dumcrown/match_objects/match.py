@@ -424,9 +424,7 @@ class Match:
         match.save()
 
     def is_player_dead(self, player):
-        if player.hp < 1:
-            return True
-        return False
+        return player.hp < 1
 
     def player_play_spell(self, player, spell_id, target):
         self.is_my_turn(player)
