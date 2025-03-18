@@ -16,13 +16,7 @@ ALLOWED_HOSTS = [
 ]
 
 GAME_VERSION = '0.1.21'
-# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-# STATICFILES_IGNORE_PATTERNS = [
-#     '*.map',
-#     'phaser/**',
-#     'dumcrown/game/phaser/plugins/spine/dist/SpineWebGLPlugin.js',
-# ]
-# Application definition
+
 INSTALLED_APPS = [
     'channels',
     'daphne',
@@ -91,38 +85,8 @@ CHANNEL_LAYERS = {
     }
 }
 
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '',
-            'secret': '',
-            'key': '',
-        },
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online', 'prompt': 'select_account'},
-    },
-
-    #     'github': {
-    #         'APP': {
-    #             'client_id': 'SEU_CLIENT_ID',
-    #             'secret': 'SEU_CLIENT_SECRET',
-    #         }
-    #     }
-}
-
-
-# SOCIALACCOUNT_PROVIDERS = {
-#     'github': {
-#         'APP': {
-#             'client_id': 'SEU_CLIENT_ID',
-#             'secret': 'SEU_CLIENT_SECRET',
-#         }
-#     }
-# }
-
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
@@ -200,6 +164,9 @@ TEMPLATE_DEBUG = True
 if not DEBUG:
     print('Debug off')
     CSRF_TRUSTED_ORIGINS = ['https://dumcrown.com.br']
+    IN_PRODUCTION = True
+    SECURE_PROXY_SSL_HEADER = (
+        "HTTP_X_FORWARDED_PROTO", "https") if IN_PRODUCTION else None
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     CORS_ALLOW_ALL_ORIGINS = False
