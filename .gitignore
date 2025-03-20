@@ -5,6 +5,7 @@ postgres
 node_modules
 package-lock.json
 package.json
+dumcrown/dumcrown/static/dumcrown/game/phaser
 
 # Django #
 *.log
