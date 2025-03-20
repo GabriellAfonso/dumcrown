@@ -28,15 +28,15 @@ class Ping {
     }
 
     latencyCheck() {
-        if (latency_ms <= 70) {
+        if (latency_ms <= 100) {
             return 'signal01'
         }
 
-        if (latency_ms <= 180) {
+        if (latency_ms <= 250) {
             return 'signal02'
         }
 
-        if (latency_ms <= 300) {
+        if (latency_ms <= 400) {
             return 'signal03'
         }
 
