@@ -1,16 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.utils.crypto import get_random_string
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, views
+
 from django.shortcuts import render, redirect
 from dumcrown.forms import RegisterForm
 from dumcrown.models.player import Player, LoginHistory
-
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.http import JsonResponse
@@ -34,7 +36,7 @@ def index(request):
     )
 
 
-def login(request):
+def user_login(request):
     form = AuthenticationForm(request)
 
     if request.method == 'POST':
@@ -182,3 +184,12 @@ def view_debug_log(request):
         'dumcrown/debug_log.html',
         {'content': content}
     )
+
+
+def guest_access(request):
+    username = f"guest_{get_random_string(8)}"
+
+    user = User.objects.create_user(username=username)
+    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+    messages.info(request, f"You are logged in as a guest ({username})")
+    return redirect('dumcrown:index')

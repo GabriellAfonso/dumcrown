@@ -8,7 +8,8 @@ app_name = 'dumcrown'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('login/', views.login, name='login'),
+    path('guest/', views.guest_access, name='guest_access'),
+    path('login/', views.user_login, name='login'),
     path('accounts/login/', views.redirect_login, name='redirect_login'),
     path('accounts/signup/', views.redirect_register, name='redirect_register'),
     path('register', views.register, name='register'),

@@ -86,8 +86,6 @@ CHANNEL_LAYERS = {
 }
 
 # Database
-
-
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE', 'change-me'),
