@@ -4,9 +4,9 @@
 Dumcrown é um jogo de cartas online player vs player baseado na história do RPG de mesa do meu irmão Daniel.
 
 ## OBJETIVO
-O principal objetivo desse projeto foi me expor ao máximo de tecnologias, conceitos e complexidades possíveis.
-Eu queria um projeto no qual eu pudesse aprender o máximo de coisas possíveis em um único projeto, e nesse projeto eu aprendi:
+O principal objetivo deste projeto foi me expor ao máximo de tecnologias, conceitos e desafios possíveis. Queria criar algo divertido e que me proporcionasse um aprendizado amplo em um único projeto. 
 
+Ao longo desse projeto, aprendi:
 * Banco de Dados
 * Accounts do Django
 * Django Channels & Websockets
@@ -20,7 +20,6 @@ Eu queria um projeto no qual eu pudesse aprender o máximo de coisas possíveis 
 * Certbot
 * Celery
  
-
 Entre outras coisas mais pontuais.
 
 ## Tecnologias Utilizadas
@@ -35,21 +34,18 @@ Entre outras coisas mais pontuais.
 ## Como Rodar o Projeto
 
 Para rodar o projeto, tudo que você vai precisar é do Docker e do Docker Compose. 
-Caso não funcione na versão que você tem instalada, o projeto está rodando com:
-* Docker 25.0.4
-* Docker-Compose v2.24.7.
 
 clone o repositório:
 ```
 git clone git@github.com:GabriellAfonso/dumcrown.git
 ```
-Va para a pasta dotenv_files e renomeie o arquivo _.env pra .env
+Vá até a pasta dotenv_files e renomeie o arquivo .env.example para .env
 
 Depois volte à pasta raiz do projeto e execute o docker compose
 ```
 docker compose up --build
 ```
-após esperar, basta acessar o localhost ou 127.0.0.1 no seu navegador.
+Após a inicialização, abra o navegador e acesse http://localhost ou http://127.0.0.1.
 
 ## Considerações Sobre o Projeto
 
@@ -61,12 +57,3 @@ Com certeza, valeu muito a pena todos os meses de estudo e esforço dedicados a 
 ## Agradecimentos 
 Primeiramente, gostaria de agradecer ao meu irmão Daniel, que me ajudou bastante desenhando as cartas, ícones e imagens do jogo,
 e também aos nossos amigos que nos ajudaram testando o jogo e nos dando mais ideias. Muito obrigado pelo apoio!
-
-## Próximos Passos
-
-Criar um jogo é um objetivo meu desde criança, então não termina por aqui. 
-Esse projeto foi apenas um rascunho que utilizei para aprender, e agora estou trabalhando em um projeto mais completo e estruturado,
-que irei fazer utilizando a engine Godot para fazer o jogo tanto para desktop quanto mobile e o Django para fazer a parte do servidor.
-Os respectivos repositórios estão linkados abaixo.
-
-* [Dumcrown-Godot](https://github.com/GabriellAfonso/dumcrown-godot)
