@@ -1,5 +1,7 @@
 # Dumcrown
 
+[Acesse o jogo como convidado](https://dumcrown.com.br/guest/)
+
 #### o que é :
 Dumcrown é um jogo de cartas online player vs player baseado na história do RPG de mesa do meu irmão Daniel.
 
