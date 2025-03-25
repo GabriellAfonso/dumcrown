@@ -146,7 +146,7 @@ export class DeckEditorScene extends Phaser.Scene {
                 cards: this.deckManager.getIDList(),
             }
 
-            console.log(data)
+            // console.log(data)
             sendSocket('save_deck', data)
             // sendSocket('get_player_data');
             //o switch scene ta no client
@@ -161,7 +161,7 @@ export class DeckEditorScene extends Phaser.Scene {
             this.deckManager.addList(this.deckData.cards)
             this.deckname.node.value = this.deckData.name
             var deck = compressedDeck(this, this.deckData.cards)
-            console.log(this.deckData.cards)
+            // console.log(this.deckData.cards)
 
             for (const [key, item] of Object.entries(deck)) {
                 this.compressedDeckContainer.addItem(item)
@@ -195,7 +195,6 @@ export class DeckEditorScene extends Phaser.Scene {
 
     }
     addToDeck(cardID) {
-        console.log('addeu', cardID)
 
         if (this.deckManager.addID(cardID)) {
             const quantity = this.deckManager.getIDCount(cardID)
@@ -213,7 +212,6 @@ export class DeckEditorScene extends Phaser.Scene {
         }
     }
     RemoveFromDeck(card) {
-        console.log('remove from deck')
         this.cards[card.id].emit('unlockCard')
 
         this.deckManager.removeCard(card.id)
@@ -323,7 +321,7 @@ export class DeckEditorScene extends Phaser.Scene {
         this.events.off('remove_from_deck')
         this.events.off('invalidDeck')
         this.events.off('successDeck')
-        console.log('Scene shutdown, deckData cleared');
+        // console.log('Scene shutdown, deckData cleared');
     }
 
 }

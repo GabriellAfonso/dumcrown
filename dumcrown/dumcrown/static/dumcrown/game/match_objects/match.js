@@ -318,7 +318,6 @@ export class MatchManager {
     draw() {
         log.info('action', 'Comprando carta')
         var id = this.player.hand.at(-1)
-        console.log(id)
         var card = this.getPlayerCardObj(id)
 
         this.playerHand.drawCard(card)
@@ -368,16 +367,12 @@ export class MatchManager {
         const pointer = this.scene.input.activePointer;
         const bounds = this.boardCollider.getBounds();
 
-        //isOver boardCollider
 
         if (cardObj.isSpell()) {
-            console.log(cardObj.id)
             var id = idCleaner(cardObj.id)
             if (id == 's7' || id == 's5') {
                 //gambiarra
-                console.log('entrou')
                 if (!this.isOver(pointer, bounds)) {
-                    console.log('ta fora')
                     return
                 }
             }
@@ -425,10 +420,8 @@ export class MatchManager {
         log.info('defensiveDropped', 'posicionando carta')
         const pointer = this.scene.input.activePointer;
         const card = cardObj.getID()
-        console.log('entrou no defensve drop')
-        console.log(!cardObj.state == 'onBench')
+
         if (cardObj.state !== 'onBench') {
-            console.log('entrou false')
             return
         }
         this.defensiveHitbox.forEach((hitbox, index) => {
@@ -558,10 +551,6 @@ export class MatchManager {
     }
     benchEnemyAnimation() {
         const numCards = this.enemy.bench.length;
-        console.log(numCards)
-        console.log(this.enemy.bench)
-
-        console.log(this.enemyBench)
 
         const spacing = 115;
         const offsetX = (numCards - 1) * spacing / 2;
@@ -569,8 +558,6 @@ export class MatchManager {
 
         this.enemyBench.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
-            console.log(card, index)
-            console.log(posX)
             card.setVisible(true)
             this.scene.tweens.add({
                 targets: card,
@@ -651,7 +638,6 @@ export class MatchManager {
 
         this.playerAttackZone.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
-            console.log(card)
             this.scene.tweens.add({
                 targets: card,
                 scale: 0.38,
@@ -663,7 +649,6 @@ export class MatchManager {
                 ease: 'Linear',
                 onComplete: () => {
                     sfx.impactWood.play()
-                    console.log('chamou o audio')
                     card.onAttackMode()
                     this.benchPlayerAnimation()
                 },
@@ -1139,7 +1124,6 @@ export class MatchManager {
         });
     }
     spellS8Animation(player, spellID, target) {
-        console.log('chamou o spellS8Animation')
         var owner
         var enemy
         var target_card
@@ -1211,8 +1195,6 @@ export class MatchManager {
         // removeFromList(Object.values(this.enemyDefenseZone), card)
     }
     removeFromBench(card, owner) {
-        console.log('removeFromBench')
-        console.log(this.player.im == owner)
         if (this.player.im == owner) {
             const index = this.playerBench.findIndex(item => item.id === card.id);
 
@@ -1227,7 +1209,6 @@ export class MatchManager {
             return
 
         }
-        console.log('foi pro inimigo')
         // Corrigido para acessar 'this.enemyBench' diretamente
         const index = this.enemyBench.findIndex(item => item.id === card.id);
 

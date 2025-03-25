@@ -22,7 +22,7 @@ export class Preloader extends Phaser.Scene {
     }
 
     create() {
-        console.log('startou PREloading')
+
 
         this.scene.launch('Loading');
 
@@ -35,7 +35,6 @@ export class Loading extends Phaser.Scene {
     }
 
     preload() {
-        console.log('startou o loading')
         const ls = this.add.image(centerX, centerY, 'loading_screen')
         ls.setScale(1);
         ls.alpha = 0.5
@@ -317,8 +316,6 @@ export class Loading extends Phaser.Scene {
 
         }, { color: 0xffffff });
         fullscreen_button.setScale(0.40);
-        console.log(player.nickname)
-        console.log(player.nickname.length)
 
         const entrar = new Button(this, centerX, 650, 'entrar_button', () => {
             fullscreen_button.destroy();

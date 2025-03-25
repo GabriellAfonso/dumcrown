@@ -99,7 +99,6 @@ export class RoomScreen extends Phaser.Scene {
                 }
                 sendSocket('start_match', data)
                 this.start.disableInteractive()
-                console.log('cliquei no start')
             });
             this.start.setScale(0.5)
             this.start.setTint(0xdddddd)

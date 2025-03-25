@@ -6,7 +6,6 @@ export var matchData = {}
 
 export function startMatch(data) {
     matchData = data
-    console.log(matchData)
 
     if (GAME.scene.isActive('QueueTimer')) {
         const QueueTimer = GAME.scene.getScene('QueueTimer');
@@ -91,12 +90,10 @@ export function returnCardToBench(data) {
 }
 
 export function animateCardToAttack(data) {
-    console.log(data)
     updateMatchData(data.data)
     emitToMatch('animateCardToAttack', data)
 }
 export function animateCardToDefense(data) {
-    console.log('chamou o animete defense')
     updateMatchData(data.data)
     emitToMatch('animateCardToDefense', data)
 }
@@ -109,7 +106,6 @@ export function defenseMode(data) {
     emitToMatch('defenseMode', data)
 }
 export function clashLine(data) {
-    console.log('recebeu clashLine')
     updateMatchData(data.match)
     emitToMatch('clashLine', data)
 }

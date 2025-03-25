@@ -35,7 +35,6 @@ export class DumMatch extends Phaser.Scene {
 
 
         if (!this.eventsAdded) {
-            console.log('entrou na primeira')
             this.addEvents();
             this.eventsAdded = true; // Marca que os eventos foram adicionados
         }

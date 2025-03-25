@@ -13,7 +13,6 @@ import {
 
 function msg(data) {
     const message = data.message
-    console.log(message)
 }
 
 export const clientReciver = {

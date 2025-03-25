@@ -26,10 +26,10 @@ export class EmailsScene extends Phaser.Scene {
         close.setDepth(4)
         this.input.topOnly = false;
         var newDeckButton = new Button(this, centerX + 200, centerY, 'add_new_deck', () => {
-            console.log('naruto')
+            console.log('p1')
         })
         var newDeckButton2 = new Button(this, centerX, centerY, 'add_new_deck', () => {
-            console.log('sasuke')
+            console.log('p2')
         })
     }
     update() {

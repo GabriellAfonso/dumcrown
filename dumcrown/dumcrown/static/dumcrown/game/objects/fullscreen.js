@@ -18,14 +18,10 @@ export class Fullscreen {
     }
 
     toggleTexture() {
-        console.log(this.fullscreen_button.texture.key)
-        console.log('chamou toggle2')
         if (this.fullscreen_button.texture.key == 'fullscreen_on') {
-            console.log('trocou a textura pra off')
             this.fullscreen_button.setTexture('fullscreen_off')
             return
         }
-        console.log('trocou a textura pra on')
         this.fullscreen_button.setTexture('fullscreen_on')
 
     }

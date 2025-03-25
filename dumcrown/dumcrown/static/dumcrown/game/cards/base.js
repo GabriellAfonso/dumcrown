@@ -177,7 +177,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
 
             this.scene.events.emit('cardDropped', this)
             this.scene.events.emit('showHand', this)
-            console.log(this.state)
+
             if (this.state == 'onHand') {
                 this.activeTween = this.scene.tweens.add({
                     targets: this,
@@ -225,8 +225,6 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.state = 'onBench'
         this.destroyCollider()
         this.stopTween()
-
-        console.log('ta no on bench')
 
         let startX = null
         let startY = null
@@ -280,7 +278,6 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             this.collider.scale = 1
 
             this.scene.events.emit('cardDropped', this)
-            console.log(this.state)
             if (this.state == 'onBench') {
                 this.activeTween = this.scene.tweens.add({
                     targets: this,
@@ -358,7 +355,6 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
     }
 
     playDamageAnimation(value) {
-        console.log('playou a animaçao')
         // Cria uma imagem para usar como máscara
         // Obtém a posição global do cardLayout dentro do container
         const worldX = this.cardLayout.getWorldTransformMatrix().tx;

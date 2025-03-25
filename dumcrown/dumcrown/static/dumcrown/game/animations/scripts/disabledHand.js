@@ -119,10 +119,10 @@ function rightHandOrganization(delCard = '') {
             this.myHand.splice(indice, 1);
 
         } else {
-            console.log("Elemento não encontrado na lista");
+            // console.log("Elemento não encontrado na lista");
         }
 
-        console.log(this.myHand); // A lista agora não contém mais o elemento 3.
+        // console.log(this.myHand); // A lista agora não contém mais o elemento 3.
 
     }
 

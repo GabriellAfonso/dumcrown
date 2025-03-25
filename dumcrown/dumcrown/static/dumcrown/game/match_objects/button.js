@@ -82,12 +82,11 @@ export class MatchButton {
 
         this.button.on('pointerup', () => {
             this.button.disableInteractive()
-            console.log(this.text)
+
             sfx.pressButton.play()
 
             //TODO usar this.text em uma tabela hash pra executar algo em especifico O(1)
             if (this.text == 'PRONTO') {
-                console.log('mandando pro servidor', cardsToSwap)
                 var data = {
                     match_id: match.id,
                     cards: cardsToSwap,
@@ -97,7 +96,7 @@ export class MatchButton {
             }
 
             else if (this.text == 'SUA VEZ') {
-                console.log('passou a vez')
+                // console.log('passou a vez')
                 sendSocket('player_pass', match.id)
 
             }
@@ -105,7 +104,7 @@ export class MatchButton {
                 sendSocket('player_clash', match.id)
             }
             else if (this.text == 'DEFENDER') {
-                console.log('mandou player clash pro servidor')
+                // console.log('mandou player clash pro servidor')
                 sendSocket('player_clash', match.id)
             }
 

@@ -48,14 +48,14 @@ export function compressedDeck(scene, data) {
         unitGroups[baseId] = object;
     });
 
-    console.log(unitGroups);
+    // console.log(unitGroups);
     return unitGroups;
 }
 
 //alguem usa essa funçao??
 export function compressCard(scene, cardID) {
     var id = idCleaner(cardID)
-    console.log(id)
+    // console.log(id)
     const object = new compressedCardObject(scene, cardsDATA[id]);
     return object
 }
@@ -87,7 +87,7 @@ export function instantiateDecks(scene, data) {
 
         decks[deck.name] = deckInstance;
     });
-    console.log('data', decks)
+    // console.log('data', decks)
     return decks;
 
 }

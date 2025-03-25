@@ -24,14 +24,14 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
     removeItem(item, delay = 0) {
         // Remove o item do container do Phaser
 
-        console.log(item)
+        // console.log(item)
 
         // Encontra o índice do item no array items
         const index = this.items.findIndex(i => i === item);
 
         if (index !== -1) {
 
-            console.log('item encontrado')
+            // console.log('item encontrado')
             sleep(this.scene, delay, () => {
                 this.items.splice(index, 1);
                 this.remove(item);
@@ -39,7 +39,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
             })
             return
         }
-        console.log('item nao encontrado')
+        // console.log('item nao encontrado')
 
     }
 
@@ -149,7 +149,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
         if (this.scrollable && this.height > this.maskHeight) {
             this.on('drag', this.drag);
             this.on('pointerover', () => {
-                console.log('ta em cima')
+                // console.log('ta em cima')
                 this.scene.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
                     this.onMouseWheel(deltaY);
                 });
@@ -194,7 +194,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
 
             }, 200)
         } else {
-            console.log('ta fora')
+            // console.log('ta fora')
         }
 
     }
@@ -283,7 +283,7 @@ export class WrapperContainer extends Phaser.GameObjects.Container {
                 this.scrollThumbPosition = Phaser.Math.Clamp(thumbPositionPercentage, 0, 100);
 
                 this.moveContent();
-                console.log(this.scrollThumbPosition);
+                // console.log(this.scrollThumbPosition);
 
                 this.scrollThumb.dragStartY = dragY;
             }

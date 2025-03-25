@@ -59,12 +59,12 @@ export function showCoordinates(scene) {
 
 export function removeFromList(list, target) {
     const indice = list.indexOf(target);
-    console.log('o indice é', indice)
+    // console.log('o indice é', indice)
     if (indice !== -1) {
         list.splice(indice, 1);
 
     } else {
-        console.log("Elemento não encontrado na lista");
+        // console.log("Elemento não encontrado na lista");
     }
     return list
 }
@@ -72,14 +72,14 @@ export function removeFromList(list, target) {
 export function logoutAjax() {
     $.ajax({
         type: 'GET',
-        url: '/logout/',  // Substitua pela URL correta do seu endpoint de logout
+        url: '/logout/',
         success: function (data) {
             window.location.href = "/logout/";
-            console.log('Logout successful');
-            // Implemente qualquer lógica adicional após o logout, como redirecionamento
+            // console.log('Logout successful');
+
         },
         error: function () {
-            console.log('Logout failed');
+            // console.log('Logout failed');
         }
     });
 }

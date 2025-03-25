@@ -4,8 +4,6 @@ import { GAME } from "../config/gameConfig.js";
 export var sfx
 
 export function loadSFX() {
-    console.log('chamou a funçao loading sfx')
-    //nao pausa mais a musica
     GAME.sound.pauseOnBlur = false;
     sfx = {
         houverSound: GAME.sound.add('hover_sound'),
