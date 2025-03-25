@@ -13,13 +13,7 @@ export function sendSocket(code, data = '') {
 
 
 export function toggleFullscreen() {
-    if (GAME.scale.isFullscreen) {
-        // Se o jogo já estiver em tela cheia, saia do modo de tela cheia
-        GAME.scale.stopFullscreen();
-    } else {
-        // Se o jogo não estiver em tela cheia, entre no modo de tela cheia
-        GAME.scale.startFullscreen();
-    }
+    GAME.scale.toggleFullscreen()
 }
 
 export function switchScenes(sceneToStart, sceneToStop = '') {
