@@ -13,118 +13,9 @@ import { instantiateCards } from '../cards/functions.js';
 import { DeckLayout } from '../objects/deck_layout.js';
 import { unitCardObject, compressedCardObject } from '../cards/base.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';
-
-class Ping {
-    constructor(scene, x, y) {
-        this.scene = scene;
-        this.initialize(scene, x, y)
-    }
-
-    initialize(scene, x, y) {
-        this.ping = scene.add.image(x, y, 'signal01');
-        // this.ping.setScale(0.06)
-        this.ms = add_text(scene, x + 35, y, latency_ms, '16px', 0.5)
-        this.update()
-    }
-
-    latencyCheck() {
-        if (latency_ms <= 100) {
-            return 'signal01'
-        }
-
-        if (latency_ms <= 250) {
-            return 'signal02'
-        }
-
-        if (latency_ms <= 400) {
-            return 'signal03'
-        }
-
-        return 'signal04'
-    }
-
-    update() {
-        this.pingUpdate = this.scene.time.addEvent({
-            delay: 1000,
-            loop: true,
-            callback: () => {
-                if (this.ping) {
-                    this.ping.setTexture(this.latencyCheck());
-                    this.ms.setText(latency_ms);
-                }
-            }
-        });
-    }
-}
-class ExpBar {
-    constructor(scene) {
-        this.scene = scene;
-        this.initialize(scene)
-    }
-
-    initialize(scene) {
-        var expToUp = player.level * 100;
-        var progress = player.experience / expToUp;
-
-        var expBox = scene.add.rectangle(221, 140, 162, 7, 0x222222, 1);
-        expBox.setOrigin(0)
-        expBox.setInteractive();
-
-        var expBar = scene.add.graphics();
-        expBar.fillStyle(0xFFA500, 1);
-        expBar.fillRect(221, 140, 162 * progress, 7);
-
-
-        this.progressBox = scene.add.rectangle(216, 160, 172, 50, 0x222222, 1);
-        this.progressBox.setOrigin(0)
-
-        this.progressNumbers = add_text(scene, 302, 185,
-            'EXP: ' + player.experience + '/' + expToUp, '18px', 0.5)
-        this.toggleVisibility(false)
-
-        var levelContainer = scene.add.container()
-        levelContainer.setSize(172, 20)
-        levelContainer.setPosition(302, 144)
-        levelContainer.setInteractive()
-
-        // var containerRect = scene.add.rectangle(
-        //     levelContainer.x, levelContainer.y,
-        //     levelContainer.width, levelContainer.height, 0xCCCCCC, 0.4);
-        // containerRect.setStrokeStyle(2, 0x000000);
-        // containerRect.setOrigin(0.5);
-
-        var pressed = false
-
-        levelContainer.on('pointerup', () => {
-            pressed = true
-            this.toggleVisibility(true)
-        });
-
-        levelContainer.on('pointerover', () => {
-            this.toggleVisibility(true)
-        });
-
-        levelContainer.on('pointerout', () => {
-            if (!pressed) {
-                this.toggleVisibility(false)
-            }
-
-        });
-        scene.input.on('pointerdown', () => {
-            if (pressed) {
-                pressed = false
-                this.toggleVisibility(false)
-            }
-        });
-    }
-
-    toggleVisibility(isVisible) {
-        this.progressBox.setVisible(isVisible);
-        this.progressNumbers.setVisible(isVisible);
-    }
-
-}
-
+import { Fullscreen } from '../objects/fullscreen.js';
+import { Ping } from '../objects/ping.js';
+import { ExpBar } from '../objects/expBar.js';
 
 
 export class HomeScene extends Phaser.Scene {
@@ -140,10 +31,7 @@ export class HomeScene extends Phaser.Scene {
 
         const background = this.add.image(centerX, centerY, 'homescreen');
 
-        const fullscreen_button = new Button(this, 1465, 35, 'fullscreen', () => {
-            toggleFullscreen();
-        });
-        fullscreen_button.setScale(0.40);
+        this.fullscreenButton = new Fullscreen(this, 1465, 35)
 
 
         this.name = add_text(this, 218, 35, player.nickname, '28px')

@@ -139,8 +139,8 @@ export class Loading extends Phaser.Scene {
         this.load.image('master', PATH + '/images/tier_shields/master.png');
 
         //buttons 
-        this.load.image('fullscreen', PATH + '/images/buttons/fullscreen.png');
-        this.load.image('soscreen', PATH + '/images/buttons/soscreen.png');
+        this.load.image('fullscreen_on', PATH + '/images/buttons/fullscreen_on.png');
+        this.load.image('fullscreen_off', PATH + '/images/buttons/fullscreen_off.png');
         this.load.image('decks_button', PATH + '/images/buttons/deck.png');
         this.load.image('friends_button', PATH + '/images/buttons/amigos.png');
         this.load.image('config_button', PATH + '/images/buttons/config.png');
