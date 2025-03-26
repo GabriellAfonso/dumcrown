@@ -70,6 +70,14 @@ export class Loading extends Phaser.Scene {
         this.load.audio('swap_do', PATH + '/soundfx/swap.mp3')
         this.load.audio('swap_undo', PATH + '/soundfx/swap_undo.mp3')
 
+        //speaksTutorial
+        this.load.audio('text_1', PATH + '/soundfx/tutorial/text01.mp3')
+        this.load.audio('text_2', PATH + '/soundfx/tutorial/text02.mp3')
+        this.load.audio('text_3', PATH + '/soundfx/tutorial/text03.mp3')
+        this.load.audio('text_4', PATH + '/soundfx/tutorial/text04.mp3')
+        this.load.audio('text_5', PATH + '/soundfx/tutorial/text05.mp3')
+
+
         //background
         this.load.image('blackground', PATH + '/images/backgrounds/black_screen.jpg');
         this.load.image('blank_background', PATH + '/images/backgrounds/blank_screen.jpg');

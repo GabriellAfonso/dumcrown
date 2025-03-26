@@ -85,8 +85,8 @@ export class MatchManager {
         this.createDecks()
         this.createHp()
         this.createEnergy()
-        this.instantiateCards()
         this.createPlayerHand()
+        this.instantiateCards()
     }
 
 

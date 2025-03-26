@@ -115,7 +115,6 @@ export class MatchButton {
             if (this.text == 'SUA VEZ') {
                 sfx.hoverButton.play()
                 this.buttonText.text = 'PASSAR'
-                //TODO fazer som qunado passar o mouse e ficar mais claro tipo selecionado
             }
         });
         this.button.on('pointerout', () => {
