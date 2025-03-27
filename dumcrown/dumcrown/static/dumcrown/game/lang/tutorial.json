@@ -3,5 +3,8 @@
     "2": "DumCrown é um jogo de cartas 1 contra 1, onde o objetivo é reduzir a vida do seu adversário a zero antes dele fazer o mesmo com você",
     "3": "Agora, deixe-me te mostrar a arena",
     "4": "A área abaixo representa a sua arena, enquanto a área acima é a do seu adversário",
-    "5": "Aqui estão seus pontos de vida e acima ficam os pontos de vida do seu adversário"
+    "5": "Aqui estão seus pontos de vida e acima ficam os pontos de vida do seu adversário",
+    "6": "",
+    "7": "Cada carta em DumCrown exige uma quantidade específica de energia para ser jogada.",
+    "8": "O cristal vermelho mostra o dano de ataque da carta enquanto o cristal laranja indica a defesa."
 }
