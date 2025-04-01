@@ -9,6 +9,7 @@ import { sendSocket } from '../functions/functions.js';
 import { add_text } from '../functions/texts.js';
 import { MatchButton } from '../match_objects/button.js';
 import { MatchHand } from '../match_objects/hand.js';
+import { InitialDrawManager } from '../match_objects/initialDrawManager.js';
 import { sfx } from '../soundfx/sounds.js';
 
 
@@ -19,7 +20,7 @@ export class Tutorial extends Phaser.Scene {
     }
 
     create() {
-
+        this.activeDialogue = false
         this.createScene()
         this.getPhrases()
 
@@ -28,7 +29,7 @@ export class Tutorial extends Phaser.Scene {
         fetch(PATH + 'lang/tutorial.json')
             .then(response => response.json())
             .then(data => {
-                this.pIndex = 1
+                this.pIndex = 11
                 this.tutorialPhrases = data
                 console.log(this.tutorialPhrases)
             })
@@ -76,6 +77,7 @@ export class Tutorial extends Phaser.Scene {
         this.blackBlur.fillRect(0, 0, centerX * 2, centerY * 2);
         this.blackBlur.depth = 100
         this.blackBlur.alpha = 0
+
         this.tweens.add({
             targets: this.blackBlur,
             alpha: 1,
@@ -137,10 +139,15 @@ export class Tutorial extends Phaser.Scene {
         // Agora o zoom só afeta a câmera principal, e a UI fica intacta
         // this.cameras.main.setZoom(1.2);
         // this.cameras.main.pan(500, 300, 1000, 'Sine.easeInOut');
+        this.activeDialogue = true
         this.playNextDialogue();
     }
 
     playNextDialogue() {
+        if (!this.activeDialogue) {
+            return
+        }
+
         let currentText = this.tutorialPhrases[this.pIndex].replace(/{nickname}/g, player.nickname);
         this.dialogueAction(this.pIndex);
 
@@ -298,6 +305,9 @@ export class Tutorial extends Phaser.Scene {
                 ease: 'Power2',
             });
         } else if (index == 8) {
+            this.cameras.main.scrollY = 0
+            this.cameras.main.scrollX = 170
+            this.cameras.main.zoom = 1.3
             this.tweens.add({
                 targets: this.cameras.main,
                 zoom: 1.5,
@@ -329,6 +339,125 @@ export class Tutorial extends Phaser.Scene {
                 duration: 300,
                 ease: 'Power2',
             });
+        } else if (index == 9) {
+            this.cameras.main.scrollY = 120
+            this.cameras.main.scrollX = 170
+            this.cameras.main.zoom = 1.5
+            if (this.focusMask) {
+                this.focusMask.clear()
+            }
+            this.cameras.main.scrollY = 120
+            this.cameras.main.zoom = 1.5
+
+            this.tweens.add({
+                targets: this.cameras.main,
+                zoom: 1.3,
+                scrollY: '-=120',
+                duration: 600,
+                ease: 'Power2',
+                repeat: 0,
+                yoyo: false
+            });
+
+            const card = this.playerCards[8]
+            this.tweens.add({
+                targets: card,
+                delay: 1400,
+                alpha: 0,
+                duration: 800,
+                ease: 'Power2',
+                onComplete: () => {
+                    card.setPosition(310, 705)
+                    card.setAlpha(1)
+                    card.setVisible(false)
+                }
+            });
+
+        } else if (index == 10) {
+            // console.log('esse é o 10')
+            // console.log(this.cameras.main.scrollY)
+            // console.log(this.cameras.main.scrollX)
+            // console.log(this.cameras.main.zoom)
+
+            this.cameras.main.scrollY = 0
+            this.cameras.main.scrollX = 170
+            this.cameras.main.zoom = 1.3
+
+            this.focusMask = this.make.graphics();
+            this.focusMask.fillStyle(0xffffff);
+            this.focusMask.fillRect(1295, 285, 200, 200);
+            const mask = new Phaser.Display.Masks.BitmapMask(this, this.focusMask);
+            mask.invertAlpha = true;
+            this.blackBlur.setMask(mask);
+
+            this.showDialogueUI(false)
+            this.tweens.add({
+                targets: this.cameras.main,
+                zoom: 1.5,
+                scrollX: '+=75',
+                duration: 600,
+                ease: 'Power2',
+                repeat: 0,
+                yoyo: false
+            });
+            this.time.delayedCall(2000, () => {
+                this.button.setTexture(this.buttonTexture[1])
+                this.buttonText.text = 'PRONTO'
+            });
+            this.time.delayedCall(3100, () => {
+                this.buttonText.text = 'PASSAR'
+            });
+            this.time.delayedCall(4000, () => {
+                this.buttonText.text = 'ATACAR'
+            });
+            this.time.delayedCall(4800, () => {
+                this.buttonText.text = 'DEFENDER'
+            });
+
+        } else if (index == 11) {
+            if (this.focusMask) {
+                this.focusMask.clear()
+            }
+            this.activeDialogue = false
+            this.showDialogueUI()
+            this.tweens.add({
+                targets: this.cameras.main,
+                zoom: 1,
+                scrollX: 0,
+                duration: 1500,
+                ease: 'Power2',
+                repeat: 0,
+                yoyo: false,
+                onComplete: () => {
+                    this.time.delayedCall(2200, () => {
+                        this.showDialogueUI(false)
+                        this.initialDrawn()
+                        this.tweens.add({
+                            targets: this.blackBlur,
+                            alpha: 0,
+                            duration: 600,
+                            ease: 'Power2',
+                        })
+
+                    });
+
+                }
+            });
+        } else if (index == 12) {
+            this.tweens.add({
+                targets: this.blackBlur,
+                alpha: 0.7,
+                duration: 600,
+                ease: 'Power2',
+            })
+            this.showDialogueUI()
+        } else if (index == 14) {
+            this.focusMask = this.make.graphics();
+            this.focusMask.fillStyle(0xffffff);
+            this.focusMask.fillRect(751, 247, 200, 320);
+            const mask = new Phaser.Display.Masks.BitmapMask(this, this.focusMask);
+            mask.invertAlpha = true;
+            this.blackBlur.setMask(mask);
         }
     }
 
@@ -406,6 +535,15 @@ export class Tutorial extends Phaser.Scene {
             }
         });
     }
+    updateButton(state, text) {
+        this.button.setTexture(this.buttonTexture[state])
+        this.buttonText.text = text
+        if (state != 1) {
+            this.button.disableInteractive()
+            return
+        }
+        this.button.setInteractive({ cursor: 'pointer' })
+    }
 
     createIcons() {
         //player
@@ -467,6 +605,7 @@ export class Tutorial extends Phaser.Scene {
         this.playerHand = new MatchHand(this)
     }
     instantiateCards() {
+        console.log(player.decks[0].cards)
         //player
         this.playerCards = createPlayerCards(this, player.decks[0].cards, 1)
         //enemy
@@ -479,7 +618,31 @@ export class Tutorial extends Phaser.Scene {
             card.scale = 0.32
         });
     }
+    initialDrawn() {
+        // console.log(this.blackBlur.visible, this.blackBlur.active);
+        // this.blackBlur.setInteractive({ useHandCursor: true });
 
+        // this.blackBlur.on('pointerup', () => {
+        //     console.log('clicou no blur')
+        // });
+        // this.blackBlur.depth = 100000
+        console.log(this.playerCards)
+        var iniDrawCards = ['8', '5', '9', '21']
+        var cardsObj = []
+        for (let card of iniDrawCards) {
+            var c = this.playerCards[card]
+            cardsObj.push(c)
+        }
+        this.initialDrawManager = new InitialDrawManager(this)
+        this.initialDrawManager.drawCards(cardsObj)
+        sleep(this, 2500, () => {
+            this.updateButton(1, 'PRONTO')
+        })
+        sleep(this, 2800, () => {
+            this.activeDialogue = true
+            this.playNextDialogue()
+        })
+    }
     update() {
 
     }
