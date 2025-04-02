@@ -85,6 +85,7 @@ export function showSwap(scene, cardObject, finalX) {
     swapButons.push(swapButon)
 
     simpleTweens(scene, swapButon, finalX, centerY + 160, 0.35, 1, 0, 1100, null, 1)
+    return swapButon
 }
 export function removeCard(scene, cardObject) {
     log.info('initialDrawn', 'subistituiu a carta ' + cardObject.getID())

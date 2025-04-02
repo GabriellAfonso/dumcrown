@@ -1,4 +1,6 @@
 
+import { crashSwords } from '../animations/scripts/attackingSwords.js';
+import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
 import { unitCardObject } from '../cards/base.js';
 import { createPlayerCards } from '../cards/functions.js';
 import { player, nicknameDenied, setNicknameDenied, nickServerMsg, cardsDATA } from '../client/client.js';
@@ -10,6 +12,7 @@ import { add_text } from '../functions/texts.js';
 import { MatchButton } from '../match_objects/button.js';
 import { MatchHand } from '../match_objects/hand.js';
 import { InitialDrawManager } from '../match_objects/initialDrawManager.js';
+import { clearCardsToSwap } from '../match_objects/swapButton.js';
 import { sfx } from '../soundfx/sounds.js';
 
 
@@ -21,9 +24,22 @@ export class Tutorial extends Phaser.Scene {
 
     create() {
         this.activeDialogue = false
+        this.offensivePlayer = 1
         this.createScene()
         this.getPhrases()
+        this.speedMultiplier = 1; // Muda esse valor para alterar a velocidade global
 
+    }
+    get speedMultiplier() {
+        return this.speedMultiplier
+    }
+
+    set speedMultiplier(value) {
+        this.SPEED_MULTIPLIER = value;
+        this.DM = value;
+        this.time.timeScale = value;
+        this.sound.rate = value;
+        this.anims.globalTimeScale = value;
     }
     getPhrases() {
         fetch(PATH + 'lang/tutorial.json')
@@ -66,11 +82,11 @@ export class Tutorial extends Phaser.Scene {
             ease: 'Power2',
             onComplete: () => {
                 GAME.scene.stop('HomeScene')
-                this.createBlur()
+                this.createBlur(true)
             }
         });
     }
-    createBlur() {
+    createBlur(initial = false) {
 
         this.blackBlur = this.make.graphics({ x: 0, y: 0, add: true });
         this.blackBlur.fillStyle(0x000000, 0.7);
@@ -78,13 +94,16 @@ export class Tutorial extends Phaser.Scene {
         this.blackBlur.depth = 100
         this.blackBlur.alpha = 0
 
+
         this.tweens.add({
             targets: this.blackBlur,
             alpha: 1,
             duration: 10,//1300
             ease: 'Power2',
             onComplete: () => {
-                this.startDialogue()
+                if (initial) {
+                    this.startDialogue()
+                }
             }
         });
     }
@@ -115,9 +134,7 @@ export class Tutorial extends Phaser.Scene {
         this.character.depth = 202;
 
         this.skipDialogueButton = new Button(this, 1350, 700, 'decks_button', () => {
-            if (this.maskTween) {
-                this.maskTween.remove()
-            }
+            this.removeMaskTween()
             //TODO armazenar cada animaçao de um index diferente, pra quando passar por outro parar as do index passado
             this.actualDialogueAudio.stop()
             this.actualDialogueText.remove();
@@ -179,7 +196,7 @@ export class Tutorial extends Phaser.Scene {
         });
 
         this.actualDialogueAudio.on('complete', () => {
-            this.time.delayedCall(200, () => {
+            this.time.delayedCall(200 / this.DM, () => {
                 this.pIndex++;
                 this.playNextDialogue();
             });
@@ -215,9 +232,7 @@ export class Tutorial extends Phaser.Scene {
             });
         }
         else if (index == 5) {
-            if (this.focusMask) {
-                this.focusMask.clear()
-            }
+            this.clearFocusMask()
             this.tweens.add({
                 targets: this.cameras.main,
                 zoom: 1.3,
@@ -280,9 +295,7 @@ export class Tutorial extends Phaser.Scene {
                 yoyo: false
             });
         } else if (index == 7) {
-            if (this.focusMask) {
-                this.focusMask.clear()
-            }
+            this.clearFocusMask()
             //garante que a cena sempre esteja no padrao da anterior, mesmo se pular a anterior
             this.cameras.main.scrollX = 170
             this.cameras.main.zoom = 1.3
@@ -343,9 +356,7 @@ export class Tutorial extends Phaser.Scene {
             this.cameras.main.scrollY = 120
             this.cameras.main.scrollX = 170
             this.cameras.main.zoom = 1.5
-            if (this.focusMask) {
-                this.focusMask.clear()
-            }
+            this.clearFocusMask()
             this.cameras.main.scrollY = 120
             this.cameras.main.zoom = 1.5
 
@@ -400,24 +411,22 @@ export class Tutorial extends Phaser.Scene {
                 repeat: 0,
                 yoyo: false
             });
-            this.time.delayedCall(2000, () => {
+            this.time.delayedCall(2000 / this.DM, () => {
                 this.button.setTexture(this.buttonTexture[1])
                 this.buttonText.text = 'PRONTO'
             });
-            this.time.delayedCall(3100, () => {
+            this.time.delayedCall(3100 / this.DM, () => {
                 this.buttonText.text = 'PASSAR'
             });
-            this.time.delayedCall(4000, () => {
+            this.time.delayedCall(4000 / this.DM, () => {
                 this.buttonText.text = 'ATACAR'
             });
-            this.time.delayedCall(4800, () => {
+            this.time.delayedCall(4800 / this.DM, () => {
                 this.buttonText.text = 'DEFENDER'
             });
 
         } else if (index == 11) {
-            if (this.focusMask) {
-                this.focusMask.clear()
-            }
+            this.clearFocusMask()
             this.activeDialogue = false
             this.showDialogueUI()
             this.tweens.add({
@@ -429,15 +438,10 @@ export class Tutorial extends Phaser.Scene {
                 repeat: 0,
                 yoyo: false,
                 onComplete: () => {
-                    this.time.delayedCall(2200, () => {
+                    this.time.delayedCall(2200 / this.DM, () => {
                         this.showDialogueUI(false)
                         this.initialDrawn()
-                        this.tweens.add({
-                            targets: this.blackBlur,
-                            alpha: 0,
-                            duration: 600,
-                            ease: 'Power2',
-                        })
+                        this.fadeOutBlackBlur()
 
                     });
 
@@ -446,18 +450,29 @@ export class Tutorial extends Phaser.Scene {
         } else if (index == 12) {
             this.tweens.add({
                 targets: this.blackBlur,
-                alpha: 0.7,
+                alpha: 1,
                 duration: 600,
                 ease: 'Power2',
             })
             this.showDialogueUI()
         } else if (index == 14) {
-            this.focusMask = this.make.graphics();
-            this.focusMask.fillStyle(0xffffff);
-            this.focusMask.fillRect(751, 247, 200, 320);
-            const mask = new Phaser.Display.Masks.BitmapMask(this, this.focusMask);
-            mask.invertAlpha = true;
-            this.blackBlur.setMask(mask);
+
+            this.time.delayedCall(1000 / this.DM, () => {
+                this.focusMask = this.make.graphics();
+                this.focusMask.fillStyle(0xffffff);
+                this.focusMask.fillRect(751, 247, 200, 275);
+                const mask = new Phaser.Display.Masks.BitmapMask(this, this.focusMask);
+                mask.invertAlpha = true;
+                this.blackBlur.setMask(mask);
+            });
+
+
+        } else if (index == 15) {
+
+            this.activeDialogue = false
+            this.time.delayedCall(2800 / this.DM, () => {
+                this.swapTutorial()
+            });
         }
     }
 
@@ -469,6 +484,7 @@ export class Tutorial extends Phaser.Scene {
                 duration: 300,
                 ease: 'Power2',
             });
+            this.dialogueText.text = ''
             return
         }
         this.tweens.add({
@@ -515,29 +531,32 @@ export class Tutorial extends Phaser.Scene {
     createButton() {
         this.buttonTexture = ['default_board_button', 'default_board_button_active']
         this.button = this.add.image(1396, centerY, this.buttonTexture[0]);
+
         this.button.depth = 90
         this.buttonText = add_text(this, 1396, centerY, '', '25px', 0.5)
         this.buttonText.setAlign('center');
         this.buttonText.setWordWrapWidth(180, true);
         this.buttonText.setStyle({ fontStyle: 'bold' });
         this.buttonText.depth = 91
+        this.actualButtonText = this.buttonText.text
 
         this.button.on('pointerover', () => {
-            if (this.text == 'SUA VEZ') {
+            if (this.actualButtonText == 'SUA VEZ') {
                 sfx.hoverButton.play()
                 this.buttonText.text = 'PASSAR'
             }
         });
         this.button.on('pointerout', () => {
-            if (this.text == 'SUA VEZ') {
+            if (this.actualButtonText == 'SUA VEZ') {
                 sfx.hoverButton.play()
-                this.buttonText.text = this.text
+                this.buttonText.text = this.actualButtonText
             }
         });
     }
     updateButton(state, text) {
         this.button.setTexture(this.buttonTexture[state])
         this.buttonText.text = text
+        this.actualButtonText = this.buttonText.text
         if (state != 1) {
             this.button.disableInteractive()
             return
@@ -602,6 +621,9 @@ export class Tutorial extends Phaser.Scene {
     }
 
     createPlayerHand() {
+        this.player = {
+            hand: [],
+        }
         this.playerHand = new MatchHand(this)
     }
     instantiateCards() {
@@ -619,22 +641,19 @@ export class Tutorial extends Phaser.Scene {
         });
     }
     initialDrawn() {
-        // console.log(this.blackBlur.visible, this.blackBlur.active);
-        // this.blackBlur.setInteractive({ useHandCursor: true });
-
-        // this.blackBlur.on('pointerup', () => {
-        //     console.log('clicou no blur')
-        // });
-        // this.blackBlur.depth = 100000
         console.log(this.playerCards)
-        var iniDrawCards = ['8', '5', '9', '21']
+        this.player.hand = ['8', '5', '9', '21']
         var cardsObj = []
-        for (let card of iniDrawCards) {
+        for (let card of this.player.hand) {
             var c = this.playerCards[card]
             cardsObj.push(c)
         }
         this.initialDrawManager = new InitialDrawManager(this)
         this.initialDrawManager.drawCards(cardsObj)
+        sleep(this, 2000, () => {
+            this.initialDrawManager.disableAllSwap()
+            this.updateCameras()
+        })
         sleep(this, 2500, () => {
             this.updateButton(1, 'PRONTO')
         })
@@ -643,10 +662,175 @@ export class Tutorial extends Phaser.Scene {
             this.playNextDialogue()
         })
     }
-    update() {
+    swapTutorial() {
+        this.showDialogueUI(false)
+        const targetSwap = this.initialDrawManager.swapButtons[2]
+        targetSwap.setInteractive()
+        targetSwap.on('pointerup', () => {
+            targetSwap.disableInteractive()
+            clearCardsToSwap()
+            this.removeMaskTween()
+            this.maskTween = this.tweens.add({
+                targets: this.focusMask,
+                scaleX: 1,
+                scaleY: 0.7,
+                x: 545,
+                y: 115,
+                duration: 600,
+                ease: 'Power2',
+            });
 
+            this.button.on('pointerup', () => {
+                this.button.off('pointerup')
+                this.button.disableInteractive()
+                this.updateButton(0, 'AGUARDE')
+                this.clearFocusMask()
+                this.fadeOutBlackBlur()
+                const oldCard = [this.playerCards[9]]
+                const newCard = [this.playerCards['s1']]
+                this.initialDrawManager.swapCards(oldCard, newCard)
+                this.player.hand[2] = 's1'
+
+                sleep(this, 2600, () => {
+                    this.fadeInBlackBlur()
+                    this.showDialogueUI()
+                    this.activeDialogue = true
+                    this.playNextDialogue()
+                    this.activeDialogue = false
+                    this.speedMultiplier = 1;
+                    sleep(this, 1500, () => {
+                        for (const id of this.player.hand) {
+                            const card = this.getPlayerCardObj(id);
+                            this.playerHand.addCard(card);
+                        }
+
+                        // this.initialDrawManager.finish(this.player.hand)
+                        sleep(this, 7700, () => {
+                            this.fadeOutBlackBlur()
+                            this.showDialogueUI(false)
+                            this.playerHand.closedHandAnimation()
+                        })
+                        sleep(this, 8400, () => {
+
+                            this.round(1)
+                        })
+                    })
+                })
+            })
+
+        })
+        this.maskTween = this.tweens.add({
+            targets: this.focusMask,
+            scaleX: 0.8,
+            scaleY: 0.2,
+            x: 170,
+            y: 467,
+            duration: 600,
+            ease: 'Power2',
+        });
     }
 
+    round(number) {
+        this.playerHand.off()
+
+        // this.button.waiting()
+        // this.clearCombatZone()
+
+        var blackground = this.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
+        blackground.depth = 99
+        blackground.alpha = 0
+        blackground.setInteractive()
+        this.updateCameras()
+        simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
+            sleep(this, 2000, () => {
+                simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
+                    blackground.destroy()
+                }, 0)
+            })
+
+        }, 0.7)
+
+        this.roundText = this.add.text(centerX, centerY, 'RODADA ' + number,
+            {
+                fontSize: '100px', fontFamily: 'Lexend Deca, sans-serif',
+                fontStyle: 'bold', fill: '#ffd700'
+            })
+        this.roundText.setOrigin(0.5, 0.5)
+        this.roundText.depth = 100
+        this.roundText.alpha = 0;
+        this.roundText.setShadow(2, 2, '#000', 2, false, true);
+        simpleTextTweens(this, this.roundText, centerX, centerY, 90, 0, 500, 1, () => {
+            simpleTextTweens(this, this.roundText, centerX, centerY, 90, 0, 500, 0, () => {
+                sleep(this, 1500, () => {
+                    this.updateButton(1, 'SUA VEZ') //TODO mudar isso pra quando tiver na vez do bot
+                    sleep(this, 1300, () => {
+                        this.updateOfensiveIcon(this.offensivePlayer)
+                    })
+                    this.draw(15) //TODO fazer uma lista com as cartas q vao ser compradas e remover a q comprou
+                    if (number == 1) {
+                        sleep(this, 1800, () => {
+                            this.activeDialogue = true
+                            this.showDialogueUI()
+                            this.playNextDialogue()
+                        })
+
+                    }
+                })
 
 
+                // this.updateEnergy()
+            }, 2000)
+        })
+
+    }
+    updateOfensiveIcon(player) {
+        if (player == 1) {
+            crashSwords(this, 300, 100, 0.25)
+            return
+        }
+        crashSwords(this, 100, -100, 0.25)
+    }
+    draw(id) {
+        var card = this.getPlayerCardObj(id)
+        this.playerHand.drawCard(card)
+        this.playerHand.off()
+    }
+    updateCameras() {
+        this.cameras.main.ignore(this.uiElements);
+        this.uiCamera.ignore(this.children.list.filter(obj => !this.uiElements.contains(obj)));
+    }
+    clearFocusMask() {
+        if (this.focusMask) {
+            this.focusMask.clear()
+        }
+    }
+    removeMaskTween() {
+        if (this.maskTween) {
+            this.maskTween.remove()
+        }
+    }
+    fadeOutBlackBlur() {
+        this.tweens.add({
+            targets: this.blackBlur,
+            alpha: 0,
+            duration: 600,
+            ease: 'Power2',
+            onComplete: () => {
+            }
+        })
+    }
+    fadeInBlackBlur() {
+        this.tweens.add({
+            targets: this.blackBlur,
+            alpha: 1,
+            duration: 300,
+            ease: 'Power2',
+            onComplete: () => {
+            }
+        })
+    }
+    getPlayerCardObj(id) {
+        var card = this.playerCards[id]
+        return card
+    }
 }

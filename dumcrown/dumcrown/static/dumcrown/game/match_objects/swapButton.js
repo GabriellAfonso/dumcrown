@@ -18,6 +18,7 @@ export class SwapButton extends Phaser.GameObjects.Image {
                 this.setTexture('swap_button_undo')
                 card.swapMode()
                 this.mode = false
+                console.log(cardsToSwap)
                 return
             }
             delete cardsToSwap[card.id];
@@ -35,4 +36,5 @@ export class SwapButton extends Phaser.GameObjects.Image {
 
 export function clearCardsToSwap() {
     cardsToSwap = {}
+    console.log(cardsToSwap)
 } 

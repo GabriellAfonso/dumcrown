@@ -34,10 +34,13 @@ export class InitialDrawManager {
 
         sleep(this.scene, 2000, () => {
             log.info('initialDrawn', 'Criando Botoes de swap')
-            showSwap(this.scene, cards[0], centerX - 300)
-            showSwap(this.scene, cards[1], centerX - 100)
-            showSwap(this.scene, cards[2], centerX + 100)
-            showSwap(this.scene, cards[3], centerX + 300)
+            this.swapButtons = [
+                showSwap(this.scene, cards[0], centerX - 300),
+                showSwap(this.scene, cards[1], centerX - 100),
+                showSwap(this.scene, cards[2], centerX + 100),
+                showSwap(this.scene, cards[3], centerX + 300)
+            ];
+
         })
     }
 
@@ -64,6 +67,12 @@ export class InitialDrawManager {
             }
         })
 
+    }
+    disableAllSwap() {
+        this.swapButtons[0].disableInteractive()
+        this.swapButtons[1].disableInteractive()
+        this.swapButtons[2].disableInteractive()
+        this.swapButtons[3].disableInteractive()
     }
 
     finish(cards) {
