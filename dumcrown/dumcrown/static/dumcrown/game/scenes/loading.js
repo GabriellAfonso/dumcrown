@@ -89,6 +89,7 @@ export class Loading extends Phaser.Scene {
         this.load.audio('text_16', PATH + '/soundfx/tutorial/text16.mp3')
         this.load.audio('text_17', PATH + '/soundfx/tutorial/text17.mp3')
         this.load.audio('text_18', PATH + '/soundfx/tutorial/text18.mp3')
+        this.load.audio('text_19', PATH + '/soundfx/tutorial/text19.mp3')
 
 
         //background

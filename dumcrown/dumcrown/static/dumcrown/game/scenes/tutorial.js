@@ -473,6 +473,49 @@ export class Tutorial extends Phaser.Scene {
             this.time.delayedCall(2800 / this.DM, () => {
                 this.swapTutorial()
             });
+        } else if (index == 17) {
+            // this.speedMultiplier = 1;
+        } else if (index == 18) {
+            this.speedMultiplier = 1;
+            this.playerHand.off()
+            console.log('deu off')
+            sleep(this, 600, () => {
+                this.showDialogueUI(false)
+                this.fadeOutBlackBlur()
+                console.log('ainda ta off?')
+            })
+            this.tweens.add({
+                targets: this.cameras.main,
+                delay: 800,
+                zoom: 1.4,
+                scrollX: '+=200',
+                duration: 1200,
+                ease: 'Power2',
+                repeat: 0,
+                yoyo: false,
+                onComplete: () => {
+                    this.tweens.add({
+                        targets: this.cameras.main,
+                        delay: 1400,
+                        zoom: 1,
+                        scrollX: 0,
+                        duration: 1000,
+                        ease: 'Power2',
+                        repeat: 0,
+                        yoyo: false,
+
+                    });
+                }
+            });
+        } else if (index == 19) {
+            this.playerHand.off()
+            console.log('e agora?')
+            this.fadeInBlackBlur()
+            this.showDialogueUI()
+            sleep(this, 2500, () => {
+                this.showDialogueUI(false)
+
+            })
         }
     }
 
@@ -697,7 +740,7 @@ export class Tutorial extends Phaser.Scene {
                     this.activeDialogue = true
                     this.playNextDialogue()
                     this.activeDialogue = false
-                    this.speedMultiplier = 1;
+
                     sleep(this, 1500, () => {
                         for (const id of this.player.hand) {
                             const card = this.getPlayerCardObj(id);
@@ -741,6 +784,7 @@ export class Tutorial extends Phaser.Scene {
         blackground.alpha = 0
         blackground.setInteractive()
         this.updateCameras()
+
         simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
             sleep(this, 2000, () => {
                 simpleTweens(this, blackground, centerX, centerY, 1, 89, 0, 600, () => {
@@ -771,7 +815,9 @@ export class Tutorial extends Phaser.Scene {
                         sleep(this, 1800, () => {
                             this.activeDialogue = true
                             this.showDialogueUI()
+                            this.fadeInBlackBlur()
                             this.playNextDialogue()
+
                         })
 
                     }
@@ -784,11 +830,14 @@ export class Tutorial extends Phaser.Scene {
 
     }
     updateOfensiveIcon(player) {
+
         if (player == 1) {
             crashSwords(this, 300, 100, 0.25)
+            this.updateCameras()
             return
         }
         crashSwords(this, 100, -100, 0.25)
+        this.updateCameras()
     }
     draw(id) {
         var card = this.getPlayerCardObj(id)
