@@ -147,6 +147,7 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         this.activeTween = null;
 
         this.collider.on('pointerdown', (pointer) => {
+            console.log('chamou pointerdown')
             if (this.activeTween) {
                 this.activeTween.stop();
             }

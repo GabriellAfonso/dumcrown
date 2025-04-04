@@ -45,7 +45,7 @@ export class Tutorial extends Phaser.Scene {
         fetch(PATH + 'lang/tutorial.json')
             .then(response => response.json())
             .then(data => {
-                this.pIndex = 11
+                this.pIndex = 19
                 this.tutorialPhrases = data
                 console.log(this.tutorialPhrases)
             })
@@ -134,6 +134,9 @@ export class Tutorial extends Phaser.Scene {
         this.character.depth = 202;
 
         this.skipDialogueButton = new Button(this, 1350, 700, 'decks_button', () => {
+            if (this.dialogueTimer) {
+                this.dialogueTimer.remove();
+            }
             this.removeMaskTween()
             //TODO armazenar cada animaçao de um index diferente, pra quando passar por outro parar as do index passado
             this.actualDialogueAudio.stop()
@@ -196,7 +199,7 @@ export class Tutorial extends Phaser.Scene {
         });
 
         this.actualDialogueAudio.on('complete', () => {
-            this.time.delayedCall(200 / this.DM, () => {
+            this.dialogueTimer = this.time.delayedCall(200 / this.DM, () => {
                 this.pIndex++;
                 this.playNextDialogue();
             });
@@ -509,11 +512,83 @@ export class Tutorial extends Phaser.Scene {
             });
         } else if (index == 19) {
             this.playerHand.off()
+            //provisorio
+            var hand = ['8', '5', 's1', '21', '15']
+            for (const id of hand) {
+                const card = this.getPlayerCardObj(id);
+                card.setVisible(true)
+                card.disableInteractive()
+                this.playerHand.addCard(card);
+            }
+            this.playerHand.closedHandAnimation()
+            this.playerHand.off()
+
+
             console.log('e agora?')
             this.fadeInBlackBlur()
             this.showDialogueUI()
-            sleep(this, 2500, () => {
+            sleep(this, 2800, () => {
+                this.activeDialogue = false
                 this.showDialogueUI(false)
+                // this.playerHand.on()
+
+                this.focusMask = this.make.graphics();
+                this.focusMask.fillStyle(0xffffff);
+                this.focusMask.fillRect(1060, 590, 400, 275);
+                const mask = new Phaser.Display.Masks.BitmapMask(this, this.focusMask);
+                mask.invertAlpha = true;
+                this.blackBlur.setMask(mask);
+
+
+                const focusArea = this.add.rectangle(1260, 727, 400, 275, 0x000000, 0);
+                focusArea.setInteractive({ cursor: 'pointer' });
+
+                focusArea.on('pointerup', () => {
+                    focusArea.disableInteractive();
+                    this.playerHand.openHandAnimation()
+
+                    this.actualDialogueAudio.stop()
+                    this.actualDialogueText.remove();
+                    this.pIndex++
+                    this.activeDialogue = true
+                    if (this.dialogueTimer) {
+                        this.dialogueTimer.remove();
+                    }
+                    this.playNextDialogue()
+
+                    sleep(this, 400, () => {
+                        for (const id of hand) {
+                            const card = this.getPlayerCardObj(id);
+                            card.collider.disableInteractive()
+                        }
+
+
+                    })
+                });
+
+            })
+        } else if (index == 20) {
+            this.maskTween = this.tweens.add({
+                targets: this.focusMask,
+                scaleX: 2.1,
+                scaleY: 1.7,
+                x: -1890,
+                y: -700,
+                duration: 600,
+                ease: 'Power2',
+            });
+
+
+            sleep(this, 1500, () => {
+                this.activeTween = this.tweens.add({
+                    targets: this.playerCards['s1'],
+                    y: 517, // Move a carta para cima
+                    angle: 0,
+                    depth: 10,
+                    scale: 0.65,
+                    duration: 400,
+                    ease: 'Power2',
+                });
 
             })
         }
