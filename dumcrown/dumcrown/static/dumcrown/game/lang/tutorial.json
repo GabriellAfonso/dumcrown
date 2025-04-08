@@ -27,5 +27,10 @@
     "26": "Arraste a carta do banco para a arena e clique no botão para atacar.",
     "27": "Agora, seu adversário pode escolher se vai se defender ou simplesmente receber o dano.",
     "28": "Ele jogou uma carta para se defender!",
-    "29": "Nesse confronto, as duas cartas irão atacar, mas apenas o dano excedente da carta atacante causará dano diretamente à vida do adversário."
+    "29": "Nesse confronto, as duas cartas irão atacar, mas apenas o dano excedente da carta atacante causará dano diretamente à vida do adversário.",
+    "30": "Veja, você destruiu a carta do adversário e ainda causou 2 pontos de dano à vida dele.",
+    "31": "Após um confronto, o round muda. Você compra mais uma carta, recebe mais energia, e agora é o adversário quem será o atacante.",
+    "32": "Após o primeiro confronto, sua carta perdeu defesa. Use a carta mágica SOMEONE'S SHIELD para aumentar sua defesa.",
+    "33": "Basta arrastar a carta mágica e soltá-la sobre a carta em que você deseja usá-la.",
+    "34": "Usar cartas mágicas consome energia, mas não passa a vez automaticamente. Como você não tem mais energia, só resta passar a vez."
 }

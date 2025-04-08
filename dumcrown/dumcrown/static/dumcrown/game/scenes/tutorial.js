@@ -27,7 +27,7 @@ export class Tutorial extends Phaser.Scene {
         this.offensivePlayer = 1
         this.createScene()
         this.getPhrases()
-        this.speedMultiplier = 5; // Muda esse valor para alterar a velocidade global
+        this.speedMultiplier = 1; // Muda esse valor para alterar a velocidade global
 
     }
     get speedMultiplier() {
@@ -65,6 +65,12 @@ export class Tutorial extends Phaser.Scene {
         showCoordinates(this)
         this.events.on('cardDropped', (cardObj) => {
             this.cardDropped(cardObj)
+        });
+        this.events.on('hideHand', (cardObj) => {
+            this.hideHand(cardObj)
+        });
+        this.events.on('showHand', (cardObj) => {
+            this.showHand(cardObj)
         });
     }
     startAnimation() {
@@ -664,8 +670,9 @@ export class Tutorial extends Phaser.Scene {
             })
 
         } else if (index == 26) {
-            this.speedMultiplier = 1
+
             this.fadeOutBlackBlur()
+            this.clearFocusMask()
             this.showDialogueUI(false)
             this.tweens.add({
                 targets: this.cameras.main,
@@ -685,12 +692,12 @@ export class Tutorial extends Phaser.Scene {
 
         } else if (index == 27) {
             this.boardCollider.setAlpha(0)
-            sleep(this, 5100, () => {
+            sleep(this, 5500, () => {
                 this.defenseEnemyAnimation('21', 0)
             })
         } else if (index == 29) {
             this.activeDialogue = false
-            sleep(this, 9000, () => {
+            sleep(this, 9500, () => {
                 //crashing cards
                 const dark_age = this.getPlayerCardObj('5');
                 const ghost = this.getEnemyCardObj('21');
@@ -721,10 +728,37 @@ export class Tutorial extends Phaser.Scene {
                                 vulnerable: true,
                             }
                             ghost.update(data2)
+                            this.activeDialogue = true
+                            this.playNextDialogue()
                         })
                     })
                 })
             })
+        } else if (index == 30) {
+            this.activeDialogue = false
+            sleep(this, 6500, () => {
+                this.benchPlayerAnimation()
+                this.offensivePlayer = 2
+                this.round(2)
+                this.speedMultiplier = 1
+
+            })
+        } else if (index == 33) {
+
+            this.activeDialogue = false
+            this.fadeOutBlackBlur()
+            this.showDialogueUI(false)
+            this.playerHand.openHandAnimation()
+            var hand = ['8', '11', 's1', '21', '15']
+            sleep(this, 400, () => {
+                for (const id of hand) {
+                    const card = this.getPlayerCardObj(id);
+                    card.collider.disableInteractive()
+                }
+                const shild = this.getPlayerCardObj('s1');
+                shild.collider.setInteractive()
+            })
+
         }
     }
 
@@ -1062,7 +1096,8 @@ export class Tutorial extends Phaser.Scene {
                     sleep(this, 1300, () => {
                         this.updateOfensiveIcon(this.offensivePlayer)
                     })
-                    this.draw(15) //TODO fazer uma lista com as cartas q vao ser compradas e remover a q comprou
+                    var draws = [0, 15, 11, 12, 13]
+                    this.draw(draws[number]) //TODO fazer uma lista com as cartas q vao ser compradas e remover a q comprou
                     if (number == 1) {
                         sleep(this, 1800, () => {
                             this.activeDialogue = true
@@ -1071,7 +1106,16 @@ export class Tutorial extends Phaser.Scene {
                             this.playNextDialogue()
 
                         })
+                    }
+                    if (number == 2) {
+                        sleep(this, 1800, () => {
+                            this.activeDialogue = true
+                            this.showDialogueUI()
+                            this.fadeInBlackBlur()
+                            this.playNextDialogue()
+                            this.playerHand.off()
 
+                        })
                     }
                 })
 
@@ -1103,7 +1147,24 @@ export class Tutorial extends Phaser.Scene {
                     return
                 }
             }
-            this.getTargetSpell(cardObj, pointer)
+            const card = this.getPlayerCardObj('5')
+            var cardBounds = card.getBounds()
+            if (this.isOver(pointer, cardBounds)) {
+                this.spellS1Animation('s1', card)
+                this.playerEnergy -= 2
+                this.playerEnergyValue.setTexture('default_energy_' + this.playerEnergy)
+                sleep(this, 400, () => {
+                    this.actualDialogueAudio.stop()
+                    this.actualDialogueText.remove();
+                    this.pIndex = 34
+                    this.activeDialogue = true
+                    if (this.dialogueTimer) {
+                        this.dialogueTimer.remove();
+                    }
+                    this.playNextDialogue()
+                })
+
+            }
             return
             //manda pro servidor e ele que se lasque pra gerenciar
         }
@@ -1140,6 +1201,7 @@ export class Tutorial extends Phaser.Scene {
             this.attackPlayerAnimation(1)
             this.button.on('pointerup', () => {
                 this.button.off('pointerup')
+                this.input.setDefaultCursor('default');
                 sfx.pressButton.play()
                 this.updateButton(0, 'TURNO DO OPONENTE')
                 sleep(this, 200, () => {
@@ -1371,5 +1433,61 @@ export class Tutorial extends Phaser.Scene {
         var is = pointer.x >= bounds.x && pointer.x <= bounds.x + bounds.width &&
             pointer.y >= bounds.y && pointer.y <= bounds.y + bounds.height
         return is
+    }
+    hideHand(mainCard) {
+        this.playerHand.hand.forEach((card) => {
+            card.alpha = 0
+        })
+        mainCard.alpha = 1
+    }
+    showHand(mainCard) {
+        this.playerHand.hand.forEach((card) => {
+            card.alpha = 1
+        })
+    }
+    spellS1Animation(spellID, target) {
+
+        var owner = this.player
+        var spell = this.getPlayerCardObj(spellID)
+        var target_card = this.getPlayerCardObj(target.id);
+        this.playerHand.removeCard(spell)
+        this.playerHand.closeHand()
+
+
+        //TODO melhorar animaçao e adicionar um brilho na carta que recebeu o buff
+        this.tweens.add({
+            targets: spell,
+            scale: 0.60,
+            depth: 10,
+            angle: 0,
+            x: centerX,
+            y: centerY,
+            duration: 300,
+            ease: 'Linear',
+            onComplete: () => {
+                this.tweens.add({
+                    targets: spell,
+                    delay: 400,
+                    scale: 0.10,
+                    depth: 10,
+                    alpha: 1,
+                    x: target_card.x,
+                    y: target_card.y,
+                    duration: 200,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        spell.death()
+                        const dark_age = this.getPlayerCardObj('5')
+                        var data = {
+                            attack: 3,
+                            defense: 3,
+                            vulnerable: true,
+                        }
+                        dark_age.update(data)
+                    },
+                });
+            },
+        });
+
     }
 }
