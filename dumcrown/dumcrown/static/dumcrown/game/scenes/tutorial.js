@@ -45,9 +45,9 @@ export class Tutorial extends Phaser.Scene {
         fetch(PATH + 'lang/tutorial.json')
             .then(response => response.json())
             .then(data => {
-                this.pIndex = 21
+                this.pIndex = 1
                 this.tutorialPhrases = data
-                console.log(this.tutorialPhrases)
+
             })
             .catch(error => console.error('Erro ao carregar JSON:', error));
 
@@ -62,7 +62,6 @@ export class Tutorial extends Phaser.Scene {
         this.instantiateCards()
         this.createPlayerHand()
         this.startAnimation()
-        showCoordinates(this)
         this.events.on('cardDropped', (cardObj) => {
             this.cardDropped(cardObj)
         });
@@ -129,9 +128,9 @@ export class Tutorial extends Phaser.Scene {
         this.dialogueBox.depth = 200;
 
         this.dialogueText = this.add.text(60, 550, '', {
-            fontSize: '40px',
+            fontSize: '35px',
             color: '#ffffff',
-            wordWrap: { width: 800 }
+            wordWrap: { width: 900 }
         });
         this.dialogueText.depth = 201;
 
@@ -142,19 +141,7 @@ export class Tutorial extends Phaser.Scene {
             .setVisible(true);
         this.character.depth = 202;
 
-        this.skipDialogueButton = new Button(this, 1350, 700, 'decks_button', () => {
-            if (this.dialogueTimer) {
-                this.dialogueTimer.remove();
-            }
-            this.removeMaskTween()
-            //TODO armazenar cada animaçao de um index diferente, pra quando passar por outro parar as do index passado
-            this.actualDialogueAudio.stop()
-            this.actualDialogueText.remove();
-            this.pIndex++
-            this.playNextDialogue()
-        })
-        // Adicionar os elementos da UI a um grupo
-        this.uiElements = this.add.group([this.dialogueBox, this.dialogueText, this.character, this.skipDialogueButton]);
+        this.uiElements = this.add.group([this.dialogueBox, this.dialogueText, this.character,]);
         this.uiElements.getChildren().forEach(child => {
             child.originalAlpha = child.alpha;
         });
@@ -182,9 +169,9 @@ export class Tutorial extends Phaser.Scene {
 
         // Criar um texto invisível para calcular wordWrap antes de exibir
         let hiddenText = this.add.text(0, 0, currentText, {
-            fontSize: '40px',
+            fontSize: '35px',
             color: '#ffffff',
-            wordWrap: { width: 800 }
+            wordWrap: { width: 900 }
         }).setVisible(false);
 
         // Pegar o texto já quebrado corretamente
@@ -397,10 +384,6 @@ export class Tutorial extends Phaser.Scene {
             });
 
         } else if (index == 10) {
-            // console.log('esse é o 10')
-            // console.log(this.cameras.main.scrollY)
-            // console.log(this.cameras.main.scrollX)
-            // console.log(this.cameras.main.zoom)
 
             this.cameras.main.scrollY = 0
             this.cameras.main.scrollX = 170
@@ -486,15 +469,14 @@ export class Tutorial extends Phaser.Scene {
                 this.swapTutorial()
             });
         } else if (index == 17) {
-            // this.speedMultiplier = 1;
+
         } else if (index == 18) {
-            this.speedMultiplier = 1;
             this.playerHand.off()
-            console.log('deu off')
+
             sleep(this, 600, () => {
                 this.showDialogueUI(false)
                 this.fadeOutBlackBlur()
-                console.log('ainda ta off?')
+
             })
             this.tweens.add({
                 targets: this.cameras.main,
@@ -522,9 +504,8 @@ export class Tutorial extends Phaser.Scene {
         } else if (index == 19) {
             this.playerHand.off()
 
+            var hand = ['8', '5', 's1', '21', '15']
 
-
-            console.log('e agora?')
             this.fadeInBlackBlur()
             this.showDialogueUI()
             sleep(this, 2800, () => {
@@ -592,25 +573,25 @@ export class Tutorial extends Phaser.Scene {
             })
         } else if (index == 21) {
             //provisorio
-            this.updateOfensiveIcon(1)
-            this.playerEnergy = 1
-            this.playerEnergyValue.setTexture('default_energy_' + this.playerEnergy)
-            this.enemyEnergy = 1
-            this.enemyEnergyValue.setTexture('default_energy_' + this.enemyEnergy)
-            this.showDialogueUI(false)
-            var hand = ['8', '5', 's1', '21', '15']
-            for (const id of hand) {
-                const card = this.getPlayerCardObj(id);
-                card.setVisible(true)
-                card.disableInteractive()
-                this.playerHand.addCard(card);
-            }
-            sleep(this, 400, () => {
-                for (const id of hand) {
-                    const card = this.getPlayerCardObj(id);
-                    card.collider.disableInteractive()
-                }
-            })
+            // this.updateOfensiveIcon(1)
+            // this.playerEnergy = 1
+            // this.playerEnergyValue.setTexture('default_energy_' + this.playerEnergy)
+            // this.enemyEnergy = 1
+            // this.enemyEnergyValue.setTexture('default_energy_' + this.enemyEnergy)
+            // this.showDialogueUI(false)
+            // var hand = ['8', '5', 's1', '21', '15']
+            // for (const id of hand) {
+            //     const card = this.getPlayerCardObj(id);
+            //     card.setVisible(true)
+            //     card.disableInteractive()
+            //     this.playerHand.addCard(card);
+            // }
+            // sleep(this, 400, () => {
+            //     for (const id of hand) {
+            //         const card = this.getPlayerCardObj(id);
+            //         card.collider.disableInteractive()
+            //     }
+            // })
 
 
             //--------------------
@@ -728,8 +709,11 @@ export class Tutorial extends Phaser.Scene {
                                 vulnerable: true,
                             }
                             ghost.update(data2)
-                            this.activeDialogue = true
-                            this.playNextDialogue()
+                            sleep(this, 800, () => {
+                                this.activeDialogue = true
+                                this.playNextDialogue()
+                            })
+
                         })
                     })
                 })
@@ -740,7 +724,6 @@ export class Tutorial extends Phaser.Scene {
                 this.benchPlayerAnimation()
                 this.offensivePlayer = 2
                 this.round(2)
-                this.speedMultiplier = 1
 
             })
         } else if (index == 33) {
@@ -759,9 +742,102 @@ export class Tutorial extends Phaser.Scene {
                 shild.collider.setInteractive()
             })
 
+        } else if (index == 34) {
+            //provisorio
+            // this.updateOfensiveIcon(2)
+            // this.updateButton(1, 'SUA VEZ')
+            // this.playerEnergy = 0
+            // this.playerEnergyValue.setTexture('default_energy_' + this.playerEnergy)
+            // this.enemyEnergy = 2
+            // this.enemyEnergyValue.setTexture('default_energy_' + this.enemyEnergy)
+            // this.fadeOutBlackBlur()
+            // this.showDialogueUI(false)
+            // const cardOnBench = this.getPlayerCardObj('5')
+            // cardOnBench.setVisible(true)
+            // this.playerBench.push(cardOnBench)
+            // this.benchPlayerAnimation()
+
+            // var hand = ['8', '21', '15', '11']
+
+            // for (const id of hand) {
+            //     const card = this.getPlayerCardObj(id);
+            //     console.log(card)
+            //     card.setVisible(true)
+            //     card.disableInteractive()
+            //     this.playerHand.addCard(card);
+            // }
+            // sleep(this, 400, () => {
+            //     for (const id of hand) {
+            //         const card = this.getPlayerCardObj(id);
+            //         // console.log(card)
+            //         // card.collider.disableInteractive()
+            //     }
+            // })
+
+
+            //--------------------
+            // this.playerHand.closedHandAnimation()
+            // this.playerHand.off()
+            //-------------
+            this.activeDialogue = false
+            sleep(this, 1000, () => {
+                this.button.on('pointerup', () => {
+                    this.button.off('pointerup')
+                    this.updateButton(0, 'TURNO DO OPONENTE')
+
+                    this.actualDialogueAudio.stop()
+                    this.actualDialogueText.remove();
+                    this.pIndex = 35
+                    this.activeDialogue = true
+                    if (this.dialogueTimer) {
+                        this.dialogueTimer.remove();
+                    }
+                    this.playNextDialogue()
+                })
+            })
+
+        } else if (index == 35) {
+            const c1 = this.getEnemyCardObj('15')
+            const c2 = this.getEnemyCardObj('18')
+            c1.setVisible(true)
+            c2.setVisible(true)
+            this.enemyAttackZone.push(c1, c2)
+            this.attackEnemyAnimation(2)
+        } else if (index == 36) {
+            //fazer retangulos roxos
+            this.createDefenseHitbox()
+        } else if (index == 38) {
+            this.updateButton(1, 'DEFENDER')
+            const dark_age = this.getPlayerCardObj('5')
+            dark_age.onBenchMode()
+
+
+        } else if (index == 39) {
+            this.fadeInBlackBlur()
+            this.showDialogueUI()
+
+        } else if (index == 43) {
+            this.activeDialogue = false
+            sleep(this, 5500, () => {
+                GAME.scene.stop('Tutorial')
+                GAME.scene.run('HomeScene')
+            })
         }
     }
+    createDefenseHitbox() {
+        this.defensiveHitbox = []
+        const numCards = 2
+        const spacing = 140;
+        const offsetX = (numCards - 1) * spacing / 2;
 
+        this.enemyAttackZone.forEach((card, index) => {
+            const posX = centerX - offsetX + index * spacing;
+
+            var hitbox = this.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.1);
+            this.defensiveHitbox.push(hitbox)
+
+        });
+    }
     showDialogueUI(bool = true) {
         if (bool == false) {
             this.tweens.add({
@@ -826,6 +902,7 @@ export class Tutorial extends Phaser.Scene {
         this.buttonText.setStyle({ fontStyle: 'bold' });
         this.buttonText.depth = 91
         this.actualButtonText = this.buttonText.text
+
 
         this.button.on('pointerover', () => {
             if (this.actualButtonText == 'SUA VEZ') {
@@ -916,7 +993,6 @@ export class Tutorial extends Phaser.Scene {
         this.playerHand = new MatchHand(this)
     }
     instantiateCards() {
-        console.log(player.decks[0].cards)
         //player
         this.playerCards = createPlayerCards(this, player.decks[0].cards, 1)
         //enemy
@@ -930,7 +1006,6 @@ export class Tutorial extends Phaser.Scene {
         });
     }
     initialDrawn() {
-        console.log(this.playerCards)
         this.player.hand = ['8', '5', '9', '21']
         var cardsObj = []
         for (let card of this.player.hand) {
@@ -1133,7 +1208,6 @@ export class Tutorial extends Phaser.Scene {
         this.enemyEnergyValue.setTexture('default_energy_' + this.enemyEnergy)
     }
     cardDropped(cardObj) {
-        console.log('Carta dropada')
 
         const pointer = this.input.activePointer;
         const bounds = this.boardCollider.getBounds();
@@ -1147,6 +1221,7 @@ export class Tutorial extends Phaser.Scene {
                     return
                 }
             }
+
             const card = this.getPlayerCardObj('5')
             var cardBounds = card.getBounds()
             if (this.isOver(pointer, cardBounds)) {
@@ -1169,15 +1244,113 @@ export class Tutorial extends Phaser.Scene {
             //manda pro servidor e ele que se lasque pra gerenciar
         }
 
+
         if (!this.isOver(pointer, bounds)) {
             return
         }
+        if (this.defensiveHitbox.length > 0) {
 
-        // if (this.defensiveHitbox.length > 0) {
-        //     this.defensiveDropped(cardObj)
-        //     return
-        // }
+            this.defensiveHitbox.forEach((hitbox, index) => {
+                var bounds = hitbox.getBounds();
+                if (this.isOver(pointer, bounds)) {
+                    this.defensePlayerAnimation('5', index)
+                    this.button.on('pointerup', () => {
+                        this.button.off('pointerup')
 
+                        this.actualDialogueAudio.stop()
+                        this.actualDialogueText.remove();
+                        if (this.dialogueTimer) {
+                            this.dialogueTimer.remove();
+                        }
+                        this.activeDialogue = false
+
+                        this.defensiveHitbox.forEach((hitbox) => {
+                            hitbox.destroy()
+                        })
+                        this.defensiveHitbox = []
+
+
+
+                        const c1 = this.getEnemyCardObj('15')
+                        const c2 = this.getEnemyCardObj('18')
+                        const enemyCards = [c1, c2]
+                        const pos = this.defensePosition
+
+                        const dark_age = this.getPlayerCardObj('5')
+                        const advCard = enemyCards[pos]
+                        const otherCard = enemyCards.find((_, idx) => idx !== pos)
+
+                        // Função de animação do dark_age e advCard
+                        const animateDarkAgeAndAdvCard = () => {
+                            simpleTweens(this, dark_age, dark_age.x, 560, 0.38, 1, 0, 200, () => {
+                                simpleTweens(this, dark_age, dark_age.x, 475, 0.38, 1, 0, 100, () => {
+                                    advCard.playDamageAnimation(-dark_age.attack.text)
+                                    simpleTweens(this, dark_age, dark_age.x, 490, 0.38, 1, 0, 300, () => {
+                                        sfx.cardDamage01.play()
+                                        dark_age.update({
+                                            attack: 3,
+                                            defense: 3 - advCard.attack.text,
+                                            vulnerable: true,
+                                        })
+                                    })
+                                })
+                            })
+
+                            simpleTweens(this, advCard, advCard.x, 210, 0.38, 1, 0, 200, () => {
+                                simpleTweens(this, advCard, advCard.x, 295, 0.38, 1, 0, 100, () => {
+                                    dark_age.playDamageAnimation(-advCard.attack.text)
+                                    simpleTweens(this, advCard, advCard.x, 280, 0.38, 1, 0, 300, () => {
+                                        sfx.cardDamage01.play()
+                                        advCard.update({
+                                            attack: advCard.attack.text,
+                                            defense: 1,
+                                            vulnerable: true,
+                                        })
+                                    })
+                                })
+                            })
+                        }
+
+                        // Função de animação do otherCard
+                        const animateOtherCard = () => {
+                            simpleTweens(this, otherCard, otherCard.x, 210, 0.38, 1, 0, 200, () => {
+                                simpleTweens(this, otherCard, otherCard.x, 295, 0.38, 1, 0, 100, () => {
+                                    simpleTweens(this, otherCard, otherCard.x, 280, 0.38, 1, 0, 300, () => {
+                                        sfx.cardDamage01.play()
+                                        this.damageTakenAnimation(-otherCard.attack.text, 1)
+                                    })
+                                })
+                            })
+                        }
+
+                        // Controla a ordem conforme o pos
+                        if (pos === 0) {
+                            animateDarkAgeAndAdvCard()
+                            sleep(this, 1000, () => {  // espera as animações principais antes de ir pro otherCard
+                                animateOtherCard()
+                            })
+                        } else {
+                            animateOtherCard()
+                            sleep(this, 1000, () => {
+                                animateDarkAgeAndAdvCard()
+                            })
+                        }
+
+                        sleep(this, 3200, () => {  // espera as animações principais antes de ir pro otherCard
+                            this.pIndex = 39
+                            this.activeDialogue = true
+                            this.playNextDialogue()
+                        })
+
+
+                    })
+
+                    return
+                }
+
+            })
+            return
+        }
 
 
         if (cardObj.state == 'onHand') {
@@ -1218,7 +1391,6 @@ export class Tutorial extends Phaser.Scene {
             return
         }
 
-        console.log('carta dropada no nada')
     }
 
     benchPlayerAnimation() {
@@ -1311,7 +1483,7 @@ export class Tutorial extends Phaser.Scene {
             this.tweens.add({
                 targets: card,
                 scale: 0.38,
-                depth: 0,
+                depth: 50,
                 angle: 0,
                 x: posX,
                 y: 280,
@@ -1328,6 +1500,8 @@ export class Tutorial extends Phaser.Scene {
     defensePlayerAnimation(cardId, position) {
         const cardObj = this.getPlayerCardObj(cardId)
         const pos = this.defensiveHitbox[position]
+        this.defensePosition = position
+
         // 0 - x: 470
         // 1 - x: 610
         // 2 - x: 750
