@@ -83,11 +83,10 @@ export class HomeScene extends Phaser.Scene {
         const friendsButton = new Button(this, 442, 725, 'friends_button', () => {
             //disabled
             // switchScenes('FriendsScene', 'HomeScene');
-            GAME.scene.run('Tutorial')
+
         }, { hoverSound: sfx.houverSound });
 
         const emailButton = new Button(this, 556, 725, 'email_button', () => {
-            sfx.cardSound01.play()
             //disabled
             // switchScenes('EmailsScene', 'HomeScene');
         }, { hoverSound: sfx.houverSound });

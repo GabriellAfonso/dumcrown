@@ -33,11 +33,11 @@ export class DumMatch extends Phaser.Scene {
         // ConfigButton.depth = 1000
         // ConfigButton.scale = 10
 
+        this.addEvents();
+        // if (!this.eventsAdded) {
 
-        if (!this.eventsAdded) {
-            this.addEvents();
-            this.eventsAdded = true; // Marca que os eventos foram adicionados
-        }
+        //     this.eventsAdded = true; // Marca que os eventos foram adicionados
+        // }
         // showCoordinates(this)
         // fase das 4 cartas iniciais
 

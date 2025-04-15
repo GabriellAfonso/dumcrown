@@ -15,6 +15,7 @@ import { InitialDrawManager } from '../match_objects/initialDrawManager.js';
 import { clearCardsToSwap } from '../match_objects/swapButton.js';
 import { sfx } from '../soundfx/sounds.js';
 
+// ⚠️ CUIDADO: GAMBIARRA. LER ESTE CÓDIGO PODE PROVOCAR MAU-ESTAR E DEPRESSÃO.
 
 
 export class Tutorial extends Phaser.Scene {
@@ -53,6 +54,7 @@ export class Tutorial extends Phaser.Scene {
 
     }
     createScene() {
+        this.createExitTutorialButton()
         this.createBoard()
         this.createButton()
         this.createIcons()
@@ -72,6 +74,35 @@ export class Tutorial extends Phaser.Scene {
             this.showHand(cardObj)
         });
     }
+    createExitTutorialButton() {
+        // Criar o retângulo
+        this.exitButtonShape = this.add.rectangle(1350, 45, 200, 60, 0x708090, 0.3)
+            .setOrigin(0.5)
+            .setInteractive({ cursor: 'pointer' })
+            .setDepth(100);
+
+        // Adicionar texto por cima do retângulo
+        this.exitButtonText = this.add.text(1350, 45, 'Sair do tutorial', {
+            fontSize: '27px',
+            color: '#ffffff',
+            fontFamily: 'Arial'
+        }).setOrigin(0.5)
+            .setDepth(100);
+
+        // Evento de pointerup
+        this.exitButtonShape.on('pointerup', () => {
+            this.actualDialogueAudio.stop()
+            this.actualDialogueText.remove();
+            if (this.dialogueTimer) {
+                this.dialogueTimer.remove();
+            }
+            this.activeDialogue = false
+            GAME.scene.remove('Tutorial')
+            GAME.scene.run('HomeScene')
+            GAME.scene.add('Tutorial', Tutorial);
+        });
+    }
+
     startAnimation() {
         const camera = this.cameras.main;
         camera.setZoom(2);
@@ -151,6 +182,7 @@ export class Tutorial extends Phaser.Scene {
 
         // Dizer para a câmera da UI renderizar apenas a UI
         this.uiCamera.ignore(this.children.list.filter(obj => !this.uiElements.contains(obj)));
+        this.uiCamera.ignore([this.exitButtonShape, this.exitButtonText]);
 
         // Agora o zoom só afeta a câmera principal, e a UI fica intacta
         // this.cameras.main.setZoom(1.2);

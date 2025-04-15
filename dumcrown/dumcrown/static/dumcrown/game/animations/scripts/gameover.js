@@ -1,6 +1,7 @@
 import { centerX, centerY, GAME } from "../../config/gameConfig.js";
 import { Button } from "../../functions/buttons.js";
 import { switchScenes } from "../../functions/functions.js";
+import { DumMatch } from "../../scenes/dumsMatch.js";
 
 
 export function gameWin(scene, crystal, points) {
@@ -42,6 +43,12 @@ export function gameWin(scene, crystal, points) {
                         soundfx.arena_music.stop()
                         soundfx.music.play()
                         soundfx.music.setLoop(true);
+
+                        GAME.scene.remove('DumMatch')
+                        GAME.scene.add('DumMatch', DumMatch);
+                        GAME.scene.bringToTop('ConfigScreen');
+
+
 
                     }, { color: 0xffff00, });
                     continue_button.alpha = 0
@@ -139,9 +146,10 @@ export function gameLoss(scene, crystal, points) {
                         soundfx.arena_music.stop()
                         soundfx.music.play()
                         soundfx.music.setLoop(true);
-                        // var match = getScene
-                        // GAME.scene.getScene('DumMatch')
 
+                        GAME.scene.remove('DumMatch')
+                        GAME.scene.add('DumMatch', DumMatch);
+                        GAME.scene.bringToTop('ConfigScreen');
                     }, { color: 0xffff00, });
                     continue_button.alpha = 0
 
