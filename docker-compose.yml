@@ -7,7 +7,7 @@ services:
       - 8001:8001 
     volumes:
       - ./dumcrown:/dumcrown
-      - ./dumcrown/dumcrown/static/dumcrown:/dumcrown/static/dumcrown
+      - ./dumcrown/dumcrown/static/dumcrown:/dumcrown/static/0.2.0/dumcrown
       - ./dumcrown/media:/dumcrown/media/
     env_file:
       - ./dotenv_files/.env

@@ -13,7 +13,7 @@ dumcrown/dumcrown/static/dumcrown/game/phaser
 *.pyc
 __pycache__
 db.sqlite3
-dumcrown/static
+dumcrown/static/
 dumcrown/media
 
 # Backup files # 

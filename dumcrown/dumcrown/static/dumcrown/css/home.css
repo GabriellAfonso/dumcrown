@@ -15,7 +15,7 @@
 
 body {
     overflow-x: hidden;
-
+    background-color: #1b1b1b;
 }
 
 .home {
@@ -171,7 +171,9 @@ ul {
 
 .arena-destaque {
     margin-top: 60px;
+    margin-left: 3px;
 }
+
 
 .tiers-destaque {
     margin-top: 20vh;

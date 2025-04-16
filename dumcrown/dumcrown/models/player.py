@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 from django.contrib.postgres.fields import ArrayField
+from django.utils.timezone import localtime
 
 from .default_values import initial_cards
 
@@ -48,6 +49,10 @@ class LoginHistory(models.Model):
     player = models.ForeignKey(
         Player, on_delete=models.CASCADE, related_name='login_history')
     login_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        login_time_local = localtime(self.login_time)
+        return f'Nick: {self.player.nickname}  Time: {login_time_local.strftime("%H:%M %d/%m/%Y")}'
 
 
 class Connection(models.Model):

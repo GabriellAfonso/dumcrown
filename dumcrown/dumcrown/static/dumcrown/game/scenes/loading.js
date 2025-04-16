@@ -141,9 +141,6 @@ export class Loading extends Phaser.Scene {
         //popups
         this.load.image('basic_warning', PATH + '/images/popups/warning_box.png');
 
-        //arenas
-        this.load.image('arena01', PATH + '/images/arenas/dumarena01.png');
-        this.load.image('arena02', PATH + '/images/arenas/dumarena02.png');
 
         //default board
         this.load.image('default_board', PATH + '/images/boards/default/board.png');

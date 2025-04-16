@@ -32,9 +32,9 @@ class PlayerConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         try:
-            print('conectando', self.user)
 
             self.user = self.scope["user"].id
+            print('conectando', self.user)
             self.channel = self.channel_name
             self.game_room = GameRoom(self)
             self.match_manager = MatchManager(self)

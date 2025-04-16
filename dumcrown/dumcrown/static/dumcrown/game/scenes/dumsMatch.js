@@ -5,6 +5,7 @@ import { Button } from "../functions/buttons.js";
 import { sendSocket, showCoordinates, sleep, switchScenes, toggleFullscreen } from "../functions/functions.js";
 import { MatchManager } from "../match_objects/match.js";
 import { cardsToSwap } from "../match_objects/swapButton.js";
+import { Fullscreen } from "../objects/fullscreen.js";
 
 export class DumMatch extends Phaser.Scene {
     constructor() {
@@ -26,10 +27,8 @@ export class DumMatch extends Phaser.Scene {
         });
         ConfigButton.setScale(0.8)
 
-        const fullscreen_button = new Button(this, 1475, 35, 'fullscreen', () => {
-            toggleFullscreen();
-        });
-        fullscreen_button.setScale(0.30);
+        const fullscreen_button = new Fullscreen(this, 1475, 35);
+
         // ConfigButton.depth = 1000
         // ConfigButton.scale = 10
 

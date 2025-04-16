@@ -82,8 +82,8 @@ export class Nickname extends Phaser.Scene {
 
 
             if (player.nickname) {
-                setNicknameDenied(null);
                 GAME.scene.run('Tutorial')
+                setNicknameDenied(null);
                 GAME.scene.stop('Nickname');
                 // GAME.scene.start('Tutorial');
                 // this.tutorial = this.scene.get('Tutorial')
