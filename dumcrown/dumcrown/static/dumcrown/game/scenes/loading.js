@@ -327,7 +327,7 @@ export class Loading extends Phaser.Scene {
 
         this.music = this.sound.add('home_sound');
         this.arena_music = this.sound.add('arena_music');
-        this.music.volume = 0.5 * player.musicVolume;
+        this.music.volume = 0.3 * player.musicVolume;
         this.music.once('complete', function (sound) {
             sound.setLoop(true);
             sound.play();
