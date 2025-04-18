@@ -2,16 +2,13 @@ import { GAME, centerX, centerY } from '../config/gameConfig.js';
 
 import { switchScenes, logoutAjax, showCoordinates, startScene, sendSocket } from '../functions/functions.js';
 import { simpleTextTweens, simpleTweens } from '../animations/scripts/functions.js';
-import { cards, Card } from '../functions/cards.js';
-import { sleep } from '../functions/functions.js';
-import { textAnimation } from '../animations/scripts/textAnimations.js';
+
 import { Button, close_button } from '../functions/buttons.js';
 import { add_text } from '../functions/texts.js';
 import { compressedDeck, instantiateCards, instantiateDecks } from '../cards/functions.js';
 import { WrapperContainer } from '../objects/WrapperContainer.js'
 import { cardsDATA, player } from '../client/client.js';
 
-import { compressedCardObject } from '../cards/base.js';
 
 
 export class DecksScene extends Phaser.Scene {

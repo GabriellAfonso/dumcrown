@@ -16,16 +16,11 @@ export class Preloader extends Phaser.Scene {
     }
 
     preload() {
-
         this.load.image('loading_screen', PATH + '/images/backgrounds/loading_screen.jpg');
-
     }
 
     create() {
-
-
         this.scene.launch('Loading');
-
     }
 }
 
@@ -125,11 +120,11 @@ export class Loading extends Phaser.Scene {
         this.load.image('config_background', PATH + '/images/backgrounds/config_background.jpg');
         this.load.image('store_background', PATH + '/images/backgrounds/store_background.jpg');
         this.load.image('missions_background', PATH + '/images/backgrounds/missoes_screen.jpg');
-        this.load.image('decks_background', PATH + '/images/backgrounds/decks_background.png');
+        this.load.image('decks_background', PATH + '/images/backgrounds/decks_background.jpg');
         this.load.image('friends_background', PATH + '/images/backgrounds/amigos_background.jpg');
         this.load.image('emails_background', PATH + '/images/backgrounds/emails_screen.jpg');
         this.load.image('ranking_background', PATH + '/images/backgrounds/ranking_background.jpg');
-        this.load.image('lobby_background', PATH + '/images/backgrounds/lobby_background.png');
+        this.load.image('lobby_background', PATH + '/images/backgrounds/lobby_background.jpg');
         this.load.image('room_screen', PATH + '/images/backgrounds/room_screen.png');
         this.load.image('victory_background', PATH + '/images/backgrounds/victory_background.png');
         this.load.image('loss_background', PATH + '/images/backgrounds/loss_background.png');
@@ -140,7 +135,6 @@ export class Loading extends Phaser.Scene {
 
         //popups
         this.load.image('basic_warning', PATH + '/images/popups/warning_box.png');
-
 
         //default board
         this.load.image('default_board', PATH + '/images/boards/default/board.png');
@@ -160,13 +154,12 @@ export class Loading extends Phaser.Scene {
         this.load.image('default_energy_10', PATH + '/images/boards/default/energy/10.png');
 
 
-
         //icons
         this.load.image('khras_talk', PATH + '/images/khras_eyebrown_talk.png');
-        this.load.image('chibi_khras', PATH + '/images/icones/khras.png');
-        this.load.image('chibi_lda', PATH + '/images/icones/lda.png');
-        this.load.image('chibi_kronos', PATH + '/images/icones/kronos.png');
-        this.load.image('icon_example', PATH + '/images/icones/exemplo.png');
+        this.load.image('chibi_khras', PATH + '/images/icons/khras.jpg');
+        this.load.image('chibi_lda', PATH + '/images/icons/lda.jpg');
+        this.load.image('chibi_kronos', PATH + '/images/icons/kronos.jpg');
+        this.load.image('icon_example', PATH + '/images/icons/exemplo.jpg');
 
         //borders
         this.load.image('border01', PATH + '/images/border/border01.png');
@@ -252,7 +245,6 @@ export class Loading extends Phaser.Scene {
 
 
         //cards
-        this.load.image('qualit2', PATH + '/images/cards/cdc.png');
         this.load.image('cardlayout-neutro', PATH + '/images/cards/layout-neutro.png');
         this.load.image('card_mask', PATH + '/images/cards/card_mask.png');
         this.load.image('disabled_card', PATH + '/images/cards/disabled_card.png');
@@ -298,8 +290,6 @@ export class Loading extends Phaser.Scene {
 
 
 
-
-
         // Crie uma barra de progresso (retângulo) para exibir o progresso do carregamento.
         this.progressBox = this.add.graphics();
         this.progressBar = this.add.graphics();
@@ -328,28 +318,19 @@ export class Loading extends Phaser.Scene {
     }
 
     handleComplete() {
-        // Remova a barra de progresso após o carregamento completo, se necessário.
         this.progressBox.destroy();
         this.progressBar.destroy();
         loadSFX()
-        // this.hoverSound = GAME.sound.add('hover_sound');
-        // this.clickSound = GAME.sound.add('click_sound');
-        // this.snapclick = GAME.sound.add('click_sound_01')
-        // this.closeSound = GAME.sound.add('close_sound');
-        // this.uiselect = GAME.sound.add('uiselect_sound');
 
 
-        // Carregar a música
         this.music = this.sound.add('home_sound');
         this.arena_music = this.sound.add('arena_music');
         this.music.volume = 0.5 * player.musicVolume;
-        // Quando a música terminar, defina o loop
         this.music.once('complete', function (sound) {
             sound.setLoop(true);
             sound.play();
         });
 
-        // Iniciar a reprodução da música
         this.music.play();
 
         this.scale.fullscreenTarget = document.getElementById('game-display');
@@ -377,11 +358,6 @@ export class Loading extends Phaser.Scene {
     update() {
         this.music.volume = 0.05 * player.musicVolume;
         this.arena_music.volume = 0.05 * player.musicVolume;
-        // this.clickSound.volume = 0.1 * player.soundsVolume;
-        // this.closeSound.volume = 0.1 * player.soundsVolume;
-        // this.uiselect.volume = 0.4 * player.soundsVolume;
-        // this.hoverSound.volume = 1 * player.soundsVolume;
-        // this.snapclick.volume = 0.1 * player.soundsVolume;
     }
 }
 
@@ -398,7 +374,7 @@ export class Exemple extends Phaser.Scene {
     }
 
     update() {
-        // Lógica de atualização do jogo (executada continuamente durante o jogo).
+
     }
 }
 
