@@ -365,6 +365,7 @@ class Match:
         }
 
         await self.manager.send_to_players(self.id, 'clash_line', data)
+        await asyncio.sleep(0.6)
 
     def process_card_damage(self, card, damage):
 

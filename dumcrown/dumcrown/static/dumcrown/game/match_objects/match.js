@@ -762,13 +762,13 @@ export class MatchManager {
             // Movimento inicial do ataque
             await Promise.all([
                 this.animateCard(attackerCard, attackerCard.x, attackY, 200),
-                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defStartY, 200) : Promise.resolve()
+                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defStartY, 200) : undefined
             ]);
 
             // Movimento para atacar
             await Promise.all([
                 this.animateCard(attackerCard, attackerCard.x, clashY, 100),
-                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defClashY, 100) : Promise.resolve()
+                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defClashY, 100) : undefined
             ]);
             sfx.cardDamage01.play()
             sfx.cardDamage01.play()
@@ -782,7 +782,7 @@ export class MatchManager {
             // Retorno após o ataque
             await Promise.all([
                 this.animateCard(attackerCard, attackerCard.x, returnY, 300),
-                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defReturnY, 300) : Promise.resolve()
+                defenderCard ? this.animateCard(defenderCard, defenderCard.x, defReturnY, 300) : undefined
             ]);
 
             // Atualizar os dados da carta defensora se ela existir
