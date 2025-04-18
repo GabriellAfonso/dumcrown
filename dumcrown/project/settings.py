@@ -15,7 +15,7 @@ ALLOWED_HOSTS = [
     if h.strip()
 ]
 
-GAME_VERSION = '0.2.0'
+GAME_VERSION = '1.0.0'
 
 INSTALLED_APPS = [
     'channels',

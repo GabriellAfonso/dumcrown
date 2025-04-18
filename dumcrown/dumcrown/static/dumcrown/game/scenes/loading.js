@@ -356,8 +356,8 @@ export class Loading extends Phaser.Scene {
     }
 
     update() {
-        this.music.volume = 0.05 * player.musicVolume;
-        this.arena_music.volume = 0.05 * player.musicVolume;
+        this.music.volume = 0.03 * player.musicVolume;
+        this.arena_music.volume = 0.03 * player.musicVolume;
     }
 }
 

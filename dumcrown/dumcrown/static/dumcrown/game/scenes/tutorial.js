@@ -604,29 +604,6 @@ export class Tutorial extends Phaser.Scene {
 
             })
         } else if (index == 21) {
-            //provisorio
-            // this.updateOfensiveIcon(1)
-            // this.playerEnergy = 1
-            // this.playerEnergyValue.setTexture('default_energy_' + this.playerEnergy)
-            // this.enemyEnergy = 1
-            // this.enemyEnergyValue.setTexture('default_energy_' + this.enemyEnergy)
-            // this.showDialogueUI(false)
-            // var hand = ['8', '5', 's1', '21', '15']
-            // for (const id of hand) {
-            //     const card = this.getPlayerCardObj(id);
-            //     card.setVisible(true)
-            //     card.disableInteractive()
-            //     this.playerHand.addCard(card);
-            // }
-            // sleep(this, 400, () => {
-            //     for (const id of hand) {
-            //         const card = this.getPlayerCardObj(id);
-            //         card.collider.disableInteractive()
-            //     }
-            // })
-
-
-            //--------------------
             this.fadeOutBlackBlur()
             this.clearFocusMask()
             this.playerHand.openHandAnimation()
@@ -1025,10 +1002,16 @@ export class Tutorial extends Phaser.Scene {
         this.playerHand = new MatchHand(this)
     }
     instantiateCards() {
+        var allCardsId = [
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+            '13', '14', '15', '16', '17', '18', '19', '20', '21', '55', '56', '57',
+            's1', 's2', 's5', 's7', 's8'
+        ];
+
         //player
-        this.playerCards = createPlayerCards(this, player.decks[0].cards, 1)
+        this.playerCards = createPlayerCards(this, allCardsId, 1)
         //enemy
-        this.enemyCards = createPlayerCards(this, player.decks[0].cards, 2)
+        this.enemyCards = createPlayerCards(this, allCardsId, 2)
 
         //isso é pra as cartas do inimigo sair de tras do deck inimigo
         Object.keys(this.enemyCards).forEach((key) => {
