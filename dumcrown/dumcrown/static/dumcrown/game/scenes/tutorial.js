@@ -43,16 +43,10 @@ export class Tutorial extends Phaser.Scene {
         this.anims.globalTimeScale = value;
     }
     getPhrases() {
-        fetch(PATH + 'lang/tutorial.json')
-            .then(response => response.json())
-            .then(data => {
-                this.pIndex = 1
-                this.tutorialPhrases = data
-
-            })
-            .catch(error => console.error('Erro ao carregar JSON:', error));
-
+        this.pIndex = 1;
+        this.tutorialPhrases = this.cache.json.get('tutorialPhrases');
     }
+
     createScene() {
         this.createExitTutorialButton()
         this.createBoard()
