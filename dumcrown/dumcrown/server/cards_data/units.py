@@ -106,7 +106,7 @@ units_data = {
         "name": "BOOGIE",
         "description": "",
         "energy": 2,
-        "attack": 3,
+        "attack": 4,
         "defense": 1,
     },
     '12': {
