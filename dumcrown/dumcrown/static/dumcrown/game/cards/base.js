@@ -421,7 +421,6 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
         }
     }
     death() {
-
         this.scene.tweens.add({
             targets: this,
             alpha: 0,
@@ -429,7 +428,6 @@ export class BaseCardObject extends Phaser.GameObjects.Container {
             duration: 300,
             ease: 'Linear',
             onComplete: () => {
-                this.scene.events.emit('removeFromAll', this)
                 this.destroy()
             },
         });

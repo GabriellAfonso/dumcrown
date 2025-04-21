@@ -120,9 +120,7 @@ export class DumMatch extends Phaser.Scene {
         this.events.on('cardDropped', (cardObj) => {
             this.match.cardDropped(cardObj)
         });
-        this.events.on('removeFromAll', (cardObj) => {
-            this.match.removeCardFromAll(cardObj)
-        });
+
         this.events.on('hideHand', (cardObj) => {
             this.match.hideHand(cardObj)
         });

@@ -1184,45 +1184,7 @@ export class MatchManager {
             card.alpha = 1
         })
     }
-    removeCardFromAll(card) {
-        this.removeFromBench(card, card.owner)
 
-        // removeFromList(this.playerAttackZone, card)
-        // removeFromList(this.enemyAttackZone, card)
-
-        //nao sei como fazer e a spell S8 nao pode ser tacada em cartas defense msm
-        // removeFromList(Object.values(this.playerDefenseZone), card)
-        // removeFromList(Object.values(this.enemyDefenseZone), card)
-    }
-    removeFromBench(card, owner) {
-        if (this.player.im == owner) {
-            const index = this.playerBench.findIndex(item => item.id === card.id);
-
-            if (index !== -1) {
-                this.playerBench.splice(index, 1);
-                sleep(this.scene, 100, () => {
-                    this.benchPlayerAnimation()
-                })
-            } else {
-                console.log("Elemento não encontrado na lista");
-            }
-            return
-
-        }
-        // Corrigido para acessar 'this.enemyBench' diretamente
-        const index = this.enemyBench.findIndex(item => item.id === card.id);
-
-        if (index !== -1) {
-            this.enemyBench.splice(index, 1);
-            sleep(this.scene, 100, () => {
-                this.benchEnemyAnimation()
-            })
-        } else {
-            console.log("Elemento não encontrado na lista");
-        }
-
-        return;
-    }
     deleteMatch() {
         clearCardsToSwap()
     }
