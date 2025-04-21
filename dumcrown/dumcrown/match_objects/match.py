@@ -166,8 +166,8 @@ class Match:
         if player.im != self.offensive_player:
             self.log(f'O player {player.nickname} chamou clash_resolve')
             asyncio.create_task(self.clash_resolve(player))
-
             return
+
         self.log(f'O player {player.nickname} chamou player_clash')
         self.toggle_turn()
         enemy = self.get_enemy(player)
