@@ -14,6 +14,7 @@ import { crashSwords } from '../animations/scripts/attackingSwords.js';
 import { gameLoss, gameWin } from '../animations/scripts/gameover.js';
 import Logger from '../objects/logger.js';
 import { sfx } from '../soundfx/sounds.js';
+import SimpleGlow from '../../shader/SimpleGlow.js';
 const log = new Logger()
 log.enableGroup('all')
 export class MatchManager {
@@ -166,13 +167,20 @@ export class MatchManager {
 
     createEnergy() {
         log.info('Criação', 'Criando barra de energia dos jogadores')
+        this.scene.simpleGlow = new SimpleGlow(this.scene.game);
+        this.scene.renderer.pipelines.add('simpleGlow', this.scene.simpleGlow);
+
         //player
         this.playerEnergyHolder = this.scene.add.image(1396, centerY + 175, 'default_board_energy_holder');
-        this.playerEnergyValue = this.scene.add.image(1396, centerY + 175, 'default_energy_' + this.player.energy);
+        this.playerEnergyValue = this.scene.add.image(1396, centerY + 175, 'default_energy_' + this.player.energy)
+        this.playerEnergyValue.setPipeline('simpleGlow');
+
         //enemy
         this.enemyEnergyHolder = this.scene.add.image(1396, centerY - 175, 'default_board_energy_holder');
         this.enemyEnergyValue = this.scene.add.image(1396, centerY - 175, 'default_energy_' + this.enemy.energy);
+        // this.enemyEnergyValue.postFX.addGlow(0xff0000);
     }
+
 
     createPlayerHand() {
         this.playerHand = new MatchHand(this.scene)

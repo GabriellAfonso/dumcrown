@@ -4,6 +4,7 @@ export var config = {
     type: Phaser.AUTO,
     parent: 'container',
     backgroundColor: '#000000',
+    transparent: true,
     dom: {
         createContainer: true // Essa propriedade é importante para usar this.add.dom()
     },

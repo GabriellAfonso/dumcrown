@@ -17,6 +17,7 @@ import { Fullscreen } from '../objects/fullscreen.js';
 import { Ping } from '../objects/ping.js';
 import { ExpBar } from '../objects/expBar.js';
 
+import SimpleGlow from '../../shader/SimpleGlow.js';
 
 export class HomeScene extends Phaser.Scene {
     constructor() {
@@ -25,6 +26,10 @@ export class HomeScene extends Phaser.Scene {
 
 
     create() {
+        this.glowPipeline = new SimpleGlow(this.game);
+        this.renderer.pipelines.add('simpleGlow', this.glowPipeline);
+
+
         sendSocket('get_player_data')
         this.completeNoActiveDeckMsg = true
         this.scale.fullscreenTarget = document.getElementById('game-display');
@@ -54,7 +59,10 @@ export class HomeScene extends Phaser.Scene {
 
         const border_perfil = this.add.image(115, 105, player.border)
         border_perfil.setScale(0.5)
-
+        // var A = this.add.image(centerX - 100, centerY, 'default_energy_' + 0)
+        // A.setPipeline('GlowPipeline');
+        // var B = this.add.image(centerX + 100, centerY, 'default_energy_' + 0)
+        // B.postFX.addGlow()
         const EXPBAR = new ExpBar(this)
 
         const crystal = this.add.image(550, 45, 'crystals');
