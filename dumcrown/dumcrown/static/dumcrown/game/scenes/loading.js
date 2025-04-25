@@ -345,7 +345,7 @@ export class Loading extends Phaser.Scene {
 
         const entrar = new Button(this, centerX, 650, 'entrar_button', () => {
             fullscreen_button.destroy();
-            GAME.scale.toggleFullscreen()
+            // GAME.scale.toggleFullscreen()
             entrar.destroy();
             if (player.nickname.length === 0) {
                 GAME.scene.start('Nickname');

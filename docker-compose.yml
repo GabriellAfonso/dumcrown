@@ -38,6 +38,7 @@ services:
       - 6379:6379
     volumes:
       - redisdata:/data
+    command: ["redis-server", "--save", ""]
 
   psql_dum:
     container_name: psql_dum

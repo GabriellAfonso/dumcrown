@@ -11,7 +11,7 @@ import { add_text } from '../functions/texts.js'
 import { sendSocket } from '../functions/functions.js';
 import { instantiateCards } from '../cards/functions.js';
 import { DeckLayout } from '../objects/deck_layout.js';
-import { unitCardObject, compressedCardObject } from '../cards/base.js';
+import { unitCardObject, compressedCardObject, SpellCardObject } from '../cards/base.js';
 import { simpleTextTweens } from '../animations/scripts/functions.js';
 import { Fullscreen } from '../objects/fullscreen.js';
 import { Ping } from '../objects/ping.js';
@@ -26,6 +26,8 @@ export class HomeScene extends Phaser.Scene {
 
 
     create() {
+        console.log('DPR:', window.devicePixelRatio);
+
         this.glowPipeline = new SimpleGlow(this.game);
         this.renderer.pipelines.add('simpleGlow', this.glowPipeline);
 
@@ -49,13 +51,16 @@ export class HomeScene extends Phaser.Scene {
 
         perfil.setScale(0.5);
         var data = {
-            "image": "khras_card",
-            "name": "KHRAS",
-            "description": "Que show da xuxa é esse???",
-            "energy": 4,
-            "attack": 8,
-            "defense": 6,
+            "image": "someones_shield",
+            "name": "SOMEONE'S SHIELD",
+            "description": "Aumenta +2 de defesa na unidade aliada atingida",
+            "energy": 2,
         }
+
+        var spellDefault = new SpellCardObject(this, 5, data, 1)
+        spellDefault.setDisplaySize(164, 241)
+        spellDefault.setVisible(true)
+        spellDefault.setPosition(centerX - 150, centerY)
 
         const border_perfil = this.add.image(115, 105, player.border)
         border_perfil.setScale(0.5)

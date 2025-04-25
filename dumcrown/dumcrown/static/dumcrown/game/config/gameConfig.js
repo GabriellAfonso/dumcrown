@@ -6,36 +6,33 @@ export var config = {
     backgroundColor: '#000000',
     transparent: true,
     dom: {
-        createContainer: true // Essa propriedade é importante para usar this.add.dom()
+        createContainer: true
     },
     scale: {
         parent: 'game-display',
-        mode: Phaser.Scale.ScaleModes.FIT,
+        mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 1500,
-        interpolation: {
-            antialias: true, // ou false, dependendo da sua escolha
-            quality: 'linear' // ou 'nearest'
-        }
-
+        height: 768, // você pode definir isso se quiser proporção fixa
     },
     texture: {
         linear: true,
     },
-
-    // antialiasGL: true,
+    render: {
+        pixelArt: false,
+        antialias: true,
+    },
     antialias: true,
+    resolution: window.devicePixelRatio,
     autoFocus: true,
     autoPause: false,
-    // activeWhenHidden: true,
-    // resolution: window.devicePixelRatio,
     fps: {
         min: 10,
         target: 60,
-        forceSetTimeOut: true, // Forçar os frames mesmo fora do foco
+        forceSetTimeOut: true,
     },
-
 };
+
 export const GAME = new Phaser.Game(config);
 
 export const centerX = GAME.config.width / 2; //750 - 1500
