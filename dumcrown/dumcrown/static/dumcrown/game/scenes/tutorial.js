@@ -836,7 +836,7 @@ export class Tutorial extends Phaser.Scene {
         this.enemyAttackZone.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
 
-            var hitbox = this.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.1);
+            var hitbox = this.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.4);
             this.defensiveHitbox.push(hitbox)
 
         });

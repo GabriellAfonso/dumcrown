@@ -265,55 +265,108 @@ export class MatchManager {
         this.playerHand.closedHandAnimation()
         this.round(this.match.round)
     }
-
     round(number) {
-        log.info('action', 'animação de round')
-        this.playerHand.off()
-        this.button.waiting()
-        this.clearCombatZone()
+        log.info('action', 'animação de round');
+        this.playerHand.off();
+        this.button.waiting();
+        this.clearCombatZone();
 
-        var blackground = this.scene.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
-        blackground.depth = 99
-        blackground.alpha = 0
-        blackground.setInteractive()
-        simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
-            sleep(this.scene, 2000, () => {
-                simpleTweens(this.scene, blackground, centerX, centerY, 1, 89, 0, 600, () => {
-                    blackground.destroy()
-                }, 0)
-            })
+        const tweens = [];  // Lista para guardar os tweens criados
 
-        }, 0.7)
+        const blackground = this.scene.add.rectangle(centerX, centerY, 2000, 2000, 0x000000, 1);
+        blackground.setDepth(99);
+        blackground.setAlpha(0);
+        blackground.setInteractive();
 
-        this.roundText = this.scene.add.text(centerX, centerY, 'RODADA ' + number,
-            {
-                fontSize: '100px', fontFamily: 'Lexend Deca, sans-serif',
-                fontStyle: 'bold', fill: '#ffd700'
-            })
-        this.roundText.setOrigin(0.5, 0.5)
-        this.roundText.depth = 100
-        this.roundText.alpha = 0;
-        this.roundText.setShadow(2, 2, '#000', 2, false, true);
-        simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 1, () => {
-            simpleTextTweens(this.scene, this.roundText, centerX, centerY, 90, 0, 500, 0, () => {
-                if (this.player.hand.length <= 7) {
-                    sleep(this.scene, 1500, () => {
-                        this.draw()
-                        this.button.update()
-                        sleep(this.scene, 1300, () => {
-                            this.updateOfensiveIcon()
-                        })
-                    })
-                } else {
-                    this.playerHand.on()
-                    this.button.update()
-                    this.updateOfensiveIcon()
-                }
+        const roundText = this.scene.add.text(centerX, centerY, 'RODADA ' + number, {
+            fontSize: '100px',
+            fontFamily: 'Lexend Deca, sans-serif',
+            fontStyle: 'bold',
+            fill: '#ffd700'
+        });
+        roundText.setOrigin(0.5, 0.5);
+        roundText.setDepth(100);
+        roundText.setAlpha(0);
+        roundText.setShadow(2, 2, '#000', 2, false, true);
 
-                this.updateEnergy()
-            }, 2000)
-        })
+        // Tween de fade in do blackground
+        const blackgroundFadeIn = this.scene.add.tween({
+            targets: blackground,
+            alpha: { from: 0, to: 0.7 },
+            duration: 600,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.time.delayedCall(2000, () => {
+                    // Tween de fade out do blackground
+                    const blackgroundFadeOut = this.scene.add.tween({
+                        targets: blackground,
+                        alpha: { from: 0.7, to: 0 },
+                        duration: 600,
+                        ease: 'Linear',
+                        onComplete: () => {
+                            blackground.destroy();
+                        }
+                    });
+                    tweens.push(blackgroundFadeOut);
+                });
+            }
+        });
+        tweens.push(blackgroundFadeIn);
 
+        // Tween de fade in do texto da rodada
+        const roundTextFadeIn = this.scene.add.tween({
+            targets: roundText,
+            alpha: { from: 0, to: 1 },
+            duration: 500,
+            ease: 'Linear',
+            onComplete: () => {
+                this.scene.time.delayedCall(2000, () => {
+                    // Tween de fade out do texto da rodada
+                    const roundTextFadeOut = this.scene.add.tween({
+                        targets: roundText,
+                        alpha: { from: 1, to: 0 },
+                        duration: 500,
+                        ease: 'Linear',
+                        onComplete: () => {
+                            // Depois que tudo terminou
+                            if (this.player.hand.length <= 7) {
+                                this.scene.time.delayedCall(1500, () => {
+                                    this.draw();
+                                    this.button.update();
+                                    this.scene.time.delayedCall(1300, () => {
+                                        this.updateOfensiveIcon();
+                                        this.finishRound(tweens, roundText);
+                                    });
+                                });
+                            } else {
+                                this.playerHand.on();
+                                this.button.update();
+                                this.updateOfensiveIcon();
+                                this.finishRound(tweens, roundText);
+                            }
+
+                            this.updateEnergy();
+                        }
+                    });
+                    tweens.push(roundTextFadeOut);
+                });
+            }
+        });
+        tweens.push(roundTextFadeIn);
+    }
+
+    // Função auxiliar pra parar tudo e limpar
+    finishRound(tweens, roundText) {
+        tweens.forEach(tween => {
+            if (tween && tween.isPlaying()) {
+                tween.stop();
+            }
+        });
+        tweens.length = 0; // Esvazia o array
+
+        if (roundText && roundText.active) {
+            roundText.destroy();
+        }
     }
 
     updateOfensiveIcon() {
@@ -465,7 +518,7 @@ export class MatchManager {
         this.enemyAttackZone.forEach((card, index) => {
             const posX = centerX - offsetX + index * spacing;
 
-            var hitbox = this.scene.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.1);
+            var hitbox = this.scene.add.rectangle(posX, 490, 124, 183, 0xff0ff0, 0.4);
             this.defensiveHitbox.push(hitbox)
 
         });

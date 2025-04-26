@@ -4,7 +4,6 @@ import logging
 import asyncio
 from dumcrown.match_objects.player import Player
 from dumcrown.match_objects.match import Match
-from django.utils import timezone
 from datetime import datetime
 from .functions import get_user, get_player, save_player, get_deck_cards
 
@@ -153,7 +152,7 @@ class MatchManager:
         await self.consumer.send_to_group(match.id, 'update_match_data', match.get_match_data())
 
     async def send_to_players(self, match_id, code, data):
-        print('send to payers')
+        print('send to players')
         match = self.matches[match_id]
         await self.consumer.send_to_group(match.id, code, data)
 
