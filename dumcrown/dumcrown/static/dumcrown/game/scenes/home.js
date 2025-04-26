@@ -17,7 +17,6 @@ import { Fullscreen } from '../objects/fullscreen.js';
 import { Ping } from '../objects/ping.js';
 import { ExpBar } from '../objects/expBar.js';
 
-import SimpleGlow from '../../shader/SimpleGlow.js';
 
 export class HomeScene extends Phaser.Scene {
     constructor() {
@@ -26,11 +25,6 @@ export class HomeScene extends Phaser.Scene {
 
 
     create() {
-        console.log('DPR:', window.devicePixelRatio);
-
-        this.glowPipeline = new SimpleGlow(this.game);
-        this.renderer.pipelines.add('simpleGlow', this.glowPipeline);
-
 
         sendSocket('get_player_data')
         this.completeNoActiveDeckMsg = true

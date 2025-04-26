@@ -14,9 +14,10 @@ import { crashSwords } from '../animations/scripts/attackingSwords.js';
 import { gameLoss, gameWin } from '../animations/scripts/gameover.js';
 import Logger from '../objects/logger.js';
 import { sfx } from '../soundfx/sounds.js';
-import SimpleGlow from '../../shader/SimpleGlow.js';
+import SimpleGlow from '../shaders/SimpleGlow.js';
 const log = new Logger()
 log.enableGroup('all')
+
 export class MatchManager {
     constructor(scene) {
         this.scene = scene
