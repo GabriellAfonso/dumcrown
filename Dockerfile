@@ -11,9 +11,9 @@ COPY scripts /scripts
 WORKDIR /dumcrown
 
 RUN chmod +x /scripts/commands.sh && \
-    chmod -R a+rw /dumcrown
+  chmod -R a+rw /dumcrown
 
-EXPOSE 8001
+EXPOSE 8000
 
 
 RUN python -m venv /venv && \
