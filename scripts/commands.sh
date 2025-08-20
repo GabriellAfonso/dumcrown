@@ -18,5 +18,4 @@ sleep 0.2
 # Iniciar Daphne
 daphne -b 0.0.0.0 -p 8001 project.asgi:application
 
-# Iniciar Nginx
-nginx -g "daemon off;"
+

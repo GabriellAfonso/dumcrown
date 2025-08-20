@@ -4,7 +4,7 @@ services:
     build:
       context: .
     ports:
-      - 8001:8001 
+      - 8001:8001
     volumes:
       - ./dumcrown:/dumcrown
       - ./dumcrown/dumcrown/static/dumcrown:/dumcrown/static/1.0.0/dumcrown
@@ -13,23 +13,7 @@ services:
       - ./dotenv_files/.env
     depends_on:
       - psql_dum
-      - redis 
-
-
-  nginx_dum:  
-    container_name: nginx_dum
-    image: nginx:1.25.1
-    ports:
-      - 80:80 
-      - 443:443  
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/html:/usr/share/nginx/html
-      - ./dumcrown/static:/dumcrown/static/
-      - ./certbot/etc/letsencrypt:/etc/letsencrypt 
-      - ./certbot-challenge:/usr/share/nginx/html/.well-known/acme-challenge
-    depends_on:
-      - dumcrown
+      - redis
 
   redis:
     restart: always
@@ -38,7 +22,7 @@ services:
       - 6379:6379
     volumes:
       - redisdata:/data
-    command: ["redis-server", "--save", ""]
+    command: [ "redis-server", "--save", "" ]
 
   psql_dum:
     container_name: psql_dum
