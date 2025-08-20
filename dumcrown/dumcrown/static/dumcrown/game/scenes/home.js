@@ -44,17 +44,17 @@ export class HomeScene extends Phaser.Scene {
         }, { color: 0xcccccc, });
 
         perfil.setScale(0.5);
-        var data = {
-            "image": "someones_shield",
-            "name": "SOMEONE'S SHIELD",
-            "description": "Aumenta +2 de defesa na unidade aliada atingida",
-            "energy": 2,
-        }
+        // var data = {
+        //     "image": "someones_shield",
+        //     "name": "SOMEONE'S SHIELD",
+        //     "description": "Aumenta +2 de defesa na unidade aliada atingida",
+        //     "energy": 2,
+        // }
 
-        var spellDefault = new SpellCardObject(this, 5, data, 1)
-        spellDefault.setDisplaySize(164, 241)
-        spellDefault.setVisible(true)
-        spellDefault.setPosition(centerX - 150, centerY)
+        // var spellDefault = new SpellCardObject(this, 5, data, 1)
+        // spellDefault.setDisplaySize(164, 241)
+        // spellDefault.setVisible(true)
+        // spellDefault.setPosition(centerX - 150, centerY)
 
         const border_perfil = this.add.image(115, 105, player.border)
         border_perfil.setScale(0.5)
