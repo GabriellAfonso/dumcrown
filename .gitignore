@@ -7,6 +7,8 @@ package-lock.json
 package.json
 dumcrown/dumcrown/static/dumcrown/game/phaser
 project/log
+compose.prod.yml
+.env.prod
 
 # Django #
 *.log
