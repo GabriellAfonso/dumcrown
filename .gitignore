@@ -8,6 +8,7 @@ package.json
 dumcrown/dumcrown/static/dumcrown/game/phaser
 core/log
 compose.prod.yml
+compose.yml
 .env.prod
 
 # Django #
