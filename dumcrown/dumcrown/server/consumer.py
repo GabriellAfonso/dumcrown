@@ -43,7 +43,7 @@ class PlayerConsumer(AsyncWebsocketConsumer):
             if await self.check_player_already_online():
                 return
 
-            # await player_connected(self.user, self.channel)
+            await player_connected(self.user, self.channel)
 
         except Exception as e:
             logging.error(f'Error in connect: {e}', exc_info=True)
