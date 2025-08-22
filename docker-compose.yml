@@ -2,13 +2,14 @@ services:
   dum_django:
     container_name: dum_django
     image: dumcrown:latest
+    user: "${UID}:${GID}"
     build:
       context: .
     ports:
-      - 80:8000
+      - 8000:8000
     volumes:
       - ./dumcrown:/dumcrown
-      - ./dumcrown/dumcrown/static/dumcrown:/dumcrown/static/1.0.0/dumcrown
+      - ./dumcrown/dumcrown/static/dumcrown:/dumcrown/static/dumcrown
       - ./dumcrown/media:/dumcrown/media/
     env_file:
       - ./dotenv_files/.env
@@ -18,8 +19,10 @@ services:
 
   dum_redis:
     container_name: dum_redis
-    restart: unless-stopped
+    restart: always
     image: redis:8.0
+    volumes:
+      - redisdata:/data
     ports:
       - 6379:6379
     command: [ "redis-server", "--save", "" ]
@@ -35,4 +38,5 @@ services:
       - ./dotenv_files/.env
 
 volumes:
+  redisdata:
   database:

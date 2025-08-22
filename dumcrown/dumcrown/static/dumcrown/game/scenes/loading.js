@@ -66,7 +66,7 @@ export class Loading extends Phaser.Scene {
         this.load.audio('swap_undo', PATH + '/soundfx/swap_undo.mp3')
 
         //speaksTutorial
-        this.load.json('tutorialPhrases', PATH + 'lang/tutorial.json');
+        this.load.json('tutorialPhrases', PATH + '/lang/tutorial.json');
 
         this.load.audio('text_1', PATH + '/soundfx/tutorial/text01.mp3')
         this.load.audio('text_2', PATH + '/soundfx/tutorial/text02.mp3')

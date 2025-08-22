@@ -1,4 +1,4 @@
-export const PATH = `static/${gameversion}/dumcrown/game`;
+export const PATH = `static/dumcrown/game`;
 
 export var config = {
     type: Phaser.AUTO,

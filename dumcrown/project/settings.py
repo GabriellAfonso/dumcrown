@@ -15,8 +15,6 @@ ALLOWED_HOSTS = [
     if h.strip()
 ]
 
-GAME_VERSION = '1.0.0'
-
 INSTALLED_APPS = [
     'channels',
     'daphne',
@@ -136,8 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = f'/static/{GAME_VERSION}/'
-STATIC_ROOT = BASE_DIR / f'static/{GAME_VERSION}/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 
 MEDIA_URL = '/media/'

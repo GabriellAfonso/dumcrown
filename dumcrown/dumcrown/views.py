@@ -118,7 +118,6 @@ def game(request):
     login_history.save()
 
     context = {
-        'GAME_VERSION': settings.GAME_VERSION,
         'nickname': player.nickname,
         'level': player.level,
         'id': player.id,
