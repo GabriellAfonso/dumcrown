@@ -2,11 +2,10 @@ services:
   dum_django:
     container_name: dum_django
     image: dumcrown:latest
-    user: "${UID}:${GID}"
     build:
       context: .
     ports:
-      - 8000:8000
+      - 80:8000
     volumes:
       - ./dumcrown:/dumcrown
       - ./dumcrown/dumcrown/static/dumcrown:/dumcrown/static/dumcrown
@@ -19,10 +18,8 @@ services:
 
   dum_redis:
     container_name: dum_redis
-    restart: always
+    restart: unless-stopped
     image: redis:8.0
-    volumes:
-      - redisdata:/data
     ports:
       - 6379:6379
     command: [ "redis-server", "--save", "" ]
@@ -31,12 +28,11 @@ services:
     container_name: dum_psql
     image: postgres:17-alpine
     ports:
-      - 5433:5432
+      - 5432:5432
     volumes:
       - database:/var/lib/postgresql/data/
     env_file:
       - ./dotenv_files/.env
 
 volumes:
-  redisdata:
   database:
