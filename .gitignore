@@ -10,6 +10,7 @@ core/log
 compose.prod.yml
 compose.yml
 .env.prod
+.vscode
 
 # Django #
 *.log
