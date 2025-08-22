@@ -175,7 +175,7 @@ def save_nickname(request):
 @staff_member_required(login_url='dumcrown:login')
 def view_debug_log(request):
     # Leitura do conteúdo do arquivo debug.log
-    with open(settings.BASE_DIR / 'project/logs/debug.log', 'r') as file:
+    with open(settings.BASE_DIR / 'core/logs/debug.log', 'r') as file:
         content = file.read()
 
     return render(

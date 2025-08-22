@@ -16,6 +16,6 @@ python manage.py migrate --noinput
 sleep 0.2
 
 # Iniciar Daphne
-daphne -b 0.0.0.0 -p 8000 project.asgi:application
+daphne -b 0.0.0.0 -p 8000 core.asgi:application
 
 

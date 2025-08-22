@@ -31,7 +31,7 @@ export let socket;
 connectWebSocket()
 function connectWebSocket() {
     const host = window.location.hostname;
-    socket = new WebSocket(`ws://${host}:8000/ws/game/`);
+    socket = new WebSocket(`ws://${host}/ws/game/`);
 
     socket.onopen = (event) => {
         console.log('Conexão com WebSocket estabelecida.');
