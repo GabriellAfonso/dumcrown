@@ -12,6 +12,7 @@ compose.yml
 .env.prod
 .vscode
 
+
 # Django #
 *.log
 *.pot
@@ -149,3 +150,5 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+claude-sandbox
+.claude
