@@ -1,4 +1,4 @@
-import { GAME } from "../config/gameConfig.js";
+import { BASE, GAME } from "../config/gameConfig.js";
 import { sendSocket, switchScenes } from "../functions/functions.js";
 let pingTime = 0
 let pongTime = 0
@@ -103,7 +103,7 @@ export function rankingRecive(data) {
 }
 
 export function alreadyOnline(data) {
-    window.location.href = '/logout/';
+    window.location.href = `${BASE}/logout/`;
     alert("Esta conta já está online em outra guia ou dispositivo!");
 }
 

@@ -1,4 +1,4 @@
-import { GAME, centerX } from '../config/gameConfig.js';
+import { BASE, GAME, centerX } from '../config/gameConfig.js';
 import { socket } from '../main.js';
 import { sfx } from '../soundfx/sounds.js';
 
@@ -72,9 +72,9 @@ export function removeFromList(list, target) {
 export function logoutAjax() {
     $.ajax({
         type: 'GET',
-        url: '/logout/',
+        url: `${BASE}/logout/`,
         success: function (data) {
-            window.location.href = "/logout/";
+            window.location.href = `${BASE}/logout/`;
             // console.log('Logout successful');
 
         },
