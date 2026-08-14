@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
@@ -28,7 +30,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/game'
+LOGIN_REDIRECT_URL = reverse_lazy('dumcrown:game')
 
 
 MIDDLEWARE = [
@@ -108,11 +110,11 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = '/static/'
+STATIC_URL = '/dumcrown/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/dumcrown/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
