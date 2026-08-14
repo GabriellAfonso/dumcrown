@@ -30,8 +30,9 @@ export let socket;
 
 connectWebSocket()
 function connectWebSocket() {
-    const host = window.location.hostname;
-    socket = new WebSocket(`ws://${host}/ws/game/`);
+    const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const host = window.location.host;
+    socket = new WebSocket(`${scheme}://${host}/dumcrown/ws/game/`);
 
     socket.onopen = (event) => {
         console.log('Conexão com WebSocket estabelecida.');
