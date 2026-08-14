@@ -1,4 +1,6 @@
-export const PATH = `static/dumcrown/game`;
+// Definidos pelo template game.html a partir do Django, sem barra no fim.
+export const BASE = (window.DUMCROWN_BASE || '/').replace(/\/$/, '');
+export const PATH = (window.DUMCROWN_STATIC || `${BASE}/static/dumcrown/game`).replace(/\/$/, '');
 
 export var config = {
     type: Phaser.AUTO,

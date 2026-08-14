@@ -27,6 +27,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       var gameversion ="1.0.0"
+      // Ambos respeitam o FORCE_SCRIPT_NAME/STATIC_URL do Django, então o JS
+      // não precisa saber que a app roda sob /dumcrown/ em produção.
+      window.DUMCROWN_BASE = "{% url 'dumcrown:index' %}";
+      window.DUMCROWN_STATIC = "{% static 'dumcrown/game' %}";
     </script>
     
     <title>Dum Crown - game</title>
